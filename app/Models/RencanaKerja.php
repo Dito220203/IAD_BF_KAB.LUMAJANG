@@ -10,5 +10,23 @@ class RencanaKerja extends Model
 {
     use HasFactory;
     protected $table = 'rencana_kerjas';
-    protected $fillable = ['subprogram','judul','status','file'];
+    protected $fillable = ['id_pengguna','id_subprogram','id_opd','judul','lokasi','tahun','anggaran','status','keterangan'];
+
+    public function penggunas()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
+    }
+    public function subprogram()
+    {
+        return $this->belongsTo(Subprogram::class, 'id_subprogram', 'id');
+    }
+    public function opd()
+    {
+        return $this->belongsTo(Opd::class, 'id_opd', 'id');
+    }
+     public function monev()
+    {
+        return $this->hasMany(Monev::class, 'id_renja', 'id');
+    }
 }
+

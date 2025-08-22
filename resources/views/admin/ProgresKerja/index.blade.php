@@ -16,7 +16,7 @@
 
                      <div class="card">
                          <div class="card-body">
-                             <div class="d-flex flex-column flex-md-row justify-content-between gap-5 mb-3 mt-3">
+                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                  <a href="{{ route('progrescreate') }}" class="btn btn-primary">
                                      + Tambah Progres
                                  </a>
@@ -40,7 +40,7 @@
 
                              <!-- Table -->
                              <div class="table-responsive">
-                                 <table class="table table-bordered" id="infoTable">
+                                 <table class="table .table-active text-center" id="infoTable">
                                      <thead>
                                          <tr>
                                              <th>
@@ -54,28 +54,70 @@
                                          </tr>
                                      </thead>
                                      <tbody>
-                                         <tr>
-                                             <td>Unity Pugh</td>
-                                             <td>9958</td>
-                                             <td>Curicó</td>
-                                             <td>2005/02/11</td>
-                                             <td>37%</td>
-                                             <td class="text-center align-middle">
-                                                 <div class="d-flex justify-content-center gap-1">
-                                                     <form action="">
-                                                         <button class="btn btn-primary btn-sm">
-                                                             <i class="fa-solid fa-pen-to-square"></i>
-                                                         </button>
-                                                     </form>
-                                                     <form action="">
-                                                         <button class="btn btn-danger btn-sm">
-                                                             <i class="fa-solid fa-trash"></i>
-                                                         </button>
-                                                     </form>
-                                                 </div>
-                                             </td>
+                                         @foreach ($progres as $data)
+                                             <tr>
+                                                 <td>{{ $loop->iteration }}</td>
+                                                 <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
 
-                                         </tr>
+                                                 <td>{{ $data->judul }}</td>
+                                                 <td>{{ $data->tahun }}</td>
+                                                 <td>
+                                                     @if ($data->status === 'Valid')
+                                                         <span class="badge bg-success">{{ $data->status }}</span>
+                                                     @else
+                                                         <span class="badge bg-secondary">{{ $data->status }}</span>
+                                                     @endif
+                                                 </td>
+                                                 <td class="text-center align-middle">
+                                                     <div class="d-flex justify-content-center gap-1">
+                                                         @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
+                                                             <button
+                                                                 class="btn btn-sm {{ $data->status == 'Valid' ? 'btn-warning' : 'btn-success' }}"
+                                                                 onclick="updateStatus('{{ $data->id }}', '{{ $data->status }}')">
+                                                                 @if ($data->status == 'Valid')
+                                                                     <i class="fa-solid fa-xmark"></i> Batalkan Validasi
+                                                                 @else
+                                                                     <i class="fa-solid fa-check"></i> Validasi
+                                                                 @endif
+                                                             </button>
+
+                                                             <form id="form-status-{{ $data->id }}"
+                                                                 action="{{ route('progres.updateStatus', $data->id) }}"
+                                                                 method="POST" style="display:none;">
+                                                                 @csrf
+                                                                 @method('PUT')
+                                                                 <input type="hidden" name="status" value="">
+                                                             </form>
+                                                         @endif
+
+
+                                                         <form action="{{ route('progres.show', $data->id) }}"
+                                                             method="GET" style="display:inline;">
+                                                             <button class="btn btn-info btn-sm" title="Lihat">
+                                                                 <i class="fa-solid fa-eye"></i>
+                                                             </button>
+                                                         </form>
+                                                         <form action="{{ route('progres.edit', $data->id) }}"
+                                                             method="GET">
+                                                             <button class="btn btn-primary btn-sm">
+                                                                 <i class="fa-solid fa-pen-to-square"></i>
+                                                             </button>
+                                                         </form>
+                                                         <form id="formDelete-{{ $data->id }}"
+                                                             action="{{ route('progres.delete', $data->id) }}"
+                                                             method="POST" style="display:inline;">
+                                                             @csrf
+                                                             @method('DELETE')
+                                                             <button type="button" class="btn btn-danger btn-sm"
+                                                                 onclick="confirmDelete('{{ $data->id }}')">
+                                                                 <i class="fa-solid fa-trash"></i>
+                                                             </button>
+                                                         </form>
+                                                     </div>
+                                                 </td>
+
+                                             </tr>
+                                         @endforeach
                                      </tbody>
                                  </table>
                                  <!-- End Table with stripped rows -->

@@ -6,16 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
+    /**     * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('potensis', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('lokasi');
+            $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
+            $table->string('judul');
+            $table->string('kecamatan');
+            $table->string('desa');
+            $table->string('gambar');
             $table->string('tanggal');
+            $table->string('uraian');
             $table->timestamps();
         });
     }

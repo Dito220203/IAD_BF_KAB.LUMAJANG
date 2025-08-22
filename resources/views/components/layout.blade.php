@@ -32,11 +32,11 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <!-- Font Awesome CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <!-- Head -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <!-- =======================================================
   * Template Name: NiceAdmin
@@ -121,13 +121,17 @@
     <script src="{{ asset('assets/js/main.js') }}"></script>
     {{-- js buatan --}}
     <script src="{{ asset('js/preview-image.js') }}"></script>
-
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <!-- Body (before closing body tag) -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/sweetalert-custom.js') }}"></script>
+    <script src="{{ asset('js/updateStatus.js') }}"></script>
+    <!-- SweetAlert Success -->
     @if (session('success'))
         <script>
             Swal.fire({
@@ -137,54 +141,12 @@
                 confirmButtonColor: '#3085d6',
             });
         </script>
+        @php
+            session()->forget('success');
+        @endphp
     @endif
 
-    {{-- alert hapus --}}
-    <script>
-        function confirmDelete(id) {
-            Swal.fire({
-                title: "Apakah kamu yakin?",
-                text: "Data yang dihapus tidak bisa dikembalikan!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Ya, hapus!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Kirim form dengan ID sesuai data
-                    document.getElementById('formDelete-' + id).submit();
-                }
-            });
-        }
-    </script>
-    {{--
-<!-- Tambahkan CDN SweetAlert2 di HTML kamu -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Contoh Menu -->
-<a href="/dashboard" onclick="return showLoading(this)">Ke Dashboard</a>
-
-<script>
-function showLoading(el) {
-    Swal.fire({
-        title: 'Memuat...',
-        text: 'Mohon tunggu sebentar',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-            Swal.showLoading()
-        }
-    });
-
-    // Tunggu sebentar sebelum redirect (misal untuk efek)
-    setTimeout(() => {
-        window.location.href = el.href;
-    }, 1000); // Delay 1 detik (bisa disesuaikan)
-
-    return false; // Mencegah link langsung berpindah
-}
-</script> --}}
 
 
 </body>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subprogram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubProgramController extends Controller
 {
@@ -12,7 +13,8 @@ class SubProgramController extends Controller
      */
     public function index()
     {
-        return view('admin.Subprogram.index');
+        $subprogram = Subprogram::all();
+        return view('admin.Subprogram.index', compact('subprogram'));
     }
 
     /**
@@ -28,15 +30,20 @@ class SubProgramController extends Controller
      */
     public function store(Request $request)
     {
-        $validasi = $request ->validate([
+        $validasi = $request->validate([
             'program' => 'required',
             'subprogram' => 'required',
-            'uraian' => 'required'
+            'uraian' => 'required',
         ]);
 
-        Subprogram::create($validasi);
+        Subprogram::create([
+             'id_pengguna' => Auth::guard('pengguna')->id(),
+            'program' => $validasi['program'],
+            'subprogram' => $validasi['subprogram'],
+            'uraian' => $validasi['uraian'],
+        ]);
 
-       return redirect()->route('subprogram')->with('success', 'Data Berhasil Ditambahkan');
+        return redirect()->route('subprogram')->with('success', 'Data Berhasil Ditambahkan');
     }
 
     /**
@@ -60,7 +67,20 @@ class SubProgramController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validasi = Subprogram::findOrFail($id);
+        $request->validate([
+            'e_program' => 'required',
+            'e_subprogram' => 'required',
+            'e_uraian' => 'required',
+        ]);
+
+        $validasi->update([
+            'program' => $request->input('e_program'),
+            'subprogram' => $request->input('e_subprogram'),
+            'uraian' => $request->input('e_uraian'),
+        ]);
+
+        return redirect()->route('subprogram')->with('success', 'Data Berhasil Di Update');
     }
 
     /**
@@ -68,6 +88,7 @@ class SubProgramController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Subprogram::where('id', $id)->delete();
+        return redirect()->route('subprogram')->with('success', 'Data Berhasil Dihapus');
     }
 }

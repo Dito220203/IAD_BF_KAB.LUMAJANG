@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('regulasis', function (Blueprint $table) {
             $table->id();
+             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->string('judul');
             $table->string('tanggal');
             $table->string('status');

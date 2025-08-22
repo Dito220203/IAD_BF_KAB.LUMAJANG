@@ -9,5 +9,10 @@ class Informasi extends Model
 {
     use HasFactory;
     protected $table = 'informasis';
-    protected $fillable = ['judul','foto','tanggal','status','isi'];
+    protected $fillable = ['id_pengguna','judul','foto','tanggal','status','isi'];
+
+      public function penggunas()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
+    }
 }

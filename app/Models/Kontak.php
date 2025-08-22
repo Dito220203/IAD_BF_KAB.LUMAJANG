@@ -10,5 +10,10 @@ class Kontak extends Model
 {
     use HasFactory;
     protected $table = 'kontaks';
-    protected $fillable = ['telepon','email','namafb','linkfb','namaig','linkig','namayt','linkyt'];
+    protected $fillable = ['id_pengguna','telepon','email','namafb','linkfb','namaig','linkig','namayt','linkyt'];
+
+       public function penggunas()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
+    }
 }

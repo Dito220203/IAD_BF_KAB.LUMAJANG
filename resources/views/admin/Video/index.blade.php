@@ -5,25 +5,74 @@
             <h1>Tabel Video</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
+                    <li class="breadcrumb-item">Beranda</li>
                     <li class="breadcrumb-item">Video</li>
                 </ol>
             </nav>
         </div>
+
         <section class="section">
             <div class="row">
-                <div class="col-lg-12">
 
-                    <div class="card ">
+                <!-- Kolom Form -->
+                <div class="col-lg-4">
+                    <div class="card">
                         <div class="card-body">
-                            <!-- Header control: Tambah, Search, Tampilkan Data -->
-                            <div class="d-flex flex-column flex-md-row justify-content-between gap-5 mb-3 mt-3">
 
-                                <a href="{{ route('createvideo') }}" class="btn btn-primary">
-                                    + Tambah Video
-                                </a>
+                            @if (isset($videoEdit))
+                                <h5 class="card-title">Update Video</h5>
+                                <form action="{{ route('video.update', $videoEdit->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
 
-                                <div class="d-flex align-items-center ">
+                                    <div class="mb-3">
+                                        <label class="form-label">Judul</label>
+                                        <input type="text" name="e_judul" class="form-control"
+                                             value="{{$videoEdit->judul}}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Link Video</label>
+                                        <input type="text" name="e_link" class="form-control"
+                                             value="{{$videoEdit->link}}" required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Update</button>
+                                    <a href="{{ route('video') }}" class="btn btn-secondary w-100 mt-2">Batal</a>
+                                </form>
+                            @else
+                                <h5 class="card-title">Tambah Video</h5>
+                                <form action="{{ route('video.store') }}" method="POST">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="judul" class="form-label">Judul</label>
+                                        <input type="text" name="judul" class="form-control" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="link" class="form-label">Link Video</label>
+                                        <input type="text" name="link" class="form-control" required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success w-100">Simpan</button>
+                                </form>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Tabel -->
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body" id="tabelVideo">
+                            <h5 class="card-title">Daftar Video</h5>
+
+                            <!-- Entries & Search -->
+                            <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
+
+                                <!-- Entries -->
+                                <div class="d-flex align-items-center gap-2">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
                                     <select id="entries" class="form-select form-select-sm w-auto">
                                         <option value="10">10</option>
@@ -34,15 +83,17 @@
                                     <span>data</span>
                                 </div>
 
+                                <!-- Search -->
                                 <div class="input-group w-auto">
+                                    <span class="input-group-text"><i class="fa fa-search"></i></span>
                                     <input type="text" id="searchInput" class="form-control"
-                                        placeholder="Cari informasi...">
+                                        placeholder="Cari Data...">
                                 </div>
                             </div>
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table table-bordered text-center" id="infoTable">
+                                <table class="table text-center" id="infoTable">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -56,15 +107,16 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $data->judul }}</td>
-                                                <td>{{ $data->link }}</td>
-
+                                                <td>
+                                                    <a href="{{ $data->link }}" target="_blank"
+                                                        class="btn btn-sm btn-info">Lihat</a>
+                                                </td>
                                                 <td class="text-center align-middle">
                                                     <div class="d-flex justify-content-center gap-1">
-                                                        <form action="{{ route('video.edit', $data->id) }}" method="get">
-                                                            <button class="btn btn-primary btn-sm">
-                                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                            </button>
-                                                        </form>
+                                                        <a href="{{ route('video.edit', $data->id) }}"
+                                                            class="btn btn-primary btn-sm">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </a>
                                                         <form id="formDelete-{{ $data->id }}"
                                                             action="{{ route('deletevideo', $data->id) }}"
                                                             method="POST" style="display:inline;">
@@ -75,7 +127,6 @@
                                                                 <i class="fa-solid fa-trash"></i>
                                                             </button>
                                                         </form>
-
                                                     </div>
                                                 </td>
                                             </tr>
@@ -84,21 +135,24 @@
                                 </table>
                             </div>
                             <!-- End Table -->
+
                         </div>
                     </div>
                 </div>
-        </section>
-    </main>
 
-    <!-- Optional: JS untuk search sederhana -->
-    <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            let value = this.value.toLowerCase();
-            let rows = document.querySelectorAll('#infoTable tbody tr');
-            rows.forEach(row => {
-                let text = row.innerText.toLowerCase();
-                row.style.display = text.includes(value) ? '' : 'none';
+            </div>
+        </section>
+
+        <!-- Search JS -->
+        <script>
+            document.getElementById('searchInput').addEventListener('keyup', function() {
+                let value = this.value.toLowerCase();
+                let rows = document.querySelectorAll('#infoTable tbody tr');
+                rows.forEach(row => {
+                    let text = row.innerText.toLowerCase();
+                    row.style.display = text.includes(value) ? '' : 'none';
+                });
             });
-        });
-    </script>
+        </script>
+    </main>
 @endsection

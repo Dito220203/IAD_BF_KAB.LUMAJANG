@@ -2,7 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FotoProgres;
+use App\Models\Map;
+use App\Models\Notifikasi;
+use App\Models\Pengguna;
+use App\Models\ProgresKerja;
+use App\Models\Subprogram;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProgreskerjaController extends Controller
 {
@@ -11,7 +19,8 @@ class ProgreskerjaController extends Controller
      */
     public function index()
     {
-        return view('admin.ProgresKerja.index');
+        $progres = ProgresKerja::all();
+        return view('admin.ProgresKerja.index', compact('progres'));
     }
 
     /**
@@ -19,7 +28,8 @@ class ProgreskerjaController extends Controller
      */
     public function create()
     {
-        return view ('admin.create');
+        $subprogram = Subprogram::all();
+        return view('admin.ProgresKerja.create', compact('subprogram'));
     }
 
     /**
@@ -27,23 +37,115 @@ class ProgreskerjaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input
+        $validatedData = $request->validate([
+            'subprogram' => 'required|exists:subprograms,id',
+            'judul' => 'required|string|max:255',
+            'tahun' => 'required|digits:4',
+            'sumber_dana' => 'required|string|max:255',
+            'jumlah_anggaran' => 'required|numeric',
+            'penerima' => 'required|string|max:255',
+            'uraian' => 'required|string',
+            'latitude.*' => 'nullable|numeric',
+            'longitude.*' => 'nullable|numeric',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'foto.max' => 'Gambar yang kamu aplud terlalu besar, batasan nya 2 MB',
+        ]);
+
+        // Simpan progres kerja
+        $progres = ProgresKerja::create([
+            'id_subprogram' => $validatedData['subprogram'],
+            'id_pengguna'   => Auth::guard('pengguna')->id(),
+            'judul'         => $validatedData['judul'],
+            'tahun'         => $validatedData['tahun'],
+            'sumber_dana'   => $validatedData['sumber_dana'],
+            'jumlah_anggaran' => $validatedData['jumlah_anggaran'],
+            'penerima'      => $validatedData['penerima'],
+            'uraian'        => $validatedData['uraian'],
+            'status'        => 'Belum Validasi',
+        ]);
+
+        // Simpan titik koordinat ke tabel map
+        if ($request->has('latitude') && $request->has('longitude')) {
+            foreach ($request->latitude as $i => $lat) {
+                if (!empty($lat) && !empty($request->longitude[$i])) {
+                    Map::create([
+                        'id_progres' => $progres->id,
+                        'id_pengguna' => $progres->id_pengguna,
+                        'latitude'   => $lat,
+                        'longitude'  => $request->longitude[$i],
+                    ]);
+                }
+            }
+        }
+
+        // Simpan foto ke tabel foto_progres
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $namaFile = $foto->getClientOriginalName(); // hanya nama file asli, misal: foto.jpg
+            $foto->storeAs('foto_progres', $namaFile, 'public'); // simpan ke storage/app/public/foto_progres
+
+            FotoProgres::create([
+                'id_progres' => $progres->id,
+                'id_pengguna' => $progres->id_pengguna,
+                'foto' => $namaFile, // hanya nama file
+            ]);
+        }
+
+
+        return redirect()->route('progres')->with('success', 'Data Berhasil Ditambahkan');
     }
+
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        $progres = ProgresKerja::findOrFail($id);
+        $subprogram = Subprogram::all();
+
+        return view('admin.ProgresKerja.show', compact('progres', 'subprogram'));
     }
+
+
+    public function validasi(string $id)
+    {
+        $progres = ProgresKerja::findOrFail($id);
+        $progres->status = 'Valid';
+        $progres->save();
+
+        return redirect()->route('progres')->with('success', 'Status berhasil divalidasi');
+    }
+    public function updateStatus(Request $request, string $id)
+    {
+        $progres = ProgresKerja::findOrFail($id);
+
+        // ganti status progres
+        if ($progres->status === 'Valid') {
+            $progres->status = 'Belum Validasi';
+        } else {
+            $progres->status = 'Valid';
+        }
+        $progres->save();
+
+        // update notifikasi: hilangkan angka "baru"
+        // atau ganti status notifikasi menjadi "diba
+        return redirect()->route('progres')->with('success', 'Status berhasil diperbarui');
+    }
+
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $progres = ProgresKerja::findOrFail($id);
+        $subprogram = Subprogram::all();
+
+        return view('admin.ProgresKerja.update', compact('progres', 'subprogram'));
     }
 
     /**
@@ -51,14 +153,90 @@ class ProgreskerjaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'subprogram' => 'required|exists:subprograms,id',
+            'judul' => 'required|string|max:255',
+            'tahun' => 'required|digits:4',
+            'sumber_dana' => 'required|string|max:255',
+            'jumlah_anggaran' => 'required|numeric',
+            'penerima' => 'required|string|max:255',
+            'uraian' => 'required|string',
+            'status' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'foto.max' => 'Gambar yang kamu aplud terlalu besar, batasan nya 2 MB',
+        ]);
+
+        $progres = ProgresKerja::findOrFail($id);
+        $progres->update([
+            'id_subprogram' => $validatedData['subprogram'],
+            'judul' => $validatedData['judul'],
+            'tahun' => $validatedData['tahun'],
+            'sumber_dana' => $validatedData['sumber_dana'],
+            'jumlah_anggaran' => $validatedData['jumlah_anggaran'],
+            'penerima' => $validatedData['penerima'],
+            'uraian' => $validatedData['uraian'],
+            'status' => $request->input('status', 'Belum Validasi'),
+        ]);
+
+     // Update foto jika ada file baru
+if ($request->hasFile('foto')) {
+    $fotoBaru = $request->file('foto');
+    $namaFile = time() . '_' . $fotoBaru->getClientOriginalName(); // sama seperti store
+
+    // Simpan file baru ke storage/app/public/foto_progres
+    $fotoBaru->storeAs('foto_progres', $namaFile, 'public');
+
+    // Ambil record foto_progres
+    $fotoProgres = $progres->fotoProgres()->first();
+    if ($fotoProgres) {
+        // Hapus file lama
+        if ($fotoProgres->foto && Storage::disk('public')->exists('foto_progres/'.$fotoProgres->foto)) {
+            Storage::disk('public')->delete('foto_progres/'.$fotoProgres->foto);
+        }
+        // Update nama file di database
+        $fotoProgres->update([
+            'foto' => $namaFile,
+        ]);
+    } else {
+        // Jika belum ada, buat baru
+        FotoProgres::create([
+            'id_progres' => $progres->id,
+            'id_pengguna' => $progres->id_pengguna,
+            'foto' => $namaFile,
+        ]);
     }
+}
+
+
+
+        return redirect()->route('progres')->with('success', 'Data berhasil diperbarui');
+    }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+   public function destroy(string $id)
+{
+    $progres = ProgresKerja::findOrFail($id);
+
+    // Hapus foto dari storage dan tabel foto_progres
+    $fotoProgres = FotoProgres::where('id_progres', $progres->id)->first();
+    if ($fotoProgres) {
+        $path = 'foto_progres/' . $fotoProgres->foto;
+
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+
+        $fotoProgres->delete();
     }
+
+    // Hapus progres kerja
+    $progres->delete();
+
+    return redirect()->route('progres')->with('success', 'Data Berhasil Dihapus');
+}
+
 }

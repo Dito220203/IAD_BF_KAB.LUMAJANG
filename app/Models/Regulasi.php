@@ -10,5 +10,10 @@ class Regulasi extends Model
 {
     use HasFactory;
     protected $table = 'regulasis';
-    protected $fillable = ['judul','tanggal','status','file'];
+    protected $fillable = ['id_pengguna','judul','tanggal','status','file'];
+
+      public function penggunas()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
+    }
 }
