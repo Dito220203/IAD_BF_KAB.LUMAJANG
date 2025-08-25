@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->foreignId('id_kth')->references('id')->on('kths')->onDelete('cascade');
             $table->string('kups');
+            $table->string('tahun');
             $table->string('pendapatan');
             $table->timestamps();
         });

@@ -10,7 +10,7 @@ class Kups extends Model
 {
     use HasFactory;
     protected $table = 'kups';
-    protected $fillable = ['id_pengguna', 'id_kth', 'kups', 'pendapatan'];
+    protected $fillable = ['id_pengguna', 'id_kth', 'kups','tahun', 'pendapatan'];
 
     public function penggunas()
     {

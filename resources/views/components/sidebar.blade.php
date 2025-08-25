@@ -102,26 +102,31 @@
 
 
 
-            {{-- informasi kehutana --}}
+            {{-- informasi kehutanan --}}
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-layout-text-window-reverse"></i><span>Informasi Kehutanan</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-layout-text-window-reverse"></i>
+                    <span>Informasi Kehutanan</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
 
-                <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <ul id="tables-nav"
+                    class="nav-content collapse
+            {{ request()->is('kth*') || request()->is('kups*') ? 'show' : '' }}">
+
                     <li>
-                        <a href="{{route('kth')}}">
+                        <a href="{{ route('kth') }}" class="{{ request()->is('kth*') ? 'active' : '' }}">
                             <i class="bi bi-circle"></i><span>KTH</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ route('kups') }}" class="{{ request()->is('kups*') ? 'active' : '' }}">
                             <i class="bi bi-circle"></i><span>KUPS</span>
                         </a>
                     </li>
                 </ul>
             </li>
+
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('subprogram*') ? '' : 'collapsed' }}"
