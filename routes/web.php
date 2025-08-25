@@ -7,9 +7,11 @@ use App\Http\Controllers\GambaranUmumController;
 use App\Http\Controllers\InformasiController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\KthController;
+use App\Http\Controllers\KupsController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MonevController;
 use App\Http\Controllers\OpdController;
+use App\Http\Controllers\Passwordcontroller;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\PotensiController;
 use App\Http\Controllers\ProgreskerjaController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\SubProgramController;
 use App\Http\Controllers\VideoController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Models\Kontak;
+use App\Models\Kups;
 use App\Models\Monev;
 use App\Models\Pengguna;
 use App\Models\Regulasi;
@@ -67,6 +70,12 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::get('/kth-edit/{id}', [KthController::class, 'edit'])->name('kth.edit');
     Route::put('/kth-update/{id}', [KthController::class, 'update'])->name('kth.update');
     Route::delete('/kth-delete/{id}', [KthController::class, 'destroy'])->name('kth.delete');
+
+    Route::get('/kups', [KupsController::class, 'index'])->name('kups');
+    Route::post('/kups-store', [KupsController::class, 'store'])->name('kups.store');
+    Route::get('/kups-edit/{id}', [KupsController::class, 'edit'])->name('kups.edit');
+    Route::put('/kups-update/{id}', [KupsController::class, 'update'])->name('kups.update');
+    Route::delete('/kups-delete/{id}', [KupsController::class, 'destroy'])->name('kups.delete');
 
     Route::get('/SubProgram', [SubProgramController::class, 'index'])->name('subprogram');
     Route::post('/create', [SubProgramController::class, 'store'])->name('subrogram.store');
@@ -132,5 +141,8 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::delete('/delete/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
 
     Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
+
+    Route::post('/ganti-password', [PasswordController::class, 'gantiPassword'])->name('ganti.password');
+
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });

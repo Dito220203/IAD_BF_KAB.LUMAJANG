@@ -2,11 +2,11 @@
 @section('content')
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Tabel KTH</h1>
+            <h1>Tabel KUPS</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">Beranda</li>
-                    <li class="breadcrumb-item active">KTH</li>
+                    <li class="breadcrumb-item active">KUPS</li>
                 </ol>
             </nav>
         </div>
@@ -20,39 +20,71 @@
                         <div class="card-body">
 
                             {{-- Jika klik edit tampilkan update, kalau tidak create --}}
-                            @if (isset($kthEdit))
-                                <h5 class="card-title">Update KTH</h5>
-                                <form action="{{ route('kth.update', $kthEdit->id) }}" method="POST">
+                            @if (isset($kupsEdit))
+                                <h5 class="card-title">Update KUPS</h5>
+                                <form action="{{ route('kups.update', $kupsEdit->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
 
                                     <div class="mb-3">
-                                        <label class="form-label">Nama KTH</label>
-                                        <input type="text" name="e_kth" class="form-control"
-                                            value="{{ $kthEdit->kth }}" required>
+                                        <label class="form-label">Kelompok Tani Hutan (KTH)</label>
+                                        <select name="id_kth" class="form-control" required>
+                                            <option value="">-- Pilih KTH --</option>
+                                            @foreach ($kth as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ $item->id == $kupsEdit->id_kth ? 'selected' : '' }}>
+                                                    {{ $item->kth }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Luas (Ha)</label>
-                                        <input type="text" name="e_luas" class="form-control"
-                                            value="{{ $kthEdit->luas }}" required>
+                                        <label class="form-label">Jenis Komoditas KUPS</label>
+                                        <input type="text" name="e_kups" class="form-control"
+                                            value="{{ $kupsEdit->kups }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tahun</label>
+                                        <input type="text" name="e_tahun" class="form-control"
+                                            value="{{ $kupsEdit->tahun }}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Jumlah Pendapatan</label>
+                                        <input type="text" name="e_pendapatan" class="form-control"
+                                            value="{{ $kupsEdit->pendapatan }}" required>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary w-100">Update</button>
-                                    <a href="{{ route('kth') }}" class="btn btn-secondary w-100 mt-2">Batal</a>
+                                    <a href="{{ route('kups') }}" class="btn btn-secondary w-100 mt-2">Batal</a>
                                 </form>
                             @else
-                                <h5 class="card-title">Tambah KTH</h5>
-                                <form action="{{ route('kth.store') }}" method="POST">
+                                <h5 class="card-title">Tambah KUPS</h5>
+                                <form action="{{ route('kups.store') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="kth" class="form-label">KELOMPOK TANI HUTAN (KTH)</label>
-                                        <input type="text" name="kth" class="form-control" required>
+                                        <label class="form-label">Kelompok Tani Hutan (KTH)</label>
+                                        <select name="id_kth" class="form-select" required>
+                                            <option value="">Pilih</option>
+                                            @foreach ($kth as $data)
+                                                <option value="{{ $data->id }}">{{ $data->kth }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="luas" class="form-label">Luas areal kelola sesuai SK (Ha)</label>
-                                        <input type="text" name="luas" class="form-control" required>
+                                        <label class="form-label">Jenis Komoditas KUPS</label>
+                                        <input type="text" name="kups" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Tahun</label>
+                                        <input type="text" name="tahun" class="form-control" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Jumlah Pendapatan</label>
+                                        <input type="text" name="pendapatan" class="form-control" required>
                                     </div>
 
                                     <button type="submit" class="btn btn-success w-100">Simpan</button>
@@ -67,7 +99,7 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Daftar KTH</h5>
+                            <h5 class="card-title">Daftar KUPS</h5>
 
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
 
@@ -95,25 +127,29 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama KTH</th>
-                                            <th>Luas areal kelola sesuai SK (Ha)</th>
+                                            <th>KTH</th>
+                                            <th>KUPS</th>
+                                            <th>Tahun</th>
+                                            <th>Pendapatan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($kth as $data)
+                                        @foreach ($kups as $data)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $data->kth }}</td>
-                                                <td>{{ $data->luas }}</td>
+                                                <td>{{ $data->kth->kth ?? '-' }}</td>
+                                                <td>{{ $data->kups }}</td>
+                                                <td>{{ $data->tahun }}</td>
+                                                <td>{{ $data->pendapatan }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center gap-1">
-                                                        <a href="{{ route('kth.edit', $data->id) }}"
+                                                        <a href="{{ route('kups.edit', $data->id) }}"
                                                             class="btn btn-primary btn-sm">
                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                         </a>
                                                         <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('kth.delete', $data->id) }}" method="POST">
+                                                            action="{{ route('kups.delete', $data->id) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="button" class="btn btn-danger btn-sm"

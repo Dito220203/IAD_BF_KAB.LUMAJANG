@@ -121,4 +121,6 @@ class PenggunaController extends Controller
         Pengguna::where('id', $id)->delete();
         return redirect()->route('pengguna')->with('success', 'Data Berhasil Dihapus');
     }
+
+
 }
