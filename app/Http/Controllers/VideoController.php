@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VideoController extends Controller
 {
@@ -34,8 +35,13 @@ class VideoController extends Controller
             'link' => 'required',
         ]);
 
-        Video::create($valiadate);
-        return redirect()->route('video')->with('success', 'Data Berhasil Ditambahkan');
+        Video::create([
+            'id_pengguna' => Auth::guard('pengguna')->id(),
+            'judul' => $valiadate['judul'],
+            'link' => $valiadate['link'],
+        ]);
+        return redirect()->to(route('video') . '#tabelVideo')
+            ->with('success', 'Data berhasil disimpan!');
     }
 
     /**
@@ -51,8 +57,9 @@ class VideoController extends Controller
      */
     public function edit(string $id)
     {
-         $video = Video::findOrFail($id);
-        return view('admin.Video.edit', compact('video'));
+        $videoEdit = Video::findOrFail($id);
+        $video = Video::all();
+        return view('admin.Video.index', compact('video', 'videoEdit'));
     }
 
     /**
@@ -71,7 +78,8 @@ class VideoController extends Controller
             'link' => $request->input('e_link'),
         ]);
 
-        return redirect()->route('video')->with('success', 'Data Berhasil Di Update');
+        return redirect()->to(route('video') . '#tabelVideo')
+            ->with('success', 'Data berhasil di Update');
     }
 
     /**
@@ -80,6 +88,6 @@ class VideoController extends Controller
     public function destroy(string $id)
     {
         Video::where('id', $id)->delete();
-        return redirect()->route('gambaran')->with('success', 'Data Berhasil Dihapus');
+        return redirect()->route('video')->with('success', 'Data Berhasil Dihapus');
     }
 }

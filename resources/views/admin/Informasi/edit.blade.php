@@ -38,18 +38,41 @@
                                      <div class="row mb-3">
                                          <label class="col-sm-2 col-form-label">Gambar Depan</label>
                                          <div class="col-sm-10">
-                                             @if ($informasi->foto)
-                                                 <div class="mb-2">
-                                                     <img src="{{ asset('images/' . $informasi->foto) }}" alt="Gambar Lama"
-                                                         width="150">
-                                                 </div>
-                                             @endif
                                              <input type="file" name="foto" class="form-control"
-                                                 accept=".jpg,.jpeg,.png">
+                                                 id="preview-image-input" accept=".jpg,.jpeg,.png">
                                              <small class="text-muted">* Harus format jpeg, jpg atau png dan maks. ukuran 2
                                                  MB</small>
+
+                                             @if ($informasi->foto)
+                                                 <div class="mt-2">
+                                                     <img id="preview-image"
+                                                         src="{{ asset('storage/' . $informasi->foto) }}"
+                                                         alt="Gambar Banner" width="80" height="80"
+                                                         style="object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
+                                                 </div>
+                                             @else
+                                                 <div class="mt-2">
+                                                     <img id="preview-image" src="#" alt="Preview Gambar"
+                                                         style="display:none; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;"
+                                                         width="80" height="80">
+                                                 </div>
+                                             @endif
                                          </div>
                                      </div>
+
+                                     {{-- Script untuk menampilkan preview saat file dipilih --}}
+                                     <script>
+                                         document.getElementById('preview-image-input').addEventListener('change', function(event) {
+                                             const file = event.target.files[0];
+                                             const preview = document.getElementById('preview-image');
+
+                                             if (file) {
+                                                 preview.src = URL.createObjectURL(file);
+                                                 preview.style.display = 'block';
+                                             }
+                                         });
+                                     </script>
+
 
                                      {{-- Tanggal --}}
                                      <div class="row mb-3">
@@ -110,24 +133,4 @@
 
          </section>
      </main>
-     <script>
-         document.addEventListener('DOMContentLoaded', function() {
-             // Ambil isi berita lama dari textarea hidden
-             const oldContent = document.querySelector('#isi').value;
-
-             // Inisialisasi Quill
-             const quill = new Quill('.quill-editor-full', {
-                 theme: 'snow'
-             });
-
-             // Set value awal Quill dari oldContent
-             quill.root.innerHTML = oldContent;
-
-             // Saat submit form, sinkronkan isi Quill ke textarea hidden
-             const form = document.querySelector('form');
-             form.addEventListener('submit', function() {
-                 document.querySelector('#isi').value = quill.root.innerHTML;
-             });
-         });
-     </script>
  @endsection

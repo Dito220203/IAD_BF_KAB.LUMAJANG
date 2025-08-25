@@ -283,7 +283,7 @@
                     <!-- Card 1 -->
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -302,7 +302,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -321,7 +321,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -340,7 +340,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -359,7 +359,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -378,7 +378,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -397,7 +397,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -416,7 +416,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -435,7 +435,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -454,7 +454,7 @@
                     </div>
                     <div class="informasi-card">
                         <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
                         <div class="informasi-content">
                             <h3>What is Lorem Ipsum?</h3>
@@ -471,6 +471,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
 
                 <!-- Pagination -->

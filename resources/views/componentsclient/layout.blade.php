@@ -9,8 +9,13 @@
     <meta name="keywords" content="">
 
     <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('client/assets/img/favicon-32x32.png') }}?v=4">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('client/assets/img/favicon-180x180.png') }}?v=4">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -32,7 +37,7 @@
     <!-- Fontawesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
-    
+
 </head>
 
 <body class="index-page">

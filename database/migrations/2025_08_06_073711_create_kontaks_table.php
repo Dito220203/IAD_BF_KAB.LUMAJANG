@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('kontaks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->string('telepon');
             $table->string('email');
             $table->string('namafb');

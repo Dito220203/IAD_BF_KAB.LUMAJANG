@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GambaranUmum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GambaranUmumController extends Controller
 {
@@ -35,7 +36,12 @@ class GambaranUmumController extends Controller
             'status' => 'required',
         ]);
 
-        GambaranUmum::create($data);
+        GambaranUmum::create([
+            'id_pengguna' => Auth::guard('pengguna')->id(),
+            'judul' => $data['judul'],
+            'uraian' => $data['uraian'],
+            'status' => $data['status'],
+        ]);
 
         return redirect()->route('gambaran')->with('success', 'Data Berhasil Ditambahkan');
     }

@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('rencana_kerjas', function (Blueprint $table) {
             $table->id();
-            $table->string('subproram');
+            $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
+            $table->foreignId('id_opd')->references('id')->on('opds')->onDelete('cascade');
+            $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
             $table->string('judul');
-            $table->string('status');
-            $table->string('file');
+            $table->string('lokasi');
+            $table->string('tahun');
+            $table->string('anggaran');
+            $table->string('status')->default('tidak valid');
+            $table->string('keterangan');
             $table->timestamps();
         });
     }

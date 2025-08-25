@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->string('judul');
             $table->string('status');
             $table->string('image');

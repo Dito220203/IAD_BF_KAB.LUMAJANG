@@ -10,5 +10,10 @@ class Potensi extends Model
 {
     use HasFactory;
     protected $table = 'potensis';
-    protected $fillable = ['nama','lokasi','tanggal'];
+    protected $fillable = ['id_pengguna','judul','kecamatan','desa','gambar','tanggal','uraian'];
+
+      public function penggunas()
+    {
+        return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
+    }
 }

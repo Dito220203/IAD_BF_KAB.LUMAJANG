@@ -17,7 +17,7 @@
                     <div class="card ">
                         <div class="card-body">
                             <!-- Header control: Tambah, Search, Tampilkan Data -->
-                            <div class="d-flex flex-column flex-md-row justify-content-between gap-5 mb-3 mt-3">
+                            <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
 
                                 <a href="{{ route('informasicreate') }}" class="btn btn-primary">
                                     + Tambah Informasi
@@ -42,7 +42,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table table-bordered text-center" id="infoTable">
+                                <table class="table .table-active text-center" id="infoTable">
                                     <thead>
                                         <tr>
                                             <th>No</th>

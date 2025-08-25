@@ -17,7 +17,7 @@
                     <div class="card ">
                         <div class="card-body">
                             <!-- Header control: Tambah, Search, Tampilkan Data -->
-                            <div class="d-flex flex-column flex-md-row justify-content-between gap-5 mb-3 mt-3">
+                            <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
 
                                 <!-- Tombol Trigger Modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -47,6 +47,7 @@
                                                     <div class="mb-3">
                                                         <label>Status</label>
                                                         <select name="status" class="form-select" required>
+                                                            <option value="">Pilih</option>
                                                             <option value="Aktif">Aktif</option>
                                                             <option value="Non Aktif">Non Aktif</option>
                                                         </select>
@@ -82,7 +83,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table table-bordered text-center" id="infoTable">
+                                <table class="table .table-active text-center" id="infoTable">
                                     <thead>
                                         <tr>
                                             <th>No</th>

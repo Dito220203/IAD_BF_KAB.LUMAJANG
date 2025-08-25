@@ -32,20 +32,18 @@
                         <div class="card-body pt-4">
 
 
-                            <form action="" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('progres.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
 
                                 {{-- Sub Program --}}
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Sub Program</label>
                                     <div class="col-sm-10">
-                                        <select name="sub_program" class="form-select" required>
+                                        <select name="subprogram" class="form-select" required>
                                             <option value="">Pilih</option>
-                                            <option>AKSES HUTSOS DAN REDISTRIBUSI</option>
-                                            <option>INTERKONEKSI WISATA</option>
-                                            <option>AGROINDUSTRI</option>
-                                            <option>AGROSILVOPASTURA</option>
-                                            <option>RESTORASI BERBASIS AGRIKULTUR</option>
+                                            @foreach ($subprogram as $data)
+                                                <option value="{{ $data->id }}">{{ $data->subprogram }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -107,72 +105,51 @@
                                     </div>
                                 </div>
 
+                                {{-- Upload Foto Progres (diletakkan di bawah tombol) --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Foto Progres</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="file" name="foto" accept="image/*"
+                                            onchange="previewFoto(event)">
+                                        <small class="text-muted">Opsional. Format: jpg, jpeg, png. Maks 2MB.</small>
+                                        <div class="mt-3">
+                                            <img id="preview-foto"
+                                                src="{{ asset('images/placeholder-image.png') }}"
+                                                alt="Preview Foto"
+                                                style="display:block;width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
+                                            <div class="text-muted mt-1" id="foto-placeholder-ket">Belum ada foto, silakan upload jika ada.</div>
+                                        </div>
+                                        @error('foto')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <script>
+                                    function previewFoto(event) {
+                                        const input = event.target;
+                                        const preview = document.getElementById('preview-foto');
+                                        const ket = document.getElementById('foto-placeholder-ket');
+                                        if (input.files && input.files[0]) {
+                                            const reader = new FileReader();
+                                            reader.onload = function(e) {
+                                                preview.src = e.target.result;
+                                                ket.style.display = 'none';
+                                            }
+                                            reader.readAsDataURL(input.files[0]);
+                                        } else {
+                                            preview.src = "{{ asset('images/placeholder-image.png') }}";
+                                            ket.style.display = 'block';
+                                        }
+                                    }
+                                </script>
                                 {{-- Tombol --}}
                                 <div class="row mb-3">
                                     <div class="col-sm-10 offset-sm-2 d-flex gap-2">
                                         <button type="submit" class="btn btn-success">Simpan</button>
-                                        <a href="#" class="btn btn-secondary">Kembali</a>
+                                        <a href="{{ route('progres') }}" class="btn btn-warning">Kembali</a>
                                     </div>
                                 </div>
                             </form>
-{{-- Tambah Foto --}}
-<div class="card mt-4">
-  <div class="card-body">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h5 class="card-title mb-0">Tabel Foto Progres</h5>
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahFotoModal">
-        <i class="bi bi-upload"></i> Tambah Foto
-      </button>
-    </div>
-
-    <table class="table table-hover table-bordered text-center">
-      <thead class="table-light">
-        <tr>
-          <th scope="col">Foto</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{-- @forelse ($fotos as $foto) --}}
-        <tr>
-          <td>
-            <img src="" alt="Foto Progres" class="img-fluid rounded" style="max-width: 200px;">
-          </td>
-        </tr>
-        {{-- @empty --}}
-        <tr>
-          <td colspan="1" class="text-muted">Belum ada foto ditambahkan.</td>
-        </tr>
-        {{-- @endforelse --}}
-      </tbody>
-    </table>
-
-  </div>
-</div>
-
-<!-- Modal Tambah Foto -->
-<div class="modal fade" id="tambahFotoModal" tabindex="-1" aria-labelledby="tambahFotoModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <form action="" method="POST" enctype="multipart/form-data" class="modal-content">
-      {{-- @csrf --}}
-      <input type="hidden" name="progres_id" value="">
-      <div class="modal-header">
-        <h5 class="modal-title" id="tambahFotoModalLabel"><i class="bi bi-image"></i> Upload Foto Progres</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="foto" class="form-label">Pilih Foto</label>
-          <input class="form-control" type="file" name="foto" required>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-success"><i class="bi bi-save"></i> Simpan</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-      </div>
-    </form>
-  </div>
-</div>
 
                         </div>
                     </div>
@@ -196,8 +173,10 @@
             var index = 0;
 
             function onMapClick(e) {
-                marker[index] = L.marker(e.latlng).addTo(mymap).bindPopup("<button type='button' onclick='hapus_marker(" + index + ")'>Hapus</button>");
-                let html = `<input type="hidden" name="longitude[${index}]" class="coordinates_${index} longitudes" value="${e.latlng.lng}">
+                marker[index] = L.marker(e.latlng).addTo(mymap).bindPopup("<button type='button' onclick='hapus_marker(" +
+                    index + ")'>Hapus</button>");
+                let html =
+                    `<input type="hidden" name="longitude[${index}]" class="coordinates_${index} longitudes" value="${e.latlng.lng}">
                             <input type="hidden" name="latitude[${index}]" class="coordinates_${index} latitudes" value="${e.latlng.lat}">`;
                 document.querySelector('.coordinates-container').insertAdjacentHTML('beforeend', html);
                 index++;
