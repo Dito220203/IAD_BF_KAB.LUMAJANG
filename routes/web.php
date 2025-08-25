@@ -8,12 +8,19 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProgreskerjaController;
 use App\Http\Controllers\SubProgramController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
+
+//client
+Route::get('/', [ClientController::class, 'index'])->name('client');
+
+
 
 
 Route::get('/Login',[LoginController::class,'index'])->name('login');
+Route::get('/admin',[DasboardAdminController::class,'index'])->name('dashboard');
 
-Route::get('/', [DasboardAdminController::class, 'index'])->name('dashboard');
+
 
 
 Route::get('/Banner', [BannerConroller::class, 'index'])->name('banner');
