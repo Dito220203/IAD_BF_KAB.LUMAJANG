@@ -18,10 +18,10 @@ class Map extends Model
 
     public function progres()
     {
-        return $this->belongsTo(ProgresKerja::class, 'id_progres');
+        return $this->belongsTo(ProgresKerja::class, 'id_progres','id');
     }
     public function penggunas()
     {
-        return $this->belongsTo(Pengguna::class, 'id_pengguna');
+        return $this->belongsTo(Pengguna::class, 'id_pengguna','id');
     }
 }

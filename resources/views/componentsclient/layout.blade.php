@@ -70,14 +70,14 @@
                 </iframe>
             </div>
         </div>
-
-        <!-- Ikon sosial media -->
-        <div class="footer-social">
-            <a href="#"><i class="bi bi-facebook"></i></a>
-            <a href="#"><i class="bi bi-instagram"></i></a>
-            <a href="#"><i class="bi bi-youtube"></i></a>
-        </div>
-
+        @foreach ($contact as $kontak)
+            <!-- Ikon sosial media -->
+            <div class="footer-social">
+                <a href="{{$kontak->linkfb}}"><i class="bi bi-facebook"></i></a>
+                <a href="{{$kontak->linkig}}"><i class="bi bi-instagram"></i></a>
+                <a href="{{$kontak->linkyt}}"><i class="bi bi-youtube"></i></a>
+            </div>
+        @endforeach
         <!-- Copyright -->
         <div class="footer-bottom">
             <p>Copyright © 2025 Sekretariat IAD BF Kab.Lumajang</p>

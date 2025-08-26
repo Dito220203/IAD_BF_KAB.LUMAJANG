@@ -88,7 +88,6 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Judul Gambaran Umum</th>
-                                            <th>Uraian</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -98,7 +97,6 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $data->judul }}</td>
-                                                <td>{{ $data->uraian }}</td>
                                                 <td>
                                                     @if ($data->status === 'Aktif')
                                                         <span class="badge bg-success">{{ $data->status }}</span>
@@ -186,16 +184,4 @@
                 </div>
         </section>
     </main>
-
-    <!-- Optional: JS untuk search sederhana -->
-    <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            let value = this.value.toLowerCase();
-            let rows = document.querySelectorAll('#infoTable tbody tr');
-            rows.forEach(row => {
-                let text = row.innerText.toLowerCase();
-                row.style.display = text.includes(value) ? '' : 'none';
-            });
-        });
-    </script>
 @endsection

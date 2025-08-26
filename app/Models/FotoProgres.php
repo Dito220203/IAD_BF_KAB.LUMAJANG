@@ -13,7 +13,7 @@ class FotoProgres extends Model
 
       public function progres()
     {
-        return $this->belongsTo(ProgresKerja::class, 'id_progres');
+        return $this->belongsTo(ProgresKerja::class, 'id_progres','id');
     }
 
       public function penggunas()

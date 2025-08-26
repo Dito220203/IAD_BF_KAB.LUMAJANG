@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banner;
+use App\Models\GambaranUmum;
+use App\Models\Kontak;
+use App\Models\Subprogram;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\MockObject\ReturnValueGenerator;
 
@@ -12,8 +16,19 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return view('client.index');
+        $gambaran = GambaranUmum::where('status', 'Aktif')->get();
+        $banner = Banner::where('status', 'Aktif')->get();
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.index', compact('banner','gambaran', 'subprograms', 'contact'));
     }
+
+    public function footer()
+    {
+        $contact = Kontak::all();
+        return view('about', compact('contact'));
+    }
+
 
     /**
      * Show the form for creating a new resource.

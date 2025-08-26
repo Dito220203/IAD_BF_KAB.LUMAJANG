@@ -111,8 +111,8 @@
                 </a>
 
                 <ul id="tables-nav"
-                    class="nav-content collapse
-            {{ request()->is('kth*') || request()->is('kups*') ? 'show' : '' }}">
+                    class="nav-content collapse {{ request()->is('kth*') || request()->is('kups*') ? 'show' : '' }}"
+                    data-bs-parent="#sidebar-nav">
 
                     <li>
                         <a href="{{ route('kth') }}" class="{{ request()->is('kth*') ? 'active' : '' }}">

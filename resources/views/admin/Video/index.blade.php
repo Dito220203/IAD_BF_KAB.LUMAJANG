@@ -28,13 +28,13 @@
                                     <div class="mb-3">
                                         <label class="form-label">Judul</label>
                                         <input type="text" name="e_judul" class="form-control"
-                                             value="{{$videoEdit->judul}}" required>
+                                            value="{{ $videoEdit->judul }}" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Link Video</label>
                                         <input type="text" name="e_link" class="form-control"
-                                             value="{{$videoEdit->link}}" required>
+                                            value="{{ $videoEdit->link }}" required>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary w-100">Update</button>
@@ -86,8 +86,7 @@
                                 <!-- Search -->
                                 <div class="input-group w-auto">
                                     <span class="input-group-text"><i class="fa fa-search"></i></span>
-                                    <input type="text" id="searchInput" class="form-control"
-                                        placeholder="Cari Data...">
+                                    <input type="text" id="searchInput" class="form-control" placeholder="Cari Data...">
                                 </div>
                             </div>
 
@@ -118,8 +117,8 @@
                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                         </a>
                                                         <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('deletevideo', $data->id) }}"
-                                                            method="POST" style="display:inline;">
+                                                            action="{{ route('deletevideo', $data->id) }}" method="POST"
+                                                            style="display:inline;">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="button" class="btn btn-danger btn-sm"
@@ -142,17 +141,5 @@
 
             </div>
         </section>
-
-        <!-- Search JS -->
-        <script>
-            document.getElementById('searchInput').addEventListener('keyup', function() {
-                let value = this.value.toLowerCase();
-                let rows = document.querySelectorAll('#infoTable tbody tr');
-                rows.forEach(row => {
-                    let text = row.innerText.toLowerCase();
-                    row.style.display = text.includes(value) ? '' : 'none';
-                });
-            });
-        </script>
     </main>
 @endsection

@@ -3,19 +3,30 @@
     <main class="main">
         <!-- Hero Section -->
         <section id="hero" class="hero section dark-background">
+            @foreach ($banner as $item)
+                @php
+                    $extension = pathinfo($item->file, PATHINFO_EXTENSION);
+                @endphp
 
-            <video autoplay loop muted playsinline controls class="background-video">
-                <source src="{{ asset('client/assets/video/bgvideo.mp4') }}">
-            </video>
+                @if (in_array(strtolower($extension), ['mp4', 'webm', 'ogg']))
+                    <!-- Video -->
+                    <video autoplay loop muted playsinline class="background-video">
+                        <source src="{{ asset('storage/' . $item->file) }}" type="video/{{ $extension }}">
+                    </video>
+                @else
+                    <!-- Gambar -->
+                    <img src="{{ asset('storage/' . $item->file) }}" alt="{{ $item->judul }}" class="img-fluid w-100">
+                @endif
+            @endforeach
             <div class="content-wrapper">
                 <div class="container d-flex flex-column align-items-center">
                     <img src="{{ asset('client/assets/img/logo-kabupaten.png') }}" alt="Logo Kabupaten"
                         data-aos="fade-in"class="hero-logo">
-                    <p data-aos="fade-up" data-aos-delay="200">We are a team of talented designers making websites with
-                        Bootstrap</p>
+                    @foreach ($gambaran as $tulis)
+                        <p data-aos="fade-up" data-aos-delay="200">{{ $tulis->uraian }}</p>
+                    @endforeach
                 </div>
             </div>
-
         </section><!-- /Hero Section -->
 
         <!-- card perhut -->
@@ -471,7 +482,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <!-- Pagination -->
@@ -767,34 +778,34 @@
 
                     <div class="col-lg-6 ">
                         <div class="row gy-4">
+                            @foreach ($contact as $kontak)
+                                <div class="col-lg-12">
+                                    <div class="info-item d-flex flex-column justify-content-center align-items-center"
+                                        data-aos="fade-up" data-aos-delay="200">
+                                        <i class="bi bi-geo-alt"></i>
+                                        <h3>Address</h3>
+                                        <p>A108 Adam Street, New York, NY 535022</p>
+                                    </div>
+                                </div><!-- End Info Item -->
 
-                            <div class="col-lg-12">
-                                <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                                    data-aos="fade-up" data-aos-delay="200">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <h3>Address</h3>
-                                    <p>A108 Adam Street, New York, NY 535022</p>
-                                </div>
-                            </div><!-- End Info Item -->
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex flex-column justify-content-center align-items-center"
+                                        data-aos="fade-up" data-aos-delay="300">
+                                        <i class="bi bi-telephone"></i>
+                                        <h3>Call Us</h3>
+                                        <p>{{ $kontak->telepon }}</p>
+                                    </div>
+                                </div><!-- End Info Item -->
 
-                            <div class="col-md-6">
-                                <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                                    data-aos="fade-up" data-aos-delay="300">
-                                    <i class="bi bi-telephone"></i>
-                                    <h3>Call Us</h3>
-                                    <p> (0334) 883516</p>
-                                </div>
-                            </div><!-- End Info Item -->
-
-                            <div class="col-md-6">
-                                <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                                    data-aos="fade-up" data-aos-delay="400">
-                                    <i class="bi bi-envelope"></i>
-                                    <h3>Email Us</h3>
-                                    <p>iadbf.lumajang@lumajangkab.go.id</p>
-                                </div>
-                            </div><!-- End Info Item -->
-
+                                <div class="col-md-6">
+                                    <div class="info-item d-flex flex-column justify-content-center align-items-center"
+                                        data-aos="fade-up" data-aos-delay="400">
+                                        <i class="bi bi-envelope"></i>
+                                        <h3>Email Us</h3>
+                                        <p>{{ $kontak->email }}</p>
+                                    </div>
+                                </div><!-- End Info Item -->
+                            @endforeach
                         </div>
                     </div>
 

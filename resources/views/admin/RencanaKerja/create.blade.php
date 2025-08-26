@@ -81,13 +81,12 @@
                                     </div>
 
 
-                                   <div class="row mb-3">
-    <label class="col-sm-2 col-form-label">Keterangan</label>
-    <div class="col-sm-10">
-        <textarea name="keterangan" class="form-control"
-            style="height: 100px; font-size: 16px; resize: vertical;" required></textarea>
-    </div>
-</div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">Keterangan</label>
+                                        <div class="col-sm-10">
+                                            <textarea name="keterangan" class="form-control" style="height: 100px; font-size: 16px; resize: vertical;" required></textarea>
+                                        </div>
+                                    </div>
 
 
                                     {{-- Tombol --}}

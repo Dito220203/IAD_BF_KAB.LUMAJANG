@@ -14,11 +14,11 @@ class ProgresKerja extends Model
 
     public function maps()
     {
-        return $this->hasMany(Map::class, 'id_progres');
+        return $this->hasMany(Map::class, 'id_progres','id');
     }
     public function fotoProgres()
     {
-        return $this->hasOne(FotoProgres::class, 'id_progres');
+        return $this->hasMany(FotoProgres::class, 'id_progres','id');
     }
 
     public function subprogram()

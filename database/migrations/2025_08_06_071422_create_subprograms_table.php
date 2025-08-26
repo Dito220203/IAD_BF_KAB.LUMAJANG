@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->string('program');
             $table->string('subprogram');
-            $table->string('uraian');
+            $table->longText('uraian');
             $table->timestamps();
         });
     }

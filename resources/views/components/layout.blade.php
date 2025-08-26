@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>Admin IAD BF Kabupaten Lumajang</title>
+
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -131,6 +132,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('js/sweetalert-custom.js') }}"></script>
     <script src="{{ asset('js/updateStatus.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}"></script>
     <!-- SweetAlert Success -->
     @if (session('success'))
         <script>

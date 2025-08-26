@@ -9,7 +9,7 @@ class Banner extends Model
 {
     use HasFactory;
     protected $table = 'banners';
-    protected $fillable = ['id_pengguna', 'judul', 'status', 'image'];
+    protected $fillable = ['id_pengguna', 'judul', 'status', 'file'];
 
     public function penggunas()
     {

@@ -57,7 +57,8 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $data->judul }}</td>
-                                              <td>Desa/Kelurahan {{ $data->desa }}, Kecamatan {{ $data->kecamatan }}</td>
+                                                <td>Desa/Kelurahan {{ $data->desa }}, Kecamatan {{ $data->kecamatan }}
+                                                </td>
                                                 <td>{{ $data->tanggal }}</td>
 
                                                 <td class="text-center align-middle">
@@ -93,16 +94,4 @@
                 </div>
         </section>
     </main>
-
-    <!-- Optional: JS untuk search sederhana -->
-    <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            let value = this.value.toLowerCase();
-            let rows = document.querySelectorAll('#infoTable tbody tr');
-            rows.forEach(row => {
-                let text = row.innerText.toLowerCase();
-                row.style.display = text.includes(value) ? '' : 'none';
-            });
-        });
-    </script>
 @endsection

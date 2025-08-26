@@ -34,23 +34,16 @@ class BannerController extends Controller
         $validated = $request->validate([
             'judul' => 'required',
             'status' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'file'  => 'required|mimes:jpeg,png,jpg,gif,mp4,mov,avi,wmv|max:51200',
         ]);
 
-        // Upload file image
-        // $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
-        // $request->file('image')->move(public_path('images'), $imageName);
+        $filePath = $request->file('file')->store('banners', 'public');
 
-        if ($request->hasFile('image')) {
-            $documentPath = $request->file('image')->store('banners', 'public');
-        }
-
-        // Simpan data ke database
         Banner::create([
             'judul'       => $validated['judul'],
             'status'      => $validated['status'],
-            'image'       => $documentPath,
-            'id_pengguna' => Auth::guard('pengguna')->id(), // ini ambil id user yang login
+            'file'        => $filePath,
+            'id_pengguna' => Auth::guard('pengguna')->id(),
         ]);
 
         return redirect()->route('banner')->with('success', 'Data Berhasil Ditambahkan');
@@ -72,8 +65,8 @@ class BannerController extends Controller
     public function edit(string $id)
     {
         $bannerEdit = Banner::findOrFail($id);
-    $banner = Banner::all();
-    return view('admin.banner.index', compact('banner', 'bannerEdit'));
+        $banner = Banner::all();
+        return view('admin.banner.index', compact('banner', 'bannerEdit'));
     }
 
     /**
@@ -83,28 +76,22 @@ class BannerController extends Controller
     {
         $banner = Banner::findOrFail($id);
 
-        // Validasi
         $request->validate([
             'e_judul' => 'required',
             'e_status' => 'required',
-            'e_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'e_file'   => 'nullable|mimes:jpeg,png,jpg,gif,mp4,mov,avi,wmv|max:51200',
         ]);
 
         $data = [
-            'judul' => $request->input('e_judul'),
-            'status' => $request->input('e_status'),
+            'judul' => $request->e_judul,
+            'status' => $request->e_status,
         ];
 
-
-        if ($request->hasFile('e_image')) {
-            // Hapus gambar lama dari storage
-            if (!empty($banner->image) && Storage::disk('public')->exists($banner->image)) {
-                Storage::disk('public')->delete($banner->image);
+        if ($request->hasFile('e_file')) {
+            if ($banner->file && Storage::disk('public')->exists($banner->file)) {
+                Storage::disk('public')->delete($banner->file);
             }
-
-            // Simpan gambar baru (sama seperti store)
-            $documentPath = $request->file('e_image')->store('banners', 'public');
-            $data['image'] = $documentPath;
+            $data['file'] = $request->file('e_file')->store('banners', 'public');
         }
 
         $banner->update($data);
@@ -121,15 +108,10 @@ class BannerController extends Controller
     public function destroy(string $id)
     {
         $banner = Banner::findOrFail($id);
-
-        // Hapus file image di storage (folder public/banners)
-        if (!empty($banner->image) && Storage::disk('public')->exists($banner->image)) {
-            Storage::disk('public')->delete($banner->image);
+        if ($banner->file && Storage::disk('public')->exists($banner->file)) {
+            Storage::disk('public')->delete($banner->file);
         }
-
-        // Hapus data dari database
         $banner->delete();
-
         return redirect()->route('banner')->with('success', 'Data Berhasil Dihapus');
     }
 }

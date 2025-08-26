@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->string('judul');
             $table->string('status');
-            $table->string('image');
+            $table->string('file');
             $table->timestamps();
         });
     }

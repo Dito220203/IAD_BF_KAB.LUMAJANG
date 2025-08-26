@@ -13,89 +13,94 @@
                 <li class="dropdown"><a href="#"><span>PROGRAM IAD</span> <i
                             class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
-                        <li class="dropdown"><a href="#"><span>AGROINDUSTRI</span><i
-                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">TENTANG AGROINDUSTRI</a></li>
-                                <li><a href="#">RENCANA KEGIATAN</a></li>
-                                <li><a href="#">PROGRES KEGIATAN</a></li>
-                                <li><a href="#">PETA SEBARAN</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="#"><span>AGROSILVOPASUTRA</span><i
-                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">TENTANG AGROSILVOPASUTRA</a></li>
-                                <li><a href="#">RENCANA KEGIATAN</a></li>
-                                <li><a href="#">PROGRES KEGIATAN</a></li>
-                                <li><a href="#">PETA SEBARAN</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="#"><span>AKSES HUTSOS DAN REDISTRIBUSI</span><i
-                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">TENTANG AKSES HUTSOS DAN REDISTRIBUSI</a></li>
-                                <li><a href="#">RENCANA KEGIATAN</a></li>
-                                <li><a href="#">PROGRES KEGIATAN</a></li>
-                                <li><a href="#">PETA SEBARAN</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="#"><span>INTERKONEKSI WISATA</span><i
-                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">TENTANG INTERKONEKSI WISATA</a></li>
-                                <li><a href="#">RENCANA KEGIATAN</a></li>
-                                <li><a href="#">PROGRES KEGIATAN</a></li>
-                                <li><a href="#">PETA SEBARAN</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="#"><span>RESTORASI BERBASIS AGRIKULTUR</span><i
-                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">TENTANG RESTORASI BERBASIS AGRIKULTUR</a></li>
-                                <li><a href="#">RENCANA KEGIATAN</a></li>
-                                <li><a href="#">PROGRES KEGIATAN</a></li>
-                                <li><a href="#">PETA SEBARAN</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
+                        @foreach ($subprograms as $subprogram)
+                            <li class="dropdown"><a href="#"><span>{{ $subprogram->subprogram }}</span><i
+                                        class="bi bi-chevron-down toggle-dropdown"></i></a>
 
-                <li class="dropdown">
-                    <a href="#"><span>PROFIL KAWASAN IAD</span> <i
+
+                        <ul>
+                            <li><a href="{{ url('subprogram/'.$subprogram->id.'/tentang') }}">TENTANG {{ strtoupper($subprogram->subprogram) }}</a></li>
+                            <li><a href="{{ url('subprogram/'.$subprogram->id.'/rencana') }}">RENCANA KEGIATAN</a></li>
+                            <li><a href="{{ url('subprogram/'.$subprogram->id.'/progres') }}">PROGRES KEGIATAN</a></li>
+                            <li><a href="{{ url('subprogram/'.$subprogram->id.'/peta') }}">PETA SEBARAN</a></li>
+                        </ul>
+                </li>
+                @endforeach
+
+                {{-- <li class="dropdown"><a href="#"><span>tra</span><i
+                            class="bi bi-chevron-down toggle-dropdown"></i></a>
+
+                    <ul>
+                        <li><a href="#">TENTANG AGROSILVOPASUTRA</a></li>
+                        <li><a href="#">RENCANA KEGIATAN</a></li>
+                        <li><a href="#">PROGRES KEGIATAN</a></li>
+                        <li><a href="#">PETA SEBARAN</a></li>
+                    </ul>
+                </li> --}}
+                {{-- <li class="dropdown"><a href="#"><span>AKSES HUTSOS DAN REDISTRIBUSI</span><i
                             class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
-                        <li>
-                            <div class="profil-dropdown">
-                                <div class="form-group">
-                                    <label for="kecamatan">Kecamatan</label>
-                                    <select id="kecamatan" class="dropdown-select">
-                                        <option value="">Pilih</option>
-                                        <option value="1">Kecamatan 1</option>
-                                        <option value="2">Kecamatan 2</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="desa">Kel/Desa</label>
-                                    <select id="desa" class="dropdown-select">
-                                        <option value="">Pilih</option>
-                                        <option value="desa1">Desa 1</option>
-                                        <option value="desa2">Desa 2</option>
-                                    </select>
-                                </div>
-
-                                <button type="button" class="profil-search-btn">
-                                    <i class="bi bi-search"></i> Cari
-                                </button>
-                            </div>
-                        </li>
+                        <li><a href="#">TENTANG AKSES HUTSOS DAN REDISTRIBUSI</a></li>
+                        <li><a href="#">RENCANA KEGIATAN</a></li>
+                        <li><a href="#">PROGRES KEGIATAN</a></li>
+                        <li><a href="#">PETA SEBARAN</a></li>
                     </ul>
-                </li>
-                <li><a href="#">REGULASI IAD</a></li>
-                <li><a href="#videosection">VIDEO</a></li>
-                <li><a href="#contact">CONTACT</a></li>
-                <li><a href="login">SINGIN</li>
+                </li> --}}
+                {{-- <li class="dropdown"><a href="#"><span>INTERKONEKSI WISATA</span><i
+                            class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <ul>
+                        <li><a href="#">TENTANG INTERKONEKSI WISATA</a></li>
+                        <li><a href="#">RENCANA KEGIATAN</a></li>
+                        <li><a href="#">PROGRES KEGIATAN</a></li>
+                        <li><a href="#">PETA SEBARAN</a></li>
+                    </ul>
+                </li> --}}
+                {{-- <li class="dropdown"><a href="#"><span>RESTORASI BERBASIS AGRIKULTUR</span><i
+                            class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <ul>
+                        <li><a href="#">TENTANG RESTORASI BERBASIS AGRIKULTUR</a></li>
+                        <li><a href="#">RENCANA KEGIATAN</a></li>
+                        <li><a href="#">PROGRES KEGIATAN</a></li>
+                        <li><a href="#">PETA SEBARAN</a></li>
+                    </ul>
+                </li> --}}
+            </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#"><span>PROFIL KAWASAN IAD</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                    <li>
+                        <div class="profil-dropdown">
+                            <div class="form-group">
+                                <label for="kecamatan">Kecamatan</label>
+                                <select id="kecamatan" class="dropdown-select">
+                                    <option value="">Pilih</option>
+                                    <option value="1">Kecamatan 1</option>
+                                    <option value="2">Kecamatan 2</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="desa">Kel/Desa</label>
+                                <select id="desa" class="dropdown-select">
+                                    <option value="">Pilih</option>
+                                    <option value="desa1">Desa 1</option>
+                                    <option value="desa2">Desa 2</option>
+                                </select>
+                            </div>
+
+                            <button type="button" class="profil-search-btn">
+                                <i class="bi bi-search"></i> Cari
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#">REGULASI IAD</a></li>
+            <li><a href="#videosection">VIDEO</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+            <li><a href="login">SINGIN</li>
             </ul>
         </nav>
 

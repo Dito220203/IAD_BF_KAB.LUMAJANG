@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->string('judul');
-            $table->string('uraian');
+            $table->longText('uraian');
             $table->string('status');
             $table->timestamps();
         });

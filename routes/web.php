@@ -24,14 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 //client
 Route::get('/', [ClientController::class, 'index'])->name('client');
-
-
-
-
-Route::get('/Login',[LoginController::class,'index'])->name('login');
-Route::get('/admin',[DasboardAdminController::class,'index'])->name('dashboard');
-
-
+Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer');
 
 
 // Admin
@@ -96,7 +89,7 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
 
     Route::get('/Progres', [ProgreskerjaController::class, 'index'])->name('progres');
     Route::get('/TambahProgres', [ProgreskerjaController::class, 'create'])->name('progrescreate');
-    Route::post('/Progres/sive', [ProgreskerjaController::class, 'store'])->name('progres.store');
+    Route::post('/Progres-sive', [ProgreskerjaController::class, 'store'])->name('progres.store');
     Route::put('/progres/{id}/status', [ProgreskerjaController::class, 'updateStatus'])->name('progres.updateStatus');
     Route::get('/progres/{id}', [ProgresKerjaController::class, 'show'])->name('progres.show');
     Route::get('/Progres/edit/{id}', [ProgreskerjaController::class, 'edit'])->name('progres.edit');
@@ -145,7 +138,7 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
 
     Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
 
-    Route::post('/ganti-password', [PasswordController::class, 'gantiPassword'])->name('ganti.password');
+   Route::post('/ganti-password', [LoginController::class, 'gantiPassword'])->name('ganti.password');
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
