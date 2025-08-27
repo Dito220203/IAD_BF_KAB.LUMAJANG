@@ -138,7 +138,7 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
 
     Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
 
-   Route::post('/ganti-password', [LoginController::class, 'gantiPassword'])->name('ganti.password');
+   Route::post('/ganti-password', [LoginController::class, 'update_password'])->name('update.password');
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });

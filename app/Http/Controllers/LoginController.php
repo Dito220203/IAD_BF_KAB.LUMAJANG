@@ -36,9 +36,28 @@ class LoginController extends Controller
         $request->session()->invalidate(); // Hapus semua session
         $request->session()->regenerateToken(); // Buat CSRF token baru
 
-        return redirect('/');
+        return redirect('/login');
     }
 
+    public function update_password(Request $request)
+    {
 
 
+        $user = Auth::guard('pengguna')->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['current_password' => ['Password saat ini tidak sesuai']]
+            ], 422);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password berhasil diubah'
+        ]);
+    }
 }

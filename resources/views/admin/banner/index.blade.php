@@ -113,9 +113,9 @@
                             </div>
 
                             <div class="input-group w-auto">
-                                <span class="input-group-text"><i class="fa fa-search"></i></span>
-                                <input type="text" id="searchInput" class="form-control" placeholder="Cari Data...">
-                            </div>
+                                    <input type="text" id="searchInput" class="form-control"
+                                        placeholder="Cari informasi...">
+                                </div>
                         </div>
 
                         <div class="table-responsive">

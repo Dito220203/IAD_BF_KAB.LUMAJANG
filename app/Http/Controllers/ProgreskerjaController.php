@@ -67,18 +67,16 @@ class ProgreskerjaController extends Controller
         ]);
 
         // Simpan titik koordinat ke tabel map
-        if ($request->has('latitude') && $request->has('longitude')) {
-            foreach ($request->latitude as $i => $lat) {
-                if (!empty($lat) && !empty($request->longitude[$i])) {
-                    Map::create([
-                        'id_progres' => $progres->id,
-                        'id_pengguna' => $progres->id_pengguna,
-                        'latitude'   => $lat,
-                        'longitude'  => $request->longitude[$i],
-                    ]);
-                }
-            }
+        // Simpan titik koordinat ke tabel map
+        if ($request->filled('latitude') && $request->filled('longitude')) {
+            Map::create([
+                'id_progres'  => $progres->id,
+                'id_pengguna' => $progres->id_pengguna,
+                'latitude'    => $request->latitude,
+                'longitude'   => $request->longitude,
+            ]);
         }
+
 
         // Simpan foto ke tabel foto_progres
         if ($request->hasFile('foto')) {
@@ -104,7 +102,7 @@ class ProgreskerjaController extends Controller
      */
     public function show(string $id)
     {
-        $progres = ProgresKerja::findOrFail($id);
+        $progres = ProgresKerja::with('maps')->findOrFail($id);
         $subprogram = Subprogram::all();
 
         return view('admin.ProgresKerja.show', compact('progres', 'subprogram'));
@@ -163,6 +161,8 @@ class ProgreskerjaController extends Controller
             'uraian' => 'required|string',
             'status' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'latitude.*' => 'nullable|numeric',
+            'longitude.*' => 'nullable|numeric',
         ], [
             'foto.max' => 'Gambar yang kamu aplud terlalu besar, batasan nya 2 MB',
         ]);
@@ -179,64 +179,74 @@ class ProgreskerjaController extends Controller
             'status' => $request->input('status', 'Belum Validasi'),
         ]);
 
-     // Update foto jika ada file baru
-if ($request->hasFile('foto')) {
-    $fotoBaru = $request->file('foto');
-    $namaFile = time() . '_' . $fotoBaru->getClientOriginalName(); // sama seperti store
+        // 🔹 Update Koordinat
+        if ($request->has('latitude') && $request->has('longitude')) {
+            // Hapus map lama dulu
+            $progres->maps()->delete();
 
-    // Simpan file baru ke storage/app/public/foto_progres
-    $fotoBaru->storeAs('foto_progres', $namaFile, 'public');
-
-    // Ambil record foto_progres
-    $fotoProgres = $progres->fotoProgres()->first();
-    if ($fotoProgres) {
-        // Hapus file lama
-        if ($fotoProgres->foto && Storage::disk('public')->exists('foto_progres/'.$fotoProgres->foto)) {
-            Storage::disk('public')->delete('foto_progres/'.$fotoProgres->foto);
+            // Buat data baru
+            if (!empty($request->latitude) && !empty($request->longitude)) {
+                Map::create([
+                    'id_progres'  => $progres->id,
+                    'id_pengguna' => $progres->id_pengguna,
+                    'latitude'    => $request->latitude,
+                    'longitude'   => $request->longitude,
+                ]);
+            }
         }
-        // Update nama file di database
-        $fotoProgres->update([
-            'foto' => $namaFile,
-        ]);
-    } else {
-        // Jika belum ada, buat baru
-        FotoProgres::create([
-            'id_progres' => $progres->id,
-            'id_pengguna' => $progres->id_pengguna,
-            'foto' => $namaFile,
-        ]);
-    }
-}
 
 
+
+        // 🔹 Update Foto (sudah benar)
+        if ($request->hasFile('foto')) {
+            $fotoBaru = $request->file('foto');
+            $namaFile = time() . '_' . $fotoBaru->getClientOriginalName();
+            $fotoBaru->storeAs('foto_progres', $namaFile, 'public');
+
+            $fotoProgres = $progres->fotoProgres()->first();
+            if ($fotoProgres) {
+                if ($fotoProgres->foto && Storage::disk('public')->exists('foto_progres/' . $fotoProgres->foto)) {
+                    Storage::disk('public')->delete('foto_progres/' . $fotoProgres->foto);
+                }
+                $fotoProgres->update([
+                    'foto' => $namaFile,
+                ]);
+            } else {
+                FotoProgres::create([
+                    'id_progres'  => $progres->id,
+                    'id_pengguna' => $progres->id_pengguna,
+                    'foto'        => $namaFile,
+                ]);
+            }
+        }
 
         return redirect()->route('progres')->with('success', 'Data berhasil diperbarui');
     }
 
 
+
     /**
      * Remove the specified resource from storage.
      */
-   public function destroy(string $id)
-{
-    $progres = ProgresKerja::findOrFail($id);
+    public function destroy(string $id)
+    {
+        $progres = ProgresKerja::findOrFail($id);
 
-    // Hapus foto dari storage dan tabel foto_progres
-    $fotoProgres = FotoProgres::where('id_progres', $progres->id)->first();
-    if ($fotoProgres) {
-        $path = 'foto_progres/' . $fotoProgres->foto;
+        // Hapus foto dari storage dan tabel foto_progres
+        $fotoProgres = FotoProgres::where('id_progres', $progres->id)->first();
+        if ($fotoProgres) {
+            $path = 'foto_progres/' . $fotoProgres->foto;
 
-        if (Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+
+            $fotoProgres->delete();
         }
 
-        $fotoProgres->delete();
+        // Hapus progres kerja
+        $progres->delete();
+
+        return redirect()->route('progres')->with('success', 'Data Berhasil Dihapus');
     }
-
-    // Hapus progres kerja
-    $progres->delete();
-
-    return redirect()->route('progres')->with('success', 'Data Berhasil Dihapus');
-}
-
 }

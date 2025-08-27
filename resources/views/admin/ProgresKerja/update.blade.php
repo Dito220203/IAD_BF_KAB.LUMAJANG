@@ -110,7 +110,17 @@
                                     <label class="col-sm-2 col-form-label">Map Lokasi</label>
                                     <div class="col-sm-10">
                                         <div class="coordinates-container">
-                                            {{-- Kalau ada koordinat lama, taruh di sini --}}
+                                            <div class="coordinates-container">
+                                                @foreach ($progres->maps as $i => $map)
+                                                    <input type="hidden" name="longitude[{{ $i }}]"
+                                                        class="coordinates_{{ $i }} longitudes"
+                                                        value="{{ $map->longitude }}">
+                                                    <input type="hidden" name="latitude[{{ $i }}]"
+                                                        class="coordinates_{{ $i }} latitudes"
+                                                        value="{{ $map->latitude }}">
+                                                @endforeach
+                                            </div>
+
                                         </div>
                                         <div id="map"></div>
                                     </div>
@@ -123,15 +133,16 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Foto Progres</label>
                                     <div class="col-sm-10">
-                                        <input type="file" name="foto" class="form-control"
-                                            accept=".jpg,.jpeg,.png" id="preview-foto-input">
+                                        <input type="file" name="foto" class="form-control" accept=".jpg,.jpeg,.png"
+                                            id="preview-foto-input">
                                         <small class="text-muted">Opsional. Maks 2MB.</small>
                                         <div class="mt-3">
                                             <img id="preview-foto"
                                                 src="{{ $fotoProgres ? asset('storage/foto_progres/' . $fotoProgres->foto) : asset('images/placeholder-image.png') }}"
                                                 alt="Foto Progres"
                                                 style="display:block;width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
-                                            <div class="text-muted mt-1" id="foto-placeholder-ket" style="{{ $fotoProgres ? 'display:none;' : '' }}">
+                                            <div class="text-muted mt-1" id="foto-placeholder-ket"
+                                                style="{{ $fotoProgres ? 'display:none;' : '' }}">
                                                 Belum ada foto, silakan upload jika ada.
                                             </div>
                                         </div>
@@ -158,63 +169,71 @@
         </section>
 
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
-        <script>
-            var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors',
-                maxZoom: 18
-            }).addTo(mymap);
+<script>
+    var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 18
+    }).addTo(mymap);
 
-            var marker = [];
-            var index = 0;
+    let markers = [];
+    let index = 0;
 
-            function onMapClick(e) {
-                marker[index] = L.marker(e.latlng).addTo(mymap).bindPopup("<button type='button' onclick='hapus_marker(" +
-                    index + ")'>Hapus</button>");
-                let html =
-                    `<input type="hidden" name="longitude[${index}]" class="coordinates_${index} longitudes" value="${e.latlng.lng}">
-                            <input type="hidden" name="latitude[${index}]" class="coordinates_${index} latitudes" value="${e.latlng.lat}">`;
-                document.querySelector('.coordinates-container').insertAdjacentHTML('beforeend', html);
-                index++;
-            }
+    // tampilkan marker lama (kalau ada dari DB)
+    var oldCoordinates = @json($progres->maps);
+    if (oldCoordinates.length > 0) {
+        let first = oldCoordinates[0]; // hanya ambil 1 marker
+        markers[0] = L.marker([first.latitude, first.longitude])
+            .addTo(mymap)
+            .bindPopup("<button type='button' class='btn btn-sm btn-danger' onclick='hapusMarker(0)'>Hapus</button>")
+            .openPopup();
 
-            function hapus_marker(id) {
-                document.querySelectorAll('.coordinates_' + id).forEach(el => el.remove());
-                mymap.removeLayer(marker[id]);
-                rapikan_input();
-            }
+        // isi ulang hidden input
+        document.querySelector('.coordinates-container').innerHTML = `
+            <input type="hidden" name="longitude" value="${first.longitude}">
+            <input type="hidden" name="latitude" value="${first.latitude}">
+        `;
+        mymap.setView([first.latitude, first.longitude], 15);
+        index = 1;
+    }
 
-            function rapikan_input() {
-                document.querySelectorAll('.longitudes').forEach((el, i) => {
-                    el.name = `longitude[${i}]`;
-                    el.className = `coordinates_${i} longitudes`;
-                });
-                document.querySelectorAll('.latitudes').forEach((el, i) => {
-                    el.name = `latitude[${i}]`;
-                    el.className = `coordinates_${i} latitudes`;
-                });
-            }
+    // fungsi klik peta → hanya 1 marker
+    function onMapClick(e) {
+        // hapus marker lama kalau ada
+        if (markers.length > 0) {
+            mymap.removeLayer(markers[0]);
+            document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
+            markers = [];
+            index = 0;
+        }
 
-            mymap.on('click', onMapClick);
-        </script>
+        // tambah marker baru
+        markers[index] = L.marker(e.latlng).addTo(mymap).bindPopup(
+            "<button type='button' class='btn btn-sm btn-danger' onclick='hapusMarker(" + index + ")'>Hapus</button>"
+        ).openPopup();
 
-        <script>
-            document.getElementById('preview-foto-input').addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                const preview = document.getElementById('preview-foto');
-                const ket = document.getElementById('foto-placeholder-ket');
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        ket.style.display = 'none';
-                    }
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "{{ asset('images/placeholder-image.png') }}";
-                    ket.style.display = 'block';
-                }
-            });
-        </script>
+        // tambahkan input hidden
+        let html = `
+            <input type="hidden" name="longitude" value="${e.latlng.lng}">
+            <input type="hidden" name="latitude" value="${e.latlng.lat}">
+        `;
+        document.querySelector('.coordinates-container').insertAdjacentHTML('beforeend', html);
+
+        index++;
+    }
+
+    // hapus marker + input
+    function hapusMarker(i) {
+        if (markers[i]) {
+            mymap.removeLayer(markers[i]);
+            markers.splice(i, 1);
+            document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
+            index = 0;
+        }
+    }
+
+    mymap.on('click', onMapClick);
+</script>
+
     </main>
 @endsection

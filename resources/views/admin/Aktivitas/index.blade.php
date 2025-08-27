@@ -31,7 +31,7 @@
                                 </div>
 
                                 <div class="input-group w-auto">
-                                    <input type="text" id="searchInput" class="form-control"
+                                    <input type="text" class="searchInput" class="form-control"
                                         placeholder="Cari informasi...">
                                 </div>
                             </div>

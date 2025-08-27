@@ -98,13 +98,20 @@
                                     </div>
                                 </div>
 
-                                {{-- Map Lokasi --}}
                                 <div class="row mb-4">
                                     <label class="col-sm-2 col-form-label">Map Lokasi</label>
                                     <div class="col-sm-10">
-                                        <div id="map"></div>
+                                        <div id="map" style="height: 400px;"></div>
+
+                                        {{-- input hidden (tidak wajib kalau hanya show) --}}
+                                        <input type="hidden" name="latitude" id="latitude"
+                                            value="{{ $progres->latitude }}">
+                                        <input type="hidden" name="longitude" id="longitude"
+                                            value="{{ $progres->longitude }}">
                                     </div>
                                 </div>
+
+
 
                                 {{-- Foto Progres (jika ada) --}}
                                 <div class="mb-3 row">
@@ -113,13 +120,12 @@
                                         @php
                                             $fotoProgres = $progres->fotoProgres()->first();
                                         @endphp
-                                        @if($fotoProgres)
-                                            <img src="{{ asset('storage/foto_progres/'.$fotoProgres->foto) }}"
+                                        @if ($fotoProgres)
+                                            <img src="{{ asset('storage/foto_progres/' . $fotoProgres->foto) }}"
                                                 alt="Foto Progres"
                                                 style="width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
                                         @else
-                                            <img src="{{ asset('images/placeholder-image.png') }}"
-                                                alt="Preview Foto"
+                                            <img src="{{ asset('images/placeholder-image.png') }}" alt="Preview Foto"
                                                 style="width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
                                             <div class="text-muted mt-1">Belum ada foto progres.</div>
                                         @endif
@@ -140,19 +146,34 @@
             </div>
         </section>
 
+        <div id="map" style="height: 400px;"></div>
+
+       {{-- Leaflet JS --}}
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
         <script>
             var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors',
                 maxZoom: 18
             }).addTo(mymap);
 
-            // Kalau ada koordinat tersimpan di progres
-            @if ($progres->latitude && $progres->longitude)
-                L.marker([{{ $progres->latitude }}, {{ $progres->longitude }}]).addTo(mymap);
-                mymap.setView([{{ $progres->latitude }}, {{ $progres->longitude }}], 15);
+            @if ($progres->maps->isNotEmpty())
+                // ambil titik pertama untuk view
+                var firstMap = @json($progres->maps->first());
+
+                var marker = L.marker([firstMap.latitude, firstMap.longitude], {
+                    draggable: false // tidak bisa digeser
+                }).addTo(mymap);
+
+                // update input hidden saat digeser
+                marker.on('dragend', function(e) {
+                    var position = e.target.getLatLng();
+                    document.getElementById("latitude").value = position.lat;
+                    document.getElementById("longitude").value = position.lng;
+                });
+
+                mymap.setView([firstMap.latitude, firstMap.longitude], 15);
             @endif
         </script>
-    </main>
-@endsection
+    @endsection
