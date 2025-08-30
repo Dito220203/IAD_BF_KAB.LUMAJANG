@@ -38,39 +38,48 @@
                                      <div class="row mb-3">
                                          <label class="col-sm-2 col-form-label">Gambar Depan</label>
                                          <div class="col-sm-10">
-                                             <input type="file" name="foto" class="form-control"
-                                                 id="preview-image-input" accept=".jpg,.jpeg,.png">
+                                             <input type="file" name="foto" id="foto" class="form-control"
+                                                 accept=".jpg,.jpeg,.png" onchange="validateAndPreview(event)">
                                              <small class="text-muted">* Harus format jpeg, jpg atau png dan maks. ukuran 2
                                                  MB</small>
 
-                                             @if ($informasi->foto)
-                                                 <div class="mt-2">
-                                                     <img id="preview-image"
-                                                         src="{{ asset('storage/' . $informasi->foto) }}"
-                                                         alt="Gambar Banner" width="80" height="80"
-                                                         style="object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
-                                                 </div>
-                                             @else
-                                                 <div class="mt-2">
-                                                     <img id="preview-image" src="#" alt="Preview Gambar"
-                                                         style="display:none; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;"
-                                                         width="80" height="80">
-                                                 </div>
-                                             @endif
+                                             {{-- Tempat preview gambar --}}
+                                             <div class="mt-2">
+                                                 <img id="image-preview"
+                                                     src="{{ $informasi->foto ? asset('storage/' . $informasi->foto) : '#' }}"
+                                                     alt="Preview Gambar"
+                                                     style="max-height: 120px; border: 1px solid #ccc; padding: 5px; {{ $informasi->foto ? '' : 'display:none;' }}">
+                                             </div>
                                          </div>
                                      </div>
 
-                                     {{-- Script untuk menampilkan preview saat file dipilih --}}
+                                     {{-- Script Validasi + Preview Gambar --}}
                                      <script>
-                                         document.getElementById('preview-image-input').addEventListener('change', function(event) {
+                                         function validateAndPreview(event) {
                                              const file = event.target.files[0];
-                                             const preview = document.getElementById('preview-image');
+                                             const preview = document.getElementById('image-preview');
 
                                              if (file) {
-                                                 preview.src = URL.createObjectURL(file);
-                                                 preview.style.display = 'block';
+                                                 // Validasi ukuran file (maks 2 MB)
+                                                 if (file.size > 2 * 1024 * 1024) {
+                                                     alert("Ukuran file melebihi 2 MB. Silakan pilih gambar lain.");
+                                                     event.target.value = ""; // reset input file
+                                                     preview.style.display = "none";
+                                                     return;
+                                                 }
+
+                                                 // Preview gambar
+                                                 const reader = new FileReader();
+                                                 reader.onload = function(e) {
+                                                     preview.src = e.target.result;
+                                                     preview.style.display = "block";
+                                                 }
+                                                 reader.readAsDataURL(file);
+                                             } else {
+                                                 preview.src = "#";
+                                                 preview.style.display = "none";
                                              }
-                                         });
+                                         }
                                      </script>
 
 
@@ -133,4 +142,21 @@
 
          </section>
      </main>
+     <script>
+         document.addEventListener("DOMContentLoaded", function() {
+             const quill = new Quill(".quill-editor-full", {
+                 theme: "snow"
+             });
+
+             // Set isi awal dari textarea ke quill
+             let initialIsi = document.getElementById("isi").value;
+             quill.root.innerHTML = initialIsi;
+
+             // Saat submit form, ambil isi Quill dan masukkan ke textarea
+             const form = document.querySelector("form");
+             form.onsubmit = function() {
+                 document.getElementById("isi").value = quill.root.innerHTML;
+             };
+         });
+     </script>
  @endsection

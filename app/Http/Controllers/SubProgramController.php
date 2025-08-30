@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Subprogram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,12 +38,12 @@ class SubProgramController extends Controller
         ]);
 
         Subprogram::create([
-             'id_pengguna' => Auth::guard('pengguna')->id(),
+            'id_pengguna' => Auth::guard('pengguna')->id(),
             'program' => $validasi['program'],
             'subprogram' => $validasi['subprogram'],
             'uraian' => $validasi['uraian'],
         ]);
-
+        LogHelper::add('Menambah data Subprogram');
         return redirect()->route('subprogram')->with('success', 'Data Berhasil Ditambahkan');
     }
 
@@ -79,7 +80,7 @@ class SubProgramController extends Controller
             'subprogram' => $request->input('e_subprogram'),
             'uraian' => $request->input('e_uraian'),
         ]);
-
+        LogHelper::add('Mengubah data Subprogram');
         return redirect()->route('subprogram')->with('success', 'Data Berhasil Di Update');
     }
 
@@ -89,6 +90,7 @@ class SubProgramController extends Controller
     public function destroy(string $id)
     {
         Subprogram::where('id', $id)->delete();
+        LogHelper::add('Menghapus data Subprogram');
         return redirect()->route('subprogram')->with('success', 'Data Berhasil Dihapus');
     }
 }

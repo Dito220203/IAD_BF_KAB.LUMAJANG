@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('informasis', function (Blueprint $table) {
+        Schema::create('log_aktivitas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
-            $table->string('judul');
-            $table->string('foto');
-            $table->string('tanggal');
-            $table->string('status');
-            $table->longText('isi')->nullable();
+            $table->unsignedBigInteger('id_pengguna')->nullable();
+            $table->string('ip');            // ip address user
+            $table->timestamp('waktu');      // kapan
+            $table->text('aktivitas');       // aktivitasnya apa
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('informasis');
+        Schema::dropIfExists('log_aktivitas');
     }
 };

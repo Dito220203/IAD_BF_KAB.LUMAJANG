@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +20,7 @@ class LoginController extends Controller
 
         if (Auth::guard('pengguna')->attempt($credentials)) {
             $request->session()->regenerate();
+            LogHelper::add('Login Halaman Admin');
             return redirect()->intended('/admin'); // Sesuaikan tujuan redirect
         }
 
@@ -31,6 +33,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        LogHelper::add('Logout Halaman Admin');
         Auth::guard('pengguna')->logout(); // Logout user dari guard 'pengguna'
 
         $request->session()->invalidate(); // Hapus semua session
@@ -54,6 +57,7 @@ class LoginController extends Controller
 
         $user->password = Hash::make($request->new_password);
         $user->save();
+        LogHelper::add('Mengubah password');
 
         return response()->json([
             'status' => 'success',

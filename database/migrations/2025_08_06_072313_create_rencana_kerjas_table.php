@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('tahun');
             $table->string('anggaran');
             $table->string('status')->default('tidak valid');
-            $table->string('keterangan');
+            $table->longText('keterangan');
             $table->timestamps();
         });
     }

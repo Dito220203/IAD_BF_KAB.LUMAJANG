@@ -66,8 +66,14 @@
                                         <label class="col-sm-2 col-form-label">Gambar Depan</label>
                                         <div class="col-sm-10">
                                             <input type="file" name="image" id="preview-image-input"
-                                                class="form-control" accept=".jpg,.jpeg,.png">
+                                                class="form-control" accept=".jpg,.jpeg,.png"
+                                                onchange="validateAndPreview(event)">
                                             <small class="text-muted">* Format jpeg, jpg atau png. Maks. 2 MB</small>
+
+                                            {{-- Error dari Laravel --}}
+                                            @error('image')
+                                                <div class="text-danger mt-1">{{ $message }}</div>
+                                            @enderror
 
                                             {{-- Wrapper untuk gambar --}}
                                             <div class="mt-2">
@@ -79,17 +85,35 @@
                                         </div>
                                     </div>
 
-                                    {{-- Script untuk preview --}}
+                                    {{-- Script untuk validasi + preview --}}
                                     <script>
-                                        document.getElementById('preview-image-input').addEventListener('change', function(event) {
+                                        function validateAndPreview(event) {
                                             const file = event.target.files[0];
+                                            const preview = document.getElementById('preview-image');
+
                                             if (file) {
-                                                const preview = document.getElementById('preview-image');
-                                                preview.src = URL.createObjectURL(file);
-                                                preview.style.display = 'block'; // pastikan tampil
+                                                // cek ukuran max 2MB
+                                                if (file.size > 2 * 1024 * 1024) {
+                                                    alert("Ukuran file melebihi 2 MB. Silakan pilih gambar lain.");
+                                                    event.target.value = ""; // reset input
+                                                    preview.style.display = "none";
+                                                    return;
+                                                }
+
+                                                // tampilkan preview
+                                                const reader = new FileReader();
+                                                reader.onload = function(e) {
+                                                    preview.src = e.target.result;
+                                                    preview.style.display = "block";
+                                                }
+                                                reader.readAsDataURL(file);
+                                            } else {
+                                                preview.src = "#";
+                                                preview.style.display = "none";
                                             }
-                                        });
+                                        }
                                     </script>
+
 
 
                                     {{-- Tanggal --}}

@@ -67,18 +67,23 @@
                                         </div>
                                     </div>
 
-                                    {{-- Pilih OPD --}}
-                                    <div class="row mb-3">
-                                        <label for="id_opd" class="col-sm-2 col-form-label">Pilih OPD</label>
-                                        <div class="col-sm-10">
-                                            <select name="id_opd" id="id_opd" class="form-control" required>
-                                                <option value="">-- Pilih OPD --</option>
-                                                @foreach ($opd as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                    {{-- Pilih OPD hanya untuk Super Admin --}}
+                                    @auth('pengguna')
+                                        @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                            <div class="row mb-3">
+                                                <label for="id_opd" class="col-sm-2 col-form-label">Pilih OPD</label>
+                                                <div class="col-sm-10">
+                                                    <select name="id_opd" id="id_opd" class="form-control" required>
+                                                        <option value="">-- Pilih OPD --</option>
+                                                        @foreach ($opd as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endauth
+
 
 
                                     <div class="row mb-3">

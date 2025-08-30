@@ -84,21 +84,24 @@
                                     </div>
                                 </div>
 
-                                {{-- Perangkat Daerah --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
-                                    <div class="col-sm-10">
-                                        <select name="id_opd" class="form-select">
-                                            <option value="">Pilih</option>
-                                            @foreach ($opd as $data)
-                                                <option value="{{ $data->id }}"
-                                                    {{ $monev->id_opd == $data->id ? 'selected' : '' }}>
-                                                    {{ $data->nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                                @auth('pengguna')
+                                    @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
+                                            <div class="col-sm-10">
+                                                <select name="id_opd" class="form-select">
+                                                    <option value="">Pilih</option>
+                                                    @foreach ($opd as $data)
+                                                        <option value="{{ $data->id }}"
+                                                            {{ $monev->id_opd == $data->id ? 'selected' : '' }}>
+                                                            {{ $data->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endauth
 
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">RKA</label>

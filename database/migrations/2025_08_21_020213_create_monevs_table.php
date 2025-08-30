@@ -30,9 +30,9 @@ return new class extends Migration
                 ->onDelete('set null');
 
             $table->string('rka')->nullable();
-             $table->string('status')->default('tidak valid');
+            $table->string('status')->default('tidak valid');
             $table->string('realisasi')->nullable();
-            $table->string('keterangan')->nullable();
+            $table->longText('keterangan')->nullable();
             $table->timestamps();
         });
     }

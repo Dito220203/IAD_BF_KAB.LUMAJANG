@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('desa');
             $table->string('gambar');
             $table->string('tanggal');
-            $table->string('uraian');
+            $table->longText('uraian');
             $table->timestamps();
         });
     }

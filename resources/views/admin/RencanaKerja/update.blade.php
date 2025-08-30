@@ -73,21 +73,24 @@
                                     </div>
                                 </div>
 
-                                {{-- OPD --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">OPD</label>
-                                    <div class="col-sm-10">
-                                        <select name="e_opd" class="form-select" required>
-                                            <option value="">-- Pilih OPD --</option>
-                                            @foreach ($opd as $item)
-                                                <option value="{{ $item->id }}"
-                                                    {{ $rencana->id_opd == $item->id ? 'selected' : '' }}>
-                                                    {{ $item->nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                {{-- OPD (hanya untuk Super Admin) --}}
+                                @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">OPD</label>
+                                        <div class="col-sm-10">
+                                            <select name="e_opd" class="form-select" required>
+                                                <option value="">-- Pilih OPD --</option>
+                                                @foreach ($opd as $item)
+                                                    <option value="{{ $item->id }}"
+                                                        {{ $rencana->id_opd == $item->id ? 'selected' : '' }}>
+                                                        {{ $item->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
+
 
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Keterangan</label>

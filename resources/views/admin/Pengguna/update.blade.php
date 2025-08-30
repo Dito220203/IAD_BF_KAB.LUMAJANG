@@ -28,7 +28,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Username</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="username" class="form-control"
+                                        <input type="text" name="e_username" class="form-control"
                                             value="{{ old('username', $pengguna->username) }}" required>
                                     </div>
                                 </div>
@@ -37,7 +37,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Nama</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="nama" class="form-control"
+                                        <input type="text" name="e_nama" class="form-control"
                                             value="{{ old('nama', $pengguna->nama) }}" required>
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Password Baru</label>
                                     <div class="col-sm-10">
-                                        <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diubah">
+                                        <input type="password" name="e_password" class="form-control" placeholder="Kosongkan jika tidak diubah">
                                         <small class="text-muted">Biarkan kosong jika tidak ingin mengubah password</small>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
                                     <div class="col-sm-10">
-                                        <select name="id_opd" class="form-select" required>
+                                        <select name="e_id_opd" class="form-select" required>
                                             <option value="">Pilih</option>
                                             @foreach ($opd as $data)
                                                 <option value="{{ $data->id }}" {{ old('id_opd', $pengguna->id_opd) == $data->id ? 'selected' : '' }}>
@@ -70,10 +70,10 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Level</label>
                                     <div class="col-sm-10">
-                                        <select name="level" class="form-select" required>
+                                        <select name="e_level" class="form-select" required>
                                             <option value="">Pilih</option>
-                                            <option value="superadmin" {{ old('level', $pengguna->level) == 'superadmin' ? 'selected' : '' }}>Super Admin</option>
-                                            <option value="admin" {{ old('level', $pengguna->level) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                            <option value="Super Admin" {{ old('level', $pengguna->level) == 'Super Admin' ? 'selected' : '' }}>Super Admin</option>
+                                            <option value="Admin" {{ old('level', $pengguna->level) == 'Admin' ? 'selected' : '' }}>Admin</option>
                                             <option value="adminsekretariat" {{ old('level', $pengguna->level) == 'adminsekretariat' ? 'selected' : '' }}>Admin Sekretariat</option>
                                         </select>
                                     </div>

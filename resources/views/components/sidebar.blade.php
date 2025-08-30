@@ -11,13 +11,13 @@
         </li><!-- End Dashboard Nav -->
 
 
-        @if (auth()->guard('pengguna')->user()->level == 'admin')
+        @if (auth()->guard('pengguna')->user()->level == 'Admin')
             {{-- Menu khusus Admin --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('informasi*') ? '' : 'collapsed' }}"
                     href="{{ route('informasi') }}">
                     <i class="bi bi-question-circle"></i>
-                    <span>Berita</span>
+                    <span>Informasi</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -86,7 +86,7 @@
                         <a class="{{ request()->routeIs('informasi*') ? 'active' : '' }}"
                             href="{{ route('informasi') }}">
                             <i class="bi bi-question-circle"></i>
-                            <span>Berita</span>
+                            <span>Informasi</span>
                         </a>
                     </li>
 

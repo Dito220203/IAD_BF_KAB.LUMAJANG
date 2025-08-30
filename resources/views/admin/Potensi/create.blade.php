@@ -28,9 +28,12 @@
                                         <label class="col-sm-2 col-form-label">Judul Potensi</label>
                                         <div class="col-sm-10">
                                             <input type="text" name="judul" class="form-control" required>
+                                            @error('judul')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
-                                    {{-- Kecamatan --}}
+
                                     {{-- Kecamatan --}}
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Kecamatan</label>
@@ -38,11 +41,12 @@
                                             <select id="kecamatan" name="kecamatan" class="form-select">
                                                 <option value="">Pilih</option>
                                                 @foreach ($kecamatan as $data)
-                                                    <option value="{{ $data->id }}">
-                                                        {{ $data->kecamatan }}
-                                                    </option>
+                                                    <option value="{{ $data->id }}">{{ $data->kecamatan }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('kecamatan')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -53,6 +57,9 @@
                                             <select id="desa" name="desa" class="form-select">
                                                 <option value="">Pilih</option>
                                             </select>
+                                            @error('desa')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -61,7 +68,7 @@
                                         <label class="col-sm-2 col-form-label">Gambar Depan</label>
                                         <div class="col-sm-10">
                                             <input type="file" name="image" class="form-control"
-                                                accept=".jpg,.jpeg,.png" onchange="previewImage(event)">
+                                                accept=".jpg,.jpeg,.png" onchange="validateAndPreview(event)">
 
                                             {{-- Tempat preview gambar --}}
                                             <div class="mt-2">
@@ -69,18 +76,30 @@
                                                     style="max-height: 120px; display: none; border: 1px solid #ccc; padding: 5px;">
                                             </div>
                                             <small class="text-muted">* Format jpeg, jpg atau png. Maks. 2 MB</small>
+                                            @error('image')
+                                                <br><small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
-                                    {{-- Script Preview --}}
+                                    {{-- Script Preview + Validasi 2MB --}}
                                     <script>
-                                        function previewImage(event) {
-                                            const input = event.target;
+                                        function validateAndPreview(event) {
+                                            const file = event.target.files[0];
                                             const preview = document.getElementById('image-preview');
 
-                                            if (input.files && input.files[0]) {
-                                                preview.src = URL.createObjectURL(input.files[0]);
-                                                preview.style.display = 'block';
+                                            if (file) {
+                                                // cek ukuran max 2MB
+                                                if (file.size > 2 * 1024 * 1024) {
+                                                    alert("Ukuran file melebihi 2 MB. Silakan pilih gambar lain.");
+                                                    event.target.value = ""; // reset input
+                                                    preview.style.display = "none";
+                                                    return;
+                                                }
+
+                                                // tampilkan preview
+                                                preview.src = URL.createObjectURL(file);
+                                                preview.style.display = "block";
                                             } else {
                                                 preview.src = "#";
                                                 preview.style.display = "none";
@@ -88,22 +107,27 @@
                                         }
                                     </script>
 
-
                                     {{-- Tanggal --}}
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Tanggal</label>
                                         <div class="col-sm-10">
                                             <input type="date" name="tanggal" class="form-control" required>
+                                            @error('tanggal')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
+                                    {{-- Keterangan --}}
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Keterangan</label>
                                         <div class="col-sm-10">
-                                            <textarea name="keterangan" class="form-control" rows="4" placeholder="Tulis keterangan..." required></textarea>
+                                            <textarea name="uraian" class="form-control" rows="4" placeholder="Tulis keterangan..." required></textarea>
+                                            @error('uraian')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
-
 
                                     {{-- Tombol --}}
                                     <div class="row mb-3">
@@ -121,6 +145,8 @@
                 </div>
             </div>
         </section>
+
+        {{-- Script untuk ambil desa berdasarkan kecamatan --}}
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const kecamatanSelect = document.getElementById("kecamatan");

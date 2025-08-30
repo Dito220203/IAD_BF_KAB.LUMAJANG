@@ -59,8 +59,8 @@
                                          <div class="col-sm-10">
                                              <select name="level" class="form-select" required>
                                                  <option value="">Pilih</option>
-                                                 <option value="superadmin">Super Admin</option>
-                                                 <option value="admin">Admin</option>
+                                                 <option value="Super Admin">Super Admin</option>
+                                                 <option value="Admin">Admin</option>
                                                  <option value="adminsekretariat">Admin Sekretariat</option>
                                              </select>
                                          </div>

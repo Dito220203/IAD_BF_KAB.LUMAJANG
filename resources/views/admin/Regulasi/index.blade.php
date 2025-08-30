@@ -25,7 +25,8 @@
 
                                 <div class="d-flex align-items-center ">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto">
+                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"
+                                        data-target="TableRegulasi">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -35,14 +36,14 @@
                                 </div>
 
                                 <div class="input-group w-auto">
-                                    <input type="text" id="searchInput" class="form-control"
-                                        placeholder="Cari informasi...">
+                                    <input type="text" class="form-control searchInput" data-target="TableRegulasi"
+                                        placeholder="Cari Data...">
                                 </div>
                             </div>
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="infoTable">
+                                <table class="table .table-active text-center" id="TableRegulasi">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -68,34 +69,35 @@
                                                 </td>
 
                                                 <td>
-                                                    <!-- Tombol Lihat -->
                                                     <button type="button" class="btn btn-sm btn-primary"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#imageModal{{ $data->id }}">
+                                                        data-bs-target="#fileModal{{ $data->id }}">
                                                         Lihat
                                                     </button>
 
+
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="imageModal{{ $data->id }}"
-                                                        tabindex="-1" aria-labelledby="imageModalLabel{{ $data->id }}"
+                                                    <div class="modal fade" id="fileModal{{ $data->id }}" tabindex="-1"
+                                                        aria-labelledby="fileModalLabel{{ $data->id }}"
                                                         aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-dialog modal-xl modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title"
-                                                                        id="imageModalLabel{{ $data->id }}">Gambar
-                                                                        Banner</h5>
+                                                                        id="fileModalLabel{{ $data->id }}">Lihat File
+                                                                        Regulasi</h5>
                                                                     <button type="button" class="btn-close"
                                                                         data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body text-center">
-                                                                    <img src="{{ asset('storage/regulasi/' . $data->file) }}"
-                                                                        alt="Regulasi" width="100%"
-                                                                        class="img-fluid rounded">
+                                                                    <iframe
+                                                                        src="{{ asset('storage/regulasi/' . $data->file) }}"
+                                                                        width="100%" height="600px"></iframe>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                 </td>
                                                 <td class="text-center align-middle">
                                                     <div class="d-flex justify-content-center gap-1">

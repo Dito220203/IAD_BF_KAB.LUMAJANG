@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
+use App\Models\LogAktivitas;
 use App\Models\Opd;
 use App\Models\Pengguna;
 use Illuminate\Http\Request;
@@ -16,7 +18,7 @@ class PenggunaController extends Controller
     public function index()
     {
         $pengguna = Pengguna::all();
-        return view('admin.Pengguna.index', compact('pengguna'));
+        return view ('admin.Pengguna.index', compact('pengguna'));
     }
 
     /**
@@ -38,20 +40,21 @@ class PenggunaController extends Controller
             'nama' => 'required',
             'password' => 'required',
             'level' => 'required',
-             'id_opd' => 'required|exists:opds,id',
+            'id_opd' => 'required|exists:opds,id',
         ]);
 
-         // Ambil nama opd berdasarkan id
+        // Ambil nama opd berdasarkan id
 
         //Simpan ke DB dengan password di-hash
         Pengguna::create([
-             'id_opd'    => $request->id_opd,
+            'id_opd'    => $request->id_opd,
             'username'  => $request->username,
             'nama'      => $request->nama,
             'password'  => Hash::make($request->password),
             'level'     => $request->level,
 
         ]);
+         LogHelper::add('Menambah data Pengguna');
         return redirect()->route('pengguna')->with('success', 'Data Berhasil Ditambahkan');
     }
 
@@ -73,43 +76,43 @@ class PenggunaController extends Controller
 
         // Ambil semua OPD untuk pilihan dropdown
         $opd = Opd::all();
-
-        // Kirim ke view edit
         return view('admin.Pengguna.update', compact('pengguna', 'opd'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-   public function update(Request $request, string $id)
+  public function update(Request $request, string $id)
 {
     $pengguna = Pengguna::findOrFail($id);
 
     $request->validate([
-        'username' => 'required|unique:penggunas,username,' . $id,
-        'nama' => 'required',
-        'id_opd' => 'required|exists:opds,id',
-        'level' => 'required',
-        'password' => 'nullable|string|min:8',
-        'level' => 'required',
+        'e_username' => 'required',
+        'e_nama'     => 'required',
+        'e_id_opd'   => 'required|exists:opds,id',
+        'e_level'    => 'required',
+        'e_password' => 'nullable|string|min:8',
     ]);
 
     $data = [
-        'username' => $request->username,
-        'nama' => $request->nama,
-        'id_opd' => $request->id_opd,
-         'level' => $request->level,
+        'username' => $request->e_username,
+        'nama'     => $request->e_nama,
+        'id_opd'   => $request->e_id_opd,
+        'level'    => $request->e_level,
     ];
 
     // Jika password diisi, hash dan update
-    if ($request->filled('password')) {
-        $data['password'] = Hash::make($request->password);
+    if ($request->filled('e_password')) {
+        $data['password'] = Hash::make($request->e_password);
     }
 
     $pengguna->update($data);
 
+    LogHelper::add('Mengubah data Pengguna');
+
     return redirect()->route('pengguna')->with('success', 'Data Berhasil Di Update');
 }
+
 
 
 
@@ -119,8 +122,7 @@ class PenggunaController extends Controller
     public function destroy(string $id)
     {
         Pengguna::where('id', $id)->delete();
+        LogHelper::add('Menghapus data Pengguna');
         return redirect()->route('pengguna')->with('success', 'Data Berhasil Dihapus');
     }
-
-
 }

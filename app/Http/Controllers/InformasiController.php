@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Informasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,8 @@ class InformasiController extends Controller
      */
     public function index()
     {
-        $informasi = Informasi::all();
+        $user = Auth::guard('pengguna')->user();
+        $user->level == 'Super Admin' ? $informasi = Informasi::all() : $informasi = Informasi::where('id_pengguna', $user->id)->get();
         return view('admin.Informasi.index', compact('informasi'));
     }
 
@@ -35,10 +37,12 @@ class InformasiController extends Controller
 
         $validatedData = $request->validate([
             'judul' => 'required',
-            'foto' => 'required|image|mimes:jpeg,jpg,png',
+            'foto'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
             'tanggal' => 'required',
             'status' => 'required',
             'isi' => 'required|string',
+        ], [
+            'foto.max' => 'Ukuran foto tidak boleh lebih dari 2 MB', // Pesan error custom
         ]);
 
 
@@ -50,7 +54,7 @@ class InformasiController extends Controller
 
 
         Informasi::create([
-             'id_pengguna' => Auth::guard('pengguna')->id(),
+            'id_pengguna' => Auth::guard('pengguna')->id(),
             'judul'       => $validatedData['judul'],
             'foto'       => $documentPath,
             'tanggal'      => $validatedData['tanggal'],
@@ -58,7 +62,7 @@ class InformasiController extends Controller
             'isi'      => $validatedData['isi'],
         ]);
 
-
+        LogHelper::add('Menambah data Informasi');
         return redirect()->route('informasi')->with('success', 'Data Berhasil Ditambahkan');
     }
 
@@ -89,10 +93,12 @@ class InformasiController extends Controller
 
         $validatedData = $request->validate([
             'judul'   => 'required',
-            'foto'    => 'nullable|image|mimes:jpeg,jpg,png',
+            'foto'    => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'tanggal' => 'required',
             'status'  => 'required',
             'isi'     => 'required',
+        ], [
+            'foto.max' => 'Ukuran foto tidak boleh lebih dari 2 MB',
         ]);
 
         // Jika ada foto baru
@@ -109,7 +115,7 @@ class InformasiController extends Controller
 
         $informasi->update($validatedData);
 
-
+        LogHelper::add('Memperbarui data Informasi');
 
         return redirect()->route('informasi')->with('success', 'Data Berhasil Diperbarui');
     }
@@ -129,7 +135,7 @@ class InformasiController extends Controller
 
         // Hapus data dari database
         $informasi->delete();
-
+        LogHelper::add('Menghapus data Informasi');
         return redirect()->route('informasi')->with('success', 'Data Berhasil Dihapus');
     }
 }

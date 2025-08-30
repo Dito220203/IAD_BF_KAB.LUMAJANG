@@ -100,7 +100,7 @@
             <li><a href="#">REGULASI IAD</a></li>
             <li><a href="#videosection">VIDEO</a></li>
             <li><a href="#contact">CONTACT</a></li>
-            <li><a href="login">SINGIN</li>
+            <li><a href="{{route('login')}}">SINGIN</li>
             </ul>
         </nav>
 

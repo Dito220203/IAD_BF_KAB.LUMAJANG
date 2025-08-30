@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class BannerController extends Controller
         $validated = $request->validate([
             'judul' => 'required',
             'status' => 'required',
-            'file'  => 'required|mimes:jpeg,png,jpg,gif,mp4,mov,avi,wmv|max:51200',
+            'file'  => 'required',
         ]);
 
         $filePath = $request->file('file')->store('banners', 'public');
@@ -45,6 +46,8 @@ class BannerController extends Controller
             'file'        => $filePath,
             'id_pengguna' => Auth::guard('pengguna')->id(),
         ]);
+
+        LogHelper::add('Menambah data Banner');
 
         return redirect()->route('banner')->with('success', 'Data Berhasil Ditambahkan');
     }
@@ -79,7 +82,7 @@ class BannerController extends Controller
         $request->validate([
             'e_judul' => 'required',
             'e_status' => 'required',
-            'e_file'   => 'nullable|mimes:jpeg,png,jpg,gif,mp4,mov,avi,wmv|max:51200',
+            'e_file'   => 'nullable',
         ]);
 
         $data = [
@@ -95,6 +98,7 @@ class BannerController extends Controller
         }
 
         $banner->update($data);
+        LogHelper::add('Mengubah data Banner');
 
         return redirect()->route('banner')->with('success', 'Data Berhasil Diupdate');
     }
@@ -112,6 +116,7 @@ class BannerController extends Controller
             Storage::disk('public')->delete($banner->file);
         }
         $banner->delete();
+        LogHelper::add('Menghapus data Banner');
         return redirect()->route('banner')->with('success', 'Data Berhasil Dihapus');
     }
 }

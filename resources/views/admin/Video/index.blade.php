@@ -74,7 +74,7 @@
                                 <!-- Entries -->
                                 <div class="d-flex align-items-center gap-2">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto">
+                                    <select id="entries" class="form-select form-select-sm w-auto" data-target="TableVideo">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -86,13 +86,13 @@
                                 <!-- Search -->
                                 <div class="input-group w-auto">
                                     <span class="input-group-text"><i class="fa fa-search"></i></span>
-                                    <input type="text" id="searchInput" class="form-control" placeholder="Cari Data...">
+                                    <input type="text" class="form-control searchInput" data-target="TableVideo" placeholder="Cari Video...">
                                 </div>
                             </div>
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table text-center" id="infoTable">
+                                <table class="table text-center" id="TableVideo">
                                     <thead>
                                         <tr>
                                             <th>No</th>

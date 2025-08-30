@@ -134,7 +134,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('js/sweetalert-custom.js') }}"></script>
     <script src="{{ asset('js/updateStatus.js') }}"></script>
-    {{-- <script src="{{ asset('js/search.js') }}"></script> --}}
+    <script src="{{ asset('js/entries.js')}}"></script>
+    <script src="{{ asset('js/search.js')}}"></script>
+
     <!-- SweetAlert Success -->
     @if (session('success'))
         <script>
@@ -150,7 +152,7 @@
         @endphp
     @endif
 
-@stack('scripts')
+    @stack('scripts')
 
 </body>
 

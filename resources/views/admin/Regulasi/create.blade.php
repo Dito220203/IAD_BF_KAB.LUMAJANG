@@ -49,22 +49,24 @@
                                          </div>
                                      </div>
 
-                                     {{-- Gambar Depan --}}
+                                     {{-- File Upload --}}
                                      <div class="row mb-3">
-                                         <label class="col-sm-2 col-form-label">Gambar Depan</label>
+                                         <label class="col-sm-2 col-form-label">Upload File</label>
                                          <div class="col-sm-10">
-                                             <input type="file" name="file" class="form-control"
-                                                 accept=".jpg,.jpeg,.png" onchange="previewImage(event)">
-
-                                             {{-- Tempat preview gambar --}}
-                                             <div class="mt-2">
-                                                 <img id="image-preview" src="#" alt="Preview Gambar"
-                                                     style="max-height: 120px; display: none; border: 1px solid #ccc; padding: 5px;">
-                                             </div>
+                                             <input type="file" name="file" id="file-input" class="form-control"
+                                                 accept=".pdf" required>
+                                             <small class="text-muted">* Hanya file PDF, Maksimal 2 MB</small>
                                          </div>
                                      </div>
-
-
+                                     <script>
+                                         document.getElementById("file-input").addEventListener("change", function(e) {
+                                             const file = e.target.files[0];
+                                             if (file && file.size > 2 * 1024 * 1024) {
+                                                 alert("Ukuran file maksimal 2 MB!");
+                                                 e.target.value = ""; // reset input
+                                             }
+                                         });
+                                     </script>
 
                                      {{-- Tombol --}}
                                      <div class="row mb-3">
