@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Kontak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,7 @@ class KontakController extends Controller
     } else {
         Kontak::create($data);
     }
-
+     LogHelper::add('Menambah data Kontak');
     return redirect()->back()->with('success', 'Kontak berhasil disimpan!');
 }
 

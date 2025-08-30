@@ -110,17 +110,12 @@
                                     <label class="col-sm-2 col-form-label">Map Lokasi</label>
                                     <div class="col-sm-10">
                                         <div class="coordinates-container">
-                                            <div class="coordinates-container">
-                                                @foreach ($progres->maps as $i => $map)
-                                                    <input type="hidden" name="longitude[{{ $i }}]"
-                                                        class="coordinates_{{ $i }} longitudes"
-                                                        value="{{ $map->longitude }}">
-                                                    <input type="hidden" name="latitude[{{ $i }}]"
-                                                        class="coordinates_{{ $i }} latitudes"
-                                                        value="{{ $map->latitude }}">
-                                                @endforeach
-                                            </div>
-
+                                            @foreach ($progres->maps as $i => $map)
+                                                <input type="hidden" name="longitude"
+                                                    value="{{ $map->longitude }}">
+                                                <input type="hidden" name="latitude"
+                                                    value="{{ $map->latitude }}">
+                                            @endforeach
                                         </div>
                                         <div id="map"></div>
                                     </div>
@@ -151,6 +146,7 @@
                                         @enderror
                                     </div>
                                 </div>
+
                                 {{-- Tombol --}}
                                 <div class="row mb-3">
                                     <div class="col-sm-10 offset-sm-2 d-flex gap-2">
@@ -160,80 +156,80 @@
                                 </div>
 
                             </form>
-
-                            {{-- Bagian tabel foto tetap sama seperti form tambah --}}
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        {{-- Leaflet Map --}}
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
-<script>
-    var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 18
-    }).addTo(mymap);
+        <script>
+            var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(mymap);
 
-    let markers = [];
-    let index = 0;
+            let markers = [];
 
-    // tampilkan marker lama (kalau ada dari DB)
-    var oldCoordinates = @json($progres->maps);
-    if (oldCoordinates.length > 0) {
-        let first = oldCoordinates[0]; // hanya ambil 1 marker
-        markers[0] = L.marker([first.latitude, first.longitude])
-            .addTo(mymap)
-            .bindPopup("<button type='button' class='btn btn-sm btn-danger' onclick='hapusMarker(0)'>Hapus</button>")
-            .openPopup();
+            // tampilkan marker lama
+            var oldCoordinates = @json($progres->maps);
+            if (oldCoordinates.length > 0) {
+                let first = oldCoordinates[0];
+                markers[0] = L.marker([first.latitude, first.longitude])
+                    .addTo(mymap)
+                    .bindPopup("<button type='button' class='btn btn-sm btn-danger' onclick='hapusMarker(0)'>Hapus</button>")
+                    .openPopup();
 
-        // isi ulang hidden input
-        document.querySelector('.coordinates-container').innerHTML = `
-            <input type="hidden" name="longitude" value="${first.longitude}">
-            <input type="hidden" name="latitude" value="${first.latitude}">
-        `;
-        mymap.setView([first.latitude, first.longitude], 15);
-        index = 1;
-    }
+                mymap.setView([first.latitude, first.longitude], 15);
+            }
 
-    // fungsi klik peta → hanya 1 marker
-    function onMapClick(e) {
-        // hapus marker lama kalau ada
-        if (markers.length > 0) {
-            mymap.removeLayer(markers[0]);
-            document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
-            markers = [];
-            index = 0;
-        }
+            function onMapClick(e) {
+                if (markers.length > 0) {
+                    mymap.removeLayer(markers[0]);
+                    document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
+                    markers = [];
+                }
+                markers[0] = L.marker(e.latlng).addTo(mymap).bindPopup(
+                    "<button type='button' class='btn btn-sm btn-danger' onclick='hapusMarker(0)'>Hapus</button>"
+                ).openPopup();
 
-        // tambah marker baru
-        markers[index] = L.marker(e.latlng).addTo(mymap).bindPopup(
-            "<button type='button' class='btn btn-sm btn-danger' onclick='hapusMarker(" + index + ")'>Hapus</button>"
-        ).openPopup();
+                document.querySelector('.coordinates-container').innerHTML = `
+                    <input type="hidden" name="longitude" value="${e.latlng.lng}">
+                    <input type="hidden" name="latitude" value="${e.latlng.lat}">
+                `;
+            }
 
-        // tambahkan input hidden
-        let html = `
-            <input type="hidden" name="longitude" value="${e.latlng.lng}">
-            <input type="hidden" name="latitude" value="${e.latlng.lat}">
-        `;
-        document.querySelector('.coordinates-container').insertAdjacentHTML('beforeend', html);
+            function hapusMarker(i) {
+                if (markers[i]) {
+                    mymap.removeLayer(markers[i]);
+                    markers.splice(i, 1);
+                    document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
+                }
+            }
 
-        index++;
-    }
+            mymap.on('click', onMapClick);
 
-    // hapus marker + input
-    function hapusMarker(i) {
-        if (markers[i]) {
-            mymap.removeLayer(markers[i]);
-            markers.splice(i, 1);
-            document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
-            index = 0;
-        }
-    }
+            // Preview + Validasi Foto Maks 2MB
+            document.getElementById('preview-foto-input').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) { // lebih dari 2MB
+                        alert("Ukuran file maksimal 2MB!");
+                        e.target.value = ""; // reset input
+                        return;
+                    }
 
-    mymap.on('click', onMapClick);
-</script>
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        document.getElementById('preview-foto').src = ev.target.result;
+                        document.getElementById('foto-placeholder-ket').style.display = "none";
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        </script>
 
     </main>
 @endsection

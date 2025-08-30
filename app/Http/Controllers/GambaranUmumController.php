@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\GambaranUmum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +43,7 @@ class GambaranUmumController extends Controller
             'uraian' => $data['uraian'],
             'status' => $data['status'],
         ]);
-
+        LogHelper::add('Menambah data Gambaran Umum');
         return redirect()->route('gambaran')->with('success', 'Data Berhasil Ditambahkan');
     }
 
@@ -76,6 +77,7 @@ class GambaranUmumController extends Controller
             'uraian' => $request->input('e_uraian'),
             'status' => $request->input('e_status'),
         ]);
+        LogHelper::add('Mengubah data Gambaran Umum');
 
         return redirect()->route('gambaran')->with('success', 'Data Berhasil Di Update');
     }
@@ -87,6 +89,7 @@ class GambaranUmumController extends Controller
     {
 
         GambaranUmum::where('id', $id)->delete();
+        LogHelper::add('Menghapus data Gambaran Umum');
         return redirect()->route('gambaran')->with('success', 'Data Berhasil Dihapus');
     }
 }

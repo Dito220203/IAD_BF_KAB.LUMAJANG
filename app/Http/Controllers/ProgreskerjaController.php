@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\FotoProgres;
 use App\Models\Map;
 use App\Models\Notifikasi;
@@ -20,7 +21,7 @@ class ProgreskerjaController extends Controller
     public function index()
     {
         $user = Auth::guard('pengguna')->user();
-        $user->level == 'Admin' ? $progres = ProgresKerja::all() : $progres = ProgresKerja::where('id_pengguna',$user->id)->get();
+        $user->level == 'Super Admin' ? $progres = ProgresKerja::all() : $progres = ProgresKerja::where('id_pengguna', $user->id)->get();
         return view('admin.ProgresKerja.index', compact('progres'));
     }
 
@@ -49,7 +50,7 @@ class ProgreskerjaController extends Controller
             'uraian' => 'required|string',
             'latitude.*' => 'nullable|numeric',
             'longitude.*' => 'nullable|numeric',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ], [
             'foto.max' => 'Gambar yang kamu aplud terlalu besar, batasan nya 2 MB',
         ]);
@@ -91,8 +92,7 @@ class ProgreskerjaController extends Controller
                 'foto' => $namaFile, // hanya nama file
             ]);
         }
-
-
+            LogHelper::add('Menambah data Progres Kerja');
         return redirect()->route('progres')->with('success', 'Data Berhasil Ditambahkan');
     }
 
@@ -105,7 +105,7 @@ class ProgreskerjaController extends Controller
     {
         $progres = ProgresKerja::with('maps')->findOrFail($id);
         $subprogram = Subprogram::all();
-
+         LogHelper::add('Melihat detail data Progres Kerja');
         return view('admin.ProgresKerja.show', compact('progres', 'subprogram'));
     }
 
@@ -115,7 +115,7 @@ class ProgreskerjaController extends Controller
         $progres = ProgresKerja::findOrFail($id);
         $progres->status = 'Valid';
         $progres->save();
-
+        LogHelper::add('Memvalidasi data Progres Kerja');
         return redirect()->route('progres')->with('success', 'Status berhasil divalidasi');
     }
     public function updateStatus(Request $request, string $id)
@@ -130,8 +130,7 @@ class ProgreskerjaController extends Controller
         }
         $progres->save();
 
-        // update notifikasi: hilangkan angka "baru"
-        // atau ganti status notifikasi menjadi "diba
+        LogHelper::add('Mengubah status data Progres Kerja');
         return redirect()->route('progres')->with('success', 'Status berhasil diperbarui');
     }
 
@@ -161,7 +160,7 @@ class ProgreskerjaController extends Controller
             'penerima' => 'required|string|max:255',
             'uraian' => 'required|string',
             'status' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'latitude.*' => 'nullable|numeric',
             'longitude.*' => 'nullable|numeric',
         ], [
@@ -220,7 +219,7 @@ class ProgreskerjaController extends Controller
                 ]);
             }
         }
-
+        LogHelper::add('Memperbarui data Progres Kerja');
         return redirect()->route('progres')->with('success', 'Data berhasil diperbarui');
     }
 
@@ -247,7 +246,7 @@ class ProgreskerjaController extends Controller
 
         // Hapus progres kerja
         $progres->delete();
-
+        LogHelper::add('Menghapus data Progres Kerja');
         return redirect()->route('progres')->with('success', 'Data Berhasil Dihapus');
     }
 }

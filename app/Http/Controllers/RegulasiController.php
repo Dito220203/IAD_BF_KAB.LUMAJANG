@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Regulasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +36,7 @@ class RegulasiController extends Controller
             'judul' => 'required',
             'tanggal' => 'required',
             'status' => 'required',
-            'file' => 'required'
+            'file' => 'required|mimes:pdf|max:2048'
         ]);
 
        // simpan file ke storage/app/public/regulasi
@@ -49,6 +50,7 @@ class RegulasiController extends Controller
             'status'      => $validate['status'],
             'file'        => $fileName,
         ]);
+         LogHelper::add('Menambah data Regulasi');
         return redirect()->route('regulasi')->with('success', 'Data Berhasil Ditambahkan');
     }
 
@@ -81,7 +83,7 @@ class RegulasiController extends Controller
             'e_judul' => 'required',
             'e_tanggal' => 'required',
             'e_status' => 'required',
-           'file' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
+           'e_file' => 'nullable|mimes:pdf|max:2048'
 
         ]);
 
@@ -104,7 +106,7 @@ class RegulasiController extends Controller
         }
 
         $regulasi->update($data);
-
+        LogHelper::add('Mengubah data Regulasi');
         return redirect()->route('regulasi')->with('success', 'Data Berhasil Diupdate');
     }
 
@@ -121,7 +123,7 @@ class RegulasiController extends Controller
         }
 
         $regulasi->delete();
-
+        LogHelper::add('Menghapus data Regulasi');
         return redirect()->route('regulasi')->with('success', 'Data Berhasil Dihapus');
     }
 }

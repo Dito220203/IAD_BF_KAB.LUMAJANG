@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,7 @@ class VideoController extends Controller
             'judul' => $valiadate['judul'],
             'link' => $valiadate['link'],
         ]);
+         LogHelper::add('Menambah data Video');
         return redirect()->to(route('video') . '#tabelVideo')
             ->with('success', 'Data berhasil disimpan!');
     }
@@ -77,7 +79,7 @@ class VideoController extends Controller
             'judul' => $request->input('e_judul'),
             'link' => $request->input('e_link'),
         ]);
-
+        LogHelper::add('Mengubah data Video');
         return redirect()->to(route('video') . '#tabelVideo')
             ->with('success', 'Data berhasil di Update');
     }
@@ -88,6 +90,7 @@ class VideoController extends Controller
     public function destroy(string $id)
     {
         Video::where('id', $id)->delete();
+        LogHelper::add('Menghapus data Video');
         return redirect()->route('video')->with('success', 'Data Berhasil Dihapus');
     }
 }

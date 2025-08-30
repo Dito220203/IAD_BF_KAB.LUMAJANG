@@ -6,7 +6,7 @@
             <h1>Tambah Informasi</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item">Beranda</a></li>
+                    <li class="breadcrumb-item">Beranda</li>
                     <li class="breadcrumb-item">Informasi</li>
                     <li class="breadcrumb-item active">Tambah Informasi</li>
                 </ol>
@@ -35,8 +35,8 @@
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Gambar Depan</label>
                                         <div class="col-sm-10">
-                                            <input type="file" name="foto" class="form-control"
-                                                accept=".jpg,.jpeg,.png" onchange="previewImage(event)">
+                                            <input type="file" name="foto" id="foto" class="form-control"
+                                                accept=".jpg,.jpeg,.png" onchange="validateAndPreview(event)">
                                             <small class="text-muted">* Format jpeg, jpg atau png. Maks. 2 MB</small>
 
                                             {{-- Tempat preview gambar --}}
@@ -49,22 +49,34 @@
                                         </div>
                                     </div>
 
-                                    {{-- Script Preview Gambar --}}
+                                    {{-- Script Validasi + Preview Gambar --}}
                                     <script>
-                                        function previewImage(event) {
-                                            const input = event.target;
+                                        function validateAndPreview(event) {
+                                            const file = event.target.files[0];
                                             const preview = document.getElementById('image-preview');
 
-                                            if (input.files && input.files[0]) {
-                                                preview.src = URL.createObjectURL(input.files[0]);
-                                                preview.style.display = 'block';
+                                            if (file) {
+                                                // Cek ukuran file (maks 2 MB)
+                                                if (file.size > 2 * 1024 * 1024) {
+                                                    alert("Ukuran file melebihi 2 MB. Silakan pilih gambar lain.");
+                                                    event.target.value = ""; // reset input file
+                                                    preview.style.display = "none";
+                                                    return;
+                                                }
+
+                                                // Jika valid → tampilkan preview
+                                                const reader = new FileReader();
+                                                reader.onload = function(e) {
+                                                    preview.src = e.target.result;
+                                                    preview.style.display = "block";
+                                                }
+                                                reader.readAsDataURL(file);
                                             } else {
-                                                preview.src = '#';
-                                                preview.style.display = 'none';
+                                                preview.src = "#";
+                                                preview.style.display = "none";
                                             }
                                         }
                                     </script>
-
 
                                     {{-- Tanggal --}}
                                     <div class="row mb-3">
@@ -131,7 +143,6 @@
         // Saat submit, isi textarea dengan konten Quill
         form.addEventListener('submit', function(e) {
             hiddenInput.value = quill.root.innerHTML;
-            console.log("Value isi:", hiddenInput.value); // debug
         });
     });
 </script>

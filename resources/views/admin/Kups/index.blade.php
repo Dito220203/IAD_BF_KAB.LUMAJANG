@@ -106,7 +106,7 @@
                                 <!-- Entries -->
                                 <div class="d-flex align-items-center gap-2">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto">
+                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"data-target="TableKUPS">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -118,12 +118,13 @@
                                 <!-- Search -->
                                 <div class="input-group w-auto">
                                     <span class="input-group-text"><i class="fa fa-search"></i></span>
-                                    <input type="text" id="searchInput" class="form-control" placeholder="Cari Data...">
+                                    <input type="text" class="form-control searchInput" data-target="TableKUPS"
+                                        placeholder="Cari Data...">
                                 </div>
                             </div>
 
                             <div class="table-responsive">
-                                <table id="infoTable" class="table text-center">
+                                <table id="TableKUPS" class="table text-center">
                                     <thead>
                                         <tr>
                                             <th>No</th>

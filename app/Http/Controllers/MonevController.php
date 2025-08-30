@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Monev;
 use App\Models\Notifikasi;
 use App\Models\Opd;
@@ -18,7 +19,8 @@ class MonevController extends Controller
      */
     public function index()
     {
-        $monev = Monev::all();
+        $user = Auth::guard('pengguna')->user();
+        $user->level == 'Super Admin' ? $monev = Monev::all() : $monev = Monev::where('id_pengguna', $user->id)->get();
         return view('admin.MonitoringEvaluasi.index', compact('monev'));
     }
 
@@ -27,9 +29,10 @@ class MonevController extends Controller
      */
     public function create()
     {
+        $user = Auth::guard('pengguna')->user();
         $subprogram = Subprogram::all();
-        $rencana = RencanaKerja::all();
         $opd = Opd::all();
+        $user->level == 'Super Admin' ? $rencana = RencanaKerja::all() : $rencana = RencanaKerja::where('id_pengguna', $user->id)->get();
         return view('admin.MonitoringEvaluasi.create', compact('subprogram', 'rencana', 'opd'));
     }
 
@@ -38,42 +41,50 @@ class MonevController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $user = Auth::guard('pengguna')->user();
+
+        // validasi dasar
+        $rules = [
             'id_subprogram' => 'required|exists:subprograms,id',
             'id_renja' => 'nullable|exists:rencana_kerjas,id',
-            'id_opd' => 'nullable|exists:opds,id',
             'lokasi' => 'nullable|string',
             'tahun' => 'nullable|string',
             'anggaran' => 'nullable|string',
             'rka' => 'required',
             'realisasi' => 'nullable|string',
             'keterangan' => 'nullable|string',
-        ]);
+        ];
 
-        $validatedData['status'] = 'Belum Validasi';
-        Monev::create([
-            'id_pengguna' => Auth::guard('pengguna')->id(),
-            'id_renja' => $validatedData['id_renja'],
-            'id_subprogram' => $validatedData['id_subprogram'],
-            'id_opd' => $validatedData['id_opd'],
-            'lokasi' => $validatedData['lokasi'],
-            'tahun' => $validatedData['tahun'],
-            'anggaran' => $validatedData['anggaran'],
-            'rka' => $validatedData['rka'],
-            'realisasi' => $validatedData['realisasi'],
-            'keterangan' => $validatedData['keterangan'],
-            'status'        => $validatedData['status'], // kalau dipakai
-        ]);
+        // Kalau Super Admin wajib pilih OPD
+        if ($user->level === 'Super Admin') {
+            $rules['id_opd'] = 'required|exists:opds,id';
+        }
 
+        $validate = $request->validate($rules);
+
+        // set pengguna
+        $validate['id_pengguna'] = $user->id;
+
+        // set opd otomatis kalau bukan super admin
+        if ($user->level !== 'Super Admin') {
+            $validate['id_opd'] = $user->id_opd; // pastikan tabel pengguna ada kolom id_opd
+        }
+
+        $validate['status'] = 'Belum Validasi';
+
+        Monev::create($validate);
+
+        LogHelper::add('Menambah data Monev');
         return redirect()->route('monev')->with('success', 'Data Berhasil Ditambahkan');
     }
+
 
     public function validasi(string $id)
     {
         $monev = Monev::findOrFail($id);
         $monev->status = 'Valid';
         $monev->save();
-
+        LogHelper::add('Memvalidasi data Monev');
         return redirect()->route('monev')->with('success', 'Status berhasil divalidasi');
     }
 
@@ -88,7 +99,7 @@ class MonevController extends Controller
             $monev->status = 'Valid';
         }
         $monev->save();
-
+        LogHelper::add('Mengubah status data Monev');
         return redirect()->route('monev')->with('success', 'Status berhasil diperbarui');
     }
 
@@ -103,7 +114,7 @@ class MonevController extends Controller
         $subprogram = Subprogram::all();
         $rencana = RencanaKerja::all();
         $opd = Opd::all();
-
+        LogHelper::add('Melihat detail data Monev');
         return view('admin.MonitoringEvaluasi.show', compact('monev', 'subprogram', 'rencana', 'opd'));
     }
 
@@ -125,34 +136,54 @@ class MonevController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $user = Auth::guard('pengguna')->user();
         $monev = Monev::findOrFail($id);
 
-        $validatedData = $request->validate([
+        // aturan validasi dasar
+        $rules = [
             'id_subprogram' => 'required|exists:subprograms,id',
             'id_renja' => 'nullable|exists:rencana_kerjas,id',
-            'id_opd' => 'nullable|exists:opds,id',
             'e_lokasi' => 'nullable|string',
             'e_tahun' => 'nullable|string',
             'e_anggaran' => 'nullable|string',
             'e_rka' => 'required',
             'e_realisasi' => 'nullable|string',
             'e_keterangan' => 'nullable|string',
-        ]);
+        ];
 
-        $monev->update([
-            'id_pengguna' => Auth::guard('pengguna')->id(),
-            'id_renja' => $validatedData['id_renja'],
-            'id_subprogram' => $validatedData['id_subprogram'],
-            'id_opd' => $validatedData['id_opd'],
-            'lokasi' => $validatedData['e_lokasi'],
-            'tahun' => $validatedData['e_tahun'],
-            'anggaran' => $validatedData['e_anggaran'],
-            'rka' => $validatedData['e_rka'],
-            'realisasi' => $validatedData['e_realisasi'],
-            'keterangan' => $validatedData['e_keterangan'],
-        ]);
+        // kalau Super Admin wajib pilih OPD
+        if ($user->level === 'Super Admin') {
+            $rules['id_opd'] = 'required|exists:opds,id';
+        }
+
+        $validate = $request->validate($rules);
+
+        // mapping data
+        $data = [
+            'id_pengguna' => $user->id,
+            'id_renja' => $validate['id_renja'] ?? null,
+            'id_subprogram' => $validate['id_subprogram'],
+            'lokasi' => $validate['e_lokasi'],
+            'tahun' => $validate['e_tahun'],
+            'anggaran' => $validate['e_anggaran'],
+            'rka' => $validate['e_rka'],
+            'realisasi' => $validate['e_realisasi'],
+            'keterangan' => $validate['e_keterangan'],
+        ];
+
+        // set OPD sesuai role
+        if ($user->level === 'Super Admin') {
+            $data['id_opd'] = $validate['id_opd'];
+        } else {
+            $data['id_opd'] = $user->id_opd;
+        }
+
+        $monev->update($data);
+
+        LogHelper::add('Mengupdate data Monev');
         return redirect()->route('monev')->with('success', 'Data Berhasil Diupdate');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -160,6 +191,7 @@ class MonevController extends Controller
     public function destroy(string $id)
     {
         Monev::where('id', $id)->delete();
+        LogHelper::add('Menghapus data Monev');
         return redirect()->route('monev')->with('success', 'Data Berhasil Dihapus');
     }
 }

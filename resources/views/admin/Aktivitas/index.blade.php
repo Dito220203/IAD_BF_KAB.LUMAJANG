@@ -21,7 +21,7 @@
 
                                 <div class="d-flex align-items-center ">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto">
+                                    <select class="form-select form-select-sm w-auto entriesSelect" data-target="TableLog">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -31,14 +31,14 @@
                                 </div>
 
                                 <div class="input-group w-auto">
-                                    <input type="text" class="searchInput" class="form-control"
-                                        placeholder="Cari informasi...">
+                                   <input type="text" class="form-control searchInput" data-target="TableLog"
+                                        placeholder="Cari Data...">
                                 </div>
                             </div>
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="infoTable">
+                                <table class="table .table-active text-center" id="TableLog">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -48,37 +48,20 @@
                                             <th>Aktivitas</th>
                                         </tr>
                                     </thead>
-                                    {{-- <tbody>
-                                        @foreach ($pengguna as $data)
+                                    <tbody>
+                                    <tbody>
+                                        @foreach ($log as $data)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $data->username }}</td>
-                                               <td>{{ $data->opds->nama ?? '-' }}</td>
-                                                <td>{{ $data->level }}</td>
-                                                <td class="text-center align-middle">
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <form action="{{ route('pengguna.edit', $data->id) }}"
-                                                            method="GET">
-                                                            <button class="btn btn-primary btn-sm">
-                                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                            </button>
-                                                        </form>
-                                                        <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('pengguna.destroy', $data->id) }}" method="POST"
-                                                            style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="confirmDelete('{{ $data->id }}')">
-                                                                <i class="fa-solid fa-trash"></i>
-                                                            </button>
-                                                        </form>
-
-                                                    </div>
-                                                </td>
+                                                 <td>{{ $data->pengguna->username ?? '-' }}</td>
+                                                <td>{{ $data->ip }}</td>
+                                                <td>{{ $data->waktu }}</td>
+                                                <td>{{ $data->aktivitas }}</td>
                                             </tr>
                                         @endforeach
-                                    </tbody> --}}
+                                    </tbody>
+
+                                    </tbody>
                                 </table>
                             </div>
                             <!-- End Table -->

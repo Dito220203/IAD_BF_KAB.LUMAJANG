@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Kth;
 use App\Models\Kups;
 use Illuminate\Http\Request;
@@ -16,16 +17,13 @@ class KupsController extends Controller
     {
         $kups = Kups::all();
         $kth = Kth::all();
-        return view('admin.Kups.index', compact('kups','kth'));
+        return view('admin.Kups.index', compact('kups', 'kth'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -46,7 +44,7 @@ class KupsController extends Controller
             'tahun' => $request->tahun,
             'pendapatan' => $request->pendapatan,
         ]);
-
+        LogHelper::add('Menambah data KUPS');
         return redirect()->route('kups')->with('success', 'Data KUPS berhasil ditambahkan.');
     }
 
@@ -66,8 +64,8 @@ class KupsController extends Controller
 
         $kupsEdit = Kups::findOrFail($id);
         $kth = Kth::all();
-         $kups = Kups::with('kth')->get();
-        return view('admin.Kups.index', compact('kups','kupsEdit','kth'));
+        $kups = Kups::with('kth')->get();
+        return view('admin.Kups.index', compact('kups', 'kupsEdit', 'kth'));
     }
 
     /**
@@ -89,7 +87,7 @@ class KupsController extends Controller
             'tahun' => $request->e_tahun,
             'pendapatan' => $request->e_pendapatan,
         ]);
-
+        LogHelper::add('Mengubah data KUPS');
         return redirect()->route('kups')->with('success', 'Data KUPS berhasil diupdate.');
     }
 
@@ -100,7 +98,7 @@ class KupsController extends Controller
     {
         $kups = Kups::findOrFail($id);
         $kups->delete();
-
+        LogHelper::add('Menghapus data KUPS');
         return redirect()->route('kups')->with('success', 'Data KUPS berhasil dihapus.');
     }
 }

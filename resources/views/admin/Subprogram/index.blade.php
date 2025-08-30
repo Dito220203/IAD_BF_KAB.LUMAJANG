@@ -66,7 +66,7 @@
 
                                 <div class="d-flex align-items-center ">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto">
+                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect" data-target="TableSubprogram">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -76,14 +76,14 @@
                                 </div>
 
                                 <div class="input-group w-auto">
-                                    <input type="text" id="searchInput" class="form-control"
-                                        placeholder="Cari informasi...">
+                                    <input type="text" class="form-control searchInput" data-target="TableSubprogram"
+                                        placeholder="Cari Data...">
                                 </div>
                             </div>
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="infoTable">
+                                <table class="table .table-active text-center" id="TableSubprogram">
                                     <thead>
                                         <tr>
                                             <th>No</th>

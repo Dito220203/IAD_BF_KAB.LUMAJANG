@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Kth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +41,7 @@ class KthController extends Controller
             'kth' => $validatedData['kth'],
             'luas' => $validatedData['luas'],
         ]);
-
+        LogHelper::add('Menambah data KTH');
         return redirect()->route('kth')->with('success', 'KTH berhasil ditambahkan.');
     }
 
@@ -77,6 +78,7 @@ class KthController extends Controller
             'kth' => $validatedData['e_kth'],
             'luas' => $validatedData['e_luas'],
         ]);
+        LogHelper::add('Mengubah data KTH');
         return redirect()->route('kth')->with('success', 'KTH berhasil di Update.');
     }
 
@@ -87,7 +89,7 @@ class KthController extends Controller
     {
         $kth = Kth::findOrFail($id);
         $kth->delete();
-
+        LogHelper::add('Menghapus data KTH');
         return redirect()->route('kth')->with('success', 'KTH berhasil dihapus.');
     }
 }

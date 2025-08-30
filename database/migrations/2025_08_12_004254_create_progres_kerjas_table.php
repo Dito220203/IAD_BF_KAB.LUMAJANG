@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('progres_kerjas', function (Blueprint $table) {
             $table->id();
-             $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
-              $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
-             $table->string('judul');
-             $table->string('tahun');
-             $table->string('sumber_dana');
-             $table->string('jumlah_anggaran');
-             $table->string('penerima');
-             $table->string('uraian');
-             $table->string('status');
+            $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
+            $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
+            $table->string('judul');
+            $table->string('tahun');
+            $table->string('sumber_dana');
+            $table->string('jumlah_anggaran');
+            $table->string('penerima');
+            $table->longText('uraian');
+            $table->string('status');
             $table->timestamps();
         });
     }

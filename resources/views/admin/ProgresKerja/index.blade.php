@@ -23,7 +23,7 @@
 
                                  <div class="d-flex align-items-center gap-2">
                                      <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                     <select id="entries" class="form-select form-select-sm w-auto">
+                                     <select id="entries" class="form-select form-select-sm w-auto entriesSelect" data-target="TableProgres">
                                          <option value="10">10</option>
                                          <option value="25">25</option>
                                          <option value="50">50</option>
@@ -33,14 +33,14 @@
                                  </div>
 
                                  <div class="input-group w-auto">
-                                     <input type="text" id="searchInput" class="form-control"
-                                         placeholder="Cari informasi...">
+                                     <input type="text" class="form-control searchInput" data-target="TableProgres"
+                                        placeholder="Cari Data...">
                                  </div>
                              </div>
 
                              <!-- Table -->
                              <div class="table-responsive">
-                                 <table class="table .table-active text-center" id="infoTable">
+                                 <table class="table .table-active text-center" id="TableProgres">
                                      <thead>
                                          <tr>
                                              <th>
@@ -75,9 +75,9 @@
                                                                  class="btn btn-sm {{ $data->status == 'Valid' ? 'btn-warning' : 'btn-success' }}"
                                                                  onclick="updateStatus('{{ $data->id }}', '{{ $data->status }}')">
                                                                  @if ($data->status == 'Valid')
-                                                                     <i class="fa-solid fa-xmark"></i> Batalkan Validasi
+                                                                     Batalkan Validasi
                                                                  @else
-                                                                     <i class="fa-solid fa-check"></i> Validasi
+                                                                      Validasi
                                                                  @endif
                                                              </button>
 

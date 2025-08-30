@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogHelper;
 use App\Models\Kecamatan;
 use App\Models\Desa;
 use App\Models\Potensi;
@@ -51,19 +52,19 @@ class PotensiController extends Controller
             'judul'     => 'required',
             'kecamatan' => 'required',
             'desa'      => 'required',
-            'image'     => 'required|image|mimes:jpg,jpeg,png,gif',
+            'image'     => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'tanggal'   => 'required',
             'uraian'    => 'required',
-        ]);
+         ]);
 
         // Ambil nama kecamatan & desa berdasarkan ID
         $namaKecamatan = Kecamatan::findOrFail($validatedData['kecamatan'])->kecamatan;
         $namaDesa = Desa::findOrFail($validatedData['desa'])->desa;
 
-         // Simpan gambar ke storage (sama kayak Informasi)
+        // Simpan gambar ke storage (sama kayak Informasi)
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $originalName = time().'_'.$request->file('image')->getClientOriginalName();
+            $originalName = time() . '_' . $request->file('image')->getClientOriginalName();
             $imagePath = $request->file('image')->storeAs('potensi', $originalName, 'public');
         }
 
@@ -76,7 +77,7 @@ class PotensiController extends Controller
             'tanggal'   => $validatedData['tanggal'],
             'uraian'    => $validatedData['uraian'],
         ]);
-
+        LogHelper::add('Menambah data Potensi');
         return redirect()->route('potensi')->with('success', 'Data potensi berhasil disimpan.');
     }
 
@@ -113,10 +114,10 @@ class PotensiController extends Controller
             'judul'     => 'required',
             'kecamatan' => 'required',
             'desa'      => 'required',
-            'image'     => 'nullable|image|mimes:jpg,jpeg,png,gif',
+            'image'     => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'tanggal'   => 'required',
             'uraian'    => 'required',
-        ]);
+         ]);
 
         $namaKecamatan = Kecamatan::findOrFail($validatedData['kecamatan'])->kecamatan;
         $namaDesa      = Desa::findOrFail($validatedData['desa'])->desa;
@@ -128,7 +129,7 @@ class PotensiController extends Controller
                 Storage::disk('public')->delete($potensi->gambar);
             }
 
-            $originalName = time().'_'.$request->file('image')->getClientOriginalName();
+            $originalName = time() . '_' . $request->file('image')->getClientOriginalName();
             $validatedData['gambar'] = $request->file('image')->storeAs('potensi', $originalName, 'public');
         }
 
@@ -140,7 +141,7 @@ class PotensiController extends Controller
             'tanggal'   => $validatedData['tanggal'],
             'uraian'    => $validatedData['uraian'],
         ]);
-
+        LogHelper::add('Mengubah data Potensi');
         return redirect()->route('potensi')->with('success', 'Data potensi berhasil diperbarui.');
     }
 
@@ -157,7 +158,7 @@ class PotensiController extends Controller
         }
 
         $potensi->delete();
-
+        LogHelper::add('Menghapus data Potensi');
         return redirect()->route('potensi')->with('success', 'Data potensi berhasil dihapus.');
     }
 }
