@@ -34,26 +34,25 @@
     }
 
     // nav menu
-  document.querySelectorAll('#navmenu a').forEach(navmenu => {
-  navmenu.addEventListener('click', (e) => {
-    let parent = navmenu.parentNode;
+    document.querySelectorAll("#navmenu a").forEach((navmenu) => {
+        navmenu.addEventListener("click", (e) => {
+            let parent = navmenu.parentNode;
 
-    // Jika link punya submenu (dropdown)
-    if (parent.classList.contains('dropdown')) {
-      e.preventDefault(); // cegah close navbar
-      parent.classList.toggle('active'); // ⬅️ ini yang atur icon + submenu
-      let submenu = parent.querySelector('ul');
-      if (submenu) submenu.classList.toggle('dropdown-active');
-      return;
-    }
+            // Jika link punya submenu (dropdown)
+            if (parent.classList.contains("dropdown")) {
+                e.preventDefault(); // cegah close navbar
+                parent.classList.toggle("active"); // ⬅️ ini yang atur icon + submenu
+                let submenu = parent.querySelector("ul");
+                if (submenu) submenu.classList.toggle("dropdown-active");
+                return;
+            }
 
-    // Kalau link biasa, tutup navbar
-    if (document.querySelector('.mobile-nav-active')) {
-      mobileNavToogle();
-    }
-  });
-});
-
+            // Kalau link biasa, tutup navbar
+            if (document.querySelector(".mobile-nav-active")) {
+                mobileNavToogle();
+            }
+        });
+    });
 
     /** Preloader */
     const preloader = document.querySelector("#preloader");
@@ -230,14 +229,204 @@ if (informasiSection) {
     window.addEventListener("scroll", showInformasiOnScroll);
 }
 
-document.querySelector(".profil-search-btn").addEventListener("click", function() {
-  const kec = document.getElementById("kecamatan").value;
-  const desa = document.getElementById("desa").value;
+document
+    .querySelector(".profil-search-btn")
+    .addEventListener("click", function () {
+        const kec = document.getElementById("kecamatan").value;
+        const desa = document.getElementById("desa").value;
 
-  if (kec && desa) {
-    window.location.href = `/profil?kecamatan=${kec}&desa=${desa}`;
-  } else {
-    alert("Silakan pilih Kecamatan dan Desa terlebih dahulu!");
+        if (kec && desa) {
+            window.location.href = `/profil?kecamatan=${kec}&desa=${desa}`;
+        } else {
+            alert("Silakan pilih Kecamatan dan Desa terlebih dahulu!");
+        }
+    });
+
+// section informasi
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const cardsContainer = document.querySelector(".informasi-cards");
+  const pagination = document.querySelector(".informasi-pagination");
+  if (!cardsContainer || !pagination) return;
+
+  let cardFullWidth = 0;   // lebar 1 card + gap
+  let scrollStep = 0;
+  let totalPages = 0;
+
+  function computeSizes() {
+    const firstCard = cardsContainer.querySelector(".informasi-card");
+    if (!firstCard) return;
+
+    // Ambil GAP dari container (bukan margin card)
+    const cs = window.getComputedStyle(cardsContainer);
+    const gap = parseInt(cs.columnGap || cs.gap || 0) || 0;
+
+    cardFullWidth = firstCard.offsetWidth + gap;
+
+    // Berapa card yang muat di viewport saat ini
+    const cardsPerView = Math.max(
+      1,
+      Math.floor((cardsContainer.clientWidth + gap) / cardFullWidth)
+    );
+
+    // Step geser:
+    // Desktop (>=4) geser 3; selain itu geser = jumlah card yang terlihat
+    if (cardsPerView >= 4) {
+      scrollStep = cardFullWidth * 3;
+    } else {
+      scrollStep = cardFullWidth * cardsPerView;
+    }
+
+    buildDots();
+    setActiveDot(); // sinkron awal
   }
+
+  function buildDots() {
+    pagination.innerHTML = "";
+    const maxScroll = cardsContainer.scrollWidth - cardsContainer.clientWidth;
+    totalPages = Math.max(1, Math.ceil(maxScroll / scrollStep) + 1);
+
+    for (let i = 0; i < totalPages; i++) {
+      const dot = document.createElement("span");
+      dot.className = "dot" + (i === 0 ? " active" : "");
+      dot.addEventListener("click", () => {
+        const max = cardsContainer.scrollWidth - cardsContainer.clientWidth;
+        const target = Math.min(i * scrollStep, max);
+        cardsContainer.scrollTo({ left: target, behavior: "smooth" });
+      });
+      pagination.appendChild(dot);
+    }
+  }
+
+  function setActiveDot() {
+    const dots = pagination.querySelectorAll(".dot");
+    if (!dots.length || !scrollStep) return;
+    let index = Math.round(cardsContainer.scrollLeft / scrollStep);
+    index = Math.min(index, dots.length - 1);
+    dots.forEach((d, i) => d.classList.toggle("active", i === index));
+  }
+
+  // Recalc saat resize & setelah semua asset (gambar) loaded
+  window.addEventListener("resize", computeSizes);
+  window.addEventListener("load", computeSizes);
+
+  // Update dot saat discroll
+  cardsContainer.addEventListener("scroll", setActiveDot);
+
+  // Inisialisasi awal
+  computeSizes();
 });
 
+// Product Kups
+
+document.addEventListener("DOMContentLoaded", () => {
+  const slides = document.querySelectorAll(".slide");
+  let currentIndex = 0;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.remove("active");
+      if (i === index) {
+        slide.classList.add("active");
+      }
+    });
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+  }
+
+  setInterval(nextSlide, 3000); // 3 detik ganti slide
+});
+
+// navbar global
+document.addEventListener("DOMContentLoaded", () => {
+    const header = document.querySelector("#header");
+
+    if (!header) return;
+
+    function toggleHeaderScrolled() {
+        if (window.scrollY > 608) {
+            header.classList.add("header-scrolled");
+        } else {
+            // hanya untuk halaman home yang bisa balik transparan
+            if (document.body.classList.contains("index-page")) {
+                header.classList.remove("header-scrolled");
+            }
+        }
+    }
+
+    // jalankan saat load pertama
+    toggleHeaderScrolled();
+
+    // jalankan tiap kali scroll
+    window.addEventListener("scroll", toggleHeaderScrolled);
+});
+
+
+/*--------------------------------------------------------------
+# Progres Section
+--------------------------------------------------------------*/
+document.addEventListener("DOMContentLoaded", () => {
+    const items = document.querySelectorAll(".progres-item");
+    const progresList = document.getElementById("progresList");
+
+    let visibleCount = 3;
+
+    function showItems() {
+        items.forEach((item, index) => {
+            if (index < visibleCount) {
+                item.style.display = "flex";
+            } else {
+                item.style.display = "none";
+            }
+        });
+    }
+
+    // awal load tampil 3
+    showItems();
+
+    // scroll untuk load lebih banyak
+    progresList.addEventListener("scroll", () => {
+        if (progresList.scrollTop + progresList.clientHeight >= progresList.scrollHeight) {
+            visibleCount += 3; // load 3 lagi
+            showItems();
+        }
+    });
+
+    // search filter
+    document.getElementById("searchBtn").addEventListener("click", () => {
+        const keyword = document.getElementById("searchInput").value.toLowerCase();
+        items.forEach(item => {
+            const title = item.querySelector("h6").innerText.toLowerCase();
+            item.style.display = title.includes(keyword) ? "flex" : "none";
+        });
+    });
+});
+
+
+// switch triwulan monev client
+
+document.addEventListener("DOMContentLoaded", function () {
+  const tabs = document.querySelectorAll(".tab-btn");
+  const contents = document.querySelectorAll(".table-content");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      // hapus semua active
+      tabs.forEach(t => t.classList.remove("active"));
+      contents.forEach(c => c.classList.remove("active"));
+
+      // tambahkan active ke tab yg diklik
+      tab.classList.add("active");
+      document.getElementById(tab.dataset.target).classList.add("active");
+    });
+  });
+});
+
+
+
+
+    

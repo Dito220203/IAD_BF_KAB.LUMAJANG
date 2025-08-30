@@ -25,6 +25,18 @@ use Illuminate\Support\Facades\Route;
 //client
 Route::get('/', [ClientController::class, 'index'])->name('client');
 Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer');
+Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
+Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
+Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
+Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
+Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])->name('client.petasebarankegiatan');
+
+
+Route::get('/regulasi', [ClientController::class, 'regulasi'])->name('client.regulasi');
+
+
+
+
 
 
 // Admin

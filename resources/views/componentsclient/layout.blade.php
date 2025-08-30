@@ -11,7 +11,7 @@
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">    
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
@@ -37,10 +37,15 @@
     <!-- Fontawesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 </head>
 
-<body class="index-page">
+
+
+
+<body class="{{ request()->is('/') ? 'index-page' : '' }}">
 
     @include('componentsclient.navbar')
 
@@ -73,14 +78,15 @@
         @foreach ($contact as $kontak)
             <!-- Ikon sosial media -->
             <div class="footer-social">
-                <a href="{{$kontak->linkfb}}"><i class="bi bi-facebook"></i></a>
-                <a href="{{$kontak->linkig}}"><i class="bi bi-instagram"></i></a>
-                <a href="{{$kontak->linkyt}}"><i class="bi bi-youtube"></i></a>
+                <a href="{{ $kontak->linkfb }}"><i class="bi bi-facebook"></i></a>
+                <a href="{{ $kontak->linkig }}"><i class="bi bi-instagram"></i></a>
+                <a href="{{ $kontak->linkyt }}"><i class="bi bi-youtube"></i></a>
             </div>
         @endforeach
         <!-- Copyright -->
         <div class="footer-bottom">
-            <p>Copyright © 2025 Sekretariat IAD BF Kab.Lumajang</p>
+            <p>Support by <a href="https://diskominfo.lumajangkab.go.id/">Dinas Komunikasi dan Informatika Kab.
+                    Lumajang</a></p>
         </div>
     </footer>
 

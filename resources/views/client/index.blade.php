@@ -32,7 +32,7 @@
         <!-- card perhut -->
         <section id="perhut" class="perhutanan">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
-                <div class="perhutanan-title">
+                <div class="global-title">
                     <h2>PERHUTANAN SOSIAL KABUPATEN LUMAJANG</h2>
                 </div>
                 <div class="perhut-cards" data-aos="fade-down" data-aos-delay="200" id="PerhutCards">
@@ -159,11 +159,50 @@
 
         </section>
 
+        <!-- PRODUCT KUPS -->
+        <section class="product-slider">
+            <div class="slider-wrapper">
+                <!-- Slide 1 -->
+                <div class="slide active">
+                    <div class="slide-image">
+                        <img src="{{ asset('client/assets/img/prdt2.png') }}" alt="Produk 1">
+                    </div>
+                    <div class="slide-content">
+                        <h2>Produk Pisang</h2>
+                        <p>Pisang hasil KUPS yang segar dan siap konsumsi.</p>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <div class="slide-image">
+                        <img src="{{ asset('client/assets/img/prdt1.png') }}" alt="Produk 2">
+                    </div>
+                    <div class="slide-content">
+                        <h2>Olahan Susu</h2>
+                        <p>Susu segar yang diolah menjadi produk berkualitas tinggi.</p>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <div class="slide-image">
+                        <img src="{{ asset('client/assets/img/prdt1.png') }}" alt="Produk 3">
+                    </div>
+                    <div class="slide-content">
+                        <h2>Kerajinan Bambu</h2>
+                        <p>Produk ramah lingkungan hasil dari kreativitas masyarakat.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /PRODUCT KUPS -->
+
         <!-- JUMLAH PENDAPATAN TIAP KUPS -->
         <section id="kups" class="kups">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
-                <div class="perhutanan-title">
-                    <h2>PERHUTANAN SOSIAL KABUPATEN LUMAJANG</h2>
+                <div class="global-title">
+                    <h2>JUMLAH PENDAPATAN TIAP KUPS</h2>
                 </div>
                 <div class="perhut-cards" data-aos="fade-down" data-aos-delay="200" id="PerhutCards">
                     <div class="row gy-4 justify-content-center">
@@ -173,9 +212,9 @@
                             <a href="#">
                                 <div class="stats-card">
                                     <div>
-                                        <div class="stats-icon"><i class="fa fa-tree"></i></div>
+                                        <div class="stats-icon"><i class="fa-solid fa-leaf"></i></div>
                                     </div>
-                                    <p class="stats-label">Luas Perhutanan Sosial</p>
+                                    <p class="stats-label">PISANG</p>
 
                                     <span class="stats-number purecounter" data-purecounter-start="0"
                                         data-purecounter-end="123" data-purecounter-decimals="0"
@@ -188,9 +227,9 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="stats-card">
                                 <div>
-                                    <div class="stats-icon"><i class="fas fa-users"></i></div>
+                                    <div class="stats-icon"><i class="fas fa-cow"></i></div>
                                 </div>
-                                <p class="stats-label">Kelompok Tani Hutan (KTH)</p>
+                                <p class="stats-label">OLAHAN SUSU</p>
                                 <span class="stats-number purecounter" data-purecounter-start="0"
                                     data-purecounter-end="123" data-purecounter-decimals="0"
                                     data-purecounter-duration="1"></span>
@@ -200,9 +239,9 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="stats-card">
                                 <div>
-                                    <div class="stats-icon"><i class="fas fa-store"></i></div>
+                                    <div class="stats-icon"><i class="fas fa-bar-chart"></i></div>
                                 </div>
-                                <p class="stats-label"> Kelompok Usaha Perhutanan Sosial (KUPS)</p>
+                                <p class="stats-label">POTENSI PETERNAKAN</p>
                                 <span class="stats-number purecounter" data-purecounter-start="0"
                                     data-purecounter-end="123" data-purecounter-decimals="0"
                                     data-purecounter-duration="1"></span>
@@ -282,11 +321,9 @@
         </section>
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
 
-
-
         <!-- Informasi Section -->
         <section class="informasi-section" id="informasisection">
-            <div class="perhutanan-title">
+            <div class="global-title">
                 <h2>INFORMASI</h2>
             </div>
             <div class="informasi-wrapper">
@@ -560,10 +597,9 @@
 
         </section>
 
-
         <!-- video Section -->
         <section class="video-section" id="videosection">
-            <div class="perhutanan-title" data-aos="fade-up">
+            <div class="global-title" data-aos="fade-up">
                 <h2>VIDEO</h2>
             </div>
             <div class="video-wrapper">
@@ -728,12 +764,11 @@
         </section>
         <!-- /video Section -->
 
-
         <!-- Contact Section -->
         <section id="contact" class="contact section">
 
             <!-- Section Title -->
-            <div class="perhutanan-title" data-aos="fade-up">
+            <div class="global-title" data-aos="fade-up">
                 <h2>Contact</h2>
             </div><!-- End Section Title -->
 

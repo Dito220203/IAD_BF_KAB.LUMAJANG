@@ -20,14 +20,76 @@ class ClientController extends Controller
         $banner = Banner::where('status', 'Aktif')->get();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.index', compact('banner','gambaran', 'subprograms', 'contact'));
+        return view('client.index', compact('banner', 'gambaran', 'subprograms', 'contact'));
     }
+
+    public function tentangkegiatan(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.tentangkegiatan', compact('contact', 'subprograms')); 
+    }
+    public function rencanakegiatan(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.rencanakegiatan', compact('contact', 'subprograms')); 
+    }
+    public function progreskegiatan(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.progreskegiatan', compact('contact', 'subprograms')); 
+    }
+    public function monev(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.monev', compact('contact', 'subprograms')); 
+    }
+    public function petasebarankegiatan(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.petasebarankegiatan', compact('contact', 'subprograms')); 
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function regulasi()
+    {
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.regulasi', compact('contact', 'subprograms'));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function footer()
     {
         $contact = Kontak::all();
         return view('about', compact('contact'));
     }
+
+
 
 
     /**
