@@ -12,30 +12,30 @@ class DasboardAdminController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        // Hitung jumlah pengguna
-        $totalPengguna = Pengguna::count();
+{
+    // Hitung jumlah pengguna
+    $totalPengguna = Pengguna::count();
 
-        // Ambil pengguna terbaru (misal 5)
-        $penggunaTerbaru = Pengguna::latest()->take(5)->get();
+    // Ambil pengguna terbaru (misal 5)
+    $penggunaTerbaru = Pengguna::latest()->take(5)->get();
 
-        $informasi = Informasi::all();
+    $informasi = Informasi::all();
 
-        // Contoh data progres tiap OPD (bisa dari tabel lain)
-        $progresOpd = [
-            'Dinas Pendidikan' => 80,
-            'Dinas Kesehatan'  => 60,
-            'Dinas PU'         => 90,
-            'Dinas Sosial'     => 50,
-        ];
+    // Contoh data progres tiap OPD (nanti bisa diambil dari tabel monitoring/evaluasi)
+    $progresOpd = [
+        ['nama' => 'Dinas Pendidikan', 'persentase' => 80],
+        ['nama' => 'Dinas Kesehatan',  'persentase' => 60],
+        ['nama' => 'Dinas PU',         'persentase' => 90],
+        ['nama' => 'Dinas Sosial',     'persentase' => 50],
+    ];
 
-        return view('admin.Dasboard.index', compact(
-            'totalPengguna',
-            'penggunaTerbaru',
-            'informasi',
-            'progresOpd'
-        ));
-    }
+    return view('admin.Dasboard.index', compact(
+        'totalPengguna',
+        'penggunaTerbaru',
+        'informasi',
+        'progresOpd'
+    ));
+}
 
 
     /**

@@ -17,12 +17,37 @@ class MonevController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::guard('pengguna')->user();
-        $user->level == 'Super Admin' ? $monev = Monev::all() : $monev = Monev::where('id_pengguna', $user->id)->get();
+        $query = Monev::query();
+
+        if ($user->level !== 'Super Admin') {
+            $query->where('id_pengguna', $user->id);
+        }
+
+        if ($request->filled('triwulan')) {
+            $triwulan = $request->triwulan;
+            $tahun = now()->year;
+
+            if ($triwulan == 1) {
+                $query->whereBetween('created_at', ["$tahun-01-01", "$tahun-03-31"]);
+            } elseif ($triwulan == 2) {
+                $query->whereBetween('created_at', ["$tahun-04-01", "$tahun-06-30"]);
+            } elseif ($triwulan == 3) {
+                $query->whereBetween('created_at', ["$tahun-07-01", "$tahun-09-30"]);
+            } elseif ($triwulan == 4) {
+                $query->whereBetween('created_at', ["$tahun-10-01", "$tahun-12-31"]);
+            }
+        }
+
+        $monev = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.MonitoringEvaluasi.index', compact('monev'));
     }
+
 
     /**
      * Show the form for creating a new resource.

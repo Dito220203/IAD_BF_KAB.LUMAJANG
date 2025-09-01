@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\LogHelper;
+use App\Models\FotoSubprogram;
 use App\Models\Subprogram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,21 +32,45 @@ class SubProgramController extends Controller
      */
     public function store(Request $request)
     {
-        $validasi = $request->validate([
+        $request->validate([
             'program' => 'required',
             'subprogram' => 'required',
             'uraian' => 'required',
         ]);
 
+        // Simpan data subprogram
         Subprogram::create([
             'id_pengguna' => Auth::guard('pengguna')->id(),
-            'program' => $validasi['program'],
-            'subprogram' => $validasi['subprogram'],
-            'uraian' => $validasi['uraian'],
+            'program' => $request->program,
+            'subprogram' => $request->subprogram,
+            'uraian' => $request->uraian,
         ]);
         LogHelper::add('Menambah data Subprogram');
+
         return redirect()->route('subprogram')->with('success', 'Data Berhasil Ditambahkan');
     }
+
+    public function storeProduk(Request $request)
+    {
+        $request->validate([
+            'id_subprogram' => 'required|exists:subprograms,id',
+            'nama_produk' => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
+            'foto' => 'required|image|max:2048',
+        ]);
+
+        $file = $request->file('foto')->store('produk', 'public');
+
+        FotoSubprogram::create([
+            'id_subprogram' => $request->id_subprogram,
+            'nama_produk' => $request->nama_produk,
+            'keterangan' => $request->keterangan,
+            'foto' => $file,
+        ]);
+
+        return redirect()->back()->with('success', 'Produk Subprogram berhasil ditambahkan!');
+    }
+
 
     /**
      * Display the specified resource.

@@ -25,6 +25,10 @@ class Subprogram extends Model
     {
         return $this->hasMany(ProgresKerja::class, 'id_subprogram', 'id');
     }
+    public function foto_subprograms()
+    {
+        return $this->hasMany(FotoSubprogram::class, 'id_subprogram', 'id');
+    }
 
     public function monev()
     {

@@ -322,7 +322,7 @@
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
 
         <!-- Informasi Section -->
-        <section class="informasi-section" id="informasisection">
+        {{-- <section class="informasi-section" id="informasisection">
             <div class="global-title">
                 <h2>INFORMASI</h2>
             </div>
@@ -595,7 +595,105 @@
             </div>
 
 
+        </section> --}}
+
+        <!-- Informasi Section -->
+        <section class="informasi-section" id="informasisection">
+            <div class="global-title">
+                <h2>INFORMASI</h2>
+            </div>
+            <div class="informasi-wrapper">
+                <div class="informasi-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
+
+                    @forelse ($informasi as $info)
+                        <div class="informasi-card">
+                            <div class="informasi-image">
+                                <img src="{{ asset('storage/' . $info->foto) }}" alt="{{ $info->judul }}">
+                            </div>
+                            <div class="informasi-content">
+                                <h3 class="card-title">{{ $info->judul }}</h3>
+                                <p>
+                                    {!! Str::words($info->isi, 20, '...') !!}
+                                </p>
+
+                                <div class="informasi-footer">
+                                    <span>{{ \Carbon\Carbon::parse($info->tanggal)->translatedFormat('d F Y') }}</span>
+                                    <a href="{{ route('informasi.show', $info->id) }}">Lebih Lengkap...</a>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <p>Tidak ada informasi.</p>
+                    @endforelse
+
+                </div>
+
+                <!-- Pagination -->
+                <div class="informasi-pagination" id="informasiPagination"></div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const cardsContainer = document.querySelector(".informasi-cards");
+                        const pagination = document.querySelector(".informasi-pagination");
+
+                        let cardWidth = 0;
+                        let scrollStep = 0;
+                        let totalPages = 0;
+
+                        function updateCardWidth() {
+                            const firstCard = cardsContainer.querySelector(".informasi-card");
+                            if (!firstCard) return;
+
+                            const style = window.getComputedStyle(firstCard);
+                            const marginRight = parseInt(style.marginRight) || 0;
+                            cardWidth = firstCard.offsetWidth + marginRight;
+
+                            // tampilkan 4 card, scroll 3 card
+                            scrollStep = cardWidth * 3;
+
+                            // hitung total page
+                            totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
+
+                            updatePagination();
+                        }
+
+                        function updatePagination() {
+                            pagination.innerHTML = "";
+
+                            for (let i = 0; i < totalPages; i++) {
+                                const dot = document.createElement("span");
+                                dot.classList.add("dot");
+                                if (i === 0) dot.classList.add("active");
+
+                                dot.addEventListener("click", () => {
+                                    cardsContainer.scrollTo({
+                                        left: i * scrollStep,
+                                        behavior: "smooth",
+                                    });
+                                });
+
+                                pagination.appendChild(dot);
+                            }
+                        }
+
+                        function setActiveDot() {
+                            const dots = pagination.querySelectorAll(".dot");
+                            const index = Math.round(cardsContainer.scrollLeft / scrollStep);
+
+                            dots.forEach((dot, i) => {
+                                dot.classList.toggle("active", i === index);
+                            });
+                        }
+
+                        window.addEventListener("resize", updateCardWidth);
+                        cardsContainer.addEventListener("scroll", setActiveDot);
+
+                        updateCardWidth();
+                    });
+                </script>
+            </div>
         </section>
+
 
         <!-- video Section -->
         <section class="video-section" id="videosection">
@@ -604,8 +702,46 @@
             </div>
             <div class="video-wrapper">
                 <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
-                    <!-- Card 1 -->
-                    <div class="video-card">
+                    @php
+                        function getYoutubeId($url)
+                        {
+                            // Tangkap format watch?v=, youtu.be/, dan embed/
+                            preg_match(
+                                '/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^\?&]+)/',
+                                $url,
+                                $matches,
+                            );
+                            return $matches[1] ?? null;
+                        }
+                    @endphp
+
+                    @forelse ($videos as $video)
+                        @php
+                            $videoId = getYoutubeId($video->link);
+                        @endphp
+
+                        <div class="video-card">
+                            <div class="video-image">
+                                @if ($videoId)
+                                    <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg"
+                                        alt="{{ $video->judul }}" class="img-fluid">
+                                @else
+                                    <img src="{{ asset('client/assets/img/default-video.jpg') }}" alt="No Thumbnail"
+                                        class="img-fluid">
+                                @endif
+                            </div>
+                            <div class="video-content">
+                                <h3>{{ $video->judul }}</h3>
+                                <div class="video-footer">
+                                    <a href="{{ $video->link }}" target="_blank">Tonton di YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <p>Tidak ada video.</p>
+                    @endforelse
+
+                    {{-- <div class="video-card">
                         <div class="video-image">
                             <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
                         </div>
@@ -663,27 +799,7 @@
                                 <a href="#">Lebih Lengkap...</a>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="video-card">
-                        <div class="video-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="video-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="video-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- Pagination -->
@@ -819,7 +935,7 @@
                                         data-aos="fade-up" data-aos-delay="200">
                                         <i class="bi bi-geo-alt"></i>
                                         <h3>Address</h3>
-                                        <p>A108 Adam Street, New York, NY 535022</p>
+                                        <p>{{ $kontak->alamat }}</p>
                                     </div>
                                 </div><!-- End Info Item -->
 

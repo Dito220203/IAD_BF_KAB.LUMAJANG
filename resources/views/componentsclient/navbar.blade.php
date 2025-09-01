@@ -136,18 +136,50 @@
                 <li class="dropdown"><a href="#"><span>PROGRAM IAD</span> <i
                             class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
-                       <li class="dropdown"><a href="#"><span>AGROINDUSTRI</span><i
-                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
 
-                            <ul>
-                                <li><a href="{{ route('client.tentangkegiatan') }}" class="{{ request()->is('tentangkegiatan') ? 'active' : '' }}">TENTANG AGROINDUSTRI</a></li>
-                                <li><a href="{{ route('client.rencanakegiatan') }}" class="{{ request()->is('rencanakegiatan') ? 'active' : '' }}">RENCANA KEGIATAN</a></li>
-                                <li><a href="{{ route('client.progreskegiatan') }}" class="{{ request()->is('progreskegiatan') ? 'active' : '' }}">PROGRES KEGIATAN</a></li>
-                                <li><a href="{{ route('client.monev') }}" class="{{ request()->is('monev') ? 'active' : '' }}">MONITORING & EVALUASI</a></li>
-                                <li><a href="{{ route('client.petasebarankegiatan') }}" class="{{ request()->is('petasebarankegiatan') ? 'active' : '' }}">PETA SEBARAN</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown"><a href="#"><span>AGROSILVOPASUTRA</span><i
+                        @foreach ($subprograms as $subprogram)
+                            <li class="dropdown">
+                                <a href="#">
+                                    <span>{{ $subprogram->subprogram }}</span>
+                                    <i class="bi bi-chevron-down toggle-dropdown"></i>
+                                </a>
+
+                                <ul>
+                                    <li>
+                                        <a href="{{ route('client.tentangkegiatan', ['id' => $subprogram->id]) }}"
+                                            class="{{ request()->is('subprogram/' . $subprogram->id . '/tentang') ? 'active' : '' }}">
+                                            TENTANG {{ strtoupper($subprogram->subprogram) }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('client.rencanakegiatan', ['id' => $subprogram->id]) }}"
+                                            class="{{ request()->is('subprogram/' . $subprogram->id . '/rencana') ? 'active' : '' }}">
+                                            RENCANA KEGIATAN
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('client.progreskegiatan', ['id' => $subprogram->id]) }}"
+                                            class="{{ request()->is('subprogram/' . $subprogram->id . '/progres') ? 'active' : '' }}">
+                                            PROGRES KEGIATAN
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('client.monev', ['id' => $subprogram->id]) }}"
+                                            class="{{ request()->is('subprogram/' . $subprogram->id . '/monev') ? 'active' : '' }}">
+                                            MONITORING & EVALUASI
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('client.petasebarankegiatan', ['id' => $subprogram->id]) }}"
+                                            class="{{ request()->is('subprogram/' . $subprogram->id . '/peta') ? 'active' : '' }}">
+                                            PETA SEBARAN
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endforeach
+
+                        {{-- <li class="dropdown"><a href="#"><span>AGROSILVOPASUTRA</span><i
                                     class="bi bi-chevron-down toggle-dropdown"></i></a>
 
                             <ul>
@@ -183,7 +215,7 @@
                                 <li><a href="#">PROGRES KEGIATAN</a></li>
                                 <li><a href="#">PETA SEBARAN</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
 
@@ -217,9 +249,10 @@
                     </ul>
                 </li>
 
-                <li><a href="{{ route('client.regulasi') }}" class="{{ request()->is('regulasi') ? 'active' : '' }}">REGULASI IAD</a></li>
-                <li><a href="#videosection">VIDEO</a></li>
-                <li><a href="#contact">CONTACT</a></li>
+                <li><a href="{{ route('client.regulasi') }}"
+                        class="{{ request()->is('regulasi') ? 'active' : '' }}">REGULASI IAD</a></li>
+                <li><a href="{{ route('client') }}#videosection">VIDEO</a></li>
+                <li><a href="{{ route('client') }}#contact">CONTACT</a></li>
                 <li><a href="{{ url('login') }}">SIGN IN</a></li>
             </ul>
         </nav>

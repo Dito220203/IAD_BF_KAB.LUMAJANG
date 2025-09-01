@@ -43,7 +43,25 @@
 </head>
 
 
+<style>
+    .card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        /* tampil maksimal 4 baris */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
+    .informasi-content p {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        /* tampil max 3 baris */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
 
 <body class="{{ request()->is('/') ? 'index-page' : '' }}">
 

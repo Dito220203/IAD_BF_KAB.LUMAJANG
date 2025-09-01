@@ -2,7 +2,7 @@
 @section('content')
     <section class="section_page">
         <div class="global-title" data-aos="fade-up">
-            <h2>What is Lorem Ipsum?</h2>
+            <h2>MONITORING EVALUASI {{ $subprogram->subprogram }}</h2>
         </div>
 
         <section class="monev-section container">
@@ -34,29 +34,31 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Normalisasi Ranu Pani</td>
-                                <td>Rehabilitasi Danau</td>
-                                <td>Lumajang</td>
-                                <td>2026</td>
-                                <td>Dinas PU</td>
-                                <td><span class="status success">Sudah</span></td>
-                                <td>70%</td>
-                                <td>Proses</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2026</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status danger">Belum</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
+                            @forelse ($triwulan[1] as $index => $item)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->subprogram->subprogram ?? '-' }}</td>
+                                    <td>{{ $item->rencanaKerja->judul ?? '-' }}</td>
+                                    <td>{{ $item->lokasi }}</td>
+                                    <td>{{ $item->tahun }}</td>
+                                    <td>{{ $item->opd->nama ?? '-' }}</td>
+                                    <td>
+                                        @if ($item->rka == 'sudah')
+                                            <span class="status success">Sudah</span>
+                                        @else
+                                            <span class="status danger">Belum</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->realisasi ?? '0%' }}</td>
+                                    <td>{{ $item->keterangan ?? '-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="text-center">Belum ada data triwulan 1</td>
+                                </tr>
+                            @endforelse
                         </tbody>
+
                     </table>
                 </div>
 
@@ -77,61 +79,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Normalisasi Ranu Pani</td>
-                                <td>Rehabilitasi Danau</td>
-                                <td>Lumajang</td>
-                                <td>2026</td>
-                                <td>Dinas PU</td>
-                                <td><span class="status success">Sudah</span></td>
-                                <td>70%</td>
-                                <td>Proses</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2026</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status danger">Belum</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2026</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status success">sudah</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2026</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status danger">Belum</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2025</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status success">sudah</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
+                            @forelse ($triwulan[2] as $index => $item)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->subprogram->subprogram ?? '-' }}</td>
+                                    <td>{{ $item->rencanaKerja->judul ?? '-' }}</td>
+                                    <td>{{ $item->lokasi }}</td>
+                                    <td>{{ $item->tahun }}</td>
+                                    <td>{{ $item->opd->nama ?? '-' }}</td>
+                                    <td>
+                                        @if ($item->rka == 'sudah')
+                                            <span class="status success">Sudah</span>
+                                        @else
+                                            <span class="status danger">Belum</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->realisasi ?? '0%' }}</td>
+                                    <td>{{ $item->keterangan ?? '-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="text-center">Belum ada data triwulan 2</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -153,28 +123,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Normalisasi Ranu Pani</td>
-                                <td>Rehabilitasi Danau</td>
-                                <td>Lumajang</td>
-                                <td>2026</td>
-                                <td>Dinas PU</td>
-                                <td><span class="status success">Sudah</span></td>
-                                <td>70%</td>
-                                <td>Proses</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2026</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status danger">Belum</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
+                            @forelse ($triwulan[3] as $index => $item)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->subprogram->subprogram ?? '-' }}</td>
+                                    <td>{{ $item->rencanaKerja->judul ?? '-' }}</td>
+                                    <td>{{ $item->lokasi }}</td>
+                                    <td>{{ $item->tahun }}</td>
+                                    <td>{{ $item->opd->nama ?? '-' }}</td>
+                                    <td>
+                                        @if ($item->rka == 'sudah')
+                                            <span class="status success">Sudah</span>
+                                        @else
+                                            <span class="status danger">Belum</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->realisasi ?? '0%' }}</td>
+                                    <td>{{ $item->keterangan ?? '-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="text-center">Belum ada data triwulan 3</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -196,51 +167,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Normalisasi Ranu Pani</td>
-                                <td>Rehabilitasi Danau</td>
-                                <td>Lumajang</td>
-                                <td>2026</td>
-                                <td>Dinas PU</td>
-                                <td><span class="status success">Sudah</span></td>
-                                <td>70%</td>
-                                <td>Proses</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2026</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status danger">Belum</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2026</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status danger">Belum</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>4s</td>
-                                <td>Penanaman Mangrove</td>
-                                <td>Konservasi</td>
-                                <td>Senduro</td>
-                                <td>2025</td>
-                                <td>Dinas Lingkungan</td>
-                                <td><span class="status success">sudah</span></td>
-                                <td>0%</td>
-                                <td>-</td>
-                            </tr>
+                            @forelse ($triwulan[4] as $index => $item)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->subprogram->subprogram ?? '-' }}</td>
+                                    <td>{{ $item->rencanaKerja->judul ?? '-' }}</td>
+                                    <td>{{ $item->lokasi }}</td>
+                                    <td>{{ $item->tahun }}</td>
+                                    <td>{{ $item->opd->nama ?? '-' }}</td>
+                                    <td>
+                                        @if ($item->rka == 'sudah')
+                                            <span class="status success">Sudah</span>
+                                        @else
+                                            <span class="status danger">Belum</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->realisasi ?? '0%' }}</td>
+                                    <td>{{ $item->keterangan ?? '-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="text-center">Belum ada data triwulan 4</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
