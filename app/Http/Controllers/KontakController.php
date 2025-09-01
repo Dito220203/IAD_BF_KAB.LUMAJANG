@@ -14,7 +14,6 @@ class KontakController extends Controller
      */
     public function index()
     {
-        // Ambil kontak pertama (jika ada)
         $kontak = Kontak::first();
         return view('admin.Kontak.index', compact('kontak'));
     }
@@ -33,6 +32,7 @@ class KontakController extends Controller
    public function store(Request $request)
 {
     $request->validate([
+        'alamat' => 'required',
         'telepon' => 'required|string|max:20',
         'email'   => 'required|email|max:255',
         'namafb'  => 'nullable|string|max:255',
@@ -43,11 +43,9 @@ class KontakController extends Controller
         'linkyt'  => 'nullable|url|max:255',
     ]);
 
-    // gabungkan data request + id_pengguna
     $data = $request->all();
     $data['id_pengguna'] = Auth::guard('pengguna')->id();
 
-    // cek apakah data sudah ada untuk user ini
     $kontak = Kontak::where('id_pengguna', $data['id_pengguna'])->first();
 
     if ($kontak) {

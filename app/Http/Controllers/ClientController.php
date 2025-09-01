@@ -4,8 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Banner;
 use App\Models\GambaranUmum;
+use App\Models\Informasi;
 use App\Models\Kontak;
+use App\Models\Map;
+use App\Models\Monev;
+use App\Models\Opd;
+use App\Models\ProgresKerja;
+use App\Models\RencanaKerja;
 use App\Models\Subprogram;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\MockObject\ReturnValueGenerator;
 
@@ -17,29 +24,64 @@ class ClientController extends Controller
     public function index()
     {
         $gambaran = GambaranUmum::where('status', 'Aktif')->get();
+        $informasi = Informasi::orderBy('tanggal', 'asc')->get();
+        $videos = Video::latest()->get();
         $banner = Banner::where('status', 'Aktif')->get();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.index', compact('banner', 'gambaran', 'subprograms', 'contact'));
+        return view('client.index', compact('banner', 'gambaran', 'informasi', 'videos', 'subprograms', 'contact'));
+    }
+    public function show($id)
+    {
+        $info = Informasi::findOrFail($id);
+        return view('client.informasi_detail', compact('info'));
     }
 
 
     //navbar
 
-    public function tentangkegiatan(){
+    public function tentangkegiatan($id){
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.tentangkegiatan', compact('contact', 'subprograms')); 
+        $subprogram = Subprogram::findOrFail($id);
+        return view('client.tentangkegiatan', compact('contact', 'subprograms', 'subprogram'));
     }
-    public function rencanakegiatan(){
-        $contact = Kontak::all();
+    public function rencanakegiatan($id)
+    {
+
         $subprograms = Subprogram::all();
-        return view('client.rencanakegiatan', compact('contact', 'subprograms')); 
+        $subprogram = Subprogram::findOrFail($id);
+        $rencanaKegiatan = RencanaKerja::where('id_subprogram', $id)->where('status', 'valid')->get();
+        $opd = Opd::all();
+        $contact = Kontak::all();
+        return view('client.rencanakegiatan', compact('contact', 'subprograms', 'rencanaKegiatan', 'subprogram', 'opd'));
     }
-    public function progreskegiatan(){
+    public function progreskegiatan($id)
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.progreskegiatan', compact('contact', 'subprograms')); 
+        $subprogram = Subprogram::findOrFail($id);
+        $progres = ProgresKerja::where('id_subprogram', $id)->where('status', 'valid')->get();
+
+        return view('client.progreskegiatan', compact('contact', 'subprograms', 'subprogram', 'progres'));
+    }
+    public function monev($id)
+    {
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        $subprogram = Subprogram::findOrFail($id);
+        $monevs = Monev::with(['rencanaKerja', 'opd'])
+            ->where('id_subprogram', $id)->where('status', 'valid')
+            ->get();
+
+        // kelompokkan per triwulan berdasarkan bulan di created_at
+        $triwulan = [
+            1 => $monevs->filter(fn($item) => $item->created_at->month >= 1 && $item->created_at->month <= 3),
+            2 => $monevs->filter(fn($item) => $item->created_at->month >= 4 && $item->created_at->month <= 6),
+            3 => $monevs->filter(fn($item) => $item->created_at->month >= 7 && $item->created_at->month <= 9),
+            4 => $monevs->filter(fn($item) => $item->created_at->month >= 10 && $item->created_at->month <= 12),
+        ];
+        return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan'));
     }
     //sub progres kgiatan
     public function progreskegiatandetail(){
@@ -47,11 +89,18 @@ class ClientController extends Controller
         $subprograms = Subprogram::all();
         return view('client.progreskegiatandetail', compact('contact', 'subprograms')); 
     }
-    public function monev(){
-        $contact = Kontak::all();
-        $subprograms = Subprogram::all();
-        return view('client.monev', compact('contact', 'subprograms')); 
-    }
+    // public function monev(){
+    //     $contact = Kontak::all();
+    //     $subprograms = Subprogram::all();
+    //     $subprogram = Subprogram::findOrFail($id);
+
+    //     // Ambil semua titik map sesuai progres dari subprogram terkait
+    //     $maps = Map::whereHas('progres', function ($q) use ($id) {
+    //         $q->where('id_subprogram', $id);
+    //     })->with('progres')->get();
+
+    //     return view('client.petasebarankegiatan', compact('contact', 'subprograms', 'subprogram', 'maps'));
+    // }
     public function petasebarankegiatan(){
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
@@ -64,6 +113,7 @@ class ClientController extends Controller
         $subprograms = Subprogram::all();
         return view('client.profilkawasan', compact('contact', 'subprograms')); 
     }
+
     //sub profil kawasanadetail
     public function profilkawasandetail(){
         $contact = Kontak::all();
@@ -127,6 +177,8 @@ class ClientController extends Controller
 
 
 
+
+
     public function footer()
     {
         $contact = Kontak::all();
@@ -148,14 +200,6 @@ class ClientController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
     {
         //
     }

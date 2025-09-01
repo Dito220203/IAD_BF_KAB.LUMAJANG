@@ -36,6 +36,14 @@ Route::get('/profilkawasan', [ClientController::class, 'profilkawasan'])->name('
 Route::get('/profilkawasandetail', [ClientController::class, 'profilkawasandetail'])->name('client.profilkawasandetail');
 
 
+Route::prefix('subprogram/{id}')->group(function () {
+    Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
+    Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
+    Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
+    Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
+    Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])
+        ->name('client.petasebarankegiatan');
+});
 Route::get('/regulasi', [ClientController::class, 'regulasi'])->name('client.regulasi');
 
 //detail card
@@ -100,6 +108,7 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
 
     Route::get('/SubProgram', [SubProgramController::class, 'index'])->name('subprogram');
     Route::post('/create', [SubProgramController::class, 'store'])->name('subrogram.store');
+    Route::post('/store-produk', [SubProgramController::class, 'storeProduk'])->name('produk.store');
     Route::put('/Subprogram/{id}/update', [SubProgramController::class, 'update'])->name('subprogram.update');
     Route::delete('/Supprogram/{id}/delete', [SubProgramController::class, 'destroy'])->name('subrogram.delete');
 
@@ -163,7 +172,7 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
 
     Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
 
-   Route::post('/ganti-password', [LoginController::class, 'update_password'])->name('update.password');
+    Route::post('/ganti-password', [LoginController::class, 'update_password'])->name('update.password');
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });

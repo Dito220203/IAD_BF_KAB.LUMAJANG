@@ -24,14 +24,25 @@
                                 </a>
 
                                 <div class="d-flex align-items-center ">
-                                    <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect" data-target="TableMonev">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                    <span>data</span>
+                                    <label for="triwulan" class="form-label mb-0 me-2">Triwulan</label>
+                                    <form method="GET" action="{{ route('monev') }}">
+                                        <select name="triwulan" id="triwulan" class="form-select form-select-sm w-auto"
+                                            onchange="this.form.submit()">
+                                            <option value="">Semua</option>
+                                            <option value="1" {{ request('triwulan') == 1 ? 'selected' : '' }}>Triwulan
+                                                1
+                                                (Jan-Mar)</option>
+                                            <option value="2" {{ request('triwulan') == 2 ? 'selected' : '' }}>Triwulan
+                                                2
+                                                (Apr-Jun)</option>
+                                            <option value="3" {{ request('triwulan') == 3 ? 'selected' : '' }}>Triwulan
+                                                3
+                                                (Jul-Sep)</option>
+                                            <option value="4" {{ request('triwulan') == 4 ? 'selected' : '' }}>Triwulan
+                                                4
+                                                (Okt-Des)</option>
+                                        </select>
+                                    </form>
                                 </div>
 
                                 <div class="input-group w-auto">
@@ -39,6 +50,8 @@
                                         placeholder="Cari monitoring evaluasi...">
                                 </div>
                             </div>
+
+
 
                             <!-- Table -->
                             <div class="table-responsive">
@@ -71,7 +84,7 @@
 
                                                 <td class="text-center align-middle">
                                                     <div class="d-flex justify-content-center gap-1">
-                                                         @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
+                                                        @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
                                                             <button
                                                                 class="btn btn-sm {{ $data->status == 'Valid' ? 'btn-warning' : 'btn-success' }}"
                                                                 onclick="updateStatus('{{ $data->id }}', '{{ $data->status }}')">
@@ -90,13 +103,14 @@
                                                                 <input type="hidden" name="status" value="">
                                                             </form>
                                                         @endif
-                                                        <form action="{{ route('monev.show', $data->id) }}" method="GET" style="display:inline;">
+                                                        <form action="{{ route('monev.show', $data->id) }}" method="GET"
+                                                            style="display:inline;">
                                                             <button class="btn btn-info btn-sm" title="Lihat">
                                                                 <i class="fa-solid fa-eye"></i>
                                                             </button>
                                                         </form>
 
-                                                        <form action="{{route('monev.edit', $data->id)}}" method="GET">
+                                                        <form action="{{ route('monev.edit', $data->id) }}" method="GET">
                                                             <button class="btn btn-primary btn-sm">
                                                                 <i class="fa-solid fa-pen-to-square"></i>
                                                             </button>
@@ -104,8 +118,8 @@
 
                                                         {{-- Tombol Delete --}}
                                                         <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('monev.delete', $data->id) }}"
-                                                            method="POST" style="display:inline;">
+                                                            action="{{ route('monev.delete', $data->id) }}" method="POST"
+                                                            style="display:inline;">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="button" class="btn btn-danger btn-sm"
@@ -120,6 +134,10 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="mt-3">
+                               {{ $monev->links('vendor.pagination.bootstrap-5') }}
+                            </div>
+
                             <!-- End Table -->
                         </div>
                     </div>

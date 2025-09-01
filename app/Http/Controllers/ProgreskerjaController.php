@@ -92,7 +92,7 @@ class ProgreskerjaController extends Controller
                 'foto' => $namaFile, // hanya nama file
             ]);
         }
-            LogHelper::add('Menambah data Progres Kerja');
+        LogHelper::add('Menambah data Progres Kerja');
         return redirect()->route('progres')->with('success', 'Data Berhasil Ditambahkan');
     }
 
@@ -105,7 +105,7 @@ class ProgreskerjaController extends Controller
     {
         $progres = ProgresKerja::with('maps')->findOrFail($id);
         $subprogram = Subprogram::all();
-         LogHelper::add('Melihat detail data Progres Kerja');
+        LogHelper::add('Melihat detail data Progres Kerja');
         return view('admin.ProgresKerja.show', compact('progres', 'subprogram'));
     }
 

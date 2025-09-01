@@ -18,7 +18,7 @@
 }
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
-:root { 
+:root {
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */
   --default-color: #444444; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #49564A; /* Color for headings, subheadings and title throughout the website */
@@ -870,7 +870,7 @@ h6 {
   padding-top: 50px; /* Tambahan untuk turunkan teks */
   position: relative;
   height: 100%;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -908,7 +908,7 @@ h6 {
   font-weight: bold;
   color: #374b44;
   display: block;
-    padding-top: 50px; 
+    padding-top: 50px;
     margin-top: auto;
 }
 
@@ -916,7 +916,7 @@ h6 {
 .stats-card:hover {
   transform: translateY(-8px);
   box-shadow:  0 10px 20px #374b44;
- 
+
 }
 
 
@@ -932,7 +932,7 @@ h6 {
     .chart-container {
       display: flex;
       gap: 20px;
-      
+
       padding: 20px;
       border-radius: 8px;
       max-width: 1200px;
@@ -955,7 +955,7 @@ h6 {
     width: 100% !important;
     height: 300px !important;
 }
-  
+
 
 /*--------------------------------------------------------------
 # Preloader
@@ -1484,7 +1484,7 @@ section,
 }
 
 .kups {
-  background-color: #F0F0F0; 
+  background-color: #F0F0F0;
   text-align: center;
   padding: 20px 0;
 }

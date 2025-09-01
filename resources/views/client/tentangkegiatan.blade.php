@@ -2,14 +2,8 @@
 @section('content')
     <section class="section_page">
         <div class="global-title" data-aos="fade-up">
-            <h2>POTENSI AGROINDUSTRI?</h2>
-            <p>Kegiatan agorindustri di lokasi IAD Lumajang telah berkembang dengan baik diantaranya produksi susu sapi,
-                susu kambing, kripik pisang, kripik talas, kopi, kapulaga dan sudah memliki jaringan pasca produksi
-                (jaringan pasar) baik regional maupun nasional. Sasaran kegiatan agroindustri ini adalah membangun
-                sentra-sentra pengolahan home industri berdasarkan potensi yang ada sehingga akan terbangun sentra
-                pengolahan di tingkat desa antara lain Pengolahan kopi akan dibangun di Desa Burno, Desa Jambekumbu, Desa
-                Pasrujambe, Pengolahan susu sapi dan kambing di Desa Burno., Pengolahan keripik pisang dan keripik talas di
-                Desa Burno dan Desa Pasrujambe, Pengolahan Porang di Desa Pasrujambe.</p>
+            <h2> {{ $subprogram->subprogram }}</h2>
+            <p>{{ $subprogram->uraian}}</p>
         </div>
 
         <section class="product-slider">
