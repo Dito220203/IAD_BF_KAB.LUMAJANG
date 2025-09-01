@@ -426,6 +426,27 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+// navbar profill
+
+$(document).ready(function() {
+    // Aktifkan searchable dropdown
+    $('.select2').select2({
+      width: '100%',
+      dropdownParent: $('.profil-dropdown') // biar dropdown gak kabur
+    });
+
+    // Tombol Cari
+    $('.profil-search-btn').on('click', function(){
+      let kecamatan = $('#kecamatan').val();
+      let desa = $('#desa').val();
+      alert("Kecamatan: " + kecamatan + " | Desa: " + desa);
+      // nanti tinggal arahkan ke halaman sesuai filter
+    });
+  });
+
+
+
+//   detail dokumentasi page profil progres regulasi
 
 
 

@@ -28,11 +28,24 @@ Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer'
 Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
 Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
 Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
+Route::get('/progreskegiatandetail', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
 Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
 Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])->name('client.petasebarankegiatan');
 
+Route::get('/profilkawasan', [ClientController::class, 'profilkawasan'])->name('client.profilkawasan');
+Route::get('/profilkawasandetail', [ClientController::class, 'profilkawasandetail'])->name('client.profilkawasandetail');
+
 
 Route::get('/regulasi', [ClientController::class, 'regulasi'])->name('client.regulasi');
+
+//detail card
+Route::get('/detailluasperhutanan', [ClientController::class, 'detailluasperhutanan'])->name('client.detailluasperhutanan');
+Route::get('/detailkth_kups', [ClientController::class, 'detailkth_kups'])->name('client.detailkth_kups');
+Route::get('/detailekonomi', [ClientController::class, 'detailekonomi'])->name('client.detailekonomi');
+
+//detail berita&video
+Route::get('/detailinformasi', [ClientController::class, 'detailinformasi'])->name('client.detailinformasi');
+Route::get('/detailvideo', [ClientController::class, 'detailvideo'])->name('client.detailvideo');
 
 
 

@@ -23,6 +23,9 @@ class ClientController extends Controller
         return view('client.index', compact('banner', 'gambaran', 'subprograms', 'contact'));
     }
 
+
+    //navbar
+
     public function tentangkegiatan(){
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
@@ -38,6 +41,12 @@ class ClientController extends Controller
         $subprograms = Subprogram::all();
         return view('client.progreskegiatan', compact('contact', 'subprograms')); 
     }
+    //sub progres kgiatan
+    public function progreskegiatandetail(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.progreskegiatandetail', compact('contact', 'subprograms')); 
+    }
     public function monev(){
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
@@ -50,6 +59,47 @@ class ClientController extends Controller
     }
 
 
+    public function profilkawasan(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.profilkawasan', compact('contact', 'subprograms')); 
+    }
+    //sub profil kawasanadetail
+    public function profilkawasandetail(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.profilkawasandetail', compact('contact', 'subprograms')); 
+    }
+
+
+    public function detailluasperhutanan(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailluasperhutanan', compact('contact', 'subprograms')); 
+    }
+    public function detailkth_kups(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailkth_kups', compact('contact', 'subprograms')); 
+    }
+    public function detailekonomi(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailekonomi', compact('contact', 'subprograms')); 
+    }
+
+
+    //detail informasi &video
+    public function detailinformasi(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailinformasi', compact('contact', 'subprograms')); 
+    }
+    public function detailvideo(){
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailvideo', compact('contact', 'subprograms')); 
+    }
 
 
 
@@ -57,13 +107,7 @@ class ClientController extends Controller
 
 
 
-
-
-
-
-
-
-
+    // detail card index
     public function regulasi()
     {
         $contact = Kontak::all();

@@ -149,12 +149,12 @@ h6 {
 .global-title {
   text-align: center;
   padding: 20px 0;
+  
 }
 
 .global-title h2 {
   display: inline-block;
   position: relative;
-  /* font-family: 'Merriweather', sans-serif; */
   font-size: 35px;
   font-weight: 700;
   color: #000;
@@ -162,29 +162,45 @@ h6 {
   margin: 0;
   line-height: 2;
   padding-top: 30px;
-  padding-bottom: 30px; 
+  padding-bottom: 10px; /* default spasi bawah title */
 }
+
+.global-title h2 + p {
+  margin-top: 15px; /* kasih jarak khusus kalau ada paragraf setelah h2 */
+}
+
 
 .global-title h2::before {
   content: "";
   position: absolute;
   left: -15px;  /* jarak garis ke teks */
-  top: 0;
+  top: 15%;
   width: 8px;   /* ketebalan garis */
-  height: 100%;
+  height: 70%;
   background-color: #FFD700;
+  transition: all 0.3s ease-in-out;
 }
+
 .global-title p {
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
-  color: #333;              /* lebih soft dari hitam pekat */
-  text-transform: none;     /* biar tidak uppercase semua */
+  color: #333;            
+  text-transform: none;   
   margin: 0 auto;
-  line-height: 1.5;         /* jarak antar baris lebih enak */
-  max-width: 1200px;         /* batasi lebar paragraf */
+  line-height: 1.5;        
+  max-width: 1200px;       
   padding-top: 15px;
-  text-align: justify;      /* biar rapi kiri kanan */
+  text-align: justify;    
 }
+@media (max-width: 768px) {
+  .global-title h2 {
+    font-size: 26px;
+  }
+  .global-title p {
+    font-size: 16px;
+  }
+}
+
 
 
 /*--------------------------------------------------------------
@@ -699,6 +715,7 @@ h6 {
     margin-bottom: 15px;
   }
 }
+
 /* =========================
    Header Transparan & Scroll
    ========================= */
@@ -1472,28 +1489,6 @@ section,
   padding: 20px 0;
 }
 
-.kups h2 {
-  display: inline-block;
-  position: relative;
-  font-size: 35px;
-  font-weight: 700;
-  color: #000;
-  text-transform: uppercase;
-  margin: 0;
-  line-height: 2;
-  padding-top: 30px;
-  padding-bottom: 30px; 
-}
-.kups h2::before {
-  content: "";
-  position: absolute;
-  left: -15px;
-  top: 0;
-  width: 8px;
-  height: 100%;
-  background-color: #FFD700;
-}
-
 .container-kups {
   z-index: 3;
   padding-bottom: 30px;
@@ -1849,6 +1844,7 @@ section,
   max-height: 400px;
   width: auto;
   object-fit: contain;
+  border-radius: 15px; 
 }
 
 .slide-content {
@@ -1883,11 +1879,12 @@ section,
 # Video Section
 --------------------------------------------------------------*/
 /* Card */
+@media (min-width: 1024px) {
 .video-card {
   position: relative;
   display: flex;
-  flex: 0 0 380px;   /* 🔹 ubah ukuran card */
-  height: 350px;     /* 🔹 tinggi card */
+  flex: 0 0 380px;
+  height: 350px;
   border-radius: 15px;
   overflow: hidden;
   background: #fff;
@@ -1895,87 +1892,97 @@ section,
   cursor: pointer;
 }
 
-/* Biar gambar/video isi penuh */
-.video-card img,
-.video-card video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-
-
+/* Gambar */
 .video-image {
-  overflow: hidden; /* penting biar gambar zoom tidak keluar card */
+  overflow: hidden;
+  position: relative;
 }
 
 .video-image img {
   width: 100%;
-  height: 100%;    /* 🔹 ikut penuh tinggi card */
+  height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
-
-
-/* Jarak antar card */
-.video-cards {
-  display: flex;
-  gap: 35px; /* atur jarak antar card */
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding-bottom: 30px;
-  padding-top: 40px;
-  scrollbar-width: none;
+.video-card:hover .video-image img {
+  transform: scale(1.05);
 }
-.video-cards::-webkit-scrollbar { display: none; }
 
-/* Overlay */
+/* 🔹 Overlay gelap default */
+.video-image::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4); /* agak gelap */
+  transition: opacity 0.3s ease;
+}
+
+/* Hover → gelap hilang */
+.video-card:hover .video-image::after {
+  opacity: 0;
+}
+
+/* Konten */
 .video-content {
   position: absolute;
-  bottom: -29%;
+  bottom: 0;
   left: 0;
   width: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2));
+  background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.2));
   color: #fff;
   padding: 15px;
-  transition: bottom 0.3s ease;
+  transition: transform 0.3s ease;
+  transform: translateY(20%); /* 🔹 teks agak turun default */
+  max-height: 60%; /* biar nggak nutup full gambar */
+  overflow-y: hidden;
 }
 
-.video-card:hover .video-image img {
-  transform: scale(1.1);
-}
-
+/* Hover → teks naik + full muncul */
 .video-card:hover .video-content {
-  bottom: 0; /* supaya overlay naik saat hover */
+  transform: translateY(0);
+  max-height: 100%;
+  overflow-y: auto; /* kalau teks panjang bisa discroll */
 }
+
 .video-content h3 {
   font-size: 18px;
   margin-bottom: 8px;
-  color: #fff; /* warna judul */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #fff;
 }
 
 .video-content p {
   font-size: 14px;
-  color: #ddd; /* warna deskripsi */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #ddd;
   line-height: 1.4em;
-  max-height: 4.2em;
+  margin-bottom: 10px;
+  display: block; /* 🔹 selalu tampil penuh */
+  max-height: none; /* hilangkan batasan clamp */
+  -webkit-line-clamp: unset;
+}
+
+/* Footer */
+.video-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-top: 8px;
 }
 
 .video-footer span {
-  color: #fff; /* tanggal */
+  color: #fff;
 }
 
 .video-footer a {
-  color: #ffcc00; /* link */
+  color: #ffcc00;
   text-decoration: none;
+  font-weight: 500;
+}
+
+.video-footer a:hover {
+  text-decoration: underline;
 }
 
 .video-pagination {
@@ -2030,22 +2037,32 @@ section,
 .video-cards::-webkit-scrollbar { display: none; }
 
 /* Desktop: tampilkan 2 card per layar */
-@media (min-width: 1024px) {
+
   .video-cards {
     justify-content: flex-start;
     max-width: calc(380px * 2 + 70px); /* 2 card + gap (ubah 35px → 70px) */
     margin: 0 auto; /* biar center container */
     gap: 70px; /* tambahkan gap antar card */
   }
-}
 
-/* Mobile: 1 card per layar */
-@media (max-width: 767px) {
+  @media (max-width: 767px) {
   .video-cards {
-    justify-content: center !important; /* pastikan center */
-    gap: 0; /* hilangkan gap horizontal biar card bener2 center */
+    justify-content: center;
+    gap: 0; /* hilangkan jarak antar card */
+    padding: 20px 0; /* kasih sedikit padding */
+  }
+
+  .video-card {
+    flex: 0 0 90%;   /* card ambil hampir full width layar */
+    max-width: 90%;  /* biar gak lebih besar dari layar */
+    height: 320px;   /* boleh disesuaikan */
   }
 }
+
+}
+
+
+
 
 
 
@@ -2206,7 +2223,7 @@ section,
 
 
 /*--------------------------------------------------------------
-#  Progres Section
+#  Progres&regulai&profilkawasan& Section
 --------------------------------------------------------------*/
 /* Search box */
 /* Search box */
@@ -2316,7 +2333,7 @@ section,
     cursor: pointer;
 }
 .btn-lihat:hover {
-    background: #145a3c;
+    background: #ffc107;
 }
 
 /* Scrollable list */
@@ -2335,6 +2352,10 @@ section,
 .progres-list::-webkit-scrollbar-thumb:hover {
     background: #999;
 }
+/* Kalau di page regulasi mau lebih pendek */
+.page-regulasi .progres-list {
+    max-height: 400px;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -2347,6 +2368,90 @@ section,
         margin-bottom: 20px;
     }
 }
+
+/* progres detail */
+.detail-card {
+    background: #F0F0F0;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+}
+
+.detail-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.detail-card p {
+    margin: 5px 0;
+    color: #444;
+}
+
+.swiper {
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 5px;
+  overflow: visible;
+   
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 250px;   
+  object-fit: cover;  
+  border-radius: 15px; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .swiper-slide img:hover {
+    z-index: 10;
+  position: relative;
+  transform: scale(1.05); /* sedikit zoom pas hover */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15); /* bayangan lembut */
+}
+
+
+.btn-footer-back {
+    padding: 10px 22px;
+    border-radius: 10px;
+    background: #2f6f4e;
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.btn-footer-back:hover {
+    background: #ffc107;
+}
+@media (max-width: 768px) {
+  .swiper-slide img {
+    max-height: 160px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .swiper-slide img {
+    max-height: 280px;
+  }
+}
+
+
+
+
+
+
+
 
 
 
@@ -2365,6 +2470,10 @@ section,
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
+.monev-section.no-tabs {
+  margin-top: 10px; /* lebih kecil biar sejajar dengan monev */
+}
+
 .tab-btn {
   padding: 8px 18px;
   border: 1px solid #196b4a;
@@ -2438,9 +2547,9 @@ section,
     border: none;
     border-bottom: 1px solid #eee;
   }
-  .monev-table td:last-child {
+  /* .monev-table td:last-child {
     border-bottom: none;
-  }
+  } */
   .monev-table td::before {
     content: attr(data-label);
     font-weight: bold;
@@ -2449,6 +2558,44 @@ section,
     color: #196b4a;
   }
 }
+/* Zebra striping biar lebih gampang dibaca */
+.monev-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover row effect */
+.monev-table tbody tr:hover {
+  background-color: rgba(25, 107, 74, 0.08);
+  transition: background 0.3s;
+}
+
+/* Header lebih modern */
+.monev-table th {
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Rata kanan khusus angka (kolom terakhir) */
+.monev-table td:last-child {
+  text-align: right;
+  font-weight: 500;
+}
+
+/* Rounded table biar soft */
+.monev-table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Mobile mode: kasih shadow lebih soft */
+@media (max-width: 768px) {
+  .monev-table tr {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+}
+
 
 /*--------------------------------------------------------------
 #  peta sebaran Section
@@ -2489,8 +2636,78 @@ section,
 
 
 /*--------------------------------------------------------------
-#  .. Section
+#  detailberita Section
 --------------------------------------------------------------*/
+.berita-card {
+  max-width: 1200px; /* lebih fokus */
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  overflow: hidden;
+  padding: 0 0 25px 0;
+  transition: all 0.3s ease;
+}
+
+.berita-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.berita-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px 16px 0 0;
+  object-fit: cover;
+   position: relative;
+
+}
+
+.berita-divider {
+  width: 100%;
+  height: 1px;
+  background: #ddd;
+  margin: 8px 0 15px 0; /* kasih jarak */
+}
+
+
+.berita-date {
+  text-align: right;
+  font-size: 14px;
+  color: #555;
+  margin: 10px 20px 0 0;
+  font-style: italic;
+}
+
+.berita-desc {
+  padding: 20px 25px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  margin-top: 10px;
+}
+
+.berita-desc p {
+  margin-bottom: 0;
+}
+
+.btn-footer-back {
+  display: inline-block;
+  padding: 8px 18px;
+  background: #196b4a;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn-footer-back:hover {
+  background: #145a3e;
+}
+
+
 
 /*--------------------------------------------------------------
 #  .. Section

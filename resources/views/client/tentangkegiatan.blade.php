@@ -2,7 +2,7 @@
 @section('content')
     <section class="section_page">
         <div class="global-title" data-aos="fade-up">
-            <h2>What is Lorem Ipsum?</h2>
+            <h2>POTENSI AGROINDUSTRI?</h2>
             <p>Kegiatan agorindustri di lokasi IAD Lumajang telah berkembang dengan baik diantaranya produksi susu sapi,
                 susu kambing, kripik pisang, kripik talas, kopi, kapulaga dan sudah memliki jaringan pasca produksi
                 (jaringan pasar) baik regional maupun nasional. Sasaran kegiatan agroindustri ini adalah membangun
@@ -14,7 +14,7 @@
 
         <section class="product-slider">
 
-            <div class="slider-wrapper">
+            <div class="slider-wrapper produk-tiap-program">
                 <!-- Slide 1 -->
                 <div class="slide active">
                     <div class="slide-image">

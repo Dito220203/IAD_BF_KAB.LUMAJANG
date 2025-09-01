@@ -1,9 +1,9 @@
 @extends('componentsclient.layout')
 @section('content')
 
-<section class="section_page">
+<section class="section_page progres">
     <div class="global-title" data-aos="fade-up">
-        <h2>What is Lorem Ipsum?</h2>
+        <h2>PROGRES KEGIATAN AGROINDUSTRI</h2>
     </div>
 
     <section id="progres-kegiatan" class="progres-section container">
@@ -74,7 +74,7 @@
                                     <p>Penerima : {{ $item->penerima }}</p>
                                 </div>
                                 <div class="progres-footer">
-                                    <button class="btn-lihat">Lihat</button>
+                                    <a href="{{ route('client.progreskegiatandetail') }}" class="{{ request()->is('progreskegiatan') ? 'active' : '' }}"><button class="btn-lihat">Lihat</button></a>
                                 </div>
                             </div>
                         @endforeach

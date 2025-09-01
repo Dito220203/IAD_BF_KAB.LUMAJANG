@@ -40,7 +40,7 @@
 
                         <!-- Card 1 -->
                         <div class="col-lg-3 col-md-6">
-                            <a href="#" class="stats-link">
+                            <a href="{{ url('/detailluasperhutanan') }}" class="stats-link">
                                 <div class="stats-card">
                                     <div>
                                         <div class="stats-icon"><i class="fa fa-tree"></i></div>
@@ -56,6 +56,7 @@
                         </div>
                         <!-- Card 2 -->
                         <div class="col-lg-3 col-md-6">
+                            <a href="{{ url('/detailkth_kups') }}">
                             <div class="stats-card">
                                 <div>
                                     <div class="stats-icon"><i class="fas fa-users"></i></div>
@@ -64,9 +65,12 @@
                                 <span class="stats-number purecounter" data-purecounter-start="0" data-purecounter-end="123"
                                     data-purecounter-decimals="0" data-purecounter-duration="1"></span>
                             </div>
+                            </a>
                         </div>
                         <!-- Card 3 -->
+                        
                         <div class="col-lg-3 col-md-6">
+                            <a href="{{ url('/detailkth_kups') }}">
                             <div class="stats-card">
                                 <div>
                                     <div class="stats-icon"><i class="fas fa-store"></i></div>
@@ -75,12 +79,14 @@
                                 <span class="stats-number purecounter" data-purecounter-start="0" data-purecounter-end="123"
                                     data-purecounter-decimals="0" data-purecounter-duration="1"></span>
                             </div>
+                            </a>
                         </div>
+                        
                         <!-- Card 4 -->
                         <div class="col-lg-3 col-md-6">
+                            <a href="{{ url('/detailekonomi') }}">
                             <div class="stats-card">
                                 <div>
-
                                     <div class="stats-icon">
                                         <i class="fas fa-sack-dollar"></i>
                                     </div>
@@ -92,6 +98,7 @@
                                         data-purecounter-end="123" data-purecounter-decimals="0"
                                         data-purecounter-duration="1"></span></span>
                             </div>
+                            </a>
                         </div>
 
                     </div>
@@ -176,7 +183,7 @@
                 <!-- Slide 2 -->
                 <div class="slide">
                     <div class="slide-image">
-                        <img src="{{ asset('client/assets/img/prdt1.png') }}" alt="Produk 2">
+                        <img src="{{ asset('client/assets/img/prdt5.jpg') }}" alt="Produk 2">
                     </div>
                     <div class="slide-content">
                         <h2>Olahan Susu</h2>
@@ -254,7 +261,7 @@
 
             </div>
 
-            <!-- chart perhut Section -->
+            <!-- chart kups Section -->
             <div data-aos="fade-up" data-aos-delay="250" id="pendapatanChart" class="pendapatanChart">
             </div>
 
@@ -330,6 +337,7 @@
                 <div class="informasi-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
                     <!-- Card 1 -->
                     <div class="informasi-card">
+                        <a href="{{ url('/detailinformasi') }}">
                         <div class="informasi-image">
                             <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
@@ -344,11 +352,13 @@
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="informasi-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
                     <div class="informasi-card">
+                        <a href="{{ url('/detailinformasi') }}">
                         <div class="informasi-image">
                             <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
@@ -363,11 +373,13 @@
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="informasi-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
                     <div class="informasi-card">
+                        <a href="{{ url('/detailinformasi') }}">
                         <div class="informasi-image">
                             <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
@@ -382,11 +394,13 @@
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="informasi-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
                     <div class="informasi-card">
+                        <a href="{{ url('/detailinformasi') }}">
                         <div class="informasi-image">
                             <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
@@ -401,11 +415,13 @@
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="informasi-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
                     <div class="informasi-card">
+                        <a href="{{ url('/detailinformasi') }}">
                         <div class="informasi-image">
                             <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
@@ -420,11 +436,13 @@
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="informasi-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
                     <div class="informasi-card">
+                        <a href="{{ url('/detailinformasi') }}">
                         <div class="informasi-image">
                             <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
@@ -439,11 +457,13 @@
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="informasi-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
                     <div class="informasi-card">
+                        <a href="{{ url('/detailinformasi') }}">
                         <div class="informasi-image">
                             <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
                         </div>
@@ -458,67 +478,12 @@
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="informasi-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
-                    <div class="informasi-card">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="informasi-card">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="informasi-card">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                    </div>
+                    
 
                 </div>
 
@@ -606,83 +571,100 @@
                 <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
                     <!-- Card 1 -->
                     <div class="video-card">
+                        <a href="{{ url('/detailvideo') }}">
                         <div class="video-image">
                             <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
                         </div>
                         <div class="video-content">
                             <h3>What is Lorem Ipsum?</h3>
                             <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="video-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
-
                     <div class="video-card">
+                        <a href="{{ url('/detailvideo') }}">
                         <div class="video-image">
                             <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
                         </div>
                         <div class="video-content">
                             <h3>What is Lorem Ipsum?</h3>
                             <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="video-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
-
                     <div class="video-card">
+                        <a href="{{ url('/detailvideo') }}">
                         <div class="video-image">
                             <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
                         </div>
                         <div class="video-content">
                             <h3>What is Lorem Ipsum?</h3>
                             <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="video-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
                     </div>
-
                     <div class="video-card">
+                        <a href="{{ url('/detailvideo') }}">
                         <div class="video-image">
                             <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
                         </div>
                         <div class="video-content">
                             <h3>What is Lorem Ipsum?</h3>
                             <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
                                 sometimes by accident, sometimes on purpose (injected humour and the like).</p>
                             <div class="video-footer">
                                 <span>01 Agustus 2025</span>
-                                <a href="#">Lebih Lengkap...</a>
+                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
                             </div>
                         </div>
+                        </a>
+                    </div>
+                    <div class="video-card">
+                        <a href="{{ url('/detailvideo') }}">
+                        <div class="video-image">
+                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                        </div>
+                        <div class="video-content">
+                            <h3>What is Lorem Ipsum?</h3>
+                            <p>It is a long established fact that a reader will be distracted by the readable content of a
+                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+                            <div class="video-footer">
+                                <span>01 Agustus 2025</span>
+                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                    <div class="video-card">
+                        <a href="{{ url('/detailvideo') }}">
+                        <div class="video-image">
+                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
+                        </div>
+                        <div class="video-content">
+                            <h3>What is Lorem Ipsum?</h3>
+                            <p>It is a long established fact that a reader will be distracted by the readable content of a
+                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+                            <div class="video-footer">
+                                <span>01 Agustus 2025</span>
+                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
+                            </div>
+                        </div>
+                        </a>
                     </div>
                 </div>
 
