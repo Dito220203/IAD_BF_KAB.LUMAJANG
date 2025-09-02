@@ -68,7 +68,7 @@
                             </a>
                         </div>
                         <!-- Card 3 -->
-                        
+
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ url('/detailkth_kups') }}">
                             <div class="stats-card">
@@ -81,7 +81,7 @@
                             </div>
                             </a>
                         </div>
-                        
+
                         <!-- Card 4 -->
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ url('/detailekonomi') }}">
@@ -483,7 +483,7 @@
                         </div>
                         </a>
                     </div>
-                    
+
 
                 </div>
 
@@ -582,7 +582,7 @@
                                 </p>
 
                                 <div class="informasi-footer">
-                                    <span>{{ \Carbon\Carbon::parse($info->tanggal)->translatedFormat('d F Y') }}</span>
+                                    <span>{{ $info->tanggal }}</span>
                                     <a href="{{ route('informasi.show', $info->id) }}">Lebih Lengkap...</a>
                                 </div>
                             </div>
@@ -660,188 +660,103 @@
         </section>
 
 
-        <!-- video Section -->
-        <section class="video-section" id="videosection">
-            <div class="global-title" data-aos="fade-up">
-                <h2>VIDEO</h2>
+       <!-- video Section -->
+<section class="video-section" id="videosection">
+    <div class="global-title" data-aos="fade-up">
+        <h2>VIDEO</h2>
+    </div>
+    <div class="video-wrapper">
+        <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
+            @forelse ($videos as $video)
+            <div class="video-card">
+                <a href="{{ url('/detailvideo/' . $video->id) }}">
+                    <div class="video-image">
+                        <img src="{{ asset('storage/' . ($video->thumbnail ?? 'client/assets/img/pulau.jpg')) }}" alt="{{ $video->judul }}">
+                    </div>
+                    <div class="video-content">
+                        <h3>{{ $video->judul }}</h3>
+                        <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
+                        <div class="video-footer">
+                            <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
+                            <a href="{{ url('/detailvideo/' . $video->id) }}">Lebih Lengkap...</a>
+                        </div>
+                    </div>
+                </a>
             </div>
-            <div class="video-wrapper">
-                <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
-                    <!-- Card 1 -->
-                    <div class="video-card">
-                        <a href="{{ url('/detailvideo') }}">
-                        <div class="video-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="video-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="video-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="video-card">
-                        <a href="{{ url('/detailvideo') }}">
-                        <div class="video-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="video-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="video-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="video-card">
-                        <a href="{{ url('/detailvideo') }}">
-                        <div class="video-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="video-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="video-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="video-card">
-                        <a href="{{ url('/detailvideo') }}">
-                        <div class="video-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="video-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="video-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="video-card">
-                        <a href="{{ url('/detailvideo') }}">
-                        <div class="video-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="video-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="video-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="video-card">
-                        <a href="{{ url('/detailvideo') }}">
-                        <div class="video-image">
-                            <img src="{{ asset('client/assets/img/pulau.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="video-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="video-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailvideo') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                </div>
+            @empty
+            <p>Tidak ada video tersedia.</p>
+            @endforelse
+        </div>
 
-                <!-- Pagination -->
-                <div class="video-pagination" id="videoPagination">
-                    <span class="dot active"></span>
+        <!-- Pagination -->
+        <div class="video-pagination" id="videoPagination"></div>
+    </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const cardsContainer = document.querySelector(".video-cards");
+            const pagination = document.querySelector(".video-pagination");
 
-                </div>
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        const cardsContainer = document.querySelector(".video-cards");
-                        const pagination = document.querySelector(".video-pagination");
+            let cardWidth = 0;
+            let scrollStep = 0;
+            let totalPages = 0;
 
-                        let cardWidth = 0;
-                        let scrollStep = 0;
-                        let totalPages = 0;
+            function updateCardWidth() {
+                const firstCard = cardsContainer.querySelector(".video-card");
+                if (!firstCard) return;
 
-                        function updateCardWidth() {
-                            const firstCard = cardsContainer.querySelector(".video-card");
-                            if (!firstCard) return;
+                const style = window.getComputedStyle(firstCard);
+                const marginRight = parseInt(style.marginRight) || 0;
+                cardWidth = firstCard.offsetWidth + marginRight;
 
-                            const style = window.getComputedStyle(firstCard);
-                            const marginRight = parseInt(style.marginRight) || 0;
-                            cardWidth = firstCard.offsetWidth + marginRight;
+                // tampilkan 4 card, scroll 3 card
+                scrollStep = cardWidth * 3;
 
-                            // tampilkan 4 card, scroll 3 card
-                            scrollStep = cardWidth * 3;
+                // hitung total page
+                totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
 
-                            // hitung total page
-                            totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
+                updatePagination();
+            }
 
-                            updatePagination();
-                        }
+            function updatePagination() {
+                pagination.innerHTML = "";
 
-                        function updatePagination() {
-                            pagination.innerHTML = "";
+                for (let i = 0; i < totalPages; i++) {
+                    const dot = document.createElement("span");
+                    dot.classList.add("dot");
+                    if (i === 0) dot.classList.add("active");
 
-                            for (let i = 0; i < totalPages; i++) {
-                                const dot = document.createElement("span");
-                                dot.classList.add("dot");
-                                if (i === 0) dot.classList.add("active");
-
-                                dot.addEventListener("click", () => {
-                                    cardsContainer.scrollTo({
-                                        left: i * scrollStep,
-                                        behavior: "smooth",
-                                    });
-                                });
-
-                                pagination.appendChild(dot);
-                            }
-                        }
-
-                        function setActiveDot() {
-                            const dots = pagination.querySelectorAll(".dot");
-                            const index = Math.round(cardsContainer.scrollLeft / scrollStep);
-
-                            dots.forEach((dot, i) => {
-                                dot.classList.toggle("active", i === index);
-                            });
-                        }
-
-                        // update setiap resize window
-                        window.addEventListener("resize", updateCardWidth);
-                        // update saat scroll
-                        cardsContainer.addEventListener("scroll", setActiveDot);
-
-                        // pertama kali jalan
-                        updateCardWidth();
+                    dot.addEventListener("click", () => {
+                        cardsContainer.scrollTo({
+                            left: i * scrollStep,
+                            behavior: "smooth",
+                        });
                     });
-                </script>
 
+                    pagination.appendChild(dot);
+                }
+            }
 
+            function setActiveDot() {
+                const dots = pagination.querySelectorAll(".dot");
+                const index = Math.round(cardsContainer.scrollLeft / scrollStep);
 
-            </div>
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle("active", i === index);
+                });
+            }
 
+            // update setiap resize window
+            window.addEventListener("resize", updateCardWidth);
+            // update saat scroll
+            cardsContainer.addEventListener("scroll", setActiveDot);
 
-        </section>
+            // pertama kali jalan
+            updateCardWidth();
+        });
+    </script>
+</section>
+
         <!-- /video Section -->
 
         <!-- Contact Section -->

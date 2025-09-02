@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Banner;
+use App\Models\FotoSubprogram;
 use App\Models\GambaranUmum;
 use App\Models\Informasi;
 use App\Models\Kontak;
@@ -25,26 +26,28 @@ class ClientController extends Controller
     {
         $gambaran = GambaranUmum::where('status', 'Aktif')->get();
         $informasi = Informasi::orderBy('tanggal', 'asc')->get();
-        $videos = Video::latest()->get();
+        $videos = Video::all();
         $banner = Banner::where('status', 'Aktif')->get();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.index', compact('banner', 'gambaran', 'informasi', 'videos', 'subprograms', 'contact'));
     }
-    public function show($id)
-    {
-        $info = Informasi::findOrFail($id);
-        return view('client.informasi_detail', compact('info'));
-    }
+    // public function show($id)
+    // {
+    //     $info = Informasi::findOrFail($id);
+    //     return view('client.informasi_detail', compact('info'));
+    // }
 
 
     //navbar
 
-    public function tentangkegiatan($id){
+    public function tentangkegiatan($id)
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         $subprogram = Subprogram::findOrFail($id);
-        return view('client.tentangkegiatan', compact('contact', 'subprograms', 'subprogram'));
+        $fotosubprogram = FotoSubprogram::where('id_subprogram', $id)->get();
+        return view('client.tentangkegiatan', compact('contact', 'subprograms', 'subprogram', 'fotosubprogram'));
     }
     public function rencanakegiatan($id)
     {
@@ -83,72 +86,79 @@ class ClientController extends Controller
         ];
         return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan'));
     }
-    //sub progres kgiatan
-    public function progreskegiatandetail(){
+
+    public function petasebarankegiatan($id)
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.progreskegiatandetail', compact('contact', 'subprograms')); 
-    }
-    // public function monev(){
-    //     $contact = Kontak::all();
-    //     $subprograms = Subprogram::all();
-    //     $subprogram = Subprogram::findOrFail($id);
+        $subprogram = Subprogram::findOrFail($id);
 
-    //     // Ambil semua titik map sesuai progres dari subprogram terkait
-    //     $maps = Map::whereHas('progres', function ($q) use ($id) {
-    //         $q->where('id_subprogram', $id);
-    //     })->with('progres')->get();
+        $maps = Map::whereHas('progres', function ($q) use ($id) {
+            $q->where('id_subprogram', $id)
+                ->where('status', 'valid');
+        })
+            ->with('progres')
+            ->get();
 
-    //     return view('client.petasebarankegiatan', compact('contact', 'subprograms', 'subprogram', 'maps'));
-    // }
-    public function petasebarankegiatan(){
-        $contact = Kontak::all();
-        $subprograms = Subprogram::all();
-        return view('client.petasebarankegiatan', compact('contact', 'subprograms')); 
+        return view('client.petasebarankegiatan', compact('contact', 'subprograms', 'subprogram', 'maps'));
     }
 
 
-    public function profilkawasan(){
+    public function progreskegiatandetail()
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.profilkawasan', compact('contact', 'subprograms')); 
+        return view('client.progreskegiatandetail', compact('contact', 'subprograms'));
+    }
+    public function profilkawasan()
+    {
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.profilkawasan', compact('contact', 'subprograms'));
     }
 
     //sub profil kawasanadetail
-    public function profilkawasandetail(){
+    public function profilkawasandetail()
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.profilkawasandetail', compact('contact', 'subprograms')); 
+        return view('client.profilkawasandetail', compact('contact', 'subprograms'));
     }
 
 
-    public function detailluasperhutanan(){
+    public function detailluasperhutanan()
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailluasperhutanan', compact('contact', 'subprograms')); 
+        return view('client.detailluasperhutanan', compact('contact', 'subprograms'));
     }
-    public function detailkth_kups(){
+    public function detailkth_kups()
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailkth_kups', compact('contact', 'subprograms')); 
+        return view('client.detailkth_kups', compact('contact', 'subprograms'));
     }
-    public function detailekonomi(){
+    public function detailekonomi()
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailekonomi', compact('contact', 'subprograms')); 
+        return view('client.detailekonomi', compact('contact', 'subprograms'));
     }
 
 
     //detail informasi &video
-    public function detailinformasi(){
+    public function detailinformasi($id)
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailinformasi', compact('contact', 'subprograms')); 
+        $info = Informasi::findOrFail($id);
+        return view('client.detailinformasi', compact('contact', 'subprograms', 'info'));
     }
-    public function detailvideo(){
+    public function detailvideo()
+    {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailvideo', compact('contact', 'subprograms')); 
+        return view('client.detailvideo', compact('contact', 'subprograms'));
     }
 
 

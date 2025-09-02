@@ -25,12 +25,12 @@ use Illuminate\Support\Facades\Route;
 //client
 Route::get('/', [ClientController::class, 'index'])->name('client');
 Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer');
-Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
-Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
-Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
+// Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
+// Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
+// Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
 Route::get('/progreskegiatandetail', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
-Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
-Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])->name('client.petasebarankegiatan');
+// Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
+// Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])->name('client.petasebarankegiatan');
 
 Route::get('/profilkawasan', [ClientController::class, 'profilkawasan'])->name('client.profilkawasan');
 Route::get('/profilkawasandetail', [ClientController::class, 'profilkawasandetail'])->name('client.profilkawasandetail');
@@ -52,7 +52,7 @@ Route::get('/detailkth_kups', [ClientController::class, 'detailkth_kups'])->name
 Route::get('/detailekonomi', [ClientController::class, 'detailekonomi'])->name('client.detailekonomi');
 
 //detail berita&video
-Route::get('/detailinformasi', [ClientController::class, 'detailinformasi'])->name('client.detailinformasi');
+Route::get('/detailinformasi/{id}', [ClientController::class, 'detailinformasi'])->name('informasi.show');
 Route::get('/detailvideo', [ClientController::class, 'detailvideo'])->name('client.detailvideo');
 
 
@@ -111,6 +111,8 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::post('/store-produk', [SubProgramController::class, 'storeProduk'])->name('produk.store');
     Route::put('/Subprogram/{id}/update', [SubProgramController::class, 'update'])->name('subprogram.update');
     Route::delete('/Supprogram/{id}/delete', [SubProgramController::class, 'destroy'])->name('subrogram.delete');
+    Route::put('/sub-produk/{id}/update', [SubProgramController::class, 'updateProduk'])->name('update.produk');
+    Route::delete('/sub-produk/{id}/delete', [SubProgramController::class, 'destroyProduk'])->name('delete.produk');
 
     Route::get('/RencanKerja', [RencanakerjaController::class, 'index'])->name('rencanakerja');
     Route::get('/Rencana/create', [RencanakerjaController::class, 'create'])->name('rencana.create');
