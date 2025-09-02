@@ -14,43 +14,42 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>KELOMPOK TANI HUTAN (KTH)</th>
-                                <th>LUAS AREAL KELOLA SESUAI SK (Ha)</th>
-                                
+                                <th>Kelompok Tani Hutan (KTH)</th>
+                                <th>Luas Areal Kelola (Ha)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>1</td>
-                                <td>KTH sumber urip</td>
-                                <td>2.198,9</td>
+                                <td data-label="No" >1</td>
+                                <td data-label="Kelompok Tani Hutan (KTH)">KTH sumber urip</td>
+                                <td data-label="Luas Areal Kelola (Ha)">2.198,9</td>
                             </tr>
                             <tr>
-                                <td>2</td>
-                                <td>Kedawung</td>
-                                <td>786</td>
+                                <td data-label="No">2</td>
+                                <td data-label="Kelompok Tani Hutan (KTH)">Kedawung</td>
+                                <td data-label="Luas Areal Kelola (Ha)">786</td>
                             </tr>
                             <tr>
-                                <td>3</td>
-                                <td>Sukodadi</td>
-                                <td>123,78</td>
+                                <td data-label="No">3</td>
+                                <td data-label="Kelompok Tani Hutan (KTH)">Sukodadi</td>
+                                <td data-label="Luas Areal Kelola (Ha)">123,78</td>
                             </tr>
                             <tr>
-                                <td>4</td>
-                                <td>Ayem Tentrem</td>
-                                <td>578</td>
+                                <td data-label="No">4</td>
+                                <td data-label="Kelompok Tani Hutan (KTH)">Ayem Tentrem</td>
+                                <td data-label="Luas Areal Kelola (Ha)">578</td>
                             </tr>
-                            
                         </tbody>
                     </table>
+
                 </div>
-                
+
             </div>
             <div class="text-center mt-4">
-            <a href="{{ url('/') }}" class="btn-footer-back">
-                ← Kembali
-            </a>
-        </div>
+                <a href="{{ url('/') }}" class="btn-footer-back">
+                    ← Kembali
+                </a>
+            </div>
         </section>
 
     </section>

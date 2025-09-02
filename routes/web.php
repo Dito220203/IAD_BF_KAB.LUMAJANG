@@ -55,7 +55,11 @@ Route::get('/detailekonomi', [ClientController::class, 'detailekonomi'])->name('
 Route::get('/detailinformasi/{id}', [ClientController::class, 'detailinformasi'])->name('informasi.show');
 Route::get('/detailvideo', [ClientController::class, 'detailvideo'])->name('client.detailvideo');
 
-
+//tamabahan potensi
+Route::get('/detailpotensipeternakan', [ClientController::class, 'detailpotensipeternakan'])->name('client.detailpotensipeternakan');
+Route::get('/detailpotensiwisata', [ClientController::class, 'detailpotensiwisata'])->name('client.detailpotensiwisata');
+Route::get('/detailpotensipertanian', [ClientController::class, 'detailpotensipertanian'])->name('client.detailpotensipertanian');
+//tamabahan potensi
 
 
 

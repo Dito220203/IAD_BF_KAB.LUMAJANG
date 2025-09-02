@@ -182,6 +182,33 @@ class ClientController extends Controller
 
 
 
+    //potensi
+    public function detailpotensipeternakan()
+    {
+      $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailpotensipeternakan', compact('contact', 'subprograms'));
+      
+    }
+    public function detailpotensiwisata()
+    {
+      $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailpotensiwisata', compact('contact', 'subprograms'));
+      
+    }
+    public function detailpotensipertanian()
+    {
+      $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailpotensipertanian', compact('contact', 'subprograms'));
+      
+    }
+
+    //potensi
+
+
+
 
 
 

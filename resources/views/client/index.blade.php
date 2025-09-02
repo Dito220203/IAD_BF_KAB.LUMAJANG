@@ -33,7 +33,7 @@
         <section id="perhut" class="perhutanan">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="global-title">
-                    <h2>PERHUTANAN SOSIAL KABUPATEN LUMAJANG</h2>
+                    <h2>IAD PERHUTANAN SOSIAL KABUPATEN LUMAJANG</h2>
                 </div>
                 <div class="perhut-cards" data-aos="fade-down" data-aos-delay="200" id="PerhutCards">
                     <div class="row gy-4">
@@ -57,47 +57,49 @@
                         <!-- Card 2 -->
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ url('/detailkth_kups') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon"><i class="fas fa-users"></i></div>
+                                <div class="stats-card">
+                                    <div>
+                                        <div class="stats-icon"><i class="fas fa-users"></i></div>
+                                    </div>
+                                    <p class="stats-label">Kelompok Tani Hutan (KTH)</p>
+                                    <span class="stats-number purecounter" data-purecounter-start="0"
+                                        data-purecounter-end="123" data-purecounter-decimals="0"
+                                        data-purecounter-duration="1"></span>
                                 </div>
-                                <p class="stats-label">Kelompok Tani Hutan (KTH)</p>
-                                <span class="stats-number purecounter" data-purecounter-start="0" data-purecounter-end="123"
-                                    data-purecounter-decimals="0" data-purecounter-duration="1"></span>
-                            </div>
                             </a>
                         </div>
                         <!-- Card 3 -->
 
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ url('/detailkth_kups') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon"><i class="fas fa-store"></i></div>
+                                <div class="stats-card">
+                                    <div>
+                                        <div class="stats-icon"><i class="fas fa-store"></i></div>
+                                    </div>
+                                    <p class="stats-label"> Kelompok Usaha Perhutanan Sosial (KUPS)</p>
+                                    <span class="stats-number purecounter" data-purecounter-start="0"
+                                        data-purecounter-end="123" data-purecounter-decimals="0"
+                                        data-purecounter-duration="1"></span>
                                 </div>
-                                <p class="stats-label"> Kelompok Usaha Perhutanan Sosial (KUPS)</p>
-                                <span class="stats-number purecounter" data-purecounter-start="0" data-purecounter-end="123"
-                                    data-purecounter-decimals="0" data-purecounter-duration="1"></span>
-                            </div>
                             </a>
                         </div>
 
                         <!-- Card 4 -->
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ url('/detailekonomi') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon">
-                                        <i class="fas fa-sack-dollar"></i>
+                                <div class="stats-card">
+                                    <div>
+                                        <div class="stats-icon">
+                                            <i class="fas fa-sack-dollar"></i>
+                                        </div>
+
                                     </div>
+                                    <p class="stats-label">Nilai Ekonomi</p>
 
+                                    <span class="stats-number"><span class="purecounter" data-purecounter-start="0"
+                                            data-purecounter-end="123" data-purecounter-decimals="0"
+                                            data-purecounter-duration="1"></span></span>
                                 </div>
-                                <p class="stats-label">Nilai Ekonomi</p>
-
-                                <span class="stats-number"><span class="purecounter" data-purecounter-start="0"
-                                        data-purecounter-end="123" data-purecounter-decimals="0"
-                                        data-purecounter-duration="1"></span></span>
-                            </div>
                             </a>
                         </div>
 
@@ -113,10 +115,10 @@
                     data-aos-delay="250">
 
                     <!-- Chart Kiri -->
-                    <div class="chart-box"
+                    {{-- <div class="chart-box"
                         style="flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <canvas id="barChart"></canvas>
-                    </div>
+                    </div> --}}
 
                     <!-- Chart Kanan -->
                     <div class="chart-box"
@@ -128,22 +130,7 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     // BAR CHART
-                    const barCtx = document.getElementById('barChart').getContext('2d');
-                    new Chart(barCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: ['Platinum', 'Emas', 'Perak', 'Biru'],
-                            datasets: [{
-                                label: '2020',
-                                data: [12, 88, 77, 74],
-                                backgroundColor: ['#6a5acd', '#ffd700', '#c0c0c0', '#1e90ff']
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false
-                        }
-                    });
+                   
 
                     // DONUT CHART
                     const donutCtx = document.getElementById('donutChart').getContext('2d');
@@ -166,62 +153,23 @@
 
         </section>
 
-        <!-- PRODUCT KUPS -->
-        <section class="product-slider">
-            <div class="slider-wrapper">
-                <!-- Slide 1 -->
-                <div class="slide active">
-                    <div class="slide-image">
-                        <img src="{{ asset('client/assets/img/prdt2.png') }}" alt="Produk 1">
-                    </div>
-                    <div class="slide-content">
-                        <h2>Produk Pisang</h2>
-                        <p>Pisang hasil KUPS yang segar dan siap konsumsi.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="slide">
-                    <div class="slide-image">
-                        <img src="{{ asset('client/assets/img/prdt5.jpg') }}" alt="Produk 2">
-                    </div>
-                    <div class="slide-content">
-                        <h2>Olahan Susu</h2>
-                        <p>Susu segar yang diolah menjadi produk berkualitas tinggi.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 3 -->
-                <div class="slide">
-                    <div class="slide-image">
-                        <img src="{{ asset('client/assets/img/prdt1.png') }}" alt="Produk 3">
-                    </div>
-                    <div class="slide-content">
-                        <h2>Kerajinan Bambu</h2>
-                        <p>Produk ramah lingkungan hasil dari kreativitas masyarakat.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- /PRODUCT KUPS -->
-
         <!-- JUMLAH PENDAPATAN TIAP KUPS -->
         <section id="kups" class="kups">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="global-title">
-                    <h2>JUMLAH PENDAPATAN TIAP KUPS</h2>
+                    <h2>IAD POTENSI TIAP KUPS</h2>
                 </div>
                 <div class="perhut-cards" data-aos="fade-down" data-aos-delay="200" id="PerhutCards">
                     <div class="row gy-4 justify-content-center">
 
                         <!-- Card 1 -->
                         <div class="col-lg-3 col-md-6">
-                            <a href="#">
+                            <a href="{{ url('/detailpotensipeternakan') }}">
                                 <div class="stats-card">
                                     <div>
-                                        <div class="stats-icon"><i class="fa-solid fa-leaf"></i></div>
+                                        <div class="stats-icon"><i class="fa-solid fa-cow"></i></div>
                                     </div>
-                                    <p class="stats-label">PISANG</p>
+                                    <p class="stats-label">POTENSI PETERNAKAN</p>
 
                                     <span class="stats-number purecounter" data-purecounter-start="0"
                                         data-purecounter-end="123" data-purecounter-decimals="0"
@@ -232,27 +180,31 @@
                         </div>
                         <!-- Card 2 -->
                         <div class="col-lg-3 col-md-6">
+                            <a href="{{ url('/detailpotensiwisata') }}">
                             <div class="stats-card">
                                 <div>
-                                    <div class="stats-icon"><i class="fas fa-cow"></i></div>
+                                    <div class="stats-icon"><i class="fas fa-mountain"></i></div>
                                 </div>
-                                <p class="stats-label">OLAHAN SUSU</p>
+                                <p class="stats-label">POTENSI WISATA</p>
                                 <span class="stats-number purecounter" data-purecounter-start="0"
                                     data-purecounter-end="123" data-purecounter-decimals="0"
                                     data-purecounter-duration="1"></span>
                             </div>
+                            </a>
                         </div>
                         <!-- Card 3 -->
                         <div class="col-lg-3 col-md-6">
+                            <a href="{{ url('/detailpotensipertanian') }}">
                             <div class="stats-card">
                                 <div>
-                                    <div class="stats-icon"><i class="fas fa-bar-chart"></i></div>
+                                    <div class="stats-icon"><i class="fas fa-tractor"></i></div>
                                 </div>
-                                <p class="stats-label">POTENSI PETERNAKAN</p>
+                                <p class="stats-label">POTENSI PERTANIAN</p>
                                 <span class="stats-number purecounter" data-purecounter-start="0"
                                     data-purecounter-end="123" data-purecounter-decimals="0"
                                     data-purecounter-duration="1"></span>
                             </div>
+                            </a>
                         </div>
 
 
@@ -286,7 +238,7 @@
                             }
                         },
                         title: {
-                            text: 'Jumlah Pendapatan Tiap KUPS'
+                            text: 'Nilai Ekonomi Tiap KUPS'
                         },
                         subtitle: {
                             text: 'Unit: Dalam Rupiah',
@@ -328,240 +280,45 @@
         </section>
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
 
-        <!-- Informasi Section -->
-        {{-- <section class="informasi-section" id="informasisection">
-            <div class="global-title">
-                <h2>INFORMASI</h2>
-            </div>
-            <div class="informasi-wrapper">
-                <div class="informasi-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
-                    <!-- Card 1 -->
-                    <div class="informasi-card">
-                        <a href="{{ url('/detailinformasi') }}">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
+        <!-- PRODUCT KUPS -->
+        <section class="product-slider">
+            <div class="slider-wrapper">
+                <!-- Slide 1 -->
+                <div class="slide active">
+                    <div class="slide-image">
+                        <img src="{{ asset('client/assets/img/prdt3.jpg') }}" alt="Produk 1">
                     </div>
-                    <div class="informasi-card">
-                        <a href="{{ url('/detailinformasi') }}">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
+                    <div class="slide-content">
+                        <h2>Produk Pisang</h2>
+                        <p>Pisang hasil KUPS yang segar dan siap konsumsi.</p>
                     </div>
-                    <div class="informasi-card">
-                        <a href="{{ url('/detailinformasi') }}">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="informasi-card">
-                        <a href="{{ url('/detailinformasi') }}">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="informasi-card">
-                        <a href="{{ url('/detailinformasi') }}">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="informasi-card">
-                        <a href="{{ url('/detailinformasi') }}">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                    <div class="informasi-card">
-                        <a href="{{ url('/detailinformasi') }}">
-                        <div class="informasi-image">
-                            <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Informasi">
-                        </div>
-                        <div class="informasi-content">
-                            <h3>What is Lorem Ipsum?</h3>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a
-                                page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                                here', making it look like readable English. Many desktop publishing packages and web page
-                                editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-                                uncover many web sites still in their infancy. Various versions have evolved over the years,
-                                sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-                            <div class="informasi-footer">
-                                <span>01 Agustus 2025</span>
-                                <a href="{{ url('/detailinformasi') }}">Lebih Lengkap...</a>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-
-
                 </div>
 
-                <!-- Pagination -->
-                <div class="informasi-pagination" id="informasiPagination">
-                    <span class="dot active"></span>
-
-
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <div class="slide-image">
+                        <img src="{{ asset('client/assets/img/prdt5.jpg') }}" alt="Produk 2">
+                    </div>
+                    <div class="slide-content">
+                        <h2>Olahan Susu</h2>
+                        <p>Susu segar yang diolah menjadi produk berkualitas tinggi.</p>
+                    </div>
                 </div>
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        const cardsContainer = document.querySelector(".informasi-cards");
-                        const pagination = document.querySelector(".informasi-pagination");
 
-                        let cardWidth = 0;
-                        let scrollStep = 0;
-                        let totalPages = 0;
-
-                        function updateCardWidth() {
-                            const firstCard = cardsContainer.querySelector(".informasi-card");
-                            if (!firstCard) return;
-
-                            const style = window.getComputedStyle(firstCard);
-                            const marginRight = parseInt(style.marginRight) || 0;
-                            cardWidth = firstCard.offsetWidth + marginRight;
-
-                            // tampilkan 4 card, scroll 3 card
-                            scrollStep = cardWidth * 3;
-
-                            // hitung total page
-                            totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
-
-                            updatePagination();
-                        }
-
-                        function updatePagination() {
-                            pagination.innerHTML = "";
-
-                            for (let i = 0; i < totalPages; i++) {
-                                const dot = document.createElement("span");
-                                dot.classList.add("dot");
-                                if (i === 0) dot.classList.add("active");
-
-                                dot.addEventListener("click", () => {
-                                    cardsContainer.scrollTo({
-                                        left: i * scrollStep,
-                                        behavior: "smooth",
-                                    });
-                                });
-
-                                pagination.appendChild(dot);
-                            }
-                        }
-
-                        function setActiveDot() {
-                            const dots = pagination.querySelectorAll(".dot");
-                            const index = Math.round(cardsContainer.scrollLeft / scrollStep);
-
-                            dots.forEach((dot, i) => {
-                                dot.classList.toggle("active", i === index);
-                            });
-                        }
-
-                        // update setiap resize window
-                        window.addEventListener("resize", updateCardWidth);
-                        // update saat scroll
-                        cardsContainer.addEventListener("scroll", setActiveDot);
-
-                        // pertama kali jalan
-                        updateCardWidth();
-                    });
-                </script>
-
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <div class="slide-image">
+                        <img src="{{ asset('client/assets/img/prdt4.jpg') }}" alt="Produk 3">
+                    </div>
+                    <div class="slide-content">
+                        <h2>Kerajinan Bambu</h2>
+                        <p>Produk ramah lingkungan hasil dari kreativitas masyarakat.</p>
+                    </div>
+                </div>
             </div>
-
-
-        </section> --}}
-
+        </section>
+        <!-- /PRODUCT KUPS -->
+        
         <!-- Informasi Section -->
         <section class="informasi-section" id="informasisection">
             <div class="global-title">
@@ -659,104 +416,103 @@
             </div>
         </section>
 
-
-       <!-- video Section -->
-<section class="video-section" id="videosection">
-    <div class="global-title" data-aos="fade-up">
-        <h2>VIDEO</h2>
-    </div>
-    <div class="video-wrapper">
-        <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
-            @forelse ($videos as $video)
-            <div class="video-card">
-                <a href="{{ url('/detailvideo/' . $video->id) }}">
-                    <div class="video-image">
-                        <img src="{{ asset('storage/' . ($video->thumbnail ?? 'client/assets/img/pulau.jpg')) }}" alt="{{ $video->judul }}">
-                    </div>
-                    <div class="video-content">
-                        <h3>{{ $video->judul }}</h3>
-                        <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
-                        <div class="video-footer">
-                            <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
-                            <a href="{{ url('/detailvideo/' . $video->id) }}">Lebih Lengkap...</a>
-                        </div>
-                    </div>
-                </a>
+        <!-- video Section -->
+        <section class="video-section" id="videosection">
+            <div class="global-title" data-aos="fade-up">
+                <h2>VIDEO</h2>
             </div>
-            @empty
-            <p>Tidak ada video tersedia.</p>
-            @endforelse
-        </div>
+            <div class="video-wrapper">
+                <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
+                    @forelse ($videos as $video)
+                        <div class="video-card">
+                            <a href="{{ url('/detailvideo/' . $video->id) }}">
+                                <div class="video-image">
+                                    <img src="{{ asset('storage/' . ($video->thumbnail ?? 'client/assets/img/pulau.jpg')) }}"
+                                        alt="{{ $video->judul }}">
+                                </div>
+                                <div class="video-content">
+                                    <h3>{{ $video->judul }}</h3>
+                                    <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
+                                    <div class="video-footer">
+                                        <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
+                                        <a href="{{ url('/detailvideo/' . $video->id) }}">Lebih Lengkap...</a>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @empty
+                        <p>Tidak ada video tersedia.</p>
+                    @endforelse
+                </div>
 
-        <!-- Pagination -->
-        <div class="video-pagination" id="videoPagination"></div>
-    </div>
+                <!-- Pagination -->
+                <div class="video-pagination" id="videoPagination"></div>
+            </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const cardsContainer = document.querySelector(".video-cards");
-            const pagination = document.querySelector(".video-pagination");
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const cardsContainer = document.querySelector(".video-cards");
+                    const pagination = document.querySelector(".video-pagination");
 
-            let cardWidth = 0;
-            let scrollStep = 0;
-            let totalPages = 0;
+                    let cardWidth = 0;
+                    let scrollStep = 0;
+                    let totalPages = 0;
 
-            function updateCardWidth() {
-                const firstCard = cardsContainer.querySelector(".video-card");
-                if (!firstCard) return;
+                    function updateCardWidth() {
+                        const firstCard = cardsContainer.querySelector(".video-card");
+                        if (!firstCard) return;
 
-                const style = window.getComputedStyle(firstCard);
-                const marginRight = parseInt(style.marginRight) || 0;
-                cardWidth = firstCard.offsetWidth + marginRight;
+                        const style = window.getComputedStyle(firstCard);
+                        const marginRight = parseInt(style.marginRight) || 0;
+                        cardWidth = firstCard.offsetWidth + marginRight;
 
-                // tampilkan 4 card, scroll 3 card
-                scrollStep = cardWidth * 3;
+                        // tampilkan 4 card, scroll 3 card
+                        scrollStep = cardWidth * 3;
 
-                // hitung total page
-                totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
+                        // hitung total page
+                        totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
 
-                updatePagination();
-            }
+                        updatePagination();
+                    }
 
-            function updatePagination() {
-                pagination.innerHTML = "";
+                    function updatePagination() {
+                        pagination.innerHTML = "";
 
-                for (let i = 0; i < totalPages; i++) {
-                    const dot = document.createElement("span");
-                    dot.classList.add("dot");
-                    if (i === 0) dot.classList.add("active");
+                        for (let i = 0; i < totalPages; i++) {
+                            const dot = document.createElement("span");
+                            dot.classList.add("dot");
+                            if (i === 0) dot.classList.add("active");
 
-                    dot.addEventListener("click", () => {
-                        cardsContainer.scrollTo({
-                            left: i * scrollStep,
-                            behavior: "smooth",
+                            dot.addEventListener("click", () => {
+                                cardsContainer.scrollTo({
+                                    left: i * scrollStep,
+                                    behavior: "smooth",
+                                });
+                            });
+
+                            pagination.appendChild(dot);
+                        }
+                    }
+
+                    function setActiveDot() {
+                        const dots = pagination.querySelectorAll(".dot");
+                        const index = Math.round(cardsContainer.scrollLeft / scrollStep);
+
+                        dots.forEach((dot, i) => {
+                            dot.classList.toggle("active", i === index);
                         });
-                    });
+                    }
 
-                    pagination.appendChild(dot);
-                }
-            }
+                    // update setiap resize window
+                    window.addEventListener("resize", updateCardWidth);
+                    // update saat scroll
+                    cardsContainer.addEventListener("scroll", setActiveDot);
 
-            function setActiveDot() {
-                const dots = pagination.querySelectorAll(".dot");
-                const index = Math.round(cardsContainer.scrollLeft / scrollStep);
-
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle("active", i === index);
+                    // pertama kali jalan
+                    updateCardWidth();
                 });
-            }
-
-            // update setiap resize window
-            window.addEventListener("resize", updateCardWidth);
-            // update saat scroll
-            cardsContainer.addEventListener("scroll", setActiveDot);
-
-            // pertama kali jalan
-            updateCardWidth();
-        });
-    </script>
-</section>
-
+            </script>
+        </section>
         <!-- /video Section -->
 
         <!-- Contact Section -->
