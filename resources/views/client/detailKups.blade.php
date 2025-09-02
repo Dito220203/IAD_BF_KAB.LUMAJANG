@@ -2,7 +2,7 @@
 @section('content')
     <section class="section_page">
         <div class="global-title" data-aos="fade-up">
-            <h2>IAD Kelompok Tani Hutan</h2>
+            <h2> Kelompok Usaha Perhutanan Sosial (KUPS)</h2>
         </div>
 
         <section class="monev-section container no-tabs">
@@ -13,14 +13,17 @@
                             <tr>
                                 <th>No</th>
                                 <th>KELOMPOK TANI HUTAN (KTH)</th>
+                                <th>Kelompok Usaha Perhutanan Sosial (KUPS)</th>
+                                <th>Kategori</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($kthKups as $data)
+                            @foreach ($Kups as $data)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td class="text-center">{{ $data->kth->kth ?? '-' }}</td>
+                                    <td class="text-center">{{ $data->kups }}</td>
 
                                 </tr>
                             @endforeach

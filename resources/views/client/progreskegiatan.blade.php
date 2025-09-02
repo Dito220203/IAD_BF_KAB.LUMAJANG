@@ -39,7 +39,9 @@
                                         <p>Penerima : {{ $item->penerima }}</p>
                                     </div>
                                     <div class="progres-footer">
-                                        <button class="btn-lihat">Lihat</button>
+                                        <form action="{{ route('client.progreskegiatandetail') }}" method="GET">
+                                            <button type="submit" class="btn-lihat">Lihat</button>
+                                        </form>
                                     </div>
                                 </div>
                             @empty
@@ -61,10 +63,10 @@
                 items.forEach(item => {
                     let text = item.innerText.toLowerCase();
                     if (value === "") {
-                        // kalau kosong → tampilkan semua
+
                         item.style.display = "";
                     } else {
-                        // filter sesuai input
+
                         item.style.display = text.includes(value) ? "" : "none";
                     }
                 });

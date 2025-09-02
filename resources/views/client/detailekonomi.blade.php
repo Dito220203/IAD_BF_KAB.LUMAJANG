@@ -9,61 +9,29 @@
         <div class="table-wrapper">
             <div class="table-content active" id="tableluasperhut">
                 <table class="monev-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Kelompok Tani Hutan (KTH)</th>
-                                <th>Jenis Komoditas KUPS</th>
-                                <th>Jumlah Pendapatan Pertahun</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td data-label="No" rowspan="3">1</td>
-                                <td data-label="Kelompok Tani Hutan (KTH)" rowspan="3">KTH sumber urip</td>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Kambing</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.1.234.000</td>
-                            </tr>
-                            <tr>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Kopi</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.1.234.567</td>
-                            </tr>
-                            <tr>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Susu</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.3.234.567</td>
-                            </tr>
-                            {{-- table lain --}}
-                            <tr>
-                                <td data-label="No" rowspan="2">2</td>
-                                <td data-label="Kelompok Tani Hutan (KTH)" rowspan="2">KTH sumber urip</td>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Kambing</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.1.234.000</td>
-                            </tr>
-                            <tr>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Susu</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.3.234.567</td>
-                            </tr>
-                            {{-- table lain --}}
-                            <tr>
-                                <td data-label="No" rowspan="4">3</td>
-                                <td data-label="Kelompok Tani Hutan (KTH)" rowspan="4">KTH sumber urip</td>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Kambing</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.1.234.000</td>
-                            </tr>
-                            <tr>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Kopi</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.1.234.567</td>
-                            </tr>
-                            <tr>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Susu</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.3.234.567</td>
-                            </tr>
-                            <tr>
-                                <td data-label="Jenis Komoditas KUPS">KUPS Kopi</td>
-                                <td data-label="Jumlah Pendapatan Pertahun">Rp.1.234.567</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>KELOMPOK TANI HUTAN (KTH)</th>
+                            <th>JENIS KOMODITAS KUPS</th>
+                            <th>KATEGORI</th>
+                            <th>TAHUN</th>
+                            <th>JUMLAH PENDAPATAN PERTAHUN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($Kups as $data)
+                        <tr>
+                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $data->kth->kth ?? '-' }}</td>
+                            <td>{{ $data->kups}}</td>
+                            <td>{{ $data->kategori}}</td>
+                            <td>{{ $data->tahun}}</td>
+                            <td>{{ $data->pendapatan }}</td>
+                        </tr>
+                         @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="text-center mt-4">

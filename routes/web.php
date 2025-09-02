@@ -31,6 +31,14 @@ Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer'
 Route::get('/progreskegiatandetail', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
 // Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
 // Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])->name('client.petasebarankegiatan');
+// Route::get('/search-profilkawasan', [ClientController::class, 'SearchprofilKawasan'])->name('client.profilkawasan');
+// Route::get('/get-desa/{kecamatan}', function ($kecamatan) {
+//     return \App\Models\Potensi::where('kecamatan', $kecamatan)
+//         ->select('desa')
+//         ->distinct()
+//         ->get();
+// });
+
 
 Route::get('/profilkawasan', [ClientController::class, 'profilkawasan'])->name('client.profilkawasan');
 Route::get('/profilkawasandetail', [ClientController::class, 'profilkawasandetail'])->name('client.profilkawasandetail');
@@ -49,6 +57,7 @@ Route::get('/regulasi', [ClientController::class, 'regulasi'])->name('client.reg
 //detail card
 Route::get('/detailluasperhutanan', [ClientController::class, 'detailluasperhutanan'])->name('client.detailluasperhutanan');
 Route::get('/detailkth_kups', [ClientController::class, 'detailkth_kups'])->name('client.detailkth_kups');
+Route::get('/detaikups', [ClientController::class, 'detailkups'])->name('client.detailkups');
 Route::get('/detailekonomi', [ClientController::class, 'detailekonomi'])->name('client.detailekonomi');
 
 //detail berita&video

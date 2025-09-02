@@ -48,9 +48,8 @@
                                     <p class="stats-label">Luas Perhutanan Sosial</p>
 
                                     <span class="stats-number purecounter" data-purecounter-start="0"
-                                        data-purecounter-end="123" data-purecounter-decimals="0"
+                                        data-purecounter-end="{{ $jumlahKth }}" data-purecounter-decimals="0"
                                         data-purecounter-duration="1"></span>
-
                                 </div>
                             </a>
                         </div>
@@ -63,7 +62,7 @@
                                     </div>
                                     <p class="stats-label">Kelompok Tani Hutan (KTH)</p>
                                     <span class="stats-number purecounter" data-purecounter-start="0"
-                                        data-purecounter-end="123" data-purecounter-decimals="0"
+                                        data-purecounter-end="{{ $jumlahKth }}" data-purecounter-decimals="0"
                                         data-purecounter-duration="1"></span>
                                 </div>
                             </a>
@@ -71,14 +70,14 @@
                         <!-- Card 3 -->
 
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detailkth_kups') }}">
+                            <a href="{{ url('/detaikups') }}">
                                 <div class="stats-card">
                                     <div>
                                         <div class="stats-icon"><i class="fas fa-store"></i></div>
                                     </div>
                                     <p class="stats-label"> Kelompok Usaha Perhutanan Sosial (KUPS)</p>
                                     <span class="stats-number purecounter" data-purecounter-start="0"
-                                        data-purecounter-end="123" data-purecounter-decimals="0"
+                                        data-purecounter-end="{{ $jumlahKups }}" data-purecounter-decimals="0"
                                         data-purecounter-duration="1"></span>
                                 </div>
                             </a>
@@ -97,7 +96,7 @@
                                     <p class="stats-label">Nilai Ekonomi</p>
 
                                     <span class="stats-number"><span class="purecounter" data-purecounter-start="0"
-                                            data-purecounter-end="123" data-purecounter-decimals="0"
+                                            data-purecounter-end="{{ $jumlahKups }}" data-purecounter-decimals="0"
                                             data-purecounter-duration="1"></span></span>
                                 </div>
                             </a>

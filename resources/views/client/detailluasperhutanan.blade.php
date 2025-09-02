@@ -14,31 +14,20 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kelompok Tani Hutan (KTH)</th>
-                                <th>Luas Areal Kelola (Ha)</th>
+                                <th>KELOMPOK TANI HUTAN (KTH)</th>
+                                <th>LUAS AREAL KELOLA SESUAI SK (Ha)</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td data-label="No" >1</td>
-                                <td data-label="Kelompok Tani Hutan (KTH)">KTH sumber urip</td>
-                                <td data-label="Luas Areal Kelola (Ha)">2.198,9</td>
-                            </tr>
-                            <tr>
-                                <td data-label="No">2</td>
-                                <td data-label="Kelompok Tani Hutan (KTH)">Kedawung</td>
-                                <td data-label="Luas Areal Kelola (Ha)">786</td>
-                            </tr>
-                            <tr>
-                                <td data-label="No">3</td>
-                                <td data-label="Kelompok Tani Hutan (KTH)">Sukodadi</td>
-                                <td data-label="Luas Areal Kelola (Ha)">123,78</td>
-                            </tr>
-                            <tr>
-                                <td data-label="No">4</td>
-                                <td data-label="Kelompok Tani Hutan (KTH)">Ayem Tentrem</td>
-                                <td data-label="Luas Areal Kelola (Ha)">578</td>
-                            </tr>
+                            @foreach ($kth as $data)
+                                <tr>
+                                    <td>1</td>
+                                    <td>{{ $data->kth }}</td>
+                                    <td>{{$data->luas}}</td>
+                                </tr>
+                            @endforeach
+
                         </tbody>
                     </table>
 

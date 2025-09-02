@@ -7,10 +7,13 @@ use App\Models\FotoSubprogram;
 use App\Models\GambaranUmum;
 use App\Models\Informasi;
 use App\Models\Kontak;
+use App\Models\Kth;
+use App\Models\Kups;
 use App\Models\Map;
 use App\Models\Monev;
 use App\Models\Opd;
 use App\Models\ProgresKerja;
+use App\Models\Regulasi;
 use App\Models\RencanaKerja;
 use App\Models\Subprogram;
 use App\Models\Video;
@@ -24,22 +27,17 @@ class ClientController extends Controller
      */
     public function index()
     {
+
+        $jumlahKups = Kups::count();
+        $jumlahKth = Kth::count();
         $gambaran = GambaranUmum::where('status', 'Aktif')->get();
         $informasi = Informasi::orderBy('tanggal', 'asc')->get();
         $videos = Video::all();
         $banner = Banner::where('status', 'Aktif')->get();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.index', compact('banner', 'gambaran', 'informasi', 'videos', 'subprograms', 'contact'));
+        return view('client.index', compact('banner', 'gambaran', 'informasi', 'videos', 'subprograms','jumlahKth','jumlahKups', 'contact'));
     }
-    // public function show($id)
-    // {
-    //     $info = Informasi::findOrFail($id);
-    //     return view('client.informasi_detail', compact('info'));
-    // }
-
-
-    //navbar
 
     public function tentangkegiatan($id)
     {
@@ -125,24 +123,42 @@ class ClientController extends Controller
         return view('client.profilkawasandetail', compact('contact', 'subprograms'));
     }
 
+    public function regulasi()
+    {
+        $regulasi = Regulasi::orderBy('tanggal', 'desc')->where('status', 'Aktif')->get();
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.regulasi', compact('contact', 'subprograms', 'regulasi'));
+    }
 
     public function detailluasperhutanan()
     {
+        $kth = Kth::all();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailluasperhutanan', compact('contact', 'subprograms'));
+        return view('client.detailluasperhutanan', compact('contact', 'subprograms', 'kth'));
     }
     public function detailkth_kups()
     {
+
+        $kthKups = Kups::all();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailkth_kups', compact('contact', 'subprograms'));
+        return view('client.detailkth_kups', compact('contact', 'subprograms', 'kthKups'));
+    }
+    public function detailkups()
+    {
+        $Kups = Kups::all();
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailkups', compact('contact', 'subprograms', 'Kups'));
     }
     public function detailekonomi()
     {
+        $Kups = Kups::all();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailekonomi', compact('contact', 'subprograms'));
+        return view('client.detailekonomi', compact('contact', 'subprograms', 'Kups'));
     }
 
 
@@ -162,57 +178,7 @@ class ClientController extends Controller
     }
 
 
-
-
-
-
-
     // detail card index
-    public function regulasi()
-    {
-        $contact = Kontak::all();
-        $subprograms = Subprogram::all();
-        return view('client.regulasi', compact('contact', 'subprograms'));
-    }
-
-
-
-
-
-
-
-
-    //potensi
-    public function detailpotensipeternakan()
-    {
-      $contact = Kontak::all();
-        $subprograms = Subprogram::all();
-        return view('client.detailpotensipeternakan', compact('contact', 'subprograms'));
-      
-    }
-    public function detailpotensiwisata()
-    {
-      $contact = Kontak::all();
-        $subprograms = Subprogram::all();
-        return view('client.detailpotensiwisata', compact('contact', 'subprograms'));
-      
-    }
-    public function detailpotensipertanian()
-    {
-      $contact = Kontak::all();
-        $subprograms = Subprogram::all();
-        return view('client.detailpotensipertanian', compact('contact', 'subprograms'));
-      
-    }
-
-    //potensi
-
-
-
-
-
-
-
 
 
 
