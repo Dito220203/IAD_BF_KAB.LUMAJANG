@@ -48,56 +48,57 @@
                                     <p class="stats-label">Luas Perhutanan Sosial</p>
 
                                     <span class="stats-number purecounter" data-purecounter-start="0"
-                                        data-purecounter-end="123" data-purecounter-decimals="0"
+                                        data-purecounter-end="{{ $jumlahKth }}" data-purecounter-decimals="0"
                                         data-purecounter-duration="1"></span>
-
                                 </div>
                             </a>
                         </div>
                         <!-- Card 2 -->
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ url('/detailkth_kups') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon"><i class="fas fa-users"></i></div>
+                                <div class="stats-card">
+                                    <div>
+                                        <div class="stats-icon"><i class="fas fa-users"></i></div>
+                                    </div>
+                                    <p class="stats-label">Kelompok Tani Hutan (KTH)</p>
+                                    <span class="stats-number purecounter" data-purecounter-start="0"
+                                        data-purecounter-end="{{ $jumlahKth }}" data-purecounter-decimals="0"
+                                        data-purecounter-duration="1"></span>
                                 </div>
-                                <p class="stats-label">Kelompok Tani Hutan (KTH)</p>
-                                <span class="stats-number purecounter" data-purecounter-start="0" data-purecounter-end="123"
-                                    data-purecounter-decimals="0" data-purecounter-duration="1"></span>
-                            </div>
                             </a>
                         </div>
                         <!-- Card 3 -->
 
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detailkth_kups') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon"><i class="fas fa-store"></i></div>
+                            <a href="{{ url('/detaikups') }}">
+                                <div class="stats-card">
+                                    <div>
+                                        <div class="stats-icon"><i class="fas fa-store"></i></div>
+                                    </div>
+                                    <p class="stats-label"> Kelompok Usaha Perhutanan Sosial (KUPS)</p>
+                                    <span class="stats-number purecounter" data-purecounter-start="0"
+                                        data-purecounter-end="{{ $jumlahKups }}" data-purecounter-decimals="0"
+                                        data-purecounter-duration="1"></span>
                                 </div>
-                                <p class="stats-label"> Kelompok Usaha Perhutanan Sosial (KUPS)</p>
-                                <span class="stats-number purecounter" data-purecounter-start="0" data-purecounter-end="123"
-                                    data-purecounter-decimals="0" data-purecounter-duration="1"></span>
-                            </div>
                             </a>
                         </div>
 
                         <!-- Card 4 -->
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ url('/detailekonomi') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon">
-                                        <i class="fas fa-sack-dollar"></i>
+                                <div class="stats-card">
+                                    <div>
+                                        <div class="stats-icon">
+                                            <i class="fas fa-sack-dollar"></i>
+                                        </div>
+
                                     </div>
+                                    <p class="stats-label">Nilai Ekonomi</p>
 
+                                    <span class="stats-number"><span class="purecounter" data-purecounter-start="0"
+                                            data-purecounter-end="{{ $jumlahKups }}" data-purecounter-decimals="0"
+                                            data-purecounter-duration="1"></span></span>
                                 </div>
-                                <p class="stats-label">Nilai Ekonomi</p>
-
-                                <span class="stats-number"><span class="purecounter" data-purecounter-start="0"
-                                        data-purecounter-end="123" data-purecounter-decimals="0"
-                                        data-purecounter-duration="1"></span></span>
-                            </div>
                             </a>
                         </div>
 
@@ -660,102 +661,103 @@
         </section>
 
 
-       <!-- video Section -->
-<section class="video-section" id="videosection">
-    <div class="global-title" data-aos="fade-up">
-        <h2>VIDEO</h2>
-    </div>
-    <div class="video-wrapper">
-        <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
-            @forelse ($videos as $video)
-            <div class="video-card">
-                <a href="{{ url('/detailvideo/' . $video->id) }}">
-                    <div class="video-image">
-                        <img src="{{ asset('storage/' . ($video->thumbnail ?? 'client/assets/img/pulau.jpg')) }}" alt="{{ $video->judul }}">
-                    </div>
-                    <div class="video-content">
-                        <h3>{{ $video->judul }}</h3>
-                        <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
-                        <div class="video-footer">
-                            <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
-                            <a href="{{ url('/detailvideo/' . $video->id) }}">Lebih Lengkap...</a>
-                        </div>
-                    </div>
-                </a>
+        <!-- video Section -->
+        <section class="video-section" id="videosection">
+            <div class="global-title" data-aos="fade-up">
+                <h2>VIDEO</h2>
             </div>
-            @empty
-            <p>Tidak ada video tersedia.</p>
-            @endforelse
-        </div>
+            <div class="video-wrapper">
+                <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
+                    @forelse ($videos as $video)
+                        <div class="video-card">
+                            <a href="{{ url('/detailvideo/' . $video->id) }}">
+                                <div class="video-image">
+                                    <img src="{{ asset('storage/' . ($video->thumbnail ?? 'client/assets/img/pulau.jpg')) }}"
+                                        alt="{{ $video->judul }}">
+                                </div>
+                                <div class="video-content">
+                                    <h3>{{ $video->judul }}</h3>
+                                    <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
+                                    <div class="video-footer">
+                                        <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
+                                        <a href="{{ url('/detailvideo/' . $video->id) }}">Lebih Lengkap...</a>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @empty
+                        <p>Tidak ada video tersedia.</p>
+                    @endforelse
+                </div>
 
-        <!-- Pagination -->
-        <div class="video-pagination" id="videoPagination"></div>
-    </div>
+                <!-- Pagination -->
+                <div class="video-pagination" id="videoPagination"></div>
+            </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const cardsContainer = document.querySelector(".video-cards");
-            const pagination = document.querySelector(".video-pagination");
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const cardsContainer = document.querySelector(".video-cards");
+                    const pagination = document.querySelector(".video-pagination");
 
-            let cardWidth = 0;
-            let scrollStep = 0;
-            let totalPages = 0;
+                    let cardWidth = 0;
+                    let scrollStep = 0;
+                    let totalPages = 0;
 
-            function updateCardWidth() {
-                const firstCard = cardsContainer.querySelector(".video-card");
-                if (!firstCard) return;
+                    function updateCardWidth() {
+                        const firstCard = cardsContainer.querySelector(".video-card");
+                        if (!firstCard) return;
 
-                const style = window.getComputedStyle(firstCard);
-                const marginRight = parseInt(style.marginRight) || 0;
-                cardWidth = firstCard.offsetWidth + marginRight;
+                        const style = window.getComputedStyle(firstCard);
+                        const marginRight = parseInt(style.marginRight) || 0;
+                        cardWidth = firstCard.offsetWidth + marginRight;
 
-                // tampilkan 4 card, scroll 3 card
-                scrollStep = cardWidth * 3;
+                        // tampilkan 4 card, scroll 3 card
+                        scrollStep = cardWidth * 3;
 
-                // hitung total page
-                totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
+                        // hitung total page
+                        totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
 
-                updatePagination();
-            }
+                        updatePagination();
+                    }
 
-            function updatePagination() {
-                pagination.innerHTML = "";
+                    function updatePagination() {
+                        pagination.innerHTML = "";
 
-                for (let i = 0; i < totalPages; i++) {
-                    const dot = document.createElement("span");
-                    dot.classList.add("dot");
-                    if (i === 0) dot.classList.add("active");
+                        for (let i = 0; i < totalPages; i++) {
+                            const dot = document.createElement("span");
+                            dot.classList.add("dot");
+                            if (i === 0) dot.classList.add("active");
 
-                    dot.addEventListener("click", () => {
-                        cardsContainer.scrollTo({
-                            left: i * scrollStep,
-                            behavior: "smooth",
+                            dot.addEventListener("click", () => {
+                                cardsContainer.scrollTo({
+                                    left: i * scrollStep,
+                                    behavior: "smooth",
+                                });
+                            });
+
+                            pagination.appendChild(dot);
+                        }
+                    }
+
+                    function setActiveDot() {
+                        const dots = pagination.querySelectorAll(".dot");
+                        const index = Math.round(cardsContainer.scrollLeft / scrollStep);
+
+                        dots.forEach((dot, i) => {
+                            dot.classList.toggle("active", i === index);
                         });
-                    });
+                    }
 
-                    pagination.appendChild(dot);
-                }
-            }
+                    // update setiap resize window
+                    window.addEventListener("resize", updateCardWidth);
+                    // update saat scroll
+                    cardsContainer.addEventListener("scroll", setActiveDot);
 
-            function setActiveDot() {
-                const dots = pagination.querySelectorAll(".dot");
-                const index = Math.round(cardsContainer.scrollLeft / scrollStep);
-
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle("active", i === index);
+                    // pertama kali jalan
+                    updateCardWidth();
                 });
-            }
-
-            // update setiap resize window
-            window.addEventListener("resize", updateCardWidth);
-            // update saat scroll
-            cardsContainer.addEventListener("scroll", setActiveDot);
-
-            // pertama kali jalan
-            updateCardWidth();
-        });
-    </script>
-</section>
+            </script>
+        </section>
 
         <!-- /video Section -->
 

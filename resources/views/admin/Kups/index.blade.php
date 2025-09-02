@@ -45,6 +45,25 @@
                                             value="{{ $kupsEdit->kups }}" required>
                                     </div>
                                     <div class="mb-3">
+                                        <label class="form-label">Kategori</label>
+                                        <select name="kategori" class="form-select" required>
+                                            <option value="">Pilih</option>
+                                            <option value="Biru"
+                                                {{ old('kategori', $kupsEdit->kategori) == 'Biru' ? 'selected' : '' }}>Biru
+                                            </option>
+                                            <option value="Silver"
+                                                {{ old('kategori', $kupsEdit->kategori) == 'Silver' ? 'selected' : '' }}>
+                                                Silver</option>
+                                            <option value="Emas"
+                                                {{ old('kategori', $kupsEdit->kategori) == 'Emas' ? 'selected' : '' }}>Emas
+                                            </option>
+                                            <option value="Platinum"
+                                                {{ old('kategori', $kupsEdit->kategori) == 'Platinum' ? 'selected' : '' }}>
+                                                Platinum</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
                                         <label class="form-label">Tahun</label>
                                         <input type="text" name="e_tahun" class="form-control"
                                             value="{{ $kupsEdit->tahun }}" required>
@@ -78,6 +97,16 @@
                                         <input type="text" name="kups" class="form-control" required>
                                     </div>
                                     <div class="mb-3">
+                                        <label class="form-label">Kategori</label>
+                                        <select name="kategori" class="form-select" required>
+                                            <option value="">Pilih</option>
+                                            <option value="Biru">Biru</option>
+                                            <option value="Silver">Silver</option>
+                                            <option value="Emas">Emas</option>
+                                            <option value="Platinum">Platinum</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
                                         <label class="form-label">Tahun</label>
                                         <input type="text" name="tahun" class="form-control" required>
                                     </div>
@@ -106,7 +135,8 @@
                                 <!-- Entries -->
                                 <div class="d-flex align-items-center gap-2">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"data-target="TableKUPS">
+                                    <select id="entries"
+                                        class="form-select form-select-sm w-auto entriesSelect"data-target="TableKUPS">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -150,7 +180,8 @@
                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                         </a>
                                                         <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('kups.delete', $data->id) }}" method="POST">
+                                                            action="{{ route('kups.delete', $data->id) }}"
+                                                            method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="button" class="btn btn-danger btn-sm"

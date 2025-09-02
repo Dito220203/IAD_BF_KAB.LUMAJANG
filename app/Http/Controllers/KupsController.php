@@ -33,6 +33,7 @@ class KupsController extends Controller
         $request->validate([
             'id_kth' => 'required|exists:kths,id',
             'kups' => 'required',
+            'kategori' => 'required',
             'tahun' => 'required',
             'pendapatan' => 'required',
         ]);
@@ -41,6 +42,7 @@ class KupsController extends Controller
             'id_pengguna' => Auth::guard('pengguna')->id(),
             'id_kth' => $request->id_kth,
             'kups' => $request->kups,
+            'kategori' => $request->kategori,
             'tahun' => $request->tahun,
             'pendapatan' => $request->pendapatan,
         ]);
@@ -77,6 +79,7 @@ class KupsController extends Controller
         $request->validate([
             'id_kth' => 'required|exists:kths,id',
             'e_kups' => 'required',
+            'e_kategori' => 'required',
             'e_tahun' => 'required',
             'e_pendapatan' => 'required',
         ]);
@@ -84,6 +87,7 @@ class KupsController extends Controller
             'id_pengguna' => Auth::guard('pengguna')->id(),
             'id_kth' => $request->id_kth,
             'kups' => $request->e_kups,
+            'kategori' => $request->e_kategori,
             'tahun' => $request->e_tahun,
             'pendapatan' => $request->e_pendapatan,
         ]);

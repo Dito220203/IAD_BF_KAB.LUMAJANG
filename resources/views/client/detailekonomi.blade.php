@@ -14,45 +14,22 @@
                             <th>No</th>
                             <th>KELOMPOK TANI HUTAN (KTH)</th>
                             <th>JENIS KOMODITAS KUPS</th>
+                            <th>KATEGORI</th>
+                            <th>TAHUN</th>
                             <th>JUMLAH PENDAPATAN PERTAHUN</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Contoh KTH dengan banyak KUPS -->
+                        @foreach ($Kups as $data)
                         <tr>
-                            <td rowspan="3">1</td>
-                            <td rowspan="3">KTH Lestari Makmur</td>
-                            <td>KUPS Kambing</td>
-                            <td>Rp. 1.560.000.000</td>
+                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $data->kth->kth ?? '-' }}</td>
+                            <td>{{ $data->kups}}</td>
+                            <td>{{ $data->kategori}}</td>
+                            <td>{{ $data->tahun}}</td>
+                            <td>{{ $data->pendapatan }}</td>
                         </tr>
-                        <tr>
-                            <td>KUPS Kapulaga</td>
-                            <td>Rp. 772.200.000</td>
-                        </tr>
-                        <tr>
-                            <td>KUPS Kopi</td>
-                            <td>Rp. 2.065.500.000</td>
-                        </tr>
-
-                        <!-- KTH berikutnya -->
-                        <tr>
-                            <td rowspan="2">2</td>
-                            <td rowspan="2">KTH Sukowono</td>
-                            <td>KUPS Pisang</td>
-                            <td>Rp. 760.320.000</td>
-                        </tr>
-                        <tr>
-                            <td>KUPS Kopi</td>
-                            <td>Rp. 1.680.000.000</td>
-                        </tr>
-
-                        <!-- KTH lain -->
-                        <tr>
-                            <td>3</td>
-                            <td>Rimba Jaya</td>
-                            <td>KUPS Kambing</td>
-                            <td>Rp. 984.000.000</td>
-                        </tr>
+                         @endforeach
                     </tbody>
                 </table>
             </div>

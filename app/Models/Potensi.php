@@ -16,4 +16,6 @@ class Potensi extends Model
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
     }
+
+
 }
