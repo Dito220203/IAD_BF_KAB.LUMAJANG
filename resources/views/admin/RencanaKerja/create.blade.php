@@ -55,7 +55,7 @@
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Tahun</label>
                                         <div class="col-sm-10">
-                                            <input type="number" name="tahun" class="form-control" required>
+                                            <input type="date" name="tanggal" class="form-control" required>
                                         </div>
                                     </div>
 

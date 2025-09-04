@@ -142,7 +142,7 @@
                                     <tbody>
                                         @foreach ($banner as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $banner->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td>
                                                     @if ($data->status === 'Aktif')
@@ -205,7 +205,9 @@
                                     </tbody>
                                 </table>
                             </div>
-
+                            <div class="mt-3">
+                                {{ $banner->links('vendor.pagination.bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -52,7 +52,7 @@
                                     <tbody>
                                         @foreach ($log as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $log->firstItem() + $loop->index }}</td>
                                                  <td>{{ $data->pengguna->username ?? '-' }}</td>
                                                 <td>{{ $data->ip }}</td>
                                                 <td>{{ $data->waktu }}</td>
@@ -63,6 +63,9 @@
 
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $log->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
                         </div>

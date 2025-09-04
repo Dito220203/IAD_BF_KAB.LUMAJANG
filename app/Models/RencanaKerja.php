@@ -10,7 +10,7 @@ class RencanaKerja extends Model
 {
     use HasFactory;
     protected $table = 'rencana_kerjas';
-    protected $fillable = ['id_pengguna','id_subprogram','id_opd','judul','lokasi','tahun','anggaran','status','keterangan'];
+    protected $fillable = ['id_pengguna','id_subprogram','id_opd','judul','lokasi','tanggal','anggaran','status','keterangan'];
 
     public function penggunas()
     {

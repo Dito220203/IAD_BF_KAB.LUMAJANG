@@ -118,7 +118,7 @@
                 <h4>Dokumentasi</h4>
                 <div class="swiper mySwiper">
                     <div class="swiper-wrapper">
-                         @forelse($progres->fotoProgres as $foto)
+                        @forelse($progres->fotoProgres as $foto)
                             <div class="swiper-slide">
                                 <img src="{{ asset('storage/foto_progres/' . $foto->foto) }}" alt="Dokumentasi">
                             </div>
@@ -133,43 +133,38 @@
                 <hr>
 
                 <h4>Peta Lokasi</h4>
-              @if($progres->maps->count())
-    @php
-        $firstMap = $progres->maps->first();
-        $lat = $firstMap->latitude;
-        $lng = $firstMap->longitude;
-    @endphp
+                {{-- @if ($progres->maps->count())
+                    @php
+                        $firstMap = $progres->maps->first();
+                        $lat = $firstMap->latitude;
+                        $lng = $firstMap->longitude;
+                    @endphp
 
-    <iframe
-        src="https://www.google.com/maps?q={{ $lat }},{{ $lng }}&hl=id&z=14&output=embed"
-        width="100%"
-        height="400"
-        style="border:0;"
-        allowfullscreen>
-    </iframe>
-@endif
-<div id="map" style="height: 400px;"></div>
+                    <iframe
+                        src="https://www.google.com/maps?q={{ $lat }},{{ $lng }}&hl=id&z=14&output=embed"
+                        width="100%" height="400" style="border:0;" allowfullscreen>
+                    </iframe>
+                @endif --}}
+                <div id="map" style="height: 400px;"></div>
 
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script>
-    var map = L.map('map').setView([0, 0], 2); // default view
+                <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+                <script>
+                    // Default center dan zoom kecil
+                    var map = L.map('map').setView([0, 0], 5); // zoom 5 = jauh
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(map);
 
-    var bounds = [];
+                    @foreach ($progres->maps as $point)
+                        var marker = L.marker([{{ $point->latitude }}, {{ $point->longitude }}]).addTo(map);
+                    @endforeach
 
-    @foreach($progres->maps as $point)
-        var marker = L.marker([{{ $point->latitude }}, {{ $point->longitude }}]).addTo(map);
-        bounds.push([{{ $point->latitude }}, {{ $point->longitude }}]);
-    @endforeach
-
-    if(bounds.length > 0){
-        map.fitBounds(bounds); // zoom ke semua marker
-    }
-</script>
-
+                    // Kalau ada titik, pindah ke titik pertama saja (tanpa zoom otomatis)
+                    @if ($progres->maps->count())
+                        map.setView([{{ $progres->maps->first()->latitude }}, {{ $progres->maps->first()->longitude }}], 5);
+                    @endif
+                </script>
 
 
 
@@ -183,8 +178,8 @@
         </div>
 
         <!-- SwiperJS CSS & JS -->
-            {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> --}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
         <script>
             var swiper = new Swiper(".mySwiper", {

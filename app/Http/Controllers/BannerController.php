@@ -15,9 +15,10 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $banner = Banner::all();
+        $banner = Banner::paginate(10);
         return view('admin.banner.index', compact('banner'));
     }
+
 
     /**
      * Show the form for creating a new resource.

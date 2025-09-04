@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
             $table->string('judul');
             $table->string('lokasi');
-            $table->string('tahun');
+            $table->date('tanggal');
             $table->string('anggaran');
             $table->string('status')->default('tidak valid');
             $table->longText('keterangan');
