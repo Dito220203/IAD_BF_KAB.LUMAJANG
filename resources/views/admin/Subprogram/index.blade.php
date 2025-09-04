@@ -2,10 +2,11 @@
 @section('content')
     <main id="main" class="main">
         <div class="pagetitle">
+            <h1>Tabel Sub Program</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">Beranda</li>
-                    <li class="breadcrumb-item">Sub Program</li>
+                    <li class="breadcrumb-item active">Sub Program</li>
                 </ol>
             </nav>
         </div>
@@ -183,8 +184,10 @@
                 <div class="col-lg-6">
                     <div class="card">
                         <div class="card-body">
+                            <div class="mb-3 mt-3">
+
                             <h5 class="card-title">Daftar Produk</h5>
-                            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
                                 data-bs-target="#modalProduk">
                                 + Tambah Produk
                             </button>
@@ -290,13 +293,13 @@
                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                         </button>
                                                         <!-- Hapus -->
-                                                        <form id="formDelete-{{ $data->id }}"
+                                                        <form id="formDeleteSub-{{ $data->id }}"
                                                             action="{{ route('delete.produk', $data->id) }}"
                                                             method="POST" style="display:inline;">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="confirmDelete('{{ $data->id }}')">
+                                                                onclick="confirmDeleteSub('{{ $data->id }}')">
                                                                 <i class="fa-solid fa-trash"></i>
                                                             </button>
                                                         </form>
@@ -307,7 +310,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- End Table Produk -->
                             <!-- Modal Update Produk -->
                             @foreach ($produk as $data)
                                 <div class="modal fade" id="ModalupdateProduk{{ $data->id }}" tabindex="-1"

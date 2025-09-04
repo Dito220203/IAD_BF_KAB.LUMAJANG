@@ -63,6 +63,7 @@
                                             <th>Rencana Kegiatan</th>
                                             <th>Input RKA</th>
                                             <th>Status</th>
+                                            <th>Tahun</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -70,9 +71,10 @@
                                         @foreach ($monev as $data)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
+                                                <td>{{ $data->program }}</td>
                                                 <td>{{ $data->rencanaKerja->judul ?? '-' }}</td>
                                                 <td>{{ $data->rka }}</td>
+
                                                 <td>
                                                     @if ($data->status === 'Valid')
                                                         <span class="badge bg-success">{{ $data->status }}</span>
@@ -80,7 +82,7 @@
                                                         <span class="badge bg-secondary">{{ $data->status }}</span>
                                                     @endif
                                                 </td>
-
+                                                <td>{{ $data->tahun }}</td>
 
                                                 <td class="text-center align-middle">
                                                     <div class="d-flex justify-content-center gap-1">
@@ -135,7 +137,7 @@
                                 </table>
                             </div>
                             <div class="mt-3">
-                               {{ $monev->links('vendor.pagination.bootstrap-5') }}
+                                {{ $monev->links('vendor.pagination.bootstrap-5') }}
                             </div>
 
                             <!-- End Table -->

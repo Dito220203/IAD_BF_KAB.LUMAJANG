@@ -21,7 +21,7 @@
                             <table class="table table-bordered">
                                 <tr>
                                     <th>Subprogram</th>
-                                    <td>{{ $monev->subprogram->subprogram ?? '-' }}</td>
+                                    <td>{{ $monev->program}}</td>
                                 </tr>
                                 <tr>
                                     <th>Rencana Kegiatan</th>

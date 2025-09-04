@@ -12,6 +12,7 @@ use App\Models\Kups;
 use App\Models\Map;
 use App\Models\Monev;
 use App\Models\Opd;
+use App\Models\ProdukKups;
 use App\Models\ProgresKerja;
 use App\Models\Regulasi;
 use App\Models\RencanaKerja;
@@ -28,6 +29,7 @@ class ClientController extends Controller
     public function index()
     {
 
+        $produkKups = ProdukKups::all();
         $jumlahKups = Kups::count();
         $jumlahKth = Kth::count();
         $gambaran = GambaranUmum::where('status', 'Aktif')->get();
@@ -36,7 +38,7 @@ class ClientController extends Controller
         $banner = Banner::where('status', 'Aktif')->get();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.index', compact('banner', 'gambaran', 'informasi', 'videos', 'subprograms','jumlahKth','jumlahKups', 'contact'));
+        return view('client.index', compact('banner', 'gambaran', 'informasi', 'videos', 'subprograms', 'jumlahKth', 'jumlahKups', 'produkKups', 'contact'));
     }
 
     public function tentangkegiatan($id)
@@ -102,12 +104,15 @@ class ClientController extends Controller
     }
 
 
-    public function progreskegiatandetail()
+    public function progreskegiatandetail($id)
     {
+          $progres = ProgresKerja::with('fotoProgres', 'maps', 'subprogram')
+                ->findOrFail($id);
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.progreskegiatandetail', compact('contact', 'subprograms'));
+        return view('client.progreskegiatandetail', compact('contact', 'subprograms', 'progres'));
     }
+
     public function profilkawasan()
     {
         $contact = Kontak::all();

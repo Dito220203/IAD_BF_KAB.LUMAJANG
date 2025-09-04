@@ -48,6 +48,24 @@ class MonevController extends Controller
         return view('admin.MonitoringEvaluasi.index', compact('monev'));
     }
 
+    public function getRencana($id)
+    {
+        $rencana = RencanaKerja::with(['subprogram', 'opd'])->find($id);
+
+        if (!$rencana) {
+            return response()->json(['error' => 'Data tidak ditemukan'], 404);
+        }
+
+        return response()->json([
+            'nama_program' => $rencana->subprogram->subprogram ?? '',
+            'lokasi' => $rencana->lokasi ?? '',
+            'tahun' => $rencana->tahun ?? '',
+            'anggaran' => $rencana->anggaran ?? '',
+            'opd' => $rencana->opd->nama ?? '',
+            'opd_id' => $rencana->opd->id ?? '',
+            'subprogram_id' => $rencana->subprogram_id ?? '',
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -66,11 +84,11 @@ class MonevController extends Controller
      */
     public function store(Request $request)
     {
+
         $user = Auth::guard('pengguna')->user();
 
-        // validasi dasar
         $rules = [
-            'id_subprogram' => 'required|exists:subprograms,id',
+            'program' => 'required',
             'id_renja' => 'nullable|exists:rencana_kerjas,id',
             'lokasi' => 'nullable|string',
             'tahun' => 'nullable|string',
@@ -80,19 +98,16 @@ class MonevController extends Controller
             'keterangan' => 'nullable|string',
         ];
 
-        // Kalau Super Admin wajib pilih OPD
         if ($user->level === 'Super Admin') {
             $rules['id_opd'] = 'required|exists:opds,id';
         }
 
         $validate = $request->validate($rules);
 
-        // set pengguna
         $validate['id_pengguna'] = $user->id;
 
-        // set opd otomatis kalau bukan super admin
         if ($user->level !== 'Super Admin') {
-            $validate['id_opd'] = $user->id_opd; // pastikan tabel pengguna ada kolom id_opd
+            $validate['id_opd'] = $user->id_opd;
         }
 
         $validate['status'] = 'Belum Validasi';
@@ -166,7 +181,7 @@ class MonevController extends Controller
 
         // aturan validasi dasar
         $rules = [
-            'id_subprogram' => 'required|exists:subprograms,id',
+            'e_program' => 'required',
             'id_renja' => 'nullable|exists:rencana_kerjas,id',
             'e_lokasi' => 'nullable|string',
             'e_tahun' => 'nullable|string',
@@ -187,7 +202,7 @@ class MonevController extends Controller
         $data = [
             'id_pengguna' => $user->id,
             'id_renja' => $validate['id_renja'] ?? null,
-            'id_subprogram' => $validate['id_subprogram'],
+            'program' => $validate['e_program'],
             'lokasi' => $validate['e_lokasi'],
             'tahun' => $validate['e_tahun'],
             'anggaran' => $validate['e_anggaran'],

@@ -15,33 +15,21 @@
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
-
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Form Monitoring Evaluasi</h5>
 
-                            <!-- Form Create -->
                             <form action="{{ route('monev.store') }}" method="POST">
                                 @csrf
 
-                                {{-- Nama Program --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Nama Program</label>
-                                    <div class="col-sm-10">
-                                        <select name="id_subprogram" class="form-select" required>
-                                            <option value="">Pilih</option>
-                                            @foreach ($subprogram as $data)
-                                                <option value="{{ $data->id }}">{{ $data->subprogram }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                                {{-- Hidden subprogram id --}}
+                                <input type="hidden" name="program" id="id_subprogram">
 
                                 {{-- Rencana Kegiatan --}}
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Rencana Kegiatan</label>
                                     <div class="col-sm-10">
-                                        <select name="id_renja" class="form-select">
+                                        <select name="id_renja" class="form-select" id="id_renja">
                                             <option value="">Pilih</option>
                                             @foreach ($rencana as $data)
                                                 <option value="{{ $data->id }}">{{ $data->judul }}</option>
@@ -50,11 +38,20 @@
                                     </div>
                                 </div>
 
+                                {{-- Nama Program --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Nama Program</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="nama_program" name="program" class="form-control"
+                                            readonly>
+                                    </div>
+                                </div>
+
                                 {{-- Lokasi --}}
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Lokasi</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="lokasi" class="form-control">
+                                        <input type="text" name="lokasi" id="lokasi" class="form-control">
                                     </div>
                                 </div>
 
@@ -62,7 +59,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Tahun</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="tahun" class="form-control">
+                                        <input type="text" name="tahun" id="tahun" class="form-control" readonly>
                                     </div>
                                 </div>
 
@@ -70,26 +67,55 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Anggaran</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="anggaran" class="form-control">
+                                        <input type="text" name="anggaran" id="anggaran" class="form-control" readonly>
                                     </div>
                                 </div>
 
-                                @auth('pengguna')
-                                    @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
-                                        <div class="row mb-3">
-                                            <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
-                                            <div class="col-sm-10">
-                                                <select name="id_opd" class="form-select">
-                                                    <option value="">Pilih</option>
-                                                    @foreach ($opd as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endauth
+                                {{-- Perangkat Daerah --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
+                                    <div class="col-sm-10">
+                                        <select name="id_opd" id="id_opd" class="form-select">
+                                            <option value="">Pilih</option>
+                                            @foreach ($opd as $data)
+                                                <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
+                                @push('scripts')
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const idRenja = document.getElementById('id_renja');
+                                            const allInputs = document.querySelectorAll('#nama_program, #lokasi, #tahun, #anggaran, #id_opd');
+
+                                            // Disable semua input dulu
+                                            allInputs.forEach(input => input.disabled = true);
+
+                                            // Kalau user klik field lain saat Rencana Kegiatan kosong
+                                            allInputs.forEach(input => {
+                                                input.addEventListener('click', function(e) {
+                                                    if (!idRenja.value) {
+                                                        e.preventDefault();
+                                                        alert('Pilih Rencana Kerja dulu!');
+                                                    }
+                                                });
+                                            });
+
+                                            // Enable field kalau Rencana Kegiatan sudah dipilih
+                                            idRenja.addEventListener('change', function() {
+                                                if (this.value) {
+                                                    allInputs.forEach(input => input.disabled = false);
+                                                } else {
+                                                    allInputs.forEach(input => input.disabled = true);
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                @endpush
+
+                                {{-- RKA --}}
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">RKA</label>
                                     <div class="col-sm-10">
@@ -100,7 +126,6 @@
                                         </select>
                                     </div>
                                 </div>
-
 
                                 {{-- Realisasi --}}
                                 <div class="row mb-3">
@@ -125,13 +150,49 @@
                                         <a href="{{ route('monev') }}" class="btn btn-warning">Kembali</a>
                                     </div>
                                 </div>
-                            </form><!-- End Form -->
+                            </form>
 
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rencanaSelect = document.getElementById('id_renja');
+            const lokasiInput = document.getElementById('lokasi');
+            const tahunInput = document.getElementById('tahun');
+            const anggaranInput = document.getElementById('anggaran');
+            const opdSelect = document.getElementById('id_opd');
+            const subprogramInput = document.getElementById('id_subprogram'); // hidden
+            const namaProgramInput = document.getElementById('nama_program'); // readonly text
+
+            rencanaSelect.addEventListener('change', function() {
+                const id = this.value;
+                if (!id) {
+                    lokasiInput.value = '';
+                    tahunInput.value = '';
+                    anggaranInput.value = '';
+                    opdSelect.value = '';
+                    subprogramInput.value = '';
+                    namaProgramInput.value = '';
+                    return;
+                }
+
+                fetch(`/rencana/${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        lokasiInput.value = data.lokasi || '';
+                        tahunInput.value = data.tahun || '';
+                        anggaranInput.value = data.anggaran || '';
+                        opdSelect.value = data.opd_id || '';
+                        subprogramInput.value = data.subprogram_id || ''; // untuk database
+                        namaProgramInput.value = data.nama_program || ''; // untuk ditampilkan
+                    })
+                    .catch(err => console.error(err));
+            });
+        });
+    </script>
 @endsection

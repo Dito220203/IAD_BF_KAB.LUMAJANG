@@ -39,6 +39,18 @@ class Pengguna extends Authenticatable
     {
         return $this->hasMany(Kups::class, 'id_pengguna', 'id');
     }
+    public function produkkups()
+    {
+        return $this->hasMany(ProdukKups::class, 'id_pengguna', 'id');
+    }
+    public function SubpotensiKehutanan()
+    {
+        return $this->hasMany(SubpotensiKehutanan::class, 'id_pengguna', 'id');
+    }
+    public function PotensiKehutanan()
+    {
+        return $this->hasMany(PotensiKehutanan::class, 'id_pengguna', 'id');
+    }
     public function subprogram()
     {
         return $this->hasMany(SubProgram::class, 'id_pengguna', 'id');

@@ -107,39 +107,48 @@
 
             </div>
 
-            <!-- chart perhut Section -->
+            @php
+                use Illuminate\Support\Arr;
+
+                // Ambil kategori unik dan hitung jumlah produk per kategori
+                $kategoriData = \App\Models\Kups::select('kategori')
+                    ->selectRaw('COUNT(*) as total')
+                    ->groupBy('kategori')
+                    ->get();
+
+                // Labels (kategori)
+                $labels = $kategoriData->pluck('kategori')->toArray();
+
+                // Data (jumlah per kategori)
+                $data = $kategoriData->pluck('total')->toArray();
+
+                // Generate warna random untuk setiap kategori
+                $backgroundColor = [];
+                foreach ($labels as $label) {
+                    $backgroundColor[] = '#' . substr(md5($label), 0, 6); // warna unik dari nama kategori
+                }
+            @endphp
+
             <section id="chart_perhut" class="perhutanan">
-                <div class="chart-container"
-                    style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; "data-aos="fade-up"
-                    data-aos-delay="250">
-
-                    <!-- Chart Kiri -->
-                    {{-- <div class="chart-box"
-                        style="flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <canvas id="barChart"></canvas>
-                    </div> --}}
-
-                    <!-- Chart Kanan -->
+                <div class="chart-container" style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;"
+                    data-aos="fade-up" data-aos-delay="250">
                     <div class="chart-box"
                         style="flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <canvas id="donutChart"></canvas>
                     </div>
                 </div>
             </section>
+
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    // BAR CHART
-                   
-
-                    // DONUT CHART
                     const donutCtx = document.getElementById('donutChart').getContext('2d');
                     new Chart(donutCtx, {
                         type: 'doughnut',
                         data: {
-                            labels: ['Platinum', 'Emas', 'Perak', 'Biru'],
+                            labels: @json($labels),
                             datasets: [{
-                                data: [12, 88, 77, 74],
-                                backgroundColor: ['#6a5acd', '#ffd700', '#c0c0c0', '#1e90ff']
+                                data: @json($data),
+                                backgroundColor: @json($backgroundColor)
                             }]
                         },
                         options: {
@@ -149,6 +158,7 @@
                     });
                 });
             </script>
+
 
         </section>
 
@@ -186,11 +196,6 @@
                                 <div>
                                     <div class="stats-icon"><i class="fas fa-mountain"></i></div>
                                 </div>
-                                <p class="stats-label">POTENSI WISATA</p>
-                                <span class="stats-number purecounter" data-purecounter-start="0"
-                                    data-purecounter-end="123" data-purecounter-decimals="0"
-                                    data-purecounter-duration="1"></span>
-                            </div>
                             </a>
                         </div>
                         <!-- Card 3 -->
@@ -226,11 +231,6 @@
                                 <div>
                                     <div class="stats-icon"><i class="fas fa-tractor"></i></div>
                                 </div>
-                                <p class="stats-label">POTENSI PERTANIAN</p>
-                                <span class="stats-number purecounter" data-purecounter-start="0"
-                                    data-purecounter-end="123" data-purecounter-decimals="0"
-                                    data-purecounter-duration="1"></span>
-                            </div>
                             </a>
                         </div>
 
@@ -312,42 +312,22 @@
         <!-- PRODUCT KUPS -->
         <section class="product-slider">
             <div class="slider-wrapper">
-                <!-- Slide 1 -->
-                <div class="slide active">
-                    <div class="slide-image">
-                        <img src="{{ asset('client/assets/img/prdt3.jpg') }}" alt="Produk 1">
+                @foreach ($produkKups as $index => $produk)
+                    <div class="slide {{ $index === 0 ? 'active' : '' }}">
+                        <div class="slide-image">
+                            <img src="{{ asset('storage/' . $produk->gambar) }}" alt="{{ $produk->nama }}">
+                        </div>
+                        <div class="slide-content">
+                            <h2>{{ $produk->nama }}</h2>
+                            <p>{{ $produk->keterangan }}</p>
+                        </div>
                     </div>
-                    <div class="slide-content">
-                        <h2>Produk Pisang</h2>
-                        <p>Pisang hasil KUPS yang segar dan siap konsumsi.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="slide">
-                    <div class="slide-image">
-                        <img src="{{ asset('client/assets/img/prdt5.jpg') }}" alt="Produk 2">
-                    </div>
-                    <div class="slide-content">
-                        <h2>Olahan Susu</h2>
-                        <p>Susu segar yang diolah menjadi produk berkualitas tinggi.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 3 -->
-                <div class="slide">
-                    <div class="slide-image">
-                        <img src="{{ asset('client/assets/img/prdt4.jpg') }}" alt="Produk 3">
-                    </div>
-                    <div class="slide-content">
-                        <h2>Kerajinan Bambu</h2>
-                        <p>Produk ramah lingkungan hasil dari kreativitas masyarakat.</p>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </section>
+
         <!-- /PRODUCT KUPS -->
-        
+
         <!-- Informasi Section -->
         <section class="informasi-section" id="informasisection">
             <div class="global-title">
@@ -453,18 +433,30 @@
             <div class="video-wrapper">
                 <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
                     @forelse ($videos as $video)
+                        @php
+                            // Ambil video ID dari link YouTube
+                            preg_match(
+                                '/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w\-]+)/',
+                                $video->link,
+                                $matches,
+                            );
+                            $videoId = $matches[1] ?? null;
+                            $thumbnail = $videoId
+                                ? "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg"
+                                : asset('client/assets/img/default-video.jpg');
+                        @endphp
+
                         <div class="video-card">
-                            <a href="{{ url('/detailvideo/' . $video->id) }}">
+                            <a href="{{ $video->link }}" target="_blank"> <!-- buka langsung video -->
                                 <div class="video-image">
-                                    <img src="{{ asset('storage/' . ($video->thumbnail ?? 'client/assets/img/pulau.jpg')) }}"
-                                        alt="{{ $video->judul }}">
+                                    <img src="{{ $thumbnail }}" alt="{{ $video->judul }}">
                                 </div>
                                 <div class="video-content">
                                     <h3>{{ $video->judul }}</h3>
                                     <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
                                     <div class="video-footer">
                                         <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
-                                        <a href="{{ url('/detailvideo/' . $video->id) }}">Lebih Lengkap...</a>
+                                        <span>Lebih Lengkap...</span>
                                     </div>
                                 </div>
                             </a>
@@ -477,70 +469,72 @@
                 <!-- Pagination -->
                 <div class="video-pagination" id="videoPagination"></div>
             </div>
+        </section>
 
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    const cardsContainer = document.querySelector(".video-cards");
-                    const pagination = document.querySelector(".video-pagination");
 
-                    let cardWidth = 0;
-                    let scrollStep = 0;
-                    let totalPages = 0;
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const cardsContainer = document.querySelector(".video-cards");
+                const pagination = document.querySelector(".video-pagination");
 
-                    function updateCardWidth() {
-                        const firstCard = cardsContainer.querySelector(".video-card");
-                        if (!firstCard) return;
+                let cardWidth = 0;
+                let scrollStep = 0;
+                let totalPages = 0;
 
-                        const style = window.getComputedStyle(firstCard);
-                        const marginRight = parseInt(style.marginRight) || 0;
-                        cardWidth = firstCard.offsetWidth + marginRight;
+                function updateCardWidth() {
+                    const firstCard = cardsContainer.querySelector(".video-card");
+                    if (!firstCard) return;
 
-                        // tampilkan 4 card, scroll 3 card
-                        scrollStep = cardWidth * 3;
+                    const style = window.getComputedStyle(firstCard);
+                    const marginRight = parseInt(style.marginRight) || 0;
+                    cardWidth = firstCard.offsetWidth + marginRight;
 
-                        // hitung total page
-                        totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
+                    // tampilkan 4 card, scroll 3 card
+                    scrollStep = cardWidth * 3;
 
-                        updatePagination();
-                    }
+                    // hitung total page
+                    totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
 
-                    function updatePagination() {
-                        pagination.innerHTML = "";
+                    updatePagination();
+                }
 
-                        for (let i = 0; i < totalPages; i++) {
-                            const dot = document.createElement("span");
-                            dot.classList.add("dot");
-                            if (i === 0) dot.classList.add("active");
+                function updatePagination() {
+                    pagination.innerHTML = "";
 
-                            dot.addEventListener("click", () => {
-                                cardsContainer.scrollTo({
-                                    left: i * scrollStep,
-                                    behavior: "smooth",
-                                });
+                    for (let i = 0; i < totalPages; i++) {
+                        const dot = document.createElement("span");
+                        dot.classList.add("dot");
+                        if (i === 0) dot.classList.add("active");
+
+                        dot.addEventListener("click", () => {
+                            cardsContainer.scrollTo({
+                                left: i * scrollStep,
+                                behavior: "smooth",
                             });
-
-                            pagination.appendChild(dot);
-                        }
-                    }
-
-                    function setActiveDot() {
-                        const dots = pagination.querySelectorAll(".dot");
-                        const index = Math.round(cardsContainer.scrollLeft / scrollStep);
-
-                        dots.forEach((dot, i) => {
-                            dot.classList.toggle("active", i === index);
                         });
+
+                        pagination.appendChild(dot);
                     }
+                }
 
-                    // update setiap resize window
-                    window.addEventListener("resize", updateCardWidth);
-                    // update saat scroll
-                    cardsContainer.addEventListener("scroll", setActiveDot);
+                function setActiveDot() {
+                    const dots = pagination.querySelectorAll(".dot");
+                    const index = Math.round(cardsContainer.scrollLeft / scrollStep);
 
-                    // pertama kali jalan
-                    updateCardWidth();
-                });
-            </script>
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle("active", i === index);
+                    });
+                }
+
+                // update setiap resize window
+                window.addEventListener("resize", updateCardWidth);
+                // update saat scroll
+                cardsContainer.addEventListener("scroll", setActiveDot);
+
+                // pertama kali jalan
+                updateCardWidth();
+            });
+        </script>
         </section>
         <!-- /video Section -->
 
