@@ -130,6 +130,13 @@ class ClientController extends Controller
         $subprograms = Subprogram::all();
         return view('client.regulasi', compact('contact', 'subprograms', 'regulasi'));
     }
+    public function detailregulasi($id)
+    {
+        $item        = Regulasi::where('status', 'Aktif')->findOrFail($id);
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailregulasi', compact('contact', 'subprograms', 'item'));
+    }
 
     public function detailluasperhutanan()
     {
@@ -175,6 +182,28 @@ class ClientController extends Controller
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.detailvideo', compact('contact', 'subprograms'));
+    }
+
+
+
+
+
+
+
+    //potensi
+    public function daftarpotensi ()
+    {
+      $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.daftarpotensi', compact('contact', 'subprograms'));
+     
+    }
+    public function detailpotensi ()
+    {
+      $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.detailpotensi', compact('contact', 'subprograms'));
+     
     }
 
 

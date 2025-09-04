@@ -158,12 +158,14 @@
                 <div class="global-title">
                     <h2>IAD POTENSI TIAP KUPS</h2>
                 </div>
+                
                 <div class="perhut-cards" data-aos="fade-down" data-aos-delay="200" id="PerhutCards">
-                    <div class="row gy-4 justify-content-center">
+                    <div class="kups-scroll">
+        <div class="row gy-4 justify-content-center flex-nowrap">
 
                         <!-- Card 1 -->
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detailpotensipeternakan') }}">
+                            <a href="{{ url('/daftarpotensi') }}">
                                 <div class="stats-card">
                                     <div>
                                         <div class="stats-icon"><i class="fa-solid fa-cow"></i></div>
@@ -179,7 +181,7 @@
                         </div>
                         <!-- Card 2 -->
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detailpotensiwisata') }}">
+                            <a href="{{ url('/daftarpotensi') }}">
                             <div class="stats-card">
                                 <div>
                                     <div class="stats-icon"><i class="fas fa-mountain"></i></div>
@@ -193,7 +195,33 @@
                         </div>
                         <!-- Card 3 -->
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detailpotensipertanian') }}">
+                            <a href="{{ url('/daftarpotensi') }}">
+                            <div class="stats-card">
+                                <div>
+                                    <div class="stats-icon"><i class="fas fa-tractor"></i></div>
+                                </div>
+                                <p class="stats-label">POTENSI PERTANIAN</p>
+                                <span class="stats-number purecounter" data-purecounter-start="0"
+                                    data-purecounter-end="123" data-purecounter-decimals="0"
+                                    data-purecounter-duration="1"></span>
+                            </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ url('/daftarpotensi') }}">
+                            <div class="stats-card">
+                                <div>
+                                    <div class="stats-icon"><i class="fas fa-tractor"></i></div>
+                                </div>
+                                <p class="stats-label">POTENSI PERTANIAN</p>
+                                <span class="stats-number purecounter" data-purecounter-start="0"
+                                    data-purecounter-end="123" data-purecounter-decimals="0"
+                                    data-purecounter-duration="1"></span>
+                            </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ url('/daftarpotensi') }}">
                             <div class="stats-card">
                                 <div>
                                     <div class="stats-icon"><i class="fas fa-tractor"></i></div>
@@ -208,7 +236,9 @@
 
 
                     </div>
+                    </div>
                 </div>
+                
 
             </div>
 
@@ -548,8 +578,9 @@
                                 <div class="col-md-12">
                                     <textarea class="form-control" name="message" rows="4" placeholder="Message" required=""></textarea>
                                 </div>
+                            </div>
 
-                                <div class="col-md-12 text-center">
+                                <div class="col-mt-3 text-center">
                                     <div class="loading">Loading</div>
                                     <div class="error-message"></div>
                                     <div class="sent-message">Your message has been sent. Thank you!</div>
@@ -557,7 +588,7 @@
                                     <button type="submit">Send Message</button>
                                 </div>
 
-                            </div>
+                            
                         </form>
                     </div>
 
@@ -600,6 +631,7 @@
 
             </div>
 
-        </section><!-- /Contact Section -->
+        </section>
+        <!-- /Contact Section -->
 
     </main>

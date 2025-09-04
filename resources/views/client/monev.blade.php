@@ -7,16 +7,17 @@
 
         <section class="monev-section container">
 
-            <!-- Pilihan Triwulan -->
+            
+
+            <!-- Table Wrapper -->
+            <div class="table-wrapper">
+                <!-- Pilihan Triwulan -->
             <div class="triwulan-tabs">
                 <button class="tab-btn active" data-target="triwulan1">Triwulan 1</button>
                 <button class="tab-btn" data-target="triwulan2">Triwulan 2</button>
                 <button class="tab-btn" data-target="triwulan3">Triwulan 3</button>
                 <button class="tab-btn" data-target="triwulan4">Triwulan 4</button>
             </div>
-
-            <!-- Table Wrapper -->
-            <div class="table-wrapper">
                 <!-- Triwulan 1 -->
                 <div class="table-content active" id="triwulan1">
                     <table class="monev-table">

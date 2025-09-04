@@ -1,8 +1,8 @@
 @extends('componentsclient.layout')
 @section('content')
-    <section class="section_page page-regulasi">
+    <section class="section_page">
         <div class="global-title" data-aos="fade-up">
-            <h2>REGULASI IAD</h2>
+            <h2>IAD POTENSI PERTANIAN</h2>
         </div>
 
         <section id="progres-kegiatan" class="progres-section container">
@@ -19,38 +19,43 @@
                 <!-- Daftar Regulasi -->
                 <div class="col-lg-9 col-md-8 col-12">
                     <div class="progres-wrapper">
-                        <h4 class="progres-title">Daftar Regulasi IAD</h4>
+                        <h4 class="progres-title">Daftar Potensi IAD</h4>
                         <div class="progres-list" id="progresList">
-                            @foreach ($regulasi as $item)
+                            {{-- @foreach ($regulasi as $item) --}}
                                 <div class="progres-item">
                                     <div class="progres-header">
-                                        <h6>{{ strtoupper($item->judul) }}</h6>
+                                        {{-- <h6>{{ strtoupper($item->judul) }}</h6> --}}
                                     </div>
                                     <div class="progres-meta">
                                         <span class="tanggal">
                                             <i class="fas fa-calendar-alt"></i>
-                                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y H:i') }}
+                                            {{-- {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y H:i') }} --}}
                                         </span>
                                     </div>
                                     <div class="progres-body">
-                                        &nbsp;
+                                        {{-- &nbsp; --}}
                                     </div>
                                     <div class="progres-footer">
-                                        @if ($item->file)
-                                            <a href="{{ route('client.detailregulasi' , $item->id) }}" >
+                                        {{-- @if ($item->file) --}}
+                                            <a href="{{ url('/detailpotensi') }}" >
                                                 <button class="btn-lihat">Lihat</button>
                                             </a>
-                                        @else
+                                        {{-- @else --}}
                                             <button class="btn-lihat" disabled>Tidak ada file</button>
-                                        @endif
+                                        {{-- @endif --}}
                                     </div>
                                 </div>
-                            @endforeach
+                            {{-- @endforeach --}}
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <div class="text-center mt-4">
+    <a href="{{ url('/') }}" class="btn-footer-back">
+        ← Kembali
+    </a>
+</div>
     </section>
 @section('scripts')
     <script>
@@ -69,4 +74,7 @@
         });
     </script>
 @endsection
+
+
+</section>
 @endsection

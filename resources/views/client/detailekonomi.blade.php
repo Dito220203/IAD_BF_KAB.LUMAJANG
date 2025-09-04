@@ -33,12 +33,13 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+       
+    </section>
+     </div>
         <div class="text-center mt-4">
             <a href="{{ url('/') }}" class="btn-footer-back">
                 ← Kembali
             </a>
         </div>
-    </section>
 </section>
 @endsection

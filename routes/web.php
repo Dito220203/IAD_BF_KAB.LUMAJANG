@@ -53,6 +53,7 @@ Route::prefix('subprogram/{id}')->group(function () {
         ->name('client.petasebarankegiatan');
 });
 Route::get('/regulasi', [ClientController::class, 'regulasi'])->name('client.regulasi');
+Route::get('/detailregulasi/{id}', [ClientController::class, 'detailregulasi'])->name('client.detailregulasi');
 
 //detail card
 Route::get('/detailluasperhutanan', [ClientController::class, 'detailluasperhutanan'])->name('client.detailluasperhutanan');
@@ -65,9 +66,14 @@ Route::get('/detailinformasi/{id}', [ClientController::class, 'detailinformasi']
 Route::get('/detailvideo', [ClientController::class, 'detailvideo'])->name('client.detailvideo');
 
 //tamabahan potensi
-Route::get('/detailpotensipeternakan', [ClientController::class, 'detailpotensipeternakan'])->name('client.detailpotensipeternakan');
-Route::get('/detailpotensiwisata', [ClientController::class, 'detailpotensiwisata'])->name('client.detailpotensiwisata');
-Route::get('/detailpotensipertanian', [ClientController::class, 'detailpotensipertanian'])->name('client.detailpotensipertanian');
+// Route::get('/detailpotensipeternakan', [ClientController::class, 'detailpotensipeternakan'])->name('client.detailpotensipeternakan');
+// Route::get('/detailpotensiwisata', [ClientController::class, 'detailpotensiwisata'])->name('client.detailpotensiwisata');
+// Route::get('/detailpotensipertanian', [ClientController::class, 'detailpotensipertanian'])->name('client.detailpotensipertanian');
+
+
+Route::get('/daftarpotensi', [ClientController::class, 'daftarpotensi'])->name('client.daftarpotensi');
+Route::get('/detailpotensi', [ClientController::class, 'detailpotensi'])->name('client.detailpotensi');
+
 //tamabahan potensi
 
 

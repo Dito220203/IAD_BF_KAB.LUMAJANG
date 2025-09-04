@@ -24,7 +24,7 @@
                                 <tr>
                                     <td>1</td>
                                     <td>{{ $data->kth }}</td>
-                                    <td>{{$data->luas}}</td>
+                                    <td>{{ $data->luas }}</td>
                                 </tr>
                             @endforeach
 
@@ -34,12 +34,12 @@
                 </div>
 
             </div>
-            <div class="text-center mt-4">
-                <a href="{{ url('/') }}" class="btn-footer-back">
-                    ← Kembali
-                </a>
-            </div>
-        </section>
 
+        </section>
+        <div class="text-center mt-4">
+            <a href="{{ url('/') }}" class="btn-footer-back">
+                ← Kembali
+            </a>
+        </div>
     </section>
 @endsection

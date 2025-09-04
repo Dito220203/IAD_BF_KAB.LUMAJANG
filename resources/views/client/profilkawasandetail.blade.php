@@ -59,33 +59,41 @@
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
         <script>
-            var swiper = new Swiper(".mySwiper", {
-                effect: "coverflow",
-                grabCursor: true,
-                centeredSlides: true,
-                loop: true,
-                autoplay: {
-                    delay: 2500,
-                    disableOnInteraction: false,
-                },
-                slidesPerView: 1, // default mobile
-                coverflowEffect: {
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 150,
-                    modifier: 1,
-                    slideShadows: false,
-                },
-                breakpoints: {
-                    768: {
-                        slidesPerView: 2
+            document.addEventListener("DOMContentLoaded", function() {
+                const slideCount = document.querySelectorAll(".mySwiper .swiper-slide").length;
+
+                var swiper = new Swiper(".mySwiper", {
+                    effect: "coverflow",
+                    grabCursor: true,
+                    centeredSlides: true,
+                    loop: slideCount > 1, // aktifkan loop kalau lebih dari 1 gambar
+                    loopedSlides: slideCount, // duplikasi semua supaya seamless
+                    speed: 800, // biar halus
+                    autoplay: slideCount > 3 ? {
+                        delay: 2500,
+                        disableOnInteraction: false,
+                    } : false,
+                    slidesPerView: Math.min(slideCount, 3),
+                    coverflowEffect: {
+                        rotate: 0,
+                        stretch: 0,
+                        depth: 150,
+                        modifier: 1,
+                        slideShadows: false,
                     },
-                    1024: {
-                        slidesPerView: 3
+                    breakpoints: {
+                        768: {
+                            slidesPerView: Math.min(slideCount, 3)
+                        },
+                        1024: {
+                            slidesPerView: Math.min(slideCount, 3)
+                        }
                     }
-                }
+                });
             });
         </script>
+
+
 
     </section>
 @endsection
