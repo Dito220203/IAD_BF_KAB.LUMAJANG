@@ -163,82 +163,55 @@
         </section>
 
         <!-- JUMLAH PENDAPATAN TIAP KUPS -->
-        <section id="kups" class="kups">
+        {{-- <section id="kups" class="kups">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="global-title">
                     <h2>IAD POTENSI TIAP KUPS</h2>
                 </div>
-                
-                <div class="perhut-cards" data-aos="fade-down" data-aos-delay="200" id="PerhutCards">
+
+                <!-- SCROLL WRAPPER -->
+                <div class="kups-cards" data-aos="fade-down" data-aos-delay="200">
                     <div class="kups-scroll">
-        <div class="row gy-4 justify-content-center flex-nowrap">
+                        <div class="row gy-4 flex-nowrap">
 
-                        <!-- Card 1 -->
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/daftarpotensi') }}">
-                                <div class="stats-card">
-                                    <div>
+                            <!-- Card 1 -->
+                            <div class="col-lg-3 col-md-6">
+                                <a href="{{ url('/daftarpotensi') }}">
+                                    <div class="stats-card">
                                         <div class="stats-icon"><i class="fa-solid fa-cow"></i></div>
+                                        <p class="stats-label">POTENSI PETERNAKAN</p>
+                                        <span class="stats-number purecounter" data-purecounter-start="0"
+                                            data-purecounter-end="123" data-purecounter-duration="1"></span>
                                     </div>
-                                    <p class="stats-label">POTENSI PETERNAKAN</p>
-
-                                    <span class="stats-number purecounter" data-purecounter-start="0"
-                                        data-purecounter-end="123" data-purecounter-decimals="0"
-                                        data-purecounter-duration="1"></span>
-
-                                </div>
-                            </a>
-                        </div>
-                        <!-- Card 2 -->
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/daftarpotensi') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon"><i class="fas fa-mountain"></i></div>
-                                </div>
-                            </a>
-                        </div>
-                        <!-- Card 3 -->
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/daftarpotensi') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon"><i class="fas fa-tractor"></i></div>
-                                </div>
-                                <p class="stats-label">POTENSI PERTANIAN</p>
-                                <span class="stats-number purecounter" data-purecounter-start="0"
-                                    data-purecounter-end="123" data-purecounter-decimals="0"
-                                    data-purecounter-duration="1"></span>
+                                </a>
                             </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/daftarpotensi') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon"><i class="fas fa-tractor"></i></div>
-                                </div>
-                                <p class="stats-label">POTENSI PERTANIAN</p>
-                                <span class="stats-number purecounter" data-purecounter-start="0"
-                                    data-purecounter-end="123" data-purecounter-decimals="0"
-                                    data-purecounter-duration="1"></span>
+
+                            <!-- Card 2 -->
+                            <div class="col-lg-3 col-md-6">
+                                <a href="{{ url('/daftarpotensi') }}">
+                                    <div class="stats-card">
+                                        <div class="stats-icon"><i class="fas fa-mountain"></i></div>
+                                        <p class="stats-label">POTENSI GUNUNG</p>
+                                        <span class="stats-number">88</span>
+                                    </div>
+                                </a>
                             </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/daftarpotensi') }}">
-                            <div class="stats-card">
-                                <div>
-                                    <div class="stats-icon"><i class="fas fa-tractor"></i></div>
-                                </div>
-                            </a>
-                        </div>
 
-
-                    </div>
+                            <!-- Card lainnya... -->
+                            <div class="col-lg-3 col-md-6">
+                                <a href="{{ url('/daftarpotensi') }}">
+                                    <div class="stats-card">
+                                        <div class="stats-icon"><i class="fas fa-mountain"></i></div>
+                                        <p class="stats-label">POTENSI GUNUNG</p>
+                                        <span class="stats-number">88</span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
-                
+
 
             </div>
 
@@ -305,6 +278,204 @@
 
                 });
             </script>
+
+        </section> --}}
+        <section id="kups" class="kups">
+            <div class="container" data-aos="fade-up" data-aos-delay="100">
+                <div class="global-title">
+                    <h2>IAD POTENSI TIAP KUPS</h2>
+                </div>
+
+                <div class="kups-cards" data-aos="fade-down" data-aos-delay="200">
+                    <div class="kups-scroll">
+                        <div class="row gy-4 flex-nowrap">
+
+                            <div class="col-lg-4 col-md-6">
+                                <a href="{{ url('/daftarpotensi') }}">
+                                    <div class="stats-card">
+                                        <div class="stats-icon"><i class="fa-solid fa-cow"></i></div>
+                                        <p class="stats-label">POTENSI PETERNAKAN</p>
+                                        <span class="stats-number purecounter" data-purecounter-start="0"
+                                            data-purecounter-end="123" data-purecounter-duration="1"></span>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+                                <a href="{{ url('/daftarpotensi') }}">
+                                    <div class="stats-card">
+                                        <div class="stats-icon"><i class="fas fa-mountain"></i></div>
+                                        <p class="stats-label">POTENSI GUNUNG</p>
+                                        <span class="stats-number">88</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+                                <a href="{{ url('/daftarpotensi') }}">
+                                    <div class="stats-card">
+                                        <div class="stats-icon"><i class="fa-solid fa-leaf"></i></div>
+                                        <p class="stats-label">POTENSI PERKEBUNAN</p>
+                                        <span class="stats-number">154</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+                                <a href="{{ url('/daftarpotensi') }}">
+                                    <div class="stats-card">
+                                        <div class="stats-icon"><i class="fa-solid fa-fish"></i></div>
+                                        <p class="stats-label">POTENSI PERIKANAN</p>
+                                        <span class="stats-number">72</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="kups-pagination" id="kupsPagination"></div>
+
+                <div data-aos="fade-up" data-aos-delay="250" id="pendapatanChart" class="pendapatanChart">
+                </div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        // Contoh data, nanti bisa diganti dari card
+                        const dataValues = [
+                            ['Pisang', 182.93],
+                            ['Olahan Susu', 222.44],
+                            ['Potensi Peternakan', 151.41],
+                            ['Olahan Kopi', 154.00]
+                        ];
+
+                        Highcharts.chart('pendapatanChart', {
+                            chart: {
+                                type: 'pie',
+                                backgroundColor: '#fff', // putih
+                                options3d: {
+                                    enabled: true,
+                                    alpha: 30, // kemiringan pas, tidak terlalu miring
+                                    beta: 0
+                                }
+                            },
+                            title: {
+                                text: 'Nilai Ekonomi Tiap KUPS'
+                            },
+                            subtitle: {
+                                text: 'Unit: Dalam Rupiah',
+                                align: 'right'
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    depth: 25, // tipis → tidak timpang tindih
+                                    borderWidth: 2, // garis pemisah antar slice
+                                    borderColor: '#fff', // garis putih biar rapi
+                                    dataLabels: {
+                                        enabled: true,
+                                        format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
+                                        connectorColor: 'silver'
+                                    },
+                                    showInLegend: true
+                                }
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
+                            },
+                            series: [{
+                                name: 'Pendapatan',
+                                data: [
+                                    ['Pisang', 182.93],
+                                    ['Olahan Susu', 222.44],
+                                    ['Potensi Peternakan', 151.41],
+                                    ['Olahan Kopi', 154.00]
+                                ],
+                                colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
+                            }]
+                        });
+
+
+                        // --- GANTI SCRIPT PAGINATION LAMA ANDA DENGAN YANG INI ---
+
+                        const kupsCardsContainer = document.querySelector(".kups-scroll .row");
+                        const kupsPagination = document.getElementById("kupsPagination");
+
+                        if (kupsCardsContainer && kupsPagination) {
+                            let cardWidth = 0;
+                            let scrollStep = 0;
+                            let totalPages = 0;
+
+                            function setupKupsPagination() {
+                                // ==================================================================
+                                // INI PERBAIKANNYA: Targetkan '.col-lg-4' sesuai HTML Anda
+                                const firstCard = kupsCardsContainer.querySelector(".col-lg-4");
+                                // ==================================================================
+                                if (!firstCard) return;
+
+                                const isMobile = window.innerWidth < 992;
+                                const cardsToScroll = isMobile ? 1 : 3;
+
+                                const gap = parseInt(window.getComputedStyle(kupsCardsContainer).gap) || 20;
+                                cardWidth = firstCard.offsetWidth + gap;
+                                scrollStep = cardWidth * cardsToScroll;
+
+                                // Cek jika ada cukup kartu untuk di-scroll
+                                if (kupsCardsContainer.scrollWidth > kupsCardsContainer.clientWidth) {
+                                    totalPages = Math.ceil((kupsCardsContainer.scrollWidth - kupsCardsContainer.clientWidth +
+                                        gap) / scrollStep) + 1;
+                                } else {
+                                    totalPages = 1;
+                                }
+
+                                updateKupsPaginationDots();
+                            }
+
+                            function updateKupsPaginationDots() {
+                                kupsPagination.innerHTML = "";
+
+                                if (totalPages <= 1) {
+                                    return;
+                                }
+
+                                for (let i = 0; i < totalPages; i++) {
+                                    const dot = document.createElement("span");
+                                    dot.classList.add("dot");
+                                    if (i === 0) dot.classList.add("active");
+
+                                    dot.addEventListener("click", () => {
+                                        kupsCardsContainer.parentElement.scrollTo({
+                                            left: i * scrollStep,
+                                            behavior: "smooth",
+                                        });
+                                    });
+                                    kupsPagination.appendChild(dot);
+                                }
+                            }
+
+                            function setActiveKupsDot() {
+                                const dots = kupsPagination.querySelectorAll(".dot");
+                                if (dots.length === 0) return;
+
+                                const container = kupsCardsContainer.parentElement;
+                                // Gunakan pembulatan yang lebih presisi untuk posisi scroll
+                                const index = Math.floor((container.scrollLeft + container.clientWidth / 2) / scrollStep);
+
+                                dots.forEach((dot, i) => {
+                                    dot.classList.toggle("active", i === index);
+                                });
+                            }
+
+                            // Event listeners
+                            window.addEventListener("resize", setupKupsPagination);
+                            kupsCardsContainer.parentElement.addEventListener("scroll", setActiveKupsDot);
+                            window.addEventListener('load', setupKupsPagination);
+                            setupKupsPagination();
+                        }
+                    });
+                </script>
 
         </section>
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
@@ -574,15 +745,15 @@
                                 </div>
                             </div>
 
-                                <div class="col-mt-3 text-center">
-                                    <div class="loading">Loading</div>
-                                    <div class="error-message"></div>
-                                    <div class="sent-message">Your message has been sent. Thank you!</div>
+                            <div class="col-mt-3 text-center">
+                                <div class="loading">Loading</div>
+                                <div class="error-message"></div>
+                                <div class="sent-message">Your message has been sent. Thank you!</div>
 
-                                    <button type="submit">Send Message</button>
-                                </div>
+                                <button type="submit">Send Message</button>
+                            </div>
 
-                            
+
                         </form>
                     </div>
 

@@ -1317,6 +1317,7 @@ section,
   align-items: center;
   min-height: 180px; /* samakan tinggi semua card, bisa disesuaikan */
   padding: 20px;
+  
 }
 
 .perhut-cards .stats-label {
@@ -1440,11 +1441,6 @@ section,
     font-size: 18px;
   }
 }
-
-
-
-
-
 /* HP besar (max 768px) */
 @media (max-width: 768px) {
   .perhutanan-title h2 {
@@ -1467,7 +1463,6 @@ section,
     font-size: 20px;
   }
 }
-
 /* HP kecil (max 480px) */
 
 @media (max-width: 480px) {
@@ -1488,75 +1483,156 @@ section,
   }
 }
 
-
-
 /*--------------------------------------------------------------
-# KUPS Section
+# KUPS Section - SOLUSI FINAL (Ukuran seperti Perhutanan)
 --------------------------------------------------------------*/
-.section-title {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.section-title h2 {
-  font-weight: 700;
-  font-size: 24px;
-  text-transform: uppercase;
-}
-.title-highlight {
-  display: inline-block;
-  width: 5px;
-  height: 30px;
-  background: #f4c20d;
-  margin-right: 10px;
-}
-.chart-container {
-  margin-top: 30px;
-  text-align: center;
-}
-.chart-header {
-  text-align: right;
-  margin-bottom: 10px;
-  font-size: 12px;
-  color: gray;
-}
 
+/* Pengaturan dasar section */
 .kups {
   background-color: #F0F0F0;
   text-align: center;
-  padding: 20px 0;
+  padding: 40px 0;
+  position: relative;
+  z-index: 10;
 }
 
-.container-kups {
-  z-index: 3;
-  padding-bottom: 30px;
-  padding-top: 40px;
+/* Wrapper untuk menengahkan area scroll */
+.kups-cards {
+  display: flex;
+  justify-content: center;
 }
 
+/* Container scroll ("jendela") */
+.kups-scroll {
+  width: 100%;
+  max-width: 930px; /* Disesuaikan untuk ukuran kartu baru */
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-top: -20px;
+  margin-bottom: -20px;
+}
+.kups-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Container baris untuk semua kartu */
+.kups-scroll .row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 30px; /* Jarak antar kartu disesuaikan */
+  margin: 0;
+  justify-content: flex-start;
+  padding: 0 5px; /* Padding kecil untuk presisi */
+}
+
+/* KUNCI UTAMA: Pengaturan ukuran setiap kartu di DESKTOP */
+.kups-scroll .col-lg-4 {
+  /* Paksa ukuran kartu agar sama seperti section Perhutanan */
+  flex-basis: 290px; /* ATUR UKURAN LEBAR KARTU DI SINI */
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+/* Style kartu KUPS, MENGADOPSI GAYA DARI PERHUTANAN */
+#kups .kups-cards .stats-card {
+  /* Dimensi & Tampilan dari Perhutanan */
+  background: white;
+  border-radius: 0 32px 0 32px; /* Diambil dari Perhutanan */
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1); /* Diambil dari Perhutanan */
+  padding: 20px;
+  min-height: 180px; /* Samakan dengan Perhutanan */
+  height: 100%;
+  
+  /* Fungsionalitas dari KUPS */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Tetap space-between agar angka di bawah */
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#kups .kups-cards .stats-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px #374b44;
+  z-index: 999;
+  position: relative;
+}
+
+/* Pagination Dots (tidak diubah) */
+.kups-pagination {
+  text-align: center;
+  margin-top: 25px;
+  padding-bottom: 20px;
+}
+.kups-pagination .dot {
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: transform 0.3s ease, background-color 0.3s ease; 
+}
+.kups-pagination .dot:hover { background-color: #d4b22a; }
+.kups-pagination .dot.active {
+  background-color: #f4c20d;
+  transform: scale(1.5); 
+}
+
+/* GUNAKAN BLOK INI SEBAGAI PENGGANTI */
+@media (max-width: 991.98px) {
+  /* 1. Jadikan container sebagai area "snap" untuk scrolling */
+  .kups-scroll {
+    scroll-snap-type: x mandatory; /* Wajibkan scroll berhenti pada titik snap */
+  }
+  
+  .kups-scroll .row {
+      gap: 15px;
+      /* 2. Padding kiri & kanan agar kartu pertama & terakhir bisa pas di tengah */
+      /* (100% lebar layar - 85% lebar kartu) / 2 = 7.5% */
+      padding: 0 7.5%;
+  }
+
+  /* 3. Atur lebar dan posisi snap setiap kartu */
+  .kups-scroll .col-lg-4 {
+    flex-basis: 85%; /* Lebar kartu 85% dari layar */
+    scroll-snap-align: center; /* PENTING: Tiap kartu akan berhenti di tengah */
+  }
+}
+/*--------------------------------------------------------------
+# Tampilan Mobile (Responsif)
+--------------------------------------------------------------*/
+@media (max-width: 991.98px) {
+  .kups-scroll {
+    max-width: 100%; /* Lebar penuh di tablet & mobile */
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .kups-scroll .row {
+      gap: 15px;
+  }
+
+  /* Atur lebar kartu agar 1 per scroll */
+  .kups-scroll .col-lg-4 {
+    flex: 0 0 85%;
+    max-width: 85%;
+  }
+}
+
+/* Pengaturan lain yang mungkin Anda perlukan (tidak digabung) */
 .pendapatanChart {
   height: 800px;
   margin: 50px;
   padding: 20px;
   border-radius: 12px;
-  background-color: #fff; /* putih */
+  background-color: #fff;
   box-shadow: 0 10px 10px rgba(0,0,0,0.1);
-}
-.kups-scroll {
-  overflow-x: auto;       /* bikin bisa scroll horizontal */
-  -webkit-overflow-scrolling: touch; /* biar smooth di mobile */
-}
-
-.kups-scroll .row {
-  flex-wrap: nowrap;      /* jangan turun ke bawah */
-}
-
-.kups-scroll::-webkit-scrollbar {
-  height: 8px;            /* scrollbar tipis */
-}
-
-.kups-scroll::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
 }
 
 
