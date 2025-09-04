@@ -25,21 +25,7 @@
                                 @csrf
                                 @method('PUT')
 
-                                {{-- Nama Program --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Nama Program</label>
-                                    <div class="col-sm-10">
-                                        <select name="id_subprogram" class="form-select" required>
-                                            <option value="">Pilih</option>
-                                            @foreach ($subprogram as $data)
-                                                <option value="{{ $data->id }}"
-                                                    {{ $monev->id_subprogram == $data->id ? 'selected' : '' }}>
-                                                    {{ $data->subprogram }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+
 
                                 {{-- Rencana Kegiatan --}}
                                 <div class="row mb-3">
@@ -54,6 +40,16 @@
                                                 </option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>
+                                {{-- Nama Program --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Nama Program</label>
+                                    <div class="col-sm-10">
+
+                                        <input type="text" id="nama_program" name="e_program" class="form-control"
+                                            value="{{ old('e_program', $monev->program) }}">
+
                                     </div>
                                 </div>
 

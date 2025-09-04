@@ -161,6 +161,7 @@
                                             <th>KTH</th>
                                             <th>KUPS</th>
                                             <th>Tahun</th>
+                                            <th>Kategori</th>
                                             <th>Pendapatan</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -172,6 +173,7 @@
                                                 <td>{{ $data->kth->kth ?? '-' }}</td>
                                                 <td>{{ $data->kups }}</td>
                                                 <td>{{ $data->tahun }}</td>
+                                                <td>{{ $data->kategori }}</td>
                                                 <td>{{ $data->pendapatan }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center gap-1">

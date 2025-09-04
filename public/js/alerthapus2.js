@@ -1,5 +1,4 @@
-
-function confirmDelete(id) {
+function confirmDeleteSub(id) {
 
     Swal.fire({
         title: "Apakah kamu yakin?",
@@ -11,11 +10,7 @@ function confirmDelete(id) {
         confirmButtonText: "Ya, hapus!"
     }).then((result) => {
         if (result.isConfirmed) {
-            document.getElementById('formDelete-' + id).submit();
+            document.getElementById('formDeleteSub-' + id).submit();
         }
     });
 }
-
-
-
-

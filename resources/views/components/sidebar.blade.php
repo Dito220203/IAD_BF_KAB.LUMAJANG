@@ -102,7 +102,7 @@
 
 
 
-            {{-- informasi kehutanan --}}
+            {{-- Informasi Kehutanan --}}
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-layout-text-window-reverse"></i>
@@ -111,21 +111,44 @@
                 </a>
 
                 <ul id="tables-nav"
-                    class="nav-content collapse {{ request()->is('kth*') || request()->is('kups*') ? 'show' : '' }}"
+                    class="nav-content collapse {{ request()->routeIs('kth*') || request()->routeIs('kups*') || request()->routeIs('SubpotensiKehutanan*') || request()->routeIs('produkKups*') ? 'show' : '' }}"
                     data-bs-parent="#sidebar-nav">
 
+
+                    {{-- KTH --}}
                     <li>
-                        <a href="{{ route('kth') }}" class="{{ request()->is('kth*') ? 'active' : '' }}">
-                            <i class="bi bi-circle"></i><span>KTH</span>
+                        <a href="{{ route('kth') }}" class="{{ request()->routeIs('kth') ? 'active' : '' }}">
+                            <i class="bi bi-circle"></i>
+                            <span>Kth</span>
+                        </a>
+                    </li>
+
+                    {{-- KUPS --}}
+                    <li>
+                        <a href="{{ route('kups') }}" class="{{ request()->routeIs('kups') ? 'active' : '' }}">
+                            <i class="bi bi-circle"></i>
+                            <span>Kups</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('kups') }}" class="{{ request()->is('kups*') ? 'active' : '' }}">
-                            <i class="bi bi-circle"></i><span>KUPS</span>
+                        <a href="{{ route('produkKups') }}" class="{{ request()->routeIs('produkKups') ? 'active' : '' }}">
+                            <i class="bi bi-circle"></i>
+                            <span>Produk Kups</span>
                         </a>
                     </li>
+
+                    {{-- Potensi Kehutanan Sosial --}}
+                    <li>
+                        <a href="{{ route('SubpotensiKehutanan') }}"
+                            class="{{ request()->routeIs('SubpotensiKehutanan*') ? 'active' : '' }}">
+                            <i class="bi bi-circle"></i>
+                            <span>Potensi IAD Perhutanan Sosial</span>
+                        </a>
+                    </li>
+
                 </ul>
             </li>
+
 
 
             <li class="nav-item">

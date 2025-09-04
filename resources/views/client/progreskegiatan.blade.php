@@ -39,7 +39,7 @@
                                         <p>Penerima : {{ $item->penerima }}</p>
                                     </div>
                                     <div class="progres-footer">
-                                        <form action="{{ route('client.progreskegiatandetail') }}" method="GET">
+                                        <form action="{{ route('client.progreskegiatandetail', $item->id) }}" method="GET">
                                             <button type="submit" class="btn-lihat">Lihat</button>
                                         </form>
                                     </div>

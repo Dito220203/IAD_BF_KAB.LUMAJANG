@@ -20,6 +20,9 @@ use App\Http\Controllers\RencanakerjaController;
 use App\Http\Controllers\SubProgramController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\PotensiKupsController;
+use App\Http\Controllers\ProdukKupsController;
+use App\Http\Controllers\SubpotensiKehutananController;
 use Illuminate\Support\Facades\Route;
 
 //client
@@ -28,7 +31,7 @@ Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer'
 // Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
 // Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
 // Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
-Route::get('/progreskegiatandetail', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
+Route::get('/progreskegiatandetail/{id}', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
 // Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
 // Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])->name('client.petasebarankegiatan');
 // Route::get('/search-profilkawasan', [ClientController::class, 'SearchprofilKawasan'])->name('client.profilkawasan');
@@ -119,6 +122,24 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::put('/kups-update/{id}', [KupsController::class, 'update'])->name('kups.update');
     Route::delete('/kups-delete/{id}', [KupsController::class, 'destroy'])->name('kups.delete');
 
+     Route::get('/produk-kups', [ProdukKupsController::class, 'index'])->name('produkKups');
+     Route::post('/produk-kups', [ProdukKupsController::class, 'store'])->name('produkKups.store');
+     Route::get('/produk-kups/{id}', [ProdukKupsController::class, 'edit'])->name('produkKups.edit');
+     Route::put('/produk-kups/{id}', [ProdukKupsController::class, 'update'])->name('produkKups.update');
+     Route::delete('/produk-kups/{id}', [ProdukKupsController::class, 'destroy'])->name('produkKups.delete');
+
+    Route::get('subpotensi-kehutanan', [SubpotensiKehutananController::class, 'index'])->name('SubpotensiKehutanan');
+    Route::post('subpotensi-kehutanan', [SubpotensiKehutananController::class, 'store'])->name('subpotensi.store');
+    Route::put('subpotensi-kehutanan/{id}', [SubpotensiKehutananController::class, 'update'])->name('subpotensi.update');
+    Route::delete('subpotensi-kehutanan/{id}', [SubpotensiKehutananController::class, 'destroy'])->name('subpotensi.delete');
+
+    // Route::get('potensi-kehutanan', [SubpotensiKehutananController::class, 'index'])->name('SubpotensiKehutanan');
+    Route::post('potensi-kehutanan', [SubpotensiKehutananController::class, 'potensiKehutananStore'])->name('potensikehutanan.store');
+    Route::put('potensi-kehutanan/update/{id}', [SubpotensiKehutananController::class, 'potensiKehutananUpdate'])->name('potensikehutanan.update');
+    Route::delete('potensi-kehutanan/delete/{id}', [SubpotensiKehutananController::class, 'potensiKehutananDelete'])->name('potensikehutanan.delete');
+
+
+
     Route::get('/SubProgram', [SubProgramController::class, 'index'])->name('subprogram');
     Route::post('/create', [SubProgramController::class, 'store'])->name('subrogram.store');
     Route::post('/store-produk', [SubProgramController::class, 'storeProduk'])->name('produk.store');
@@ -126,6 +147,7 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::delete('/Supprogram/{id}/delete', [SubProgramController::class, 'destroy'])->name('subrogram.delete');
     Route::put('/sub-produk/{id}/update', [SubProgramController::class, 'updateProduk'])->name('update.produk');
     Route::delete('/sub-produk/{id}/delete', [SubProgramController::class, 'destroyProduk'])->name('delete.produk');
+
 
     Route::get('/RencanKerja', [RencanakerjaController::class, 'index'])->name('rencanakerja');
     Route::get('/Rencana/create', [RencanakerjaController::class, 'create'])->name('rencana.create');
@@ -144,6 +166,8 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::get('/Progres/edit/{id}', [ProgreskerjaController::class, 'edit'])->name('progres.edit');
     Route::put('/Progres/update/{id}', [ProgreskerjaController::class, 'update'])->name('progres.update');
     Route::delete('/Progres/delete/{id}', [ProgreskerjaController::class, 'destroy'])->name('progres.delete');
+
+    Route::get('/rencana/{id}', [MonevController::class, 'getRencana'])->name('rencana.get');
 
     Route::get('/Monev', [MonevController::class, 'index'])->name('monev');
     Route::get('/create-monev', [MonevController::class, 'create'])->name('monev.create');

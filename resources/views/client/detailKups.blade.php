@@ -24,6 +24,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td class="text-center">{{ $data->kth->kth ?? '-' }}</td>
                                     <td class="text-center">{{ $data->kups }}</td>
+                                    <td class="text-center">{{ $data->kategori }}</td>
 
                                 </tr>
                             @endforeach
