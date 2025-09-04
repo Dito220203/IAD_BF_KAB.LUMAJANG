@@ -16,7 +16,7 @@ class AktivitasController extends Controller
 
         $log = LogAktivitas::with('pengguna')
             ->orderBy('id', 'desc')
-            ->get();
+           ->paginate(10);
         return view('admin.Aktivitas.index', compact('log'));
     }
 }

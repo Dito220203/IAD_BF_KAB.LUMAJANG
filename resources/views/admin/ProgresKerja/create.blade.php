@@ -124,21 +124,15 @@
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">Foto Progres</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control @error('foto') is-invalid @enderror"
-                                           type="file" name="foto" accept="image/*"
-                                           onchange="validateFoto(event)">
-                                    <small class="text-muted">Opsional. Format: jpg, jpeg, png. Maks 2MB.</small>
-                                    <div class="mt-3">
-                                        <img id="preview-foto" src="{{ asset('images/placeholder-image.png') }}"
-                                             alt="Preview Foto"
-                                             style="display:block;width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
-                                        <div class="text-muted mt-1" id="foto-placeholder-ket">
-                                            Belum ada foto, silakan upload jika ada.
+                                    <div id="foto-container">
+                                        <div class="foto-item mb-3">
+                                            <input class="form-control mb-2" type="file" name="foto[]" accept="image/*" onchange="previewFoto(event, this)">
+                                            <img src="{{ asset('images/placeholder-image.png') }}"
+                                                 style="width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
                                         </div>
                                     </div>
-                                    @error('foto')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
+                                    <button type="button" class="btn btn-primary mt-2" onclick="tambahFoto()">+ Tambah Foto</button>
+                                    <small class="text-muted d-block mt-2">Opsional. Format: jpg, jpeg, png. Maks 2MB per foto.</small>
                                 </div>
                             </div>
 
@@ -161,42 +155,48 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
 
     <script>
-        // ================== FOTO VALIDASI ==================
-        function validateFoto(event) {
-            const input = event.target;
-            const file = input.files[0];
-            const preview = document.getElementById('preview-foto');
-            const ket = document.getElementById('foto-placeholder-ket');
+        // ================== PREVIEW FOTO PER INPUT ==================
+        function previewFoto(event, input) {
+            const file = event.target.files[0];
+            const img = input.nextElementSibling;
 
             if (file) {
                 const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
                 if (!allowedTypes.includes(file.type)) {
                     alert("Format foto harus JPG atau PNG!");
-                    resetFoto(input, preview, ket);
+                    input.value = "";
+                    img.src = "{{ asset('images/placeholder-image.png') }}";
                     return;
                 }
 
                 if (file.size > 2 * 1024 * 1024) { // 2MB
                     alert("Ukuran foto maksimal 2MB!");
-                    resetFoto(input, preview, ket);
+                    input.value = "";
+                    img.src = "{{ asset('images/placeholder-image.png') }}";
                     return;
                 }
 
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    ket.style.display = 'none';
+                    img.src = e.target.result;
                 }
                 reader.readAsDataURL(file);
             } else {
-                resetFoto(input, preview, ket);
+                img.src = "{{ asset('images/placeholder-image.png') }}";
             }
         }
 
-        function resetFoto(input, preview, ket) {
-            input.value = "";
-            preview.src = "{{ asset('images/placeholder-image.png') }}";
-            ket.style.display = 'block';
+        // ================== TAMBAH INPUT FOTO DINAMIS ==================
+        function tambahFoto() {
+            const container = document.getElementById('foto-container');
+            const div = document.createElement('div');
+            div.classList.add('foto-item', 'mb-3');
+            div.innerHTML = `
+                <input class="form-control mb-2" type="file" name="foto[]" accept="image/*" onchange="previewFoto(event, this)">
+                <img src="{{ asset('images/placeholder-image.png') }}"
+                     style="width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
+            `;
+            container.appendChild(div);
         }
 
         // ================== LEAFLET MAP ==================
@@ -206,7 +206,6 @@
             maxZoom: 18
         }).addTo(mymap);
 
-        // aktifkan interaksi
         mymap.dragging.enable();
         mymap.scrollWheelZoom.enable();
         mymap.doubleClickZoom.enable();
@@ -216,25 +215,21 @@
         var markers = [];
 
         function onMapClick(e) {
-            // hanya 1 marker
             if (markers.length > 0) {
                 mymap.removeLayer(markers[0]);
                 document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
                 markers = [];
             }
 
-            // tambah marker baru
             let marker = L.marker(e.latlng, { draggable: true }).addTo(mymap);
             markers.push(marker);
 
-            // input hidden
             let html = `
                 <input type="hidden" id="longitude" name="longitude" value="${e.latlng.lng}">
                 <input type="hidden" id="latitude" name="latitude" value="${e.latlng.lat}">
             `;
             document.querySelector('.coordinates-container').insertAdjacentHTML('beforeend', html);
 
-            // update jika digeser
             marker.on('dragend', function(event) {
                 let pos = event.target.getLatLng();
                 document.getElementById("latitude").value = pos.lat;

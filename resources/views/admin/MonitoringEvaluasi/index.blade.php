@@ -63,7 +63,7 @@
                                             <th>Rencana Kegiatan</th>
                                             <th>Input RKA</th>
                                             <th>Status</th>
-                                            <th>Tahun</th>
+                                            <th>Tanggal</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>

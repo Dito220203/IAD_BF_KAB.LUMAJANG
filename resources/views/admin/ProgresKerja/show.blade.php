@@ -113,24 +113,28 @@
 
 
 
-                                {{-- Foto Progres (jika ada) --}}
                                 <div class="mb-3 row">
                                     <label class="col-sm-2 col-form-label">Foto Progres</label>
                                     <div class="col-sm-10">
                                         @php
-                                            $fotoProgres = $progres->fotoProgres()->first();
+                                            $fotoProgres = $progres->fotoProgres()->get();
                                         @endphp
-                                        @if ($fotoProgres)
-                                            <img src="{{ asset('storage/foto_progres/' . $fotoProgres->foto) }}"
-                                                alt="Foto Progres"
-                                                style="width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
+                                        @if ($fotoProgres->isNotEmpty())
+                                            <div class="d-flex flex-wrap gap-3">
+                                                @foreach ($fotoProgres as $foto)
+                                                    <img src="{{ asset('storage/foto_progres/' . $foto->foto) }}"
+                                                        alt="Foto Progres"
+                                                        style="width:200px;height:150px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
+                                                @endforeach
+                                            </div>
                                         @else
                                             <img src="{{ asset('images/placeholder-image.png') }}" alt="Preview Foto"
-                                                style="width:350px;height:250px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
+                                                style="width:200px;height:150px;object-fit:cover;border-radius:5px;border:1px solid #ddd;">
                                             <div class="text-muted mt-1">Belum ada foto progres.</div>
                                         @endif
                                     </div>
                                 </div>
+
 
                                 {{-- Tombol Kembali --}}
                                 <div class="row mb-3">
@@ -148,7 +152,7 @@
 
         <div id="map" style="height: 400px;"></div>
 
-       {{-- Leaflet JS --}}
+        {{-- Leaflet JS --}}
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
         <script>
             var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
