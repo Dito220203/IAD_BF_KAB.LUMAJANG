@@ -24,12 +24,6 @@
                         </iframe>
 
                     </div>
-
-                    {{-- <div class="text-center mt-3">
-          <a class="btn-lihat" href="{{ route('client.regulasi.download', $item->id) }}">
-            Unduh PDF
-          </a>
-        </div> --}}
                 @else
                     <p><em>Tidak ada file regulasi.</em></p>
                 @endif

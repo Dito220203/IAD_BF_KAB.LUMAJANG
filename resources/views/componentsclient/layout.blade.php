@@ -103,7 +103,7 @@
         @endforeach
         <!-- Copyright -->
         <div class="footer-bottom">
-            <p>Support by <a href="https://diskominfo.lumajangkab.go.id/">Dinas Komunikasi dan Informatika Kab.
+            <p>Support by <a href="https://diskominfo.lumajangkab.go.id/" class="showinfo">Dinas Komunikasi dan Informatika Kab.
                     Lumajang</a></p>
         </div>
     </footer>

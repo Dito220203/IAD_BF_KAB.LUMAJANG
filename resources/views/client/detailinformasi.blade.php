@@ -3,10 +3,11 @@
 @section('content')
     <section class="section_page berita-detail">
         <section>
-            <div class="global-title" data-aos="fade-up">
-                <h2>{{ $info->judul }}</h2>
+            <div class="detail-title-wrapper">
+                <div class="global-title" data-aos="fade-up">
+                    <h2>{{ $info->judul }}</h2>
+                </div>
             </div>
-
             <div class="berita-card" data-aos="fade-up">
                 <!-- Foto -->
                 <div class="berita-image">

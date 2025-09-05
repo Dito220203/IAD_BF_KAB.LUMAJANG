@@ -193,6 +193,29 @@ h6 {
   text-align: justify;    
 }
 
+/*--------------------------------------------------------------
+# Perbaikan Khusus untuk Judul Panjang di Halaman Detail
+--------------------------------------------------------------*/
+
+.detail-title-wrapper {
+  /* Batasi lebar maksimum wrapper judul */
+  max-width: 900px;
+  
+  /* Posisikan wrapper di tengah halaman */
+  margin: 0 auto;
+  
+  /* Jaga agar teks di dalamnya tetap rata tengah */
+  text-align: center;
+}
+
+.detail-title-wrapper .global-title h2 {
+  /* Sesuaikan line-height agar jarak antar baris tidak terlalu jauh */
+  line-height: 1.4;
+  
+  /* Beri sedikit ruang agar tidak terlalu mepet */
+  padding: 0 15px; 
+}
+
 .btn-footer-back {
     padding: 10px 22px;
     border-radius: 10px;
@@ -1305,207 +1328,60 @@ section,
   font-family: var(--heading-font);
   font-size: 16px;
 }
-
 /*--------------------------------------------------------------
-# perhutanan Section
+# SECTION PERHUTANAN & KUPS - FINAL GABUNGAN (Dengan Perbaikan)
 --------------------------------------------------------------*/
 
-.perhut-cards .stats-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* icon - label - number terdistribusi */
-  align-items: center;
-  min-height: 180px; /* samakan tinggi semua card, bisa disesuaikan */
-  padding: 20px;
-  
-}
-
-.perhut-cards .stats-label {
-  flex: 1; /* isi area tengah */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-/* Biar label & icon punya jarak rapi */
-.stats-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;            /* jarak antara teks dan icon */
-  text-align: left;    /* teks rata kiri */
-  width: 100%;
-  white-space: normal; /* teks bisa turun baris */
-  word-break: break-word;
-}
-
-/* Supaya icon tidak ikut geser ke bawah */
-.stats-label i {
-  flex-shrink: 0; /* cegah icon mengecil */
-  font-size: 18px; /* bisa sesuaikan */
-}
-
-
-.perhutanan .img {
-  border-radius: 8px;
-  overflow: hidden;
-}
-.perhutanan{
- background-color: #F0F0F0; /* Biru muda seperti gambar */
-  text-align: center;
-  padding-top: 20px;
-  padding-bottom: 30px;
-}
-.perhutanan .img img {
-  transition: 0.6s;
-}
-
-.perhutanan .details {
-  background: color-mix(in srgb, var(--surface-color), transparent 5%);
-  padding: 50px 30px;
-  margin: -100px 30px 0 30px;
-  transition: all ease-in-out 0.3s;
-  position: relative;
-  text-align: center;
-  border-radius: 8px;
-  box-shadow: 0px 0 25px rgba(0, 0, 0, 0.1);
-}
-
-.perhutanan .details .icon {
-  margin: 0;
-  width: 72px;
-  height: 72px;
-  background: var(--accent-color);
-  color: var(--contrast-color);
-  border: 6px solid var(--contrast-color);
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  font-size: 28px;
-  transition: ease-in-out 0.3s;
-  position: absolute;
-  top: -36px;
-  left: calc(50% - 36px);
-}
-
-.perhutanan .details h3 {
-  font-weight: 700;
-  margin: 10px 0 15px 0;
-  font-size: 22px;
-  transition: ease-in-out 0.3s;
-}
-
-.perhutanan .details p {
-  color: color-mix(in srgb, var(--default-color), transparent 10%);
-  line-height: 24px;
-  font-size: 14px;
-  margin-bottom: 0;
-}
-
-.perhutanan .perhutanan-item:hover .details h3 {
-  color: var(--accent-color);
-}
-
-.perhutanan .perhutanan-item:hover .details .icon {
-  background: var(--surface-color);
-  border: 2px solid var(--accent-color);
-}
-
-.perhutanan .perhutanan-item:hover .details .icon i {
-  color: var(--accent-color);
-}
-
-.perhutanan .perhutanan-item:hover .img img {
-  transform: scale(1.2);
-}
-/* ===================== */
-/* RESPONSIVE PERHUTANAN */
-/* ===================== */
-@media (min-width: 992px) {
-  .stats-label {
-    display: flex;
-    justify-content: center;
-    align-items: center;   /* balik lagi ke tengah biar sejajar */
-    gap: 8px;
-    text-align: left;
-    white-space: normal;
-    word-break: break-word;
-  }
-
-  .stats-label i {
-    flex-shrink: 0;
-    position: relative;
-    top: -40px;    /* ini yang bikin icon agak naik */
-    font-size: 18px;
-  }
-}
-/* HP besar (max 768px) */
-@media (max-width: 768px) {
-  .perhutanan-title h2 {
-    font-size: 24px;
-  }
-
-  .stats-card {
-    padding: 15px;
-  }
-
-  .stats-icon {
-    font-size: 28px;
-  }
-
-  .stats-label {
-    font-size: 14px;
-  }
-
-  .stats-number {
-    font-size: 20px;
-  }
-}
-/* HP kecil (max 480px) */
-
-@media (max-width: 480px) {
-  .stats-card {
-    display: flex;
-    flex-direction: column;  /* isi vertikal */
-    align-items: center;
-    text-align: center;
-  }
-
-  .stats-label {
-    white-space: normal;     /* teks bisa multi-line */
-    word-wrap: break-word;
-  }
-
-  .stats-icon {
-    margin-bottom: 8px;
-  }
-}
-
-/*--------------------------------------------------------------
-# KUPS Section - SOLUSI FINAL (Ukuran seperti Perhutanan)
---------------------------------------------------------------*/
-
-/* Pengaturan dasar section */
-.kups {
+/* ================================================== */
+/* A. STYLE UMUM (Berlaku untuk kedua section)
+/* ================================================== */
+.perhutanan, .kups {
   background-color: #F0F0F0;
   text-align: center;
   padding: 40px 0;
-  position: relative;
-  z-index: 10;
 }
 
-/* Wrapper untuk menengahkan area scroll */
-.kups-cards {
+/* ================================================== */
+/* B. STYLE KHUSUS SECTION PERHUTANAN
+/* ================================================== */
+#perhutanan .stats-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-height: 180px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+}
+#perhutanan .stats-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* ================================================== */
+/* C. STYLE KHUSUS SECTION KUPS
+/* ================================================== */
+#kups {
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+
+#kups .kups-cards {
   display: flex;
   justify-content: center;
 }
 
-/* Container scroll ("jendela") */
-.kups-scroll {
+#kups .kups-scroll {
   width: 100%;
-  max-width: 930px; /* Disesuaikan untuk ukuran kartu baru */
+  max-width: 930px;
   overflow-x: auto;
   overflow-y: visible;
   scrollbar-width: none;
@@ -1515,60 +1391,62 @@ section,
   margin-top: -20px;
   margin-bottom: -20px;
 }
-.kups-scroll::-webkit-scrollbar {
+#kups .kups-scroll::-webkit-scrollbar {
   display: none;
 }
 
-/* Container baris untuk semua kartu */
-.kups-scroll .row {
+/* Baris kartu di dalam KUPS */
+#kups .kups-scroll .row {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 30px; /* Jarak antar kartu disesuaikan */
+  flex-wrap: nowrap !important; /* KUNCI PERBAIKAN SLIDER MOBILE */
+  gap: 30px;
   margin: 0;
   justify-content: flex-start;
-  padding: 0 5px; /* Padding kecil untuk presisi */
+  padding: 0 5px;
 }
 
-/* KUNCI UTAMA: Pengaturan ukuran setiap kartu di DESKTOP */
-.kups-scroll .col-lg-4 {
-  /* Paksa ukuran kartu agar sama seperti section Perhutanan */
-  flex-basis: 290px; /* ATUR UKURAN LEBAR KARTU DI SINI */
+/* Ukuran setiap kartu KUPS di DESKTOP */
+#kups .kups-scroll .col-lg-4 {
+  flex-basis: 290px;
   flex-shrink: 0;
   flex-grow: 0;
 }
 
-/* Style kartu KUPS, MENGADOPSI GAYA DARI PERHUTANAN */
-#kups .kups-cards .stats-card {
-  /* Dimensi & Tampilan dari Perhutanan */
+/* Style kartu KUPS */
+#kups .stats-card {
   background: white;
-  border-radius: 0 32px 0 32px; /* Diambil dari Perhutanan */
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1); /* Diambil dari Perhutanan */
+  border-radius: 0 32px 0 32px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  min-height: 180px; /* Samakan dengan Perhutanan */
+  min-height: 180px;
   height: 100%;
-  
-  /* Fungsionalitas dari KUPS */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Tetap space-between agar angka di bawah */
+  justify-content: space-between;
   align-items: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
-#kups .kups-cards .stats-card:hover {
+#kups .stats-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 10px 20px #374b44;
   z-index: 999;
   position: relative;
 }
+#kups .stats-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
 
-/* Pagination Dots (tidak diubah) */
-.kups-pagination {
+/* Pagination Dots KUPS */
+#kups .kups-pagination {
   text-align: center;
   margin-top: 25px;
   padding-bottom: 20px;
 }
-.kups-pagination .dot {
+#kups .kups-pagination .dot {
   cursor: pointer;
   height: 12px;
   width: 12px;
@@ -1576,56 +1454,17 @@ section,
   background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
-  transition: transform 0.3s ease, background-color 0.3s ease; 
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
-.kups-pagination .dot:hover { background-color: #d4b22a; }
-.kups-pagination .dot.active {
+#kups .kups-pagination .dot:hover { background-color: #d4b22a; }
+#kups .kups-pagination .dot.active {
   background-color: #f4c20d;
-  transform: scale(1.5); 
+  transform: scale(1.5);
 }
 
-/* GUNAKAN BLOK INI SEBAGAI PENGGANTI */
-@media (max-width: 991.98px) {
-  /* 1. Jadikan container sebagai area "snap" untuk scrolling */
-  .kups-scroll {
-    scroll-snap-type: x mandatory; /* Wajibkan scroll berhenti pada titik snap */
-  }
-  
-  .kups-scroll .row {
-      gap: 15px;
-      /* 2. Padding kiri & kanan agar kartu pertama & terakhir bisa pas di tengah */
-      /* (100% lebar layar - 85% lebar kartu) / 2 = 7.5% */
-      padding: 0 7.5%;
-  }
-
-  /* 3. Atur lebar dan posisi snap setiap kartu */
-  .kups-scroll .col-lg-4 {
-    flex-basis: 85%; /* Lebar kartu 85% dari layar */
-    scroll-snap-align: center; /* PENTING: Tiap kartu akan berhenti di tengah */
-  }
-}
-/*--------------------------------------------------------------
-# Tampilan Mobile (Responsif)
---------------------------------------------------------------*/
-@media (max-width: 991.98px) {
-  .kups-scroll {
-    max-width: 100%; /* Lebar penuh di tablet & mobile */
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-  
-  .kups-scroll .row {
-      gap: 15px;
-  }
-
-  /* Atur lebar kartu agar 1 per scroll */
-  .kups-scroll .col-lg-4 {
-    flex: 0 0 85%;
-    max-width: 85%;
-  }
-}
-
-/* Pengaturan lain yang mungkin Anda perlukan (tidak digabung) */
+/* ================================================== */
+/* D. PENGATURAN CHART (Hanya untuk KUPS)
+/* ================================================== */
 .pendapatanChart {
   height: 800px;
   margin: 50px;
@@ -1635,158 +1474,64 @@ section,
   box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 }
 
+/* ================================================== */
+/* E. RESPONSIVE - GABUNGAN FINAL
+/* ================================================== */
 
-/*--------------------------------------------------------------
-# Responsive
---------------------------------------------------------------*/
-
-/* Tablet (≤991px) */
-@media (max-width: 991px) {
-  .kups h2 {
-    font-size: 28px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+/* Tampilan Tablet & Mobile (di bawah 992px) */
+@media (max-width: 991.98px) {
+  /* Pengaturan scroll snap untuk KUPS di mobile */
+  #kups .kups-scroll {
+    max-width: 100%;
+    scroll-snap-type: x mandatory;
+  }
+  
+  #kups .kups-scroll .row {
+      gap: 15px;
+      padding: 0 7.5%;
   }
 
-  .stats-card {
-    margin-bottom: 20px;
+  /* Ukuran kartu KUPS di mobile */
+  #kups .kups-scroll .col-lg-4 {
+    flex-basis: 85%;
+    scroll-snap-align: center;
   }
 
-  #pendapatanChart {
+  /* Pengaturan Chart */
+  .pendapatanChart {
     height: 600px !important;
     margin: 30px 20px !important;
     padding: 15px !important;
   }
 }
 
-/* Mobile besar (≤768px) */
-@media (max-width: 768px) {
-  .kups h2 {
-    font-size: 24px;
-  }
+/* Tampilan Mobile Sedang (di bawah 768px) */
+@media (max-width: 767.98px) {
+    /* Pengaturan Perhutanan (Vertikal & lebih kecil) */
+    #perhutanan div.col-lg-3 { /* KUNCI PERBAIKAN KARTU PERHUTANAN */
+        flex: 0 0 100%;
+        max-width: 280px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 25px;
+    }
 
-  .container-kups .row {
-    justify-content: center;
-  }
-
-  .container-kups .col-lg-3.col-md-6 {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-
-  .stats-card {
-    padding: 15px;
-    margin: 12px auto;
-    max-width: 320px;  /* biar tidak terlalu lebar */
-    text-align: center;
-  }
-
-  .stats-icon {
-    font-size: 26px;
-    margin: 0 auto 10px auto;
-  }
-
-  .stats-label {
-    font-size: 14px;
-  }
-
-  .stats-number,
-  .stats-number-kups {
-    font-size: 20px;
-  }
-
-  #pendapatanChart {
-    height: 450px !important;
-    margin: 20px 10px !important;
-    padding: 12px !important;
-  }
+    /* Pengaturan Chart */
+    .pendapatanChart {
+        height: 450px !important;
+        margin: 20px 10px !important;
+        padding: 12px !important;
+    }
 }
 
-/* Mobile kecil (≤480px) */
-@media (max-width: 480px) {
-  .kups h2 {
-    font-size: 20px;
-  }
-
-  .container-kups {
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
-  .stats-card {
-    max-width: 100%;
-    margin: 10px 0;
-    padding: 12px;
-  }
-
-  #pendapatanChart {
-    height: 350px !important;
-    margin: 15px 5px !important;
-    padding: 10px !important;
-  }
+/* Tampilan Mobile Kecil (di bawah 480px) */
+@media (max-width: 479.98px) {
+    .pendapatanChart {
+        height: 350px !important;
+        margin: 15px 5px !important;
+        padding: 10px !important;
+    }
 }
-
-/* ===================== */
-/* Responsive perhut + kups mobile friendly */
-/* ===================== */
-
-/* Tablet (≤991px) */
-@media (max-width: 991px) {
-  .stats-card {
-    margin-bottom: 25px;
-  }
-
-  #pendapatanChart {
-    height: 550px !important;
-    margin: 30px 15px !important;
-    padding: 15px !important;
-  }
-}
-
-/* Mobile besar (≤768px) */
-@media (max-width: 768px) {
-  .stats-card {
-    padding: 15px;
-    margin: 15px auto;
-    max-width: 320px;   /* biar center dan gak terlalu lebar */
-    text-align: center;
-  }
-
-  .stats-icon {
-    font-size: 26px;
-    margin-bottom: 10px;
-  }
-
-  .stats-label {
-    font-size: 14px;
-  }
-
-  .stats-number {
-    font-size: 20px;
-  }
-
-  #pendapatanChart {
-    height: 420px !important;
-    margin: 25px 10px !important;
-    padding: 12px !important;
-  }
-}
-
-/* Mobile kecil (≤480px) */
-@media (max-width: 480px) {
-  .stats-card {
-    max-width: 90%;     /* biar ada spasi kiri kanan */
-    margin: 12px auto;
-    padding: 12px;
-  }
-
-  #pendapatanChart {
-    height: 320px !important;
-    margin: 20px 8px !important;
-    padding: 10px !important;
-  }
-}
-
 
 /*--------------------------------------------------------------
 # Informasi Section
@@ -1894,6 +1639,12 @@ section,
   display: flex;
   justify-content: space-between;
   font-size: 13px;
+}
+.showinfo{
+  color: #196b4a;
+}
+.showinfo:hover{
+  color: #ffc107;
 }
 
 /* Pagination */
@@ -2089,16 +1840,40 @@ section,
 
 
 
-/*--------------------------------------------------------------
-# Video Section
---------------------------------------------------------------*/
-/* Card */
-@media (min-width: 1024px) {
 
+/*--------------------------------------------------------------
+# Video Section - SOLUSI FINAL GABUNGAN
+--------------------------------------------------------------*/
+
+/* Pengaturan dasar wrapper untuk menengahkan */
+.video-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Container utama untuk scrolling ("jendela") */
+.video-cards {
+  display: flex;
+  gap: 35px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  width: 100%; /* Lebar penuh agar bisa diatur max-width */
+  
+  /* Pengaturan untuk DESKTOP: Lebar pas 2 kartu */
+  max-width: 830px; /* (2 x 380px kartu) + 70px gap */
+  justify-content: flex-start; /* Mulai dari kiri di desktop */
+}
+.video-cards::-webkit-scrollbar { 
+  display: none; 
+}
+
+/* Pengaturan untuk setiap kartu video */
 .video-card {
   position: relative;
   display: flex;
-  flex: 0 0 380px;
+  flex: 0 0 380px; /* Ukuran kartu tetap di desktop */
   height: 350px;
   border-radius: 15px;
   overflow: hidden;
@@ -2111,8 +1886,9 @@ section,
 .video-image {
   overflow: hidden;
   position: relative;
+  width: 100%;
+  height: 100%;
 }
-
 .video-image img {
   width: 100%;
   height: 100%;
@@ -2123,23 +1899,21 @@ section,
   transform: scale(1.05);
 }
 
-/* 🔹 Overlay gelap default */
+/* Overlay gelap */
 .video-image::after {
   content: "";
   position: absolute;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4); /* agak gelap */
+  background: rgba(0,0,0,0.4);
   transition: opacity 0.3s ease;
 }
-
-/* Hover → gelap hilang */
 .video-card:hover .video-image::after {
   opacity: 0;
 }
 
-/* Konten */
+/* Konten Teks */
 .video-content {
   position: absolute;
   bottom: 0;
@@ -2148,34 +1922,18 @@ section,
   background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.2));
   color: #fff;
   padding: 15px;
-  transition: transform 0.3s ease;
-  transform: translateY(20%); /* 🔹 teks agak turun default */
-  max-height: 60%; /* biar nggak nutup full gambar */
+  transform: translateY(20%);
+  max-height: 60%;
   overflow-y: hidden;
+  transition: transform 0.3s ease-in-out, max-height 0.3s ease-in-out;
 }
-
-/* Hover → teks naik + full muncul */
 .video-card:hover .video-content {
   transform: translateY(0);
   max-height: 100%;
-  overflow-y: auto; /* kalau teks panjang bisa discroll */
 }
 
-.video-content h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
-  color: #fff;
-}
-
-.video-content p {
-  font-size: 14px;
-  color: #ddd;
-  line-height: 1.4em;
-  margin-bottom: 10px;
-  display: block; /* 🔹 selalu tampil penuh */
-  max-height: none; /* hilangkan batasan clamp */
-  -webkit-line-clamp: unset;
-}
+.video-content h3 { font-size: 18px; margin-bottom: 8px; color: #fff; }
+.video-content p { font-size: 14px; color: #ddd; line-height: 1.4em; }
 
 /* Footer */
 .video-footer {
@@ -2185,92 +1943,54 @@ section,
   font-size: 13px;
   margin-top: 8px;
 }
+.video-footer span { color: #fff; }
 
-.video-footer span {
-  color: #fff;
-}
-
-.video-footer a {
-  color: #ffcc00;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.video-footer a:hover {
-  text-decoration: underline;
-}
-
+/* Pagination Dots */
 .video-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 25px;
 }
-
 .video-pagination .dot {
   width: 10px;
   height: 10px;
   background-color: #bbb;
   border-radius: 50%;
-  display: inline-block;
-  transition: all 0.3s ease;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
-
-.video-pagination .dot:hover {
-  background-color: #888;
-  transform: scale(1.2);
-}
-
 .video-pagination .dot.active {
-  background-color: #f39c12; /* warna kuning/oranye */
+  background-color: #f39c12;
   transform: scale(1.4);
 }
 
-/* Cards wrapper */
-.video-cards {
-  display: flex;
-  justify-content: center; /* biar center default */
-  gap: 35px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 0;              /* ✅ fix: hilangkan padding ekstra */
-  margin-top: 0;           /* ✅ fix: biar nempel sama global-title */
-  scrollbar-width: none;
-}
-.video-cards::-webkit-scrollbar { display: none; }
-
-/* Desktop: tampilkan 2 card per layar */
-.video-cards {
-  justify-content: flex-start;
-  max-width: calc(380px * 2 + 70px); /* 2 card + gap */
-  margin: 0 auto; /* biar center container */
-  gap: 70px;
-}
-
+/*--------------------------------------------------------------
+# RESPONSIVE KHUSUS VIDEO
+--------------------------------------------------------------*/
 @media (max-width: 767px) {
+  /* Hapus max-width agar container full-width */
   .video-cards {
-    justify-content: center;
-    gap: 0; /* hilangkan jarak antar card */
-    padding: 0; /* ✅ fix mobile juga */
+    max-width: none; 
+    
+    /* Aktifkan scroll snap untuk efek carousel */
+    scroll-snap-type: x mandatory;
+    
+    /* Padding kiri & kanan agar kartu pertama/terakhir bisa pas di tengah */
+    padding: 0 5%;
+    
+    /* Jarak antar kartu */
+    gap: 15px; 
   }
 
+  /* Atur lebar dan posisi snap setiap kartu */
   .video-card {
-    flex: 0 0 90%;
-    max-width: 90%;
+    flex: 0 0 90%; /* Lebar kartu 90% dari layar */
     height: 320px;
+    scroll-snap-align: center; /* Tiap kartu akan berhenti di tengah */
   }
 }
-
-}
-
-
-
-
-
-
-
 
 
 
@@ -2373,7 +2093,7 @@ section,
 
 .contact .php-email-form button[type=submit] {
   color: var(--contrast-color);
-  background: var(--accent-color);
+  background: #196b4a;
   border: 0;
   padding: 10px 30px;
   transition: 0.4s;
@@ -2381,7 +2101,7 @@ section,
 }
 
 .contact .php-email-form button[type=submit]:hover {
-  background: color-mix(in srgb, var(--accent-color), transparent 20%);
+  background: #ffc107;
 }
 
 
@@ -2475,7 +2195,8 @@ section,
     cursor: pointer;
 }
 .search-box button:hover {
-    background: #145a3c;
+    background: #ffc107;
+;
 }
 
 /* Progres wrapper */
@@ -2555,6 +2276,8 @@ section,
     background: #ffc107;
 }
 
+
+
 /* Scrollable list */
 .progres-list {
     max-height: 600px; /* tampil maksimal 3 item-an */
@@ -2608,6 +2331,10 @@ section,
     color: #444;
 }
 
+/*--------------------------------------------------------------
+# GALERI DOKUMENTASI - SOLUSI FINAL
+--------------------------------------------------------------*/
+
 .swiper {
   width: 100%;
   padding-top: 20px;
@@ -2618,28 +2345,122 @@ section,
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 5px;
   overflow: visible;
-   
 }
 
 .swiper-slide img {
+  display: block; /* Pastikan gambar adalah block-level element */
   width: 100%;
   height: auto;
-  max-width: 100%;
-  max-height: 250px;   
-  object-fit: cover;  
-  border-radius: 15px; 
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 15px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .swiper-slide img:hover {
-  z-index: 10;
-  position: relative;
-  transform: scale(1.05); /* sedikit zoom pas hover */
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15); /* bayangan lembut */
+}
+.swiper-slide img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
+/*--------------------------------------------------------------
+# GALERI DOKUMENTASI - SOLUSI FINAL
+--------------------------------------------------------------*/
+
+.documentation-gallery {
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+/* KASUS 1, 2, 3: LAYOUT STATIS (BUKAN SLIDER) */
+.documentation-gallery:not(.swiper-initialized) .swiper-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.documentation-gallery:not(.swiper-initialized) .swiper-slide {
+  width: 30%; /* Default untuk 3 gambar */
+  max-width: 350px;
+}
+
+.documentation-gallery:not(.swiper-initialized)[data-photo-count="1"] .swiper-slide {
+  width: 65%;
+  max-width: 550px;
+}
+
+.documentation-gallery:not(.swiper-initialized)[data-photo-count="2"] .swiper-slide {
+  width: 48%;
+}
+
+.documentation-gallery:not(.swiper-initialized) .swiper-slide img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.documentation-gallery:not(.swiper-initialized) .swiper-slide img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* KASUS 4+: LAYOUT SLIDER (SAAT SWIPER AKTIF) */
+.documentation-gallery.swiper-initialized {
+  cursor: grab;
+}
+
+.documentation-gallery.swiper-initialized .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.documentation-gallery.swiper-initialized .swiper-slide img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+/* Atur lebar slide untuk efek 'auto' */
+#detail-kegiatan .swiper-slide {
+  width: 70%; /* Slide akan mengambil 70% dari lebar container */
+}
+
+/* Di layar besar, buat lebih kecil agar 3 muat */
+@media (min-width: 1024px) {
+  #detail-kegiatan .swiper-slide {
+    width: 40%;
+  }
+}
+
+/* Transisi untuk slide yang tidak aktif */
+#detail-kegiatan .swiper-slide:not(.swiper-slide-active) {
+  transform: scale(0.9);
+  opacity: 0.7;
+  transition: transform 0.4s, opacity 0.4s;
+}
+
+#detail-kegiatan .swiper-slide.swiper-slide-active {
+    transition: transform 0.4s, opacity 0.4s;
+}
+
+/* Responsif untuk gambar di semua kasus */
+@media (max-width: 768px) {
+  .documentation-gallery:not(.swiper-initialized) .swiper-wrapper {
+    flex-direction: column; /* Susun vertikal jika statis di mobile */
+  }
+  .documentation-gallery:not(.swiper-initialized) .swiper-slide {
+    width: 90%; /* Ambil lebar penuh */
+    max-width: 400px;
+  }
+  .documentation-gallery.swiper-initialized .swiper-slide img,
+  .documentation-gallery:not(.swiper-initialized) .swiper-slide img {
+    height: 200px; /* Samakan tinggi gambar di mobile */
+  }
+}
 
 @media (max-width: 768px) {
   .swiper-slide img {

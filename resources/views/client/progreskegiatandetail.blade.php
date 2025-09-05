@@ -1,101 +1,3 @@
-{{-- @extends('componentsclient.layout')
-@section('content')
-
-
-    <section class="section_page ">
-
-        <div class="global-title" data-aos="fade-up">
-            <h2>Detail Progres Kegiatan</h2>
-        </div>
-
-        <section id="detail-kegiatan" class="container">
-            <div class="detail-card">
-                <h3>Normalisasi Ranu Pani</h3>
-                <p><strong>Tanggal:</strong> 01 Agustus 2025 13:45</p>
-                <p><strong>Sumber Anggaran:</strong> APBD</p>
-                <p><strong>Jumlah Anggaran:</strong> Rp xx.xxx.xxx,xx</p>
-                <p><strong>Penerima:</strong> Masyarakat</p>
-
-                <hr>
-
-                <h4>Dokumentasi</h4>
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
-
-                        <div class="swiper-slide">
-                            <img src="{{ asset('client/assets/img/prdt3.jpg') }}" alt="Dokumentasi 1">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('client/assets/img/prdt5.jpg') }}" alt="Dokumentasi 2">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('client/assets/img/prdt4.jpg') }}" alt="Dokumentasi 3">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('client/assets/img/prdt3.jpg') }}" alt="Dokumentasi 1">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('client/assets/img/prdt5.jpg') }}" alt="Dokumentasi 2">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('client/assets/img/prdt4.jpg') }}" alt="Dokumentasi 3">
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <hr>
-
-                <h4>Peta Lokasi</h4>
-                <iframe src="https://www.google.com/maps?q=-8.023,112.92&hl=id&z=14&output=embed" width="100%"
-                    height="400" style="border:0;" allowfullscreen>
-                </iframe>
-            </div>
-        </section>
-
-        <div class="text-center mt-4">
-            <a href="{{ url('/progreskegiatan') }}" class="btn-footer-back">
-                ← Kembali ke Daftar
-            </a>
-        </div>
-
-        <!-- SwiperJS CSS & JS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-        <script>
-            var swiper = new Swiper(".mySwiper", {
-                effect: "coverflow",
-                grabCursor: true,
-                centeredSlides: true,
-                loop: true,
-                autoplay: {
-                    delay: 2500,
-                    disableOnInteraction: false,
-                },
-                slidesPerView: 1, // default mobile
-                coverflowEffect: {
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 150,
-                    modifier: 1,
-                    slideShadows: false,
-                },
-                breakpoints: {
-                    768: {
-                        slidesPerView: 2
-                    },
-                    1024: {
-                        slidesPerView: 3
-                    }
-                }
-            });
-        </script>
-
-    </section>
-@endsection --}}
-
 @extends('componentsclient.layout')
 @section('content')
     <section class="section_page ">
@@ -114,9 +16,13 @@
                 <p><strong>Penerima:</strong> {{ $progres->penerima }}</p>
 
                 <hr>
+                @php
+                    // Pindahkan ini ke atas
+                    $photoCount = $progres->fotoProgres->count();
+                @endphp
 
                 <h4>Dokumentasi</h4>
-                <div class="swiper mySwiper">
+                <div class="documentation-gallery" data-photo-count="{{ $photoCount }}">
                     <div class="swiper-wrapper">
                         @forelse($progres->fotoProgres as $foto)
                             <div class="swiper-slide">
@@ -133,18 +39,7 @@
                 <hr>
 
                 <h4>Peta Lokasi</h4>
-                {{-- @if ($progres->maps->count())
-                    @php
-                        $firstMap = $progres->maps->first();
-                        $lat = $firstMap->latitude;
-                        $lng = $firstMap->longitude;
-                    @endphp
 
-                    <iframe
-                        src="https://www.google.com/maps?q={{ $lat }},{{ $lng }}&hl=id&z=14&output=embed"
-                        width="100%" height="400" style="border:0;" allowfullscreen>
-                    </iframe>
-                @endif --}}
                 <div id="map" style="height: 400px;"></div>
 
                 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -169,46 +64,52 @@
 
 
             </div>
-        </section>
 
-        <div class="text-center mt-4">
-            <a href="{{ url('/progreskegiatan') }}" class="btn-footer-back">
-                ← Kembali ke Daftar
-            </a>
-        </div>
 
-        <!-- SwiperJS CSS & JS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+            <div class="text-center mt-4">
+                <a href="{{ url('/progreskegiatan') }}" class="btn-footer-back">
+                    ← Kembali ke Daftar
+                </a>
+            </div>
 
-        <script>
+            {{-- HANYA JALANKAN SWIPER JIKA GAMBAR LEBIH DARI 3 --}}
+
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+            <script>
+    const gallery = document.querySelector('.documentation-gallery');
+    if (gallery) {
+        const photoCount = parseInt(gallery.getAttribute('data-photo-count'), 10) || 0;
+
+        if (photoCount > 3) {
+            gallery.classList.add('swiper', 'mySwiper');
+
             var swiper = new Swiper(".mySwiper", {
-                effect: "coverflow",
+                // === PERUBAHAN UTAMA DI SINI ===
+                effect: "slide", // Ganti dari "coverflow" menjadi "slide"
                 grabCursor: true,
                 centeredSlides: true,
+                slidesPerView: "auto", // Biarkan Swiper mengatur jumlah slide
+                spaceBetween: 30, // Jarak antar slide
+                // ================================
+                
                 loop: true,
                 autoplay: {
-                    delay: 2500,
+                    delay: 3000,
                     disableOnInteraction: false,
                 },
-                slidesPerView: 1, // default mobile
-                coverflowEffect: {
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 150,
-                    modifier: 1,
-                    slideShadows: false,
-                },
-                breakpoints: {
-                    768: {
-                        slidesPerView: 2
-                    },
-                    1024: {
-                        slidesPerView: 3
-                    }
-                }
-            });
-        </script>
+                
+                // Hapus atau komentari blok coverflowEffect
+                // coverflowEffect: { ... }, 
 
+                // Breakpoints bisa disederhanakan atau dihapus
+                // breakpoints: { ... }
+            });
+        }
+    }
+</script>
+
+        </section>
     </section>
 @endsection

@@ -26,7 +26,7 @@
                                     <td>{{ $rk->subprogram->subprogram ?? '-'  }}</td>
                                     <td>{{ $rk->judul }}</td>
                                     <td>{{ $rk->lokasi }}</td>
-                                    <td>{{ $rk->tahun }}</td>
+                                    <td>{{ $rk->tanggal }}</td>
                                     <td>{{ $rk->opd->nama ?? '-'  }}</td>
                                 </tr>
                             @empty

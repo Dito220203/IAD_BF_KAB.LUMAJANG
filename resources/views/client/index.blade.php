@@ -520,7 +520,7 @@
 
                                 <div class="informasi-footer">
                                     <span>{{ $info->tanggal }}</span>
-                                    <a href="{{ route('informasi.show', $info->id) }}">Lebih Lengkap...</a>
+                                    <a href="{{ route('informasi.show', $info->id) }}" class="showinfo">Lebih Lengkap...</a>
                                 </div>
                             </div>
                         </div>
@@ -627,7 +627,7 @@
                                     <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
                                     <div class="video-footer">
                                         <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
-                                        <span>Lebih Lengkap...</span>
+                                        <span class="showinfo">Lebih Lengkap...</span>
                                     </div>
                                 </div>
                             </a>
@@ -641,8 +641,6 @@
                 <div class="video-pagination" id="videoPagination"></div>
             </div>
         </section>
-
-
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const cardsContainer = document.querySelector(".video-cards");
@@ -656,15 +654,22 @@
                     const firstCard = cardsContainer.querySelector(".video-card");
                     if (!firstCard) return;
 
-                    const style = window.getComputedStyle(firstCard);
-                    const marginRight = parseInt(style.marginRight) || 0;
-                    cardWidth = firstCard.offsetWidth + marginRight;
+                    // Cek apakah di mobile atau desktop
+                    const isMobile = window.innerWidth < 768;
+                    const cardsToScroll = isMobile ? 1 : 2; // Mobile geser 1, Desktop geser 2
 
-                    // tampilkan 4 card, scroll 3 card
-                    scrollStep = cardWidth * 3;
+                    // Ambil gap langsung dari CSS untuk akurasi
+                    const gap = parseInt(window.getComputedStyle(cardsContainer).gap) || 0;
+                    cardWidth = firstCard.offsetWidth + gap;
+                    scrollStep = cardWidth * cardsToScroll;
 
-                    // hitung total page
-                    totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
+                    // Kalkulasi total halaman yang lebih akurat
+                    if (cardsContainer.scrollWidth > cardsContainer.clientWidth) {
+                        totalPages = Math.ceil((cardsContainer.scrollWidth - cardsContainer.clientWidth + gap) /
+                            scrollStep) + 1;
+                    } else {
+                        totalPages = 1;
+                    }
 
                     updatePagination();
                 }
@@ -750,7 +755,7 @@
                                 <div class="error-message"></div>
                                 <div class="sent-message">Your message has been sent. Thank you!</div>
 
-                                <button type="submit">Send Message</button>
+                                <button type="submit" >Send Message</button>
                             </div>
 
 

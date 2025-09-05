@@ -21,7 +21,7 @@ return new class extends Migration
                 ->on('rencana_kerjas')
                 ->onDelete('cascade');
             $table->string('lokasi')->nullable();
-            $table->date('tanggal')->nullable();
+            $table->date('tahun')->nullable();
             $table->string('anggaran')->nullable();
             $table->unsignedBigInteger('id_opd')->nullable();
             $table->foreign('id_opd')
