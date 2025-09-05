@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('monevs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
-            $table->string('program');
+             $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
             $table->unsignedBigInteger('id_renja')->nullable();
             $table->foreign('id_renja')
                 ->references('id')

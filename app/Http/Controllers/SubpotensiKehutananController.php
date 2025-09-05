@@ -76,6 +76,7 @@ class SubpotensiKehutananController extends Controller
         $request->validate([
             'id_subpotensi' => 'required|exists:subpotensi_kehutanans,id',
             'gambar' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'judul' => 'required',
             'keterangan' => 'required',
         ]);
 
@@ -84,6 +85,7 @@ class SubpotensiKehutananController extends Controller
         PotensiKehutanan::create([
             'id_pengguna' => Auth::guard('pengguna')->id(),
             'id_subpotensi' => $request->id_subpotensi,
+            'judul' => $request->judul,
             'gambar' => $filePath,
             'keterangan' => $request->keterangan,
         ]);
@@ -99,11 +101,13 @@ class SubpotensiKehutananController extends Controller
 
         $request->validate([
             'id_subpotensi' => 'required|exists:subpotensi_kehutanans,id',
+            'e_judul' => 'required',
             'e_keterangan' => 'required',
         ]);
 
         $data = [
             'id_subpotensi' => $request->id_subpotensi,
+            'judul' => $request->e_judul,
             'keterangan' => $request->e_keterangan,
         ];
 

@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="progres-footer">
                                         @if ($item->file)
-                                            <a href="{{ route('client.detailregulasi' , $item->id) }}" >
+                                            <a href="{{ route('client.detailregulasi', $item->id) }}">
                                                 <button class="btn-lihat">Lihat</button>
                                             </a>
                                         @else

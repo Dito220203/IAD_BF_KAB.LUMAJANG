@@ -104,7 +104,7 @@
                                     <tbody>
                                         @foreach ($kth as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $kth->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->kth }}</td>
                                                 <td>{{ $data->luas }}</td>
                                                 <td>
@@ -129,7 +129,9 @@
                                     </tbody>
                                 </table>
                             </div>
-
+                            <div class="mt-3">
+                                {{ $kth->links('vendor.pagination.bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

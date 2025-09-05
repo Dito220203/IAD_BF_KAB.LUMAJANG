@@ -207,7 +207,7 @@
                                     </div>
                                 </a>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -288,194 +288,112 @@
 
                 <div class="kups-cards" data-aos="fade-down" data-aos-delay="200">
                     <div class="kups-scroll">
-                        <div class="row gy-4 flex-nowrap">
-
-                            <div class="col-lg-4 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fa-solid fa-cow"></i></div>
-                                        <p class="stats-label">POTENSI PETERNAKAN</p>
-                                        <span class="stats-number purecounter" data-purecounter-start="0"
-                                            data-purecounter-end="123" data-purecounter-duration="1"></span>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <div class="col-lg-4 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fas fa-mountain"></i></div>
-                                        <p class="stats-label">POTENSI GUNUNG</p>
-                                        <span class="stats-number">88</span>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <div class="col-lg-4 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fa-solid fa-leaf"></i></div>
-                                        <p class="stats-label">POTENSI PERKEBUNAN</p>
-                                        <span class="stats-number">154</span>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <div class="col-lg-4 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fa-solid fa-fish"></i></div>
-                                        <p class="stats-label">POTENSI PERIKANAN</p>
-                                        <span class="stats-number">72</span>
-                                    </div>
-                                </a>
-                            </div>
-
+                        <div class="row gy-4">
+                            @foreach ($subpotensis as $subpotensi)
+                                <div class="col-lg-4 col-md-6">
+                                    <a href="{{ route('client.daftarpotensi', ['id' => $subpotensi->id]) }}">
+                                        <div class="stats-card">
+                                            <div class="stats-icon">
+                                                {{-- kalau ada field icon di database --}}
+                                                @if (!empty($subpotensi->icon))
+                                                    <i class="{{ $subpotensi->icon }}"></i>
+                                                @else
+                                                    <i class="fa-solid fa-leaf"></i> {{-- default --}}
+                                                @endif
+                                            </div>
+                                            <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
+                                            <span class="stats-number purecounter" data-purecounter-start="0"
+                                                data-purecounter-end="{{ $subpotensi->jumlah ?? 0 }}"
+                                                data-purecounter-duration="1"></span>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
                         </div>
+
                     </div>
 
                 </div>
-                <div class="kups-pagination" id="kupsPagination"></div>
 
-                <div data-aos="fade-up" data-aos-delay="250" id="pendapatanChart" class="pendapatanChart">
+                <div class="kups-pagination" id="kupsPagination"></div>
+                <div class="filter-tahun" style="margin-bottom: 15px;">
+                    <label for="tahunSelect">Pilih Tahun:</label>
+                    <select id="tahunSelect">
+                        @foreach ($years as $year)
+                            <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
+
+                <div data-aos="fade-up" data-aos-delay="250" id="pendapatanChart" class="pendapatanChart"></div>
+
+                <script src="https://code.highcharts.com/highcharts.js"></script>
+                <script src="https://code.highcharts.com/highcharts-3d.js"></script>
 
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
-                        // Contoh data, nanti bisa diganti dari card
-                        const dataValues = [
-                            ['Pisang', 182.93],
-                            ['Olahan Susu', 222.44],
-                            ['Potensi Peternakan', 151.41],
-                            ['Olahan Kopi', 154.00]
-                        ];
+                        const tahunSelect = document.getElementById("tahunSelect");
 
-                        Highcharts.chart('pendapatanChart', {
-                            chart: {
-                                type: 'pie',
-                                backgroundColor: '#fff', // putih
-                                options3d: {
-                                    enabled: true,
-                                    alpha: 30, // kemiringan pas, tidak terlalu miring
-                                    beta: 0
-                                }
-                            },
-                            title: {
-                                text: 'Nilai Ekonomi Tiap KUPS'
-                            },
-                            subtitle: {
-                                text: 'Unit: Dalam Rupiah',
-                                align: 'right'
-                            },
-                            plotOptions: {
-                                pie: {
-                                    allowPointSelect: true,
-                                    cursor: 'pointer',
-                                    depth: 25, // tipis → tidak timpang tindih
-                                    borderWidth: 2, // garis pemisah antar slice
-                                    borderColor: '#fff', // garis putih biar rapi
-                                    dataLabels: {
+                        function renderChart(dataValues, tahun) {
+                            Highcharts.chart('pendapatanChart', {
+                                chart: {
+                                    type: 'pie',
+                                    backgroundColor: '#fff',
+                                    options3d: {
                                         enabled: true,
-                                        format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
-                                        connectorColor: 'silver'
-                                    },
-                                    showInLegend: true
-                                }
-                            },
-                            tooltip: {
-                                pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
-                            },
-                            series: [{
-                                name: 'Pendapatan',
-                                data: [
-                                    ['Pisang', 182.93],
-                                    ['Olahan Susu', 222.44],
-                                    ['Potensi Peternakan', 151.41],
-                                    ['Olahan Kopi', 154.00]
-                                ],
-                                colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
-                            }]
-                        });
+                                        alpha: 30
+                                    }
+                                },
+                                title: {
+                                    text: 'Nilai Ekonomi Tiap KUPS'
+                                },
 
-
-                        // --- GANTI SCRIPT PAGINATION LAMA ANDA DENGAN YANG INI ---
-
-                        const kupsCardsContainer = document.querySelector(".kups-scroll .row");
-                        const kupsPagination = document.getElementById("kupsPagination");
-
-                        if (kupsCardsContainer && kupsPagination) {
-                            let cardWidth = 0;
-                            let scrollStep = 0;
-                            let totalPages = 0;
-
-                            function setupKupsPagination() {
-                                // ==================================================================
-                                // INI PERBAIKANNYA: Targetkan '.col-lg-4' sesuai HTML Anda
-                                const firstCard = kupsCardsContainer.querySelector(".col-lg-4");
-                                // ==================================================================
-                                if (!firstCard) return;
-
-                                const isMobile = window.innerWidth < 992;
-                                const cardsToScroll = isMobile ? 1 : 3;
-
-                                const gap = parseInt(window.getComputedStyle(kupsCardsContainer).gap) || 20;
-                                cardWidth = firstCard.offsetWidth + gap;
-                                scrollStep = cardWidth * cardsToScroll;
-
-                                // Cek jika ada cukup kartu untuk di-scroll
-                                if (kupsCardsContainer.scrollWidth > kupsCardsContainer.clientWidth) {
-                                    totalPages = Math.ceil((kupsCardsContainer.scrollWidth - kupsCardsContainer.clientWidth +
-                                        gap) / scrollStep) + 1;
-                                } else {
-                                    totalPages = 1;
-                                }
-
-                                updateKupsPaginationDots();
-                            }
-
-                            function updateKupsPaginationDots() {
-                                kupsPagination.innerHTML = "";
-
-                                if (totalPages <= 1) {
-                                    return;
-                                }
-
-                                for (let i = 0; i < totalPages; i++) {
-                                    const dot = document.createElement("span");
-                                    dot.classList.add("dot");
-                                    if (i === 0) dot.classList.add("active");
-
-                                    dot.addEventListener("click", () => {
-                                        kupsCardsContainer.parentElement.scrollTo({
-                                            left: i * scrollStep,
-                                            behavior: "smooth",
-                                        });
-                                    });
-                                    kupsPagination.appendChild(dot);
-                                }
-                            }
-
-                            function setActiveKupsDot() {
-                                const dots = kupsPagination.querySelectorAll(".dot");
-                                if (dots.length === 0) return;
-
-                                const container = kupsCardsContainer.parentElement;
-                                // Gunakan pembulatan yang lebih presisi untuk posisi scroll
-                                const index = Math.floor((container.scrollLeft + container.clientWidth / 2) / scrollStep);
-
-                                dots.forEach((dot, i) => {
-                                    dot.classList.toggle("active", i === index);
-                                });
-                            }
-
-                            // Event listeners
-                            window.addEventListener("resize", setupKupsPagination);
-                            kupsCardsContainer.parentElement.addEventListener("scroll", setActiveKupsDot);
-                            window.addEventListener('load', setupKupsPagination);
-                            setupKupsPagination();
+                                subtitle: {
+                                    text: 'Unit: Dalam Rupiah - Tahun: ' + tahun,
+                                    align: 'right'
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        allowPointSelect: true,
+                                        cursor: 'pointer',
+                                        depth: 25,
+                                        borderWidth: 2,
+                                        borderColor: '#fff',
+                                        dataLabels: {
+                                            enabled: true,
+                                            format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
+                                            connectorColor: 'silver'
+                                        },
+                                        showInLegend: true
+                                    }
+                                },
+                                tooltip: {
+                                    pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
+                                },
+                                series: [{
+                                    name: 'Pendapatan',
+                                    data: dataValues,
+                                    colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
+                                }]
+                            });
                         }
+
+                        // Render awal chart
+                        renderChart(@json($chartData), {{ $currentYear }});
+
+                        // Event filter tahun
+                        tahunSelect.addEventListener("change", function() {
+                            const selectedYear = this.value;
+                            fetch(`/kups/chart-data/${selectedYear}`)
+                                .then(res => res.json())
+                                .then(data => renderChart(data, selectedYear));
+                        });
                     });
                 </script>
+
+
 
         </section>
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->

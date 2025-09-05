@@ -47,7 +47,7 @@
                                     <label class="col-sm-2 col-form-label">Nama Program</label>
                                     <div class="col-sm-10">
                                         <input type="text" id="nama_program" name="program" class="form-control"
-                                            value="{{ old('program', $monev->program) }}" readonly>
+                                            value="{{ old('program', $monev->subprogram->subprogram ?? '-') }}" readonly>
                                     </div>
                                 </div>
 

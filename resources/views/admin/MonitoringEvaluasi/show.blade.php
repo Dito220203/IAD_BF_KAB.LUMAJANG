@@ -19,13 +19,14 @@
                     <div class="card">
                         <div class="card-body mt-3">
                             <table class="table table-bordered">
-                                <tr>
-                                    <th>Subprogram</th>
-                                    <td>{{ $monev->program}}</td>
-                                </tr>
+
                                 <tr>
                                     <th>Rencana Kegiatan</th>
                                     <td>{{ $monev->rencanaKerja->judul ?? '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Subprogram</th>
+                                    <td>{{ $monev->subprogram->subprogram ?? '-' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Lokasi</th>
@@ -43,7 +44,7 @@
                                     <th>Perangkat Daerah</th>
                                     <td>{{ $monev->opd->nama ?? '-' }}</td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <th>RKA</th>
                                     <td>{{ $monev->rka }}</td>
                                 </tr>

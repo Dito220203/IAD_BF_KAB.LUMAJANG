@@ -12,6 +12,7 @@ class PotensiKehutanan extends Model
     protected $fillable = [
         'id_pengguna',
         'id_subpotensi',
+        'judul',
         'gambar',
         'keterangan'
     ];

@@ -74,9 +74,10 @@ Route::get('/detailvideo', [ClientController::class, 'detailvideo'])->name('clie
 // Route::get('/detailpotensipertanian', [ClientController::class, 'detailpotensipertanian'])->name('client.detailpotensipertanian');
 
 
-Route::get('/daftarpotensi', [ClientController::class, 'daftarpotensi'])->name('client.daftarpotensi');
-Route::get('/detailpotensi', [ClientController::class, 'detailpotensi'])->name('client.detailpotensi');
-
+Route::get('/daftarpotensi/{id}', [ClientController::class, 'daftarpotensi'])->name('client.daftarpotensi');
+Route::get('/detailpotensi/{id}', [ClientController::class, 'detailpotensi'])
+    ->name('client.detailpotensi');
+    Route::get('/kups/chart-data/{tahun}', [ClientController::class, 'chartData']);
 //tamabahan potensi
 
 

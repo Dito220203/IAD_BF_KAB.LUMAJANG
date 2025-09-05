@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->foreignId('id_subpotensi')->references('id')->on('subpotensi_kehutanans')->onDelete('cascade');
+            $table->string('judul');
             $table->string('gambar');
             $table->longText('keterangan');
             $table->timestamps();

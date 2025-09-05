@@ -17,36 +17,50 @@ class MonevController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $user = Auth::guard('pengguna')->user();
-        $query = Monev::query();
+public function index(Request $request)
+{
+    $user = Auth::guard('pengguna')->user();
+    $query = Monev::query();
 
-        if ($user->level !== 'Super Admin') {
-            $query->where('id_pengguna', $user->id);
-        }
-
-        if ($request->filled('triwulan')) {
-            $triwulan = $request->triwulan;
-            $tahun = now()->year;
-
-            if ($triwulan == 1) {
-                $query->whereBetween('created_at', ["$tahun-01-01", "$tahun-03-31"]);
-            } elseif ($triwulan == 2) {
-                $query->whereBetween('created_at', ["$tahun-04-01", "$tahun-06-30"]);
-            } elseif ($triwulan == 3) {
-                $query->whereBetween('created_at', ["$tahun-07-01", "$tahun-09-30"]);
-            } elseif ($triwulan == 4) {
-                $query->whereBetween('created_at', ["$tahun-10-01", "$tahun-12-31"]);
-            }
-        }
-
-        $monev = $query->orderBy('created_at', 'desc')
-            ->paginate(10)
-            ->withQueryString();
-
-        return view('admin.MonitoringEvaluasi.index', compact('monev'));
+    if ($user->level !== 'Super Admin') {
+        $query->where('id_pengguna', $user->id);
     }
+
+    // Filter Triwulan
+    if ($request->filled('triwulan')) {
+        $triwulan = $request->triwulan;
+
+        switch ($triwulan) {
+            case 1:
+                $query->whereMonth('tahun', '>=', 1)->whereMonth('tahun', '<=', 3);
+                break;
+            case 2:
+                $query->whereMonth('tahun', '>=', 4)->whereMonth('tahun', '<=', 6);
+                break;
+            case 3:
+                $query->whereMonth('tahun', '>=', 7)->whereMonth('tahun', '<=', 9);
+                break;
+            case 4:
+                $query->whereMonth('tahun', '>=', 10)->whereMonth('tahun', '<=', 12);
+                break;
+        }
+    }
+
+    // Filter Tahun
+    if ($request->filled('tahun')) {
+        $query->whereYear('tahun', $request->tahun);
+    }
+
+    $monev = $query->orderBy('tahun', 'desc')->paginate(10)->withQueryString();
+
+    // Untuk dropdown tahun
+    $tahun_list = Monev::selectRaw('YEAR(tahun) as tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+
+    return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
+}
+
+
+
 
     public function getRencana($id)
     {
@@ -63,7 +77,7 @@ class MonevController extends Controller
             'anggaran' => $rencana->anggaran ?? '',
             'opd' => $rencana->opd->nama ?? '',
             'opd_id' => $rencana->opd->id ?? '',
-            'subprogram_id' => $rencana->subprogram_id ?? '',
+             'subprogram_id' => $rencana->id_subprogram ?? '',
         ]);
     }
 
@@ -85,10 +99,11 @@ class MonevController extends Controller
     public function store(Request $request)
     {
 
+
         $user = Auth::guard('pengguna')->user();
 
         $rules = [
-            'program' => 'required',
+            'id_subprogram' => 'required|exists:subprograms,id',
             'id_renja' => 'nullable|exists:rencana_kerjas,id',
             'lokasi' => 'nullable|string',
             'tahun' => 'required',

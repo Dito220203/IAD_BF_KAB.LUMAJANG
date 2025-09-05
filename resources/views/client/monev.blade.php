@@ -7,7 +7,7 @@
 
         <section class="monev-section container">
 
-            
+
 
             <!-- Table Wrapper -->
             <div class="table-wrapper">

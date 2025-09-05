@@ -12,7 +12,7 @@ class Monev extends Model
     protected $table = 'monevs';
     protected $fillable = [
         'id_pengguna',
-        'program',
+        'id_subprogram',
         'id_renja',
         'lokasi',
         'tahun',
@@ -27,10 +27,10 @@ class Monev extends Model
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
     }
-    //    public function subprogram()
-    // {
-    //     return $this->belongsTo(Subprogram::class, 'id_subprogram', 'id');
-    // }
+       public function subprogram()
+    {
+        return $this->belongsTo(Subprogram::class, 'id_subprogram', 'id');
+    }
 
     public function rencanaKerja()
     {

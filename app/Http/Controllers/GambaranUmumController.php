@@ -14,7 +14,7 @@ class GambaranUmumController extends Controller
      */
     public function index()
     {
-        $gambaran = GambaranUmum::all();
+        $gambaran = GambaranUmum::paginate(10);
         return view('admin.GambaranUmum.index', compact('gambaran'));
     }
 

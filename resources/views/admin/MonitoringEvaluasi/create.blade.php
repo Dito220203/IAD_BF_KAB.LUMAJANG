@@ -21,103 +21,101 @@
 
 
 
-                                <form action="{{ route('monev.store') }}" method="POST">
-                                    @csrf
+                            <form action="{{ route('monev.store') }}" method="POST">
+                                @csrf
 
-                                    {{-- Hidden subprogram id --}}
-                                    <input type="hidden" name="program" id="id_subprogram">
+                                {{-- Hidden subprogram id --}}
+                                <input type="hidden" name="id_subprogram" id="id_subprogram">
 
-                                    {{-- Rencana Kegiatan --}}
+                                {{-- Rencana Kegiatan --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Rencana Kegiatan</label>
+                                    <div class="col-sm-10">
+                                        <select name="id_renja" class="form-select" id="id_renja" required>
+                                            <option value="">Pilih</option>
+                                            @foreach ($rencana as $data)
+                                                <option value="{{ $data->id }}">{{ $data->judul }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {{-- Semua field selain Rencana Kegiatan dibungkus div --}}
+                                <div id="form-lanjutan" style="display: none;">
+                                    {{-- Nama Program --}}
                                     <div class="row mb-3">
-                                        <label class="col-sm-2 col-form-label">Rencana Kegiatan</label>
+                                        <label class="col-sm-2 col-form-label">Nama Program</label>
                                         <div class="col-sm-10">
-                                            <select name="id_renja" class="form-select" id="id_renja" required>
+                                            <input type="text" id="nama_program" class="form-control" readonly>
+                                        </div>
+                                    </div>
+
+                                    {{-- Lokasi --}}
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">Lokasi</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="lokasi" id="lokasi" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    {{-- Tahun --}}
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">Tahun</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="tahun" id="tahun" class="form-control"
+                                                readonly>
+                                        </div>
+                                    </div>
+
+                                    {{-- Anggaran --}}
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">Anggaran</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="anggaran" id="anggaran" class="form-control"
+                                                readonly>
+                                        </div>
+                                    </div>
+
+                                    {{-- Perangkat Daerah --}}
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
+                                        <div class="col-sm-10">
+                                            <select name="id_opd" id="id_opd" class="form-select">
                                                 <option value="">Pilih</option>
-                                                @foreach ($rencana as $data)
-                                                    <option value="{{ $data->id }}">{{ $data->judul }}</option>
+                                                @foreach ($opd as $data)
+                                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
+                                </div>
 
-                                    {{-- Semua field selain Rencana Kegiatan dibungkus div --}}
-                                    <div id="form-lanjutan" style="display: none;">
-                                        {{-- Nama Program --}}
-                                        <div class="row mb-3">
-                                            <label class="col-sm-2 col-form-label">Nama Program</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" id="nama_program" name="program" class="form-control"
-                                                    readonly>
-                                            </div>
-                                        </div>
+                                @push('scripts')
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const idRenja = document.getElementById('id_renja');
+                                            const formLanjutan = document.getElementById('form-lanjutan');
+                                            const allInputs = document.querySelectorAll('#nama_program, #lokasi, #tahun, #anggaran, #id_opd');
 
-                                        {{-- Lokasi --}}
-                                        <div class="row mb-3">
-                                            <label class="col-sm-2 col-form-label">Lokasi</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name="lokasi" id="lokasi" class="form-control">
-                                            </div>
-                                        </div>
+                                            // Hide semua form selain Rencana Kerja awalnya
+                                            formLanjutan.style.display = 'none';
 
-                                        {{-- Tahun --}}
-                                        <div class="row mb-3">
-                                            <label class="col-sm-2 col-form-label">Tahun</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name="tahun" id="tahun" class="form-control"
-                                                    readonly>
-                                            </div>
-                                        </div>
+                                            // Disable semua input dulu
+                                            allInputs.forEach(input => input.disabled = true);
 
-                                        {{-- Anggaran --}}
-                                        <div class="row mb-3">
-                                            <label class="col-sm-2 col-form-label">Anggaran</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name="anggaran" id="anggaran" class="form-control"
-                                                    readonly>
-                                            </div>
-                                        </div>
+                                            idRenja.addEventListener('change', function() {
+                                                if (this.value) {
+                                                    formLanjutan.style.display = 'block';
+                                                    allInputs.forEach(input => input.disabled = false);
+                                                } else {
 
-                                        {{-- Perangkat Daerah --}}
-                                        <div class="row mb-3">
-                                            <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
-                                            <div class="col-sm-10">
-                                                <select name="id_opd" id="id_opd" class="form-select">
-                                                    <option value="">Pilih</option>
-                                                    @foreach ($opd as $data)
-                                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @push('scripts')
-                                        <script>
-                                            document.addEventListener('DOMContentLoaded', function() {
-                                                const idRenja = document.getElementById('id_renja');
-                                                const formLanjutan = document.getElementById('form-lanjutan');
-                                                const allInputs = document.querySelectorAll('#nama_program, #lokasi, #tahun, #anggaran, #id_opd');
-
-                                                // Hide semua form selain Rencana Kerja awalnya
-                                                formLanjutan.style.display = 'none';
-
-                                                // Disable semua input dulu
-                                                allInputs.forEach(input => input.disabled = true);
-
-                                                idRenja.addEventListener('change', function() {
-                                                    if (this.value) {
-                                                        // Kalau ada rencana dipilih
-                                                        formLanjutan.style.display = 'block';
-                                                        allInputs.forEach(input => input.disabled = false);
-                                                    } else {
-                                                        // Kalau kosong lagi, sembunyiin
-                                                        formLanjutan.style.display = 'none';
-                                                        allInputs.forEach(input => input.disabled = true);
-                                                    }
-                                                });
+                                                    formLanjutan.style.display = 'none';
+                                                    allInputs.forEach(input => input.disabled = true);
+                                                }
                                             });
-                                        </script>
-                                    @endpush
+                                        });
+                                    </script>
+                                @endpush
 
 
 
@@ -194,10 +192,15 @@
                         tahunInput.value = data.tanggal || '';
                         anggaranInput.value = data.anggaran || '';
                         opdSelect.value = data.opd_id || '';
-                        subprogramInput.value = data.subprogram_id || ''; // untuk database
-                        namaProgramInput.value = data.nama_program || ''; // untuk ditampilkan
+
+                        // ID untuk database
+                        subprogramInput.value = data.subprogram_id || '';
+
+                        // Nama hanya untuk ditampilkan
+                        namaProgramInput.value = data.nama_program || '';
                     })
                     .catch(err => console.error(err));
+
             });
         });
     </script>
