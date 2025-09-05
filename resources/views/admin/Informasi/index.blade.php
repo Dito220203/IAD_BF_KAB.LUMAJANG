@@ -25,7 +25,8 @@
 
                                 <div class="d-flex align-items-center ">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect" data-target="TableInformasi">>
+                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"
+                                        data-target="TableInformasi">>
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -56,7 +57,7 @@
                                     <tbody>
                                         @foreach ($informasi as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $informasi->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td>{{ $data->tanggal }}</td>
                                                 <td>{{ $data->foto }}</td>
@@ -94,6 +95,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $informasi->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
                         </div>

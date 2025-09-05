@@ -2,7 +2,7 @@
 @section('content')
     <section class="section_page">
         <div class="global-title" data-aos="fade-up">
-            <h2>IAD POTENSI PERTANIAN</h2>
+            <h2>{{ $subpotensiKehutanan->sub_potensi }}</h2>
         </div>
 
         <section id="progres-kegiatan" class="progres-section container">
@@ -21,15 +21,15 @@
                     <div class="progres-wrapper">
                         <h4 class="progres-title">Daftar Potensi IAD</h4>
                         <div class="progres-list" id="progresList">
-                            {{-- @foreach ($regulasi as $item) --}}
+                            @foreach ($potensiKehutanan as $item)
                                 <div class="progres-item">
                                     <div class="progres-header">
-                                        {{-- <h6>{{ strtoupper($item->judul) }}</h6> --}}
+                                        <h6>{{ strtoupper($item->judul) }}</h6>
                                     </div>
                                     <div class="progres-meta">
                                         <span class="tanggal">
                                             <i class="fas fa-calendar-alt"></i>
-                                            {{-- {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y H:i') }} --}}
+                                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
                                         </span>
                                     </div>
                                     <div class="progres-body">
@@ -37,25 +37,19 @@
                                     </div>
                                     <div class="progres-footer">
                                         {{-- @if ($item->file) --}}
-                                            <a href="{{ url('/detailpotensi') }}" >
-                                                <button class="btn-lihat">Lihat</button>
-                                            </a>
-                                        {{-- @else --}}
-                                            <button class="btn-lihat" disabled>Tidak ada file</button>
-                                        {{-- @endif --}}
+                                        <a href="{{ route('client.detailpotensi', $item->id) }}">
+                                            <button class="btn-lihat">Lihat</button>
+                                        </a>
+
                                     </div>
                                 </div>
-                            {{-- @endforeach --}}
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <div class="text-center mt-4">
-    <a href="{{ url('/') }}" class="btn-footer-back">
-        ← Kembali
-    </a>
-</div>
+
     </section>
 @section('scripts')
     <script>

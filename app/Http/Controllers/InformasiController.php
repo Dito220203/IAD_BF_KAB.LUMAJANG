@@ -16,9 +16,16 @@ class InformasiController extends Controller
     public function index()
     {
         $user = Auth::guard('pengguna')->user();
-        $user->level == 'Super Admin' ? $informasi = Informasi::all() : $informasi = Informasi::where('id_pengguna', $user->id)->get();
+
+        if ($user->level == 'Super Admin') {
+            $informasi = Informasi::paginate(10);
+        } else {
+            $informasi = Informasi::where('id_pengguna', $user->id)->paginate(10);
+        }
+
         return view('admin.Informasi.index', compact('informasi'));
     }
+
 
     /**
      * Show the form for creating a new resource.

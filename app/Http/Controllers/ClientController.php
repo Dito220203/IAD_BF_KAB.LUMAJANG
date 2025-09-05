@@ -12,12 +12,15 @@ use App\Models\Kups;
 use App\Models\Map;
 use App\Models\Monev;
 use App\Models\Opd;
+use App\Models\PotensiKehutanan;
 use App\Models\ProdukKups;
 use App\Models\ProgresKerja;
 use App\Models\Regulasi;
 use App\Models\RencanaKerja;
+use App\Models\SubpotensiKehutanan;
 use App\Models\Subprogram;
 use App\Models\Video;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\MockObject\ReturnValueGenerator;
 
@@ -28,7 +31,31 @@ class ClientController extends Controller
      */
     public function index()
     {
+        $currentYear = Carbon::now()->year;
 
+        // Ambil data KUPS untuk tahun sekarang
+        $kupsData = Kups::where('tahun', $currentYear)
+            ->select('kups', 'pendapatan')
+            ->get();
+
+        // Format data untuk Highcharts
+        $chartData = $kupsData->map(function ($item) {
+            return [$item->kups, (float)$item->pendapatan];
+        });
+
+        // Ambil daftar tahun unik dari tabel KUPS untuk dropdown
+        $years = Kups::select('tahun')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+        // $kupsData = Kups::select('kups', 'pendapatan')->get();
+
+        // // Format data untuk Highcharts
+        // $chartData = $kupsData->map(function ($item) {
+        //     return [$item->kups, (float)$item->pendapatan];
+        // });
+
+        $subpotensis = SubpotensiKehutanan::all();
         $produkKups = ProdukKups::all();
         $jumlahKups = Kups::count();
         $jumlahKth = Kth::count();
@@ -38,7 +65,33 @@ class ClientController extends Controller
         $banner = Banner::where('status', 'Aktif')->get();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.index', compact('banner', 'gambaran', 'informasi', 'videos', 'subprograms', 'jumlahKth', 'jumlahKups', 'produkKups', 'contact'));
+        return view('client.index', compact(
+            'banner',
+            'gambaran',
+            'informasi',
+            'videos',
+            'subprograms',
+            'jumlahKth',
+            'jumlahKups',
+            'produkKups',
+            'subpotensis',
+            'chartData',
+            'currentYear',
+            'years',
+            'contact'
+        ));
+    }
+    public function chartData($tahun)
+    {
+        $kupsData = Kups::where('tahun', $tahun)
+            ->select('kups', 'pendapatan')
+            ->get();
+
+        $chartData = $kupsData->map(function ($item) {
+            return [$item->kups, (float)$item->pendapatan];
+        });
+
+        return response()->json($chartData);
     }
 
     public function tentangkegiatan($id)
@@ -106,8 +159,8 @@ class ClientController extends Controller
 
     public function progreskegiatandetail($id)
     {
-          $progres = ProgresKerja::with('fotoProgres', 'maps', 'subprogram')
-                ->findOrFail($id);
+        $progres = ProgresKerja::with('fotoProgres', 'maps', 'subprogram')
+            ->findOrFail($id);
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.progreskegiatandetail', compact('contact', 'subprograms', 'progres'));
@@ -196,19 +249,20 @@ class ClientController extends Controller
 
 
     //potensi
-    public function daftarpotensi ()
+    public function daftarpotensi($id)
     {
-      $contact = Kontak::all();
+        $subpotensiKehutanan = SubpotensiKehutanan::findOrFail($id);
+        $potensiKehutanan = PotensiKehutanan::where('id_subpotensi', $id)->get();
+        $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.daftarpotensi', compact('contact', 'subprograms'));
-     
+        return view('client.daftarpotensi', compact('contact', 'subprograms', 'subpotensiKehutanan', 'potensiKehutanan'));
     }
-    public function detailpotensi ()
+    public function detailpotensi($id)
     {
-      $contact = Kontak::all();
+        $detailpotensiKehutanan = PotensiKehutanan::findOrFail($id);
+        $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailpotensi', compact('contact', 'subprograms'));
-     
+        return view('client.detailpotensi', compact('contact', 'subprograms', 'detailpotensiKehutanan'));
     }
 
 

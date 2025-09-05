@@ -30,8 +30,8 @@ class Subprogram extends Model
         return $this->hasMany(FotoSubprogram::class, 'id_subprogram', 'id');
     }
 
-    // public function monev()
-    // {
-    //     return $this->hasMany(Monev::class, 'id_subprogram', 'id');
-    // }
+    public function monev()
+    {
+        return $this->hasMany(Monev::class, 'id_subprogram', 'id');
+    }
 }

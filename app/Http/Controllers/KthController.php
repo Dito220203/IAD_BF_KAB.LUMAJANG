@@ -14,7 +14,7 @@ class KthController extends Controller
      */
     public function index()
     {
-        $kth = Kth::all();
+        $kth = Kth::paginate(10);
         return view('admin.Kth.index', compact('kth'));
     }
 

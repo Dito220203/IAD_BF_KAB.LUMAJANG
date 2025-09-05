@@ -95,7 +95,7 @@
                                     <tbody>
                                         @foreach ($gambaran as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $gambaran->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td>
                                                     @if ($data->status === 'Aktif')
@@ -177,6 +177,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                             <div class="mt-3">
+                                {{ $gambaran->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
                         </div>

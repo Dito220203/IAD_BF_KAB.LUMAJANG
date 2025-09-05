@@ -147,7 +147,7 @@
                                 + Tambah Potensi Kehutanan
                             </button>
 
-                            <!-- Modal Tambah Potensi -->
+                            <!-- Modal Tambah Potensikehutanan -->
                             <div class="modal fade" id="modalPotensi" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -169,6 +169,10 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Judul</label>
+                                                    <input type="text" name="judul" class="form-control" required>
                                                 </div>
 
                                                 <div class="mb-3">
@@ -206,6 +210,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Subpotensi</th>
+                                            <th>judul</th>
                                             <th>Gambar</th>
                                             <th>Keterangan</th>
                                             <th>Aksi</th>
@@ -216,6 +221,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->SubpotensiKehutanan->sub_potensi ?? '-' }}</td>
+                                                <td>{{ $item->judul }}</td>
                                                 <td>
                                                     @if ($item->gambar)
                                                         <button type="button" class="btn btn-info btn-sm"
@@ -297,6 +303,14 @@
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
+                                                                <div class="mb-3">
+                                                                    <label>Judul</label>
+                                                                    <input type="text" name="e_judul"
+                                                                        class="form-control"
+                                                                        value="{{ old('judul', $item->judul) }}"
+                                                                        required>
+                                                                </div>
+
 
                                                                 <div class="mb-3">
                                                                     <label>Gambar</label>

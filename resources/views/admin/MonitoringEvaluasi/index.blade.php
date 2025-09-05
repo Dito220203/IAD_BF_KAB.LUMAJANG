@@ -17,33 +17,47 @@
                     <div class="card ">
                         <div class="card-body">
                             <!-- Header control: Tambah, Search, Tampilkan Data -->
-                            <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-4 mt-3">
 
                                 <a href="{{ route('monev.create') }}" class="btn btn-primary">
                                     + Tambah Monitoring Evaluasi
                                 </a>
 
-                                <div class="d-flex align-items-center ">
-                                    <label for="triwulan" class="form-label mb-0 me-2">Triwulan</label>
-                                    <form method="GET" action="{{ route('monev') }}">
-                                        <select name="triwulan" id="triwulan" class="form-select form-select-sm w-auto"
-                                            onchange="this.form.submit()">
-                                            <option value="">Semua</option>
-                                            <option value="1" {{ request('triwulan') == 1 ? 'selected' : '' }}>Triwulan
-                                                1
-                                                (Jan-Mar)</option>
-                                            <option value="2" {{ request('triwulan') == 2 ? 'selected' : '' }}>Triwulan
-                                                2
-                                                (Apr-Jun)</option>
-                                            <option value="3" {{ request('triwulan') == 3 ? 'selected' : '' }}>Triwulan
-                                                3
-                                                (Jul-Sep)</option>
-                                            <option value="4" {{ request('triwulan') == 4 ? 'selected' : '' }}>Triwulan
-                                                4
-                                                (Okt-Des)</option>
-                                        </select>
+                                <div class="d-flex align-items-center gap-2">
+                                    <form method="GET" action="{{ route('monev') }}" class="d-flex gap-2">
+                                        <div>
+                                            <label for="tahun" class="form-label mb-0 me-1">Tahun</label>
+                                            <select name="tahun" id="tahun" class="form-select form-select-sm"
+                                                onchange="this.form.submit()">
+                                                <option value="">Semua</option>
+                                                @foreach ($tahun_list as $tahun)
+                                                    <option value="{{ $tahun }}"
+                                                        {{ request('tahun') == $tahun ? 'selected' : '' }}>
+                                                        {{ $tahun }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="triwulan" class="form-label mb-0 me-1">Triwulan</label>
+                                            <select name="triwulan" id="triwulan" class="form-select form-select-sm"
+                                                onchange="this.form.submit()">
+                                                <option value="">Semua</option>
+                                                <option value="1" {{ request('triwulan') == 1 ? 'selected' : '' }}>
+                                                    Triwulan 1 (Jan-Mar)</option>
+                                                <option value="2" {{ request('triwulan') == 2 ? 'selected' : '' }}>
+                                                    Triwulan 2 (Apr-Jun)</option>
+                                                <option value="3" {{ request('triwulan') == 3 ? 'selected' : '' }}>
+                                                    Triwulan 3 (Jul-Sep)</option>
+                                                <option value="4" {{ request('triwulan') == 4 ? 'selected' : '' }}>
+                                                    Triwulan 4 (Okt-Des)</option>
+                                            </select>
+                                        </div>
+
+
+
                                     </form>
                                 </div>
+
 
                                 <div class="input-group w-auto">
                                     <input type="text" class="form-control searchInput" data-target="TableMonev"
@@ -71,7 +85,7 @@
                                         @foreach ($monev as $data)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $data->program }}</td>
+                                                 <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                 <td>{{ $data->rencanaKerja->judul ?? '-' }}</td>
                                                 <td>{{ $data->rka }}</td>
 

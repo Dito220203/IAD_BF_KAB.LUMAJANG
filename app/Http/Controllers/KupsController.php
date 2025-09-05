@@ -92,7 +92,7 @@ class KupsController extends Controller
             'pendapatan' => $request->e_pendapatan,
         ]);
         LogHelper::add('Mengubah data KUPS');
-        return redirect()->route('kups')->with('success', 'Data KUPS berhasil diupdate.');
+      return redirect()->route('kups')->with('success', 'Data KUPS berhasil di Update.');
     }
 
     /**

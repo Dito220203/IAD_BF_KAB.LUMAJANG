@@ -27,6 +27,12 @@
                     <span>Rencana Kerja</span>
                 </a>
             </li>
+              <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('monev*') ? '' : 'collapsed' }}" href="{{ route('monev') }}">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>Monitoring Evaluasi</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('progres*') ? '' : 'collapsed' }}"
                     href="{{ route('progres') }}">
@@ -34,12 +40,7 @@
                     <span>Progres Kerja</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('monev*') ? '' : 'collapsed' }}" href="{{ route('monev') }}">
-                    <i class="bi bi-clipboard-check"></i>
-                    <span>Monitoring Evaluasi</span>
-                </a>
-            </li>
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="modal"
                     data-bs-target="#modalGantiPassword">
@@ -131,7 +132,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('produkKups') }}" class="{{ request()->routeIs('produkKups') ? 'active' : '' }}">
+                        <a href="{{ route('produkKups') }}"
+                            class="{{ request()->routeIs('produkKups') ? 'active' : '' }}">
                             <i class="bi bi-circle"></i>
                             <span>Produk Kups</span>
                         </a>
@@ -166,19 +168,20 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('progres*') ? '' : 'collapsed' }}"
-                    href="{{ route('progres') }}">
-                    <i class="bi bi-card-list"></i>
-                    <span>Progres Kerja</span>
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('monev*') ? '' : 'collapsed' }}" href="{{ route('monev') }}">
                     <i class="bi bi-clipboard-check"></i>
 
                     <span>Monitoring Evaluasi</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('progres*') ? '' : 'collapsed' }}"
+                    href="{{ route('progres') }}">
+                    <i class="bi bi-card-list"></i>
+                    <span>Progres Kerja</span>
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('potensi*') ? '' : 'collapsed' }}"
                     href="{{ route('potensi') }}">

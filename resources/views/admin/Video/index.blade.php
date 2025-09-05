@@ -104,7 +104,7 @@
                                     <tbody>
                                         @foreach ($video as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                 <td>{{ $video->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td>
                                                     <a href="{{ $data->link }}" target="_blank"
@@ -132,6 +132,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                             <div class="mt-3">
+                                {{ $video->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
 

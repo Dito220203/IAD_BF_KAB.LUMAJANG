@@ -46,7 +46,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Kategori</label>
-                                        <select name="kategori" class="form-select" required>
+                                        <select name="e_kategori" class="form-select" required>
                                             <option value="">Pilih</option>
                                             <option value="Biru"
                                                 {{ old('kategori', $kupsEdit->kategori) == 'Biru' ? 'selected' : '' }}>Biru
@@ -156,7 +156,7 @@
                             <div class="table-responsive">
                                 <table id="TableKUPS" class="table text-center">
                                     <thead>
-                                        <tr>
+                                         <tr>
                                             <th>No</th>
                                             <th>KTH</th>
                                             <th>KUPS</th>
