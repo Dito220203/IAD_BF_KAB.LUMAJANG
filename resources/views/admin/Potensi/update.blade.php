@@ -31,6 +31,9 @@
                                         <div class="col-sm-10">
                                             <input type="text" name="judul" class="form-control"
                                                 value="{{ old('judul', $potensi->judul) }}" required>
+                                            @error('judul')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -38,15 +41,18 @@
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Kecamatan</label>
                                         <div class="col-sm-10">
-                                            <select id="kecamatan" name="kecamatan" class="form-select">
+                                            <select id="kecamatanUpdate" name="kecamatan" class="form-select" required>
                                                 <option value="">Pilih</option>
                                                 @foreach ($kecamatan as $data)
-                                                    <option value="{{ $data->id }}"
-                                                        {{ $data->kecamatan == $potensi->kecamatan ? 'selected' : '' }}>
-                                                        {{ $data->kecamatan }}
+                                                    <option value="{{ $data->id }}" data-code="{{ $data->code }}"
+                                                        {{ old('kecamatan', $potensi->id_kecamatan) == $data->id ? 'selected' : '' }}>
+                                                        {{ $data->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('kecamatan')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -54,67 +60,41 @@
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Desa</label>
                                         <div class="col-sm-10">
-                                            <select id="desa" name="desa" class="form-select">
-                                                <option value="">Pilih</option>
-                                                {{-- Akan diisi via JS --}}
+                                            <select id="desaUpdate" name="desa" class="form-select" required>
+                                                @foreach ($desa as $d)
+                                                    <option value="{{ $d->id }}"
+                                                        {{ old('desa', $potensi->id_desa) == $d->id ? 'selected' : '' }}>
+                                                        {{ $d->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
+                                            @error('desa')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
-                                    {{-- Gambar --}}
+                                    {{-- Gambar (preview langsung ganti ke gambar baru saat pilih file) --}}
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Gambar Depan</label>
                                         <div class="col-sm-10">
-                                            <input type="file" name="image" id="preview-image-input"
-                                                class="form-control" accept=".jpg,.jpeg,.png"
-                                                onchange="validateAndPreview(event)">
-                                            <small class="text-muted">* Format jpeg, jpg atau png. Maks. 2 MB</small>
+                                            <input type="file" id="imageInput" name="image" class="form-control"
+                                                accept=".jpg,.jpeg,.png">
 
-                                            {{-- Error dari Laravel --}}
-                                            @error('image')
-                                                <div class="text-danger mt-1">{{ $message }}</div>
-                                            @enderror
-
-                                            {{-- Wrapper untuk gambar --}}
                                             <div class="mt-2">
-                                                <img id="preview-image"
+                                                {{-- single img: tampilkan gambar lama di load pertama (jika ada) --}}
+                                                <img id="image-preview"
                                                     src="{{ $potensi->gambar ? asset('storage/' . $potensi->gambar) : '#' }}"
                                                     alt="Preview Gambar"
-                                                    style="max-height: 150px; {{ $potensi->gambar ? '' : 'display:none;' }} border:1px solid #ccc; padding:5px;">
+                                                    style="max-height: 120px; {{ $potensi->gambar ? '' : 'display:none;' }}; border:1px solid #ccc; padding:5px;">
                                             </div>
+
+                                            <small class="text-muted">* Format jpeg, jpg atau png. Maks. 2 MB</small>
+                                            @error('image')
+                                                <br><small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
-
-                                    {{-- Script untuk validasi + preview --}}
-                                    <script>
-                                        function validateAndPreview(event) {
-                                            const file = event.target.files[0];
-                                            const preview = document.getElementById('preview-image');
-
-                                            if (file) {
-                                                // cek ukuran max 2MB
-                                                if (file.size > 2 * 1024 * 1024) {
-                                                    alert("Ukuran file melebihi 2 MB. Silakan pilih gambar lain.");
-                                                    event.target.value = ""; // reset input
-                                                    preview.style.display = "none";
-                                                    return;
-                                                }
-
-                                                // tampilkan preview
-                                                const reader = new FileReader();
-                                                reader.onload = function(e) {
-                                                    preview.src = e.target.result;
-                                                    preview.style.display = "block";
-                                                }
-                                                reader.readAsDataURL(file);
-                                            } else {
-                                                preview.src = "#";
-                                                preview.style.display = "none";
-                                            }
-                                        }
-                                    </script>
-
-
 
                                     {{-- Tanggal --}}
                                     <div class="row mb-3">
@@ -122,21 +102,27 @@
                                         <div class="col-sm-10">
                                             <input type="date" name="tanggal" class="form-control"
                                                 value="{{ old('tanggal', $potensi->tanggal) }}" required>
+                                            @error('tanggal')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
-                                    {{-- Uraian --}}
+                                    {{-- Keterangan --}}
                                     <div class="row mb-3">
-                                        <label class="col-sm-2 col-form-label">Uraian</label>
+                                        <label class="col-sm-2 col-form-label">Keterangan</label>
                                         <div class="col-sm-10">
                                             <textarea name="uraian" class="form-control" rows="4" required>{{ old('uraian', $potensi->uraian) }}</textarea>
+                                            @error('uraian')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     {{-- Tombol --}}
                                     <div class="row mb-3">
                                         <div class="col-sm-10 offset-sm-2 d-flex gap-2">
-                                            <button type="submit" class="btn btn-success">Update</button>
+                                            <button type="submit" class="btn btn-primary">Update</button>
                                             <a href="{{ route('potensi') }}" class="btn btn-warning">Kembali</a>
                                         </div>
                                     </div>
@@ -150,40 +136,122 @@
             </div>
         </section>
 
-        {{-- Script isi desa otomatis --}}
+        {{-- Script Ajax Desa + Preview Gambar --}}
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const kecamatanSelect = document.getElementById("kecamatan");
-                const desaSelect = document.getElementById("desa");
-                const desaLama = "{{ $potensi->desa }}";
+            $(document).ready(function() {
+                // --- DESA / KECAMATAN (tetap seperti sebelumnya) ---
+                let $desaSelect = $('#desaUpdate');
+                let kecamatanId = $('#kecamatanUpdate').val();
+                let desaId = "{{ old('desa', $potensi->id_desa) }}";
 
-                function loadDesa(kecamatanId) {
-                    desaSelect.innerHTML = '<option value="">Pilih</option>';
-                    if (kecamatanId) {
-                        fetch(`/get-desa/${kecamatanId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                data.forEach(desa => {
-                                    const option = document.createElement("option");
-                                    option.value = desa.id;
-                                    option.textContent = desa.desa;
-                                    if (desa.desa === desaLama) {
-                                        option.selected = true;
-                                    }
-                                    desaSelect.appendChild(option);
+                if (kecamatanId) {
+                    let codeKecamatan = $('#kecamatanUpdate').find(':selected').data('code');
+
+                    $.ajax({
+                        url: "{{ url('/get-desa') }}/" + codeKecamatan,
+                        method: "GET",
+                        dataType: "json",
+                        success: function(response) {
+                            let data = response.desa;
+                            $desaSelect.empty();
+
+                            if (Array.isArray(data)) {
+                                data.forEach(function(desa) {
+                                    $desaSelect.append(
+                                        $('<option>', {
+                                            value: desa.id,
+                                            text: desa.name,
+                                            selected: desa.id == desaId
+                                        })
+                                    );
                                 });
-                            });
+                            }
+                        }
+                    });
+                }
+
+                $('#kecamatanUpdate').on('change', function() {
+                    let codeKecamatan = $(this).find(':selected').data('code');
+                    $desaSelect.html('<option value="">Pilih</option>');
+
+                    if (codeKecamatan) {
+                        $.ajax({
+                            url: "{{ url('/get-desa') }}/" + codeKecamatan,
+                            method: "GET",
+                            dataType: "json",
+                            success: function(response) {
+                                let data = response.desa;
+                                $desaSelect.html('<option value="">Pilih</option>');
+                                if (Array.isArray(data)) {
+                                    data.forEach(function(desa) {
+                                        $desaSelect.append(
+                                            $('<option>', {
+                                                value: desa.id,
+                                                text: desa.name
+                                            })
+                                        );
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+
+                // --- PREVIEW GAMBAR: langsung ganti ke gambar baru saat pilih file ---
+                const imageInput = document.getElementById('imageInput');
+                const previewImg = document.getElementById('image-preview');
+
+                // simpan src asli (gambar lama) untuk revert jika user batal pilih
+                const originalSrc = {!! json_encode($potensi->gambar ? asset('storage/' . $potensi->gambar) : '') !!};
+                let objectUrl = null;
+
+                function showOriginalOrHide() {
+                    if (originalSrc) {
+                        previewImg.src = originalSrc;
+                        previewImg.style.display = 'block';
+                    } else {
+                        previewImg.src = '#';
+                        previewImg.style.display = 'none';
                     }
                 }
 
-                kecamatanSelect.addEventListener("change", function() {
-                    loadDesa(this.value);
+                function validateAndPreviewFile(file) {
+                    if (!file) {
+                        // user batal pilih -> kembalikan ke gambar lama
+                        if (objectUrl) {
+                            URL.revokeObjectURL(objectUrl);
+                            objectUrl = null;
+                        }
+                        showOriginalOrHide();
+                        return;
+                    }
+
+                    // cek ukuran max 2MB
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert("Ukuran file melebihi 2 MB. Silakan pilih gambar lain.");
+                        imageInput.value = '';
+                        validateAndPreviewFile(null);
+                        return;
+                    }
+
+                    // revoke objectUrl sebelumnya bila ada
+                    if (objectUrl) {
+                        URL.revokeObjectURL(objectUrl);
+                        objectUrl = null;
+                    }
+                    objectUrl = URL.createObjectURL(file);
+                    previewImg.src = objectUrl;
+                    previewImg.style.display = 'block';
+                }
+
+                // bind event
+                imageInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    validateAndPreviewFile(file);
                 });
 
-                // Load desa saat halaman dibuka
-                if (kecamatanSelect.value) {
-                    loadDesa(kecamatanSelect.value);
-                }
+                // kalau page pertama kali load, pastikan tampil sesuai originalSrc
+                showOriginalOrHide();
             });
         </script>
 

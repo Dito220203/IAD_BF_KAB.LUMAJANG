@@ -164,8 +164,6 @@ class ProgreskerjaController extends Controller
         'longitude'       => 'nullable|numeric',
         'foto.*'          => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         'foto_lama.*'     => 'nullable|exists:foto_progres,id',
-    ], [
-        'foto.*.max' => 'Setiap foto maksimal 2MB.',
     ]);
 
     $progres = ProgresKerja::findOrFail($id);
@@ -182,7 +180,7 @@ class ProgreskerjaController extends Controller
 
     // Update Map
     $progres->maps()->delete();
-    if ($request->filled(['latitude', 'longitude'])) {
+    if($request->filled(['latitude','longitude'])){
         Map::create([
             'id_progres'  => $progres->id,
             'id_pengguna' => $progres->id_pengguna,
@@ -191,26 +189,22 @@ class ProgreskerjaController extends Controller
         ]);
     }
 
-    // ====================== FOTO ======================
-    // Hapus foto lama yang tidak dikirim lagi dari form
+    // Hapus foto lama yang tidak dikirim
     $fotoLamaIds = $request->input('foto_lama', []);
-    $fotoProgresAll = $progres->fotoProgres()->get();
-
-    foreach ($fotoProgresAll as $foto) {
-        if (!in_array($foto->id, $fotoLamaIds)) {
-            $path = 'foto_progres/' . $foto->foto;
-            if (Storage::disk('public')->exists($path)) {
-                Storage::disk('public')->delete($path);
+    foreach($progres->fotoProgres as $foto){
+        if(!in_array($foto->id, $fotoLamaIds)){
+            if(Storage::disk('public')->exists('foto_progres/'.$foto->foto)){
+                Storage::disk('public')->delete('foto_progres/'.$foto->foto);
             }
             $foto->delete();
         }
     }
 
-    // Simpan foto baru jika ada
-    if ($request->hasFile('foto')) {
-        foreach ($request->file('foto') as $file) {
-            $namaFile = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('foto_progres', $namaFile, 'public');
+    // Simpan foto baru
+    if($request->hasFile('foto')){
+        foreach($request->file('foto') as $file){
+            $namaFile = time().'_'.$file->getClientOriginalName();
+            $file->storeAs('foto_progres',$namaFile,'public');
 
             FotoProgres::create([
                 'id_progres'  => $progres->id,
@@ -221,7 +215,7 @@ class ProgreskerjaController extends Controller
     }
 
     LogHelper::add('Memperbarui data Progres Kerja');
-    return redirect()->route('progres')->with('success', 'Data berhasil diperbarui');
+    return redirect()->route('progres')->with('success','Data berhasil diperbarui');
 }
 
 

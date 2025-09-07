@@ -34,21 +34,21 @@
                          @forelse($notifikasi as $item)
                              <li class="notification-item">
                                  @if ($item instanceof \App\Models\RencanaKerja)
-                                     <i class="bi bi-calendar-check text-info"></i>
+                                     <i class="bi bi-journal-check"></i>
                                      <div>
                                          <h4>Rencana Kerja Baru</h4>
                                          <p>{{ $item->judul }}</p>
                                          <p>{{ $item->created_at->diffForHumans() }}</p>
                                      </div>
                                  @elseif($item instanceof \App\Models\ProgresKerja)
-                                     <i class="bi bi-graph-up text-success"></i>
+                                      <i class="bi bi-card-list"></i>
                                      <div>
                                          <h4>Progres Kerja Baru</h4>
                                          <p>{{ $item->judul }}</p>
                                          <p>{{ $item->created_at->diffForHumans() }}</p>
                                      </div>
                                  @elseif($item instanceof \App\Models\Monev)
-                                     <i class="bi bi-calendar-check text-info"></i>
+                                    <i class="bi bi-clipboard-check"></i>
                                      <div>
                                          <h4>Monitoring & Evaluasi</h4>
                                          <p>{{ $item->keterangan }}</p>

@@ -11,13 +11,29 @@
 
             <!-- Table Wrapper -->
             <div class="table-wrapper">
+                <!-- Filter Tahun -->
+                <div class="filter-tahun mb-4 text-center">
+                    <form method="GET" action="{{ route('client.monev', $subprogram->id) }}">
+                        <label for="tahun" class="me-2 fw-bold">Pilih Tahun:</label>
+                        <select name="tahun" id="tahun" onchange="this.form.submit()"
+                            class="form-select d-inline-block w-auto">
+                            <option value="">Semua Tahun</option>
+                            @foreach ($years as $year)
+                                <option value="{{ $year }}" {{ request('tahun') == $year ? 'selected' : '' }}>
+                                    {{ $year }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+
                 <!-- Pilihan Triwulan -->
-            <div class="triwulan-tabs">
-                <button class="tab-btn active" data-target="triwulan1">Triwulan 1</button>
-                <button class="tab-btn" data-target="triwulan2">Triwulan 2</button>
-                <button class="tab-btn" data-target="triwulan3">Triwulan 3</button>
-                <button class="tab-btn" data-target="triwulan4">Triwulan 4</button>
-            </div>
+                <div class="triwulan-tabs">
+                    <button class="tab-btn active" data-target="triwulan1">Triwulan 1</button>
+                    <button class="tab-btn" data-target="triwulan2">Triwulan 2</button>
+                    <button class="tab-btn" data-target="triwulan3">Triwulan 3</button>
+                    <button class="tab-btn" data-target="triwulan4">Triwulan 4</button>
+                </div>
                 <!-- Triwulan 1 -->
                 <div class="table-content active" id="triwulan1">
                     <table class="monev-table">

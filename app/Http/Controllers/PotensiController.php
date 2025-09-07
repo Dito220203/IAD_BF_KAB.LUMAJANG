@@ -32,12 +32,26 @@ class PotensiController extends Controller
         $kecamatan = Kecamatan::all(); // ambil semua data
         return view('admin.Potensi.create', compact('kecamatan'));
     }
-    public function getDesa($id_kec)
-    {
-        $desa = Desa::where('id_kec', $id_kec)->get();
-        return response()->json($desa);
-    }
 
+    public function getDesa($code)
+    {
+        try {
+
+
+            $desa = Desa::where('district_code', $code)->get();
+
+            return response()->json([
+                'code' => $code,
+                'desa' => $desa
+            ]);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'error' => $e->getMessage(),
+                'code' => $code
+            ], 500);
+        }
+    }
 
 
 
@@ -50,16 +64,13 @@ class PotensiController extends Controller
     {
         $validatedData = $request->validate([
             'judul'     => 'required',
-            'kecamatan' => 'required',
-            'desa'      => 'required',
+            'kecamatan' => 'required|exists:kecamatans,id',
+            'desa'      => 'required|exists:desas,id',
             'image'     => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'tanggal'   => 'required',
             'uraian'    => 'required',
-         ]);
+        ]);
 
-        // Ambil nama kecamatan & desa berdasarkan ID
-        $namaKecamatan = Kecamatan::findOrFail($validatedData['kecamatan'])->kecamatan;
-        $namaDesa = Desa::findOrFail($validatedData['desa'])->desa;
 
         // Simpan gambar ke storage (sama kayak Informasi)
         $imagePath = null;
@@ -68,15 +79,18 @@ class PotensiController extends Controller
             $imagePath = $request->file('image')->storeAs('potensi', $originalName, 'public');
         }
 
+
         Potensi::create([
             'id_pengguna' => Auth::guard('pengguna')->id(),
-            'judul'     => $validatedData['judul'],
-            'kecamatan' => $namaKecamatan,
-            'desa'      => $namaDesa,
-            'gambar'    => $imagePath,
-            'tanggal'   => $validatedData['tanggal'],
-            'uraian'    => $validatedData['uraian'],
+            'judul'       => $validatedData['judul'],
+            'id_kecamatan' => $validatedData['kecamatan'], // simpan ID
+            'id_desa'     => $validatedData['desa'],      // simpan ID
+            'gambar'      => $imagePath,
+            'tanggal'     => $validatedData['tanggal'],
+            'uraian'      => $validatedData['uraian'],
         ]);
+
+
         LogHelper::add('Menambah data Potensi');
         return redirect()->route('potensi')->with('success', 'Data potensi berhasil disimpan.');
     }
@@ -98,10 +112,17 @@ class PotensiController extends Controller
     {
         $potensi = Potensi::findOrFail($id);
         $kecamatan = Kecamatan::all();
-        $desa = Desa::where('id_kec', $potensi->id_kec)->get(); // kalau mau load otomatis desa sesuai kecamatan
+
+        // Ambil kode kecamatan dari potensi
+        $kodeKecamatan = Kecamatan::find($potensi->id_kecamatan)->code ?? null;
+
+        // Ambil desa sesuai kode kecamatan
+        $desa = $kodeKecamatan ? Desa::where('district_code', $kodeKecamatan)->get() : collect();
 
         return view('admin.Potensi.update', compact('potensi', 'kecamatan', 'desa'));
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -112,15 +133,12 @@ class PotensiController extends Controller
 
         $validatedData = $request->validate([
             'judul'     => 'required',
-            'kecamatan' => 'required',
-            'desa'      => 'required',
+            'kecamatan' => 'required|exists:kecamatans,id',
+            'desa'      => 'required|exists:desas,id',
             'image'     => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'tanggal'   => 'required',
             'uraian'    => 'required',
-         ]);
-
-        $namaKecamatan = Kecamatan::findOrFail($validatedData['kecamatan'])->kecamatan;
-        $namaDesa      = Desa::findOrFail($validatedData['desa'])->desa;
+        ]);
 
         // Jika ada upload gambar baru
         if ($request->hasFile('image')) {
@@ -133,17 +151,20 @@ class PotensiController extends Controller
             $validatedData['gambar'] = $request->file('image')->storeAs('potensi', $originalName, 'public');
         }
 
+        // Update data hanya dengan ID, sesuai kolom di DB
         $potensi->update([
-            'judul'     => $validatedData['judul'],
-            'kecamatan' => $namaKecamatan,
-            'desa'      => $namaDesa,
-            'gambar'    => $validatedData['gambar'] ?? $potensi->gambar,
-            'tanggal'   => $validatedData['tanggal'],
-            'uraian'    => $validatedData['uraian'],
+            'judul'         => $validatedData['judul'],
+            'id_kecamatan'  => $validatedData['kecamatan'],
+            'id_desa'       => $validatedData['desa'],
+            'gambar'        => $validatedData['gambar'] ?? $potensi->gambar,
+            'tanggal'       => $validatedData['tanggal'],
+            'uraian'        => $validatedData['uraian'],
         ]);
+
         LogHelper::add('Mengubah data Potensi');
         return redirect()->route('potensi')->with('success', 'Data potensi berhasil diperbarui.');
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -38,10 +38,11 @@
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Kecamatan</label>
                                         <div class="col-sm-10">
-                                            <select id="kecamatan" name="kecamatan" class="form-select">
+                                            <select id="kecamatanCreate" name="kecamatan" class="form-select">
                                                 <option value="">Pilih</option>
                                                 @foreach ($kecamatan as $data)
-                                                    <option value="{{ $data->id }}">{{ $data->kecamatan }}</option>
+                                                    <option value="{{ $data->id }}" data-code="{{ $data->code }}">
+                                                        {{ $data->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('kecamatan')
@@ -54,7 +55,7 @@
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Desa</label>
                                         <div class="col-sm-10">
-                                            <select id="desa" name="desa" class="form-select">
+                                            <select id="desaCreate" name="desa" class="form-select">
                                                 <option value="">Pilih</option>
                                             </select>
                                             @error('desa')
@@ -146,32 +147,55 @@
             </div>
         </section>
 
-        {{-- Script untuk ambil desa berdasarkan kecamatan --}}
+
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const kecamatanSelect = document.getElementById("kecamatan");
-                const desaSelect = document.getElementById("desa");
+            $(document).ready(function() {
+                $('#kecamatanCreate').on('change', function() {
+                    let codeKecamatan = $(this).find(':selected').data('code');
+                    console.log("code:", codeKecamatan);
 
-                kecamatanSelect.addEventListener("change", function() {
-                    const kecamatanId = this.value;
-                    desaSelect.innerHTML = '<option value="">Pilih</option>'; // reset
+                    let $desaSelect = $('#desaCreate');
+                    $desaSelect.html('<option value="">Pilih</option>'); // reset
 
-                    if (kecamatanId) {
-                        fetch(`/get-desa/${kecamatanId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                data.forEach(desa => {
-                                    const option = document.createElement("option");
-                                    option.value = desa.id;
-                                    option.textContent = desa.desa;
-                                    desaSelect.appendChild(option);
-                                });
-                            })
-                            .catch(error => console.error("Error fetching desa:", error));
+                    if (codeKecamatan) {
+                        let url = "{{ url('/get-desa') }}/" + codeKecamatan;
+                        console.log("fetch URL:", url);
+
+                        $.ajax({
+                            url: "{{ url('/get-desa') }}/" + codeKecamatan,
+                            method: "GET",
+                            dataType: "json",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                console.log("Response JSON:", response);
+                                console.log("Kode diterima controller:", response.code);
+
+                                let data = response.desa;
+                                if (Array.isArray(data)) {
+                                    data.forEach(function(desa) {
+                                        $('#desaCreate').append(
+                                            $('<option>', {
+                                                value: desa.id,
+                                                text: desa.name
+                                            })
+                                        );
+                                    });
+                                }
+                            },
+
+                            error: function(xhr, status, error) {
+                                console.error("AJAX Error:", status, error);
+                                console.log("Response text:", xhr.responseText);
+                            }
+                        });
+
                     }
                 });
             });
         </script>
+
 
     </main>
 @endsection

@@ -10,4 +10,9 @@ class Desa extends Model
     use HasFactory;
     protected $table = 'desas';
     protected $fillable = ['id_kec', 'kecamatan', 'desa','subdomain','is_desa','aktif'];
+
+      public function potensi()
+    {
+        return $this->hasMany(Potensi::class, 'id_desa', 'id');
+    }
 }

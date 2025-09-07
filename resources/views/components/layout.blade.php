@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Admin IAD BF Kabupaten Lumajang</title>
 
@@ -46,6 +47,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <style>
@@ -135,8 +137,8 @@
     <script src="{{ asset('js/sweetalert-custom.js') }}"></script>
     <script src="{{ asset('js/alerthapus2.js') }}"></script>
     <script src="{{ asset('js/updateStatus.js') }}"></script>
-    <script src="{{ asset('js/entries.js')}}"></script>
-    <script src="{{ asset('js/search.js')}}"></script>
+    <script src="{{ asset('js/entries.js') }}"></script>
+    <script src="{{ asset('js/search.js') }}"></script>
 
     <!-- SweetAlert Success -->
     @if (session('success'))

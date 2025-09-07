@@ -1,5 +1,3 @@
-
-
 <header id="header"
     class="header d-flex align-items-center fixed-top {{ request()->is('/') ? '' : 'header-scrolled' }}">
 
@@ -102,7 +100,7 @@
                 </li>
 
                 <li class="dropdown">
-                    <a href="#"><span>PROFIL KAWASAN IAD</span>
+                    <a href="{{ route('profilkawasan.search') }}"><span>PROFIL KAWASAN IAD</span>
                         <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
                         <li>
@@ -111,22 +109,57 @@
                                     <label for="kecamatan">Kecamatan</label>
                                     <select id="kecamatan" class="dropdown-select">
                                         <option value="">Pilih</option>
-                                        <option value="1">Kecamatan 1</option>
-                                        <option value="2">Kecamatan 2</option>
+                                        @foreach ($kecamatan as $k)
+                                            <option value="{{ $k->id }}" data-code="{{ $k->code }}">
+                                                {{ $k->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="desa">Kel/Desa</label>
                                     <select id="desa" class="dropdown-select">
                                         <option value="">Pilih</option>
-                                        <option value="desa1">Desa 1</option>
-                                        <option value="desa2">Desa 2</option>
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function() {
+                                                const kecamatanSelect = document.getElementById('kecamatan');
+                                                const desaSelect = document.getElementById('desa');
+
+                                                function loadDesa(kecamatanId, selectedDesa = null) {
+                                                    desaSelect.innerHTML = '<option value="">Pilih</option>';
+                                                    if (!kecamatanId) return;
+
+                                                    fetch(`/get-desa/client/${kecamatanId}`)
+                                                        .then(res => res.json())
+                                                        .then(data => {
+                                                            data.forEach(desa => {
+                                                                const option = document.createElement('option');
+                                                                option.value = desa.id;
+                                                                option.textContent = desa.name;
+                                                                if (desa.id == selectedDesa) option.selected = true;
+                                                                desaSelect.appendChild(option);
+                                                            });
+                                                        })
+                                                        .catch(err => console.error(err));
+                                                }
+
+                                                // Load desa jika ada kecamatan yang sudah dipilih
+                                                if (kecamatanSelect.value) {
+                                                    loadDesa(kecamatanSelect.value);
+                                                }
+
+                                                // Event change kecamatan
+                                                kecamatanSelect.addEventListener('change', function() {
+                                                    loadDesa(this.value);
+                                                });
+                                            });
+                                        </script>
+
                                     </select>
                                 </div>
-                                <a href="{{ route('client.profilkawasan') }}"
-                                    class="{{ request()->is('profilkawasan') ? 'active' : '' }}">
-                                    <button type="button"
-                                        class="profil-search-btn">
+
+
+                                    <button type="submit" class="profil-search-btn">
                                         <i class="bi bi-search"></i> Cari
                                     </button></a>
                             </div>
