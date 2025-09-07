@@ -111,9 +111,13 @@
         <i class="bi bi-arrow-up-short"></i>
     </a>
 
+    
     <!-- Preloader -->
     <div id="preloader"></div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    
     <!-- Vendor JS Files -->
     <script src="{{ asset('client/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('client/assets/vendor/php-email-form/validate.js') }}"></script>
@@ -124,10 +128,8 @@
     <script src="{{ asset('client/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
     <script src="{{ asset('client/assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-    <!-- Main JS File -->
-    <script src="{{ asset('client/assets/js/main.js') }}"></script>
-
+    
+    
     <!-- chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -135,6 +137,8 @@
     <script src="https://code.highcharts.com/highcharts-3d.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <!-- Main JS File -->
+    <script src="{{ asset('client/assets/js/main.js') }}"></script>
 </body>
 
 </html>

@@ -162,169 +162,41 @@
 
         </section>
 
-        <!-- JUMLAH PENDAPATAN TIAP KUPS -->
-        {{-- <section id="kups" class="kups">
-            <div class="container" data-aos="fade-up" data-aos-delay="100">
-                <div class="global-title">
-                    <h2>IAD POTENSI TIAP KUPS</h2>
-                </div>
-
-                <!-- SCROLL WRAPPER -->
-                <div class="kups-cards" data-aos="fade-down" data-aos-delay="200">
-                    <div class="kups-scroll">
-                        <div class="row gy-4 flex-nowrap">
-
-                            <!-- Card 1 -->
-                            <div class="col-lg-3 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fa-solid fa-cow"></i></div>
-                                        <p class="stats-label">POTENSI PETERNAKAN</p>
-                                        <span class="stats-number purecounter" data-purecounter-start="0"
-                                            data-purecounter-end="123" data-purecounter-duration="1"></span>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Card 2 -->
-                            <div class="col-lg-3 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fas fa-mountain"></i></div>
-                                        <p class="stats-label">POTENSI GUNUNG</p>
-                                        <span class="stats-number">88</span>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Card lainnya... -->
-                            <div class="col-lg-3 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fas fa-mountain"></i></div>
-                                        <p class="stats-label">POTENSI GUNUNG</p>
-                                        <span class="stats-number">88</span>
-                                    </div>
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <!-- chart kups Section -->
-            <div data-aos="fade-up" data-aos-delay="250" id="pendapatanChart" class="pendapatanChart">
-            </div>
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    // Contoh data, nanti bisa diganti dari card
-                    const dataValues = [
-                        ['Pisang', 182.93],
-                        ['Olahan Susu', 222.44],
-                        ['Potensi Peternakan', 151.41],
-                        ['Olahan Kopi', 154.00]
-                    ];
-
-                    Highcharts.chart('pendapatanChart', {
-                        chart: {
-                            type: 'pie',
-                            backgroundColor: '#fff', // putih
-                            options3d: {
-                                enabled: true,
-                                alpha: 30, // kemiringan pas, tidak terlalu miring
-                                beta: 0
-                            }
-                        },
-                        title: {
-                            text: 'Nilai Ekonomi Tiap KUPS'
-                        },
-                        subtitle: {
-                            text: 'Unit: Dalam Rupiah',
-                            align: 'right'
-                        },
-                        plotOptions: {
-                            pie: {
-                                allowPointSelect: true,
-                                cursor: 'pointer',
-                                depth: 25, // tipis → tidak timpang tindih
-                                borderWidth: 2, // garis pemisah antar slice
-                                borderColor: '#fff', // garis putih biar rapi
-                                dataLabels: {
-                                    enabled: true,
-                                    format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
-                                    connectorColor: 'silver'
-                                },
-                                showInLegend: true
-                            }
-                        },
-                        tooltip: {
-                            pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
-                        },
-                        series: [{
-                            name: 'Pendapatan',
-                            data: [
-                                ['Pisang', 182.93],
-                                ['Olahan Susu', 222.44],
-                                ['Potensi Peternakan', 151.41],
-                                ['Olahan Kopi', 154.00]
-                            ],
-                            colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
-                        }]
-                    });
-
-                });
-            </script>
-
-        </section> --}}
+        <!-- IAD POTENSI TIAP KUPS -->
         <section id="kups" class="kups">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="global-title">
                     <h2>IAD POTENSI TIAP KUPS</h2>
                 </div>
 
-                <div class="kups-cards" data-aos="fade-down" data-aos-delay="200">
-                    <div class="kups-scroll">
-                        <div class="row gy-4">
-                            @foreach ($subpotensis as $subpotensi)
-                                <div class="col-lg-4 col-md-6">
-                                    <a href="{{ route('client.daftarpotensi', ['id' => $subpotensi->id]) }}">
-                                        <div class="stats-card">
-                                            <div class="stats-icon">
-                                                {{-- kalau ada field icon di database --}}
-                                                @if (!empty($subpotensi->icon))
-                                                    <i class="{{ $subpotensi->icon }}"></i>
-                                                @else
-                                                    <i class="fa-solid fa-leaf"></i> {{-- default --}}
-                                                @endif
-                                            </div>
-                                            <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
-                                            <span class="stats-number purecounter" data-purecounter-start="0"
-                                                data-purecounter-end="{{ $subpotensi->jumlah ?? 0 }}"
-                                                data-purecounter-duration="1"></span>
+                <div class="kups-wrapper">
+                    <div class="kups-slider">
+                        @foreach ($subpotensis as $subpotensi)
+                            <div class="kups-card-item">
+                                <a href="{{ route('client.daftarpotensi', ['id' => $subpotensi->id]) }}">
+                                    <div class="stats-card">
+                                        <div class="stats-icon">
+                                            @if (!empty($subpotensi->icon))
+                                                <i class="{{ $subpotensi->icon }}"></i>
+                                            @else
+                                                <i class="fa-solid fa-leaf"></i>
+                                            @endif
                                         </div>
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
-
+                                        <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
+                                        <span class="stats-number purecounter" data-purecounter-start="0"
+                                            data-purecounter-end="{{ $subpotensi->jumlah ?? 0 }}"
+                                            data-purecounter-duration="1"></span>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
-
+                    <div class="kups-pagination" id="kupsPagination"></div>
                 </div>
-
-                {{-- ... kups-pagination ... --}}
-                <div class="kups-pagination" id="kupsPagination"></div>
-
-                {{-- ========================================================= --}}
-                {{-- MULAI PEMBUNGKUS CHART BARU DI SINI --}}
-                {{-- ========================================================= --}}
                 <div class="chart-wrapper" data-aos="fade-up">
 
                     {{-- Header sekarang berisi JUDUL dan FILTER --}}
-                    <<div class="chart-header">
+                    <div class="chart-header">
                         <h3 class="chart-title">Nilai Ekonomi Tiap KUPS</h3>
 
                         {{-- TAMBAHKAN KEMBALI PEMBUNGKUS INI --}}
@@ -342,152 +214,140 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    {{-- Chart Area --}}
+                    <div id="pendapatanChart" class="pendapatanChart"></div>
                 </div>
 
-                {{-- Chart Area --}}
-                <div id="pendapatanChart" class="pendapatanChart"></div>
-            </div>
+                <script src="https://code.highcharts.com/highcharts.js"></script>
+                <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const tahunSelect = document.getElementById("tahunSelect");
 
-            {{-- Script Highcharts (posisinya tetap setelah HTML chart) --}}
-            <script src="https://code.highcharts.com/highcharts.js"></script>
-            <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-            <script>
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // =========================================================
-    // BAGIAN 1: KODE UNTUK HIGHCHARTS
-    // =========================================================
-    const tahunSelect = document.getElementById("tahunSelect");
-
-    function renderChart(dataValues, tahun) {
-        Highcharts.chart('pendapatanChart', {
-            chart: {
-                type: 'pie',
-                backgroundColor: '#f0f0f0',
-                options3d: {
-                    enabled: true,
-                    alpha: 30
-                }
-            },
-            title: {
-                text: null
-            },
-            subtitle: {
-                text: 'Unit: Dalam Rupiah - Tahun: ' + tahun,
-                align: 'left'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    depth: 25,
-                    borderWidth: 2,
-                    borderColor: '#fff',
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
-                        connectorColor: 'silver'
-                    },
-                    showInLegend: true
-                }
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
-            },
-            series: [{
-                name: 'Pendapatan',
-                data: dataValues,
-                colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
-            }]
-        });
-    }
-
-    // Render awal chart
-    renderChart(@json($chartData), {{ $currentYear }});
-
-    // Event filter tahun (akan dipicu oleh script dropdown di bawah)
-    tahunSelect.addEventListener("change", function() {
-        const selectedYear = this.value;
-        fetch(`/kups/chart-data/${selectedYear}`)
-            .then(res => res.json())
-            .then(data => renderChart(data, selectedYear));
-    });
-
-
-    // =========================================================
-    // BAGIAN 2: KODE UNTUK DROPDOWN KUSTOM
-    // =========================================================
-    var x, i, j, l, ll, selElmnt, a, b, c;
-    x = document.getElementsByClassName("custom-select-wrapper");
-    l = x.length;
-    for (i = 0; i < l; i++) {
-        selElmnt = x[i].getElementsByTagName("select")[0];
-        ll = selElmnt.length;
-        a = document.createElement("DIV");
-        a.setAttribute("class", "select-selected");
-        a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-        x[i].appendChild(a);
-        b = document.createElement("DIV");
-        b.setAttribute("class", "select-items select-hide");
-        for (j = 0; j < ll; j++) { // Loop dimulai dari 0 agar semua tahun muncul
-            c = document.createElement("DIV");
-            c.innerHTML = selElmnt.options[j].innerHTML;
-            c.addEventListener("click", function(e) {
-                var y, i, k, s, h, sl, yl;
-                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-                sl = s.length;
-                h = this.parentNode.previousSibling;
-                for (i = 0; i < sl; i++) {
-                    if (s.options[i].innerHTML == this.innerHTML) {
-                        s.selectedIndex = i;
-                        h.innerHTML = this.innerHTML;
-                        y = this.parentNode.getElementsByClassName("same-as-selected");
-                        yl = y.length;
-                        for (k = 0; k < yl; k++) {
-                            y[k].removeAttribute("class");
+                        function renderChart(dataValues, tahun) {
+                            Highcharts.chart('pendapatanChart', {
+                                // ... (isi kode Highcharts Anda, sudah benar) ...
+                                chart: {
+                                    type: 'pie',
+                                    backgroundColor: '#f0f0f0',
+                                    options3d: {
+                                        enabled: true,
+                                        alpha: 30
+                                    }
+                                },
+                                title: {
+                                    text: null
+                                },
+                                subtitle: {
+                                    text: 'Unit: Dalam Rupiah - Tahun: ' + tahun,
+                                    align: 'left'
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        allowPointSelect: true,
+                                        cursor: 'pointer',
+                                        depth: 25,
+                                        borderWidth: 2,
+                                        borderColor: '#fff',
+                                        dataLabels: {
+                                            enabled: true,
+                                            format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
+                                            connectorColor: 'silver'
+                                        },
+                                        showInLegend: true
+                                    }
+                                },
+                                tooltip: {
+                                    pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
+                                },
+                                series: [{
+                                    name: 'Pendapatan',
+                                    data: dataValues,
+                                    colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
+                                }]
+                            });
                         }
-                        this.setAttribute("class", "same-as-selected");
-                        
-                        // Memicu event 'change' agar chart tetap update
-                        s.dispatchEvent(new Event('change')); 
-                        
-                        break;
-                    }
-                }
-                h.click();
-            });
-            b.appendChild(c);
-        }
-        x[i].appendChild(b);
-        a.addEventListener("click", function(e) {
-            e.stopPropagation();
-            closeAllSelect(this);
-            this.nextSibling.classList.toggle("select-hide");
-        });
-    }
+                        if (document.getElementById("pendapatanChart")) { // Cek jika chart ada
+                            renderChart(@json($chartData), {{ $currentYear }});
+                            tahunSelect.addEventListener("change", function() {
+                                const selectedYear = this.value;
+                                fetch(`/kups/chart-data/${selectedYear}`)
+                                    .then(res => res.json())
+                                    .then(data => renderChart(data, selectedYear));
+                            });
+                        }
 
-    function closeAllSelect(elmnt) {
-        var x, y, i, xl, yl, arrNo = [];
-        x = document.getElementsByClassName("select-items");
-        y = document.getElementsByClassName("select-selected");
-        xl = x.length;
-        yl = y.length;
-        for (i = 0; i < yl; i++) {
-            if (elmnt != y[i]) {
-                y[i].classList.remove("select-arrow-active");
-            }
-        }
-        for (i = 0; i < xl; i++) {
-            if (elmnt != y[i]) {
-                x[i].classList.add("select-hide");
-            }
-        }
-    }
-    document.addEventListener("click", closeAllSelect);
-    
-});
-</script>
-        </section> {{-- <-- PENUTUP SECTION#KUPS YANG BENAR --}}
+                        var x, i, j, l, ll, selElmnt, a, b, c;
+                        x = document.getElementsByClassName("custom-select-wrapper");
+                        l = x.length;
+                        for (i = 0; i < l; i++) {
+                            // ... (isi kode dropdown kustom Anda, sudah benar) ...
+                            selElmnt = x[i].getElementsByTagName("select")[0];
+                            if (!selElmnt) continue;
+                            ll = selElmnt.length;
+                            a = document.createElement("DIV");
+                            a.setAttribute("class", "select-selected");
+                            a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                            x[i].appendChild(a);
+                            b = document.createElement("DIV");
+                            b.setAttribute("class", "select-items select-hide");
+                            for (j = 0; j < ll; j++) {
+                                c = document.createElement("DIV");
+                                c.innerHTML = selElmnt.options[j].innerHTML;
+                                c.addEventListener("click", function(e) {
+                                    var y, i, k, s, h, sl, yl;
+                                    s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                                    sl = s.length;
+                                    h = this.parentNode.previousSibling;
+                                    for (i = 0; i < sl; i++) {
+                                        if (s.options[i].innerHTML == this.innerHTML) {
+                                            s.selectedIndex = i;
+                                            h.innerHTML = this.innerHTML;
+                                            y = this.parentNode.getElementsByClassName("same-as-selected");
+                                            yl = y.length;
+                                            for (k = 0; k < yl; k++) {
+                                                y[k].removeAttribute("class");
+                                            }
+                                            this.setAttribute("class", "same-as-selected");
+                                            s.dispatchEvent(new Event('change'));
+                                            break;
+                                        }
+                                    }
+                                    h.click();
+                                });
+                                b.appendChild(c);
+                            }
+                            x[i].appendChild(b);
+                            a.addEventListener("click", function(e) {
+                                e.stopPropagation();
+                                closeAllSelect(this);
+                                this.nextSibling.classList.toggle("select-hide");
+                            });
+                        }
+
+                        function closeAllSelect(elmnt) {
+                            var x, y, i, xl, yl, arrNo = [];
+                            x = document.getElementsByClassName("select-items");
+                            y = document.getElementsByClassName("select-selected");
+                            xl = x.length;
+                            yl = y.length;
+                            for (i = 0; i < yl; i++) {
+                                if (elmnt != y[i]) {
+                                    y[i].classList.remove("select-arrow-active");
+                                }
+                            }
+                            for (i = 0; i < xl; i++) {
+                                if (elmnt != y[i]) {
+                                    x[i].classList.add("select-hide");
+                                }
+                            }
+                        }
+                        document.addEventListener("click", closeAllSelect);
+                    }); 
+                </script>
+        </section>
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
 
         <!-- PRODUCT KUPS -->
@@ -506,7 +366,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 @endforeach
             </div>
         </section>
-
         <!-- /PRODUCT KUPS -->
 
         <!-- Informasi Section -->
@@ -538,70 +397,66 @@ document.addEventListener("DOMContentLoaded", function() {
                     @empty
                         <p>Tidak ada informasi.</p>
                     @endforelse
-
                 </div>
-
-                <!-- Pagination -->
                 <div class="informasi-pagination" id="informasiPagination"></div>
 
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
-                        const cardsContainer = document.querySelector(".informasi-cards");
-                        const pagination = document.querySelector(".informasi-pagination");
+                        function initializeSlider(sliderSelector, paginationId, cardSelector) {
+                            const slider = document.querySelector(sliderSelector);
+                            const pagination = document.getElementById(paginationId);
+                            const cards = document.querySelectorAll(cardSelector);
 
-                        let cardWidth = 0;
-                        let scrollStep = 0;
-                        let totalPages = 0;
+                            // Pengecekan ini sangat penting, akan menghentikan error
+                            if (!slider || !pagination || cards.length === 0) {
+                                return;
+                            }
 
-                        function updateCardWidth() {
-                            const firstCard = cardsContainer.querySelector(".informasi-card");
-                            if (!firstCard) return;
+                            pagination.innerHTML = '';
+                            const gap = parseInt(window.getComputedStyle(slider).gap) || 20;
 
-                            const style = window.getComputedStyle(firstCard);
-                            const marginRight = parseInt(style.marginRight) || 0;
-                            cardWidth = firstCard.offsetWidth + marginRight;
-
-                            // tampilkan 4 card, scroll 3 card
-                            scrollStep = cardWidth * 3;
-
-                            // hitung total page
-                            totalPages = Math.ceil(cardsContainer.scrollWidth / scrollStep);
-
-                            updatePagination();
-                        }
-
-                        function updatePagination() {
-                            pagination.innerHTML = "";
-
-                            for (let i = 0; i < totalPages; i++) {
-                                const dot = document.createElement("span");
+                            // 1. Buat dots
+                            cards.forEach((_, index) => {
+                                const dot = document.createElement("div");
                                 dot.classList.add("dot");
-                                if (i === 0) dot.classList.add("active");
+                                if (index === 0) dot.classList.add("active");
+                                pagination.appendChild(dot);
+                            });
 
+                            const allDots = pagination.querySelectorAll(".dot");
+                            if (allDots.length <= 1) {
+                                pagination.style.display = 'none';
+                            }
+
+                            // 2. Fungsi Klik
+                            allDots.forEach((dot, index) => {
                                 dot.addEventListener("click", () => {
-                                    cardsContainer.scrollTo({
-                                        left: i * scrollStep,
-                                        behavior: "smooth",
+                                    const cardWidth = cards[0].offsetWidth;
+                                    const scrollPosition = index * (cardWidth + gap);
+                                    slider.scrollTo({
+                                        left: scrollPosition,
+                                        behavior: "smooth"
                                     });
                                 });
+                            });
 
-                                pagination.appendChild(dot);
-                            }
-                        }
-
-                        function setActiveDot() {
-                            const dots = pagination.querySelectorAll(".dot");
-                            const index = Math.round(cardsContainer.scrollLeft / scrollStep);
-
-                            dots.forEach((dot, i) => {
-                                dot.classList.toggle("active", i === index);
+                            // 3. Fungsi Scroll
+                            slider.addEventListener("scroll", () => {
+                                const cardWidth = cards[0].offsetWidth;
+                                const activeIndex = Math.round(slider.scrollLeft / (cardWidth + gap));
+                                allDots.forEach((dot, index) => {
+                                    dot.classList.toggle("active", index === activeIndex);
+                                });
                             });
                         }
+                        try {
+                            initializeSlider(".kups-slider", "kupsPagination", ".kups-card-item");
+                            initializeSlider(".informasi-cards", "informasiPagination", ".informasi-card");
+                            initializeSlider(".video-cards", "videoPagination", ".video-card");
+                        } catch (e) {
+                            console.error("Terjadi error saat menginisialisasi slider:", e);
+                        }
 
-                        window.addEventListener("resize", updateCardWidth);
-                        cardsContainer.addEventListener("scroll", setActiveDot);
-
-                        updateCardWidth();
                     });
                 </script>
             </div>
@@ -647,81 +502,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         <p>Tidak ada video tersedia.</p>
                     @endforelse
                 </div>
-
-                <!-- Pagination -->
                 <div class="video-pagination" id="videoPagination"></div>
             </div>
-        </section>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const cardsContainer = document.querySelector(".video-cards");
-                const pagination = document.querySelector(".video-pagination");
-
-                let cardWidth = 0;
-                let scrollStep = 0;
-                let totalPages = 0;
-
-                function updateCardWidth() {
-                    const firstCard = cardsContainer.querySelector(".video-card");
-                    if (!firstCard) return;
-
-                    // Cek apakah di mobile atau desktop
-                    const isMobile = window.innerWidth < 768;
-                    const cardsToScroll = isMobile ? 1 : 2; // Mobile geser 1, Desktop geser 2
-
-                    // Ambil gap langsung dari CSS untuk akurasi
-                    const gap = parseInt(window.getComputedStyle(cardsContainer).gap) || 0;
-                    cardWidth = firstCard.offsetWidth + gap;
-                    scrollStep = cardWidth * cardsToScroll;
-
-                    // Kalkulasi total halaman yang lebih akurat
-                    if (cardsContainer.scrollWidth > cardsContainer.clientWidth) {
-                        totalPages = Math.ceil((cardsContainer.scrollWidth - cardsContainer.clientWidth + gap) /
-                            scrollStep) + 1;
-                    } else {
-                        totalPages = 1;
-                    }
-
-                    updatePagination();
-                }
-
-                function updatePagination() {
-                    pagination.innerHTML = "";
-
-                    for (let i = 0; i < totalPages; i++) {
-                        const dot = document.createElement("span");
-                        dot.classList.add("dot");
-                        if (i === 0) dot.classList.add("active");
-
-                        dot.addEventListener("click", () => {
-                            cardsContainer.scrollTo({
-                                left: i * scrollStep,
-                                behavior: "smooth",
-                            });
-                        });
-
-                        pagination.appendChild(dot);
-                    }
-                }
-
-                function setActiveDot() {
-                    const dots = pagination.querySelectorAll(".dot");
-                    const index = Math.round(cardsContainer.scrollLeft / scrollStep);
-
-                    dots.forEach((dot, i) => {
-                        dot.classList.toggle("active", i === index);
-                    });
-                }
-
-                // update setiap resize window
-                window.addEventListener("resize", updateCardWidth);
-                // update saat scroll
-                cardsContainer.addEventListener("scroll", setActiveDot);
-
-                // pertama kali jalan
-                updateCardWidth();
-            });
-        </script>
         </section>
         <!-- /video Section -->
 

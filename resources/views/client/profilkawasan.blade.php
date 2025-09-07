@@ -1,6 +1,6 @@
 @extends('componentsclient.layout')
 @section('content')
-    <section class="section_page profilkawasan">
+    <section class="section_page page-profil-kawasan ">
         <div class="global-title" data-aos="fade-up">
             <h2>PROFIL KAWASAN IAD</h2>
         </div>

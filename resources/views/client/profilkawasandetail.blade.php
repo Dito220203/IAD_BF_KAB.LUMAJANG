@@ -11,8 +11,8 @@
 
                 <hr>
                 <h4>Dokumentasi</h4>
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
+                <div class="dokumentasi-gambar">
+                    
 
                         <div class="swiper-slide">
                             @if ($profilkawasanDetail->gambar)
@@ -22,14 +22,14 @@
                         
 
 
-                    </div>
+                    
                 </div>
                 <hr>
             </div>
         </section>
 
         <div class="text-center mt-4">
-            <a href="{{ url('/profilkawasan') }}" class="btn-footer-back">
+            <a href="{{ route('client.Daftarprofilkawasan') }}" class="btn-footer-back">
                 ← Kembali ke Daftar
             </a>
         </div>
