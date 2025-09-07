@@ -60,6 +60,7 @@ class ClientController extends Controller
 
         $subpotensis = SubpotensiKehutanan::all();
         $produkKups = ProdukKups::all();
+        $countpotensiKehutanan = PotensiKehutanan::count();
         $jumlahKups = Kups::count();
         $jumlahKth = Kth::count();
         $gambaran = GambaranUmum::where('status', 'Aktif')->get();
@@ -78,10 +79,12 @@ class ClientController extends Controller
             'jumlahKups',
             'produkKups',
             'subpotensis',
+            'countpotensiKehutanan',
             'chartData',
             'currentYear',
             'years',
             'contact'
+
         ));
     }
     public function chartData($tahun)

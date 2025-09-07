@@ -156,7 +156,7 @@
                             <div class="table-responsive">
                                 <table id="TableKUPS" class="table text-center">
                                     <thead>
-                                         <tr>
+                                        <tr>
                                             <th>No</th>
                                             <th>KTH</th>
                                             <th>KUPS</th>
@@ -169,7 +169,7 @@
                                     <tbody>
                                         @foreach ($kups as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $kups->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->kth->kth ?? '-' }}</td>
                                                 <td>{{ $data->kups }}</td>
                                                 <td>{{ $data->tahun }}</td>
@@ -198,7 +198,9 @@
                                     </tbody>
                                 </table>
                             </div>
-
+                            <div class="mt-3">
+                                {{ $kups->links('vendor.pagination.bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

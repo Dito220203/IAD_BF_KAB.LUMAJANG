@@ -20,7 +20,7 @@ class PotensiController extends Controller
 
     public function index()
     {
-        $potensi = Potensi::all();
+        $potensi = Potensi::paginate(10);
         return view('admin.Potensi.index', compact('potensi'));
     }
 

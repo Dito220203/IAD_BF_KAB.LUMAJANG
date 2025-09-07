@@ -15,7 +15,7 @@ class ProdukKupsController extends Controller
      */
     public function index()
     {
-        $produkKups = ProdukKups::all();
+        $produkKups = ProdukKups::paginate(10);
         return view('admin.ProdukKups.index', compact('produkKups'));
     }
 
@@ -68,7 +68,7 @@ class ProdukKupsController extends Controller
     public function edit(string $id)
     {
         $produkKupsEdit = ProdukKups::findOrFail($id);
-        $produkKups = ProdukKups::all();
+         $produkKups = ProdukKups::paginate(10);
         return view('admin.ProdukKups.index', compact('produkKups', 'produkKupsEdit'));
     }
 

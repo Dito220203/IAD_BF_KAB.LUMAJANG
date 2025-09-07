@@ -55,7 +55,7 @@
                                     <tbody>
                                         @foreach ($pengguna as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $pengguna->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->username }}</td>
                                                  <td>{{ $data->opd->nama ?? '-' }}</td>
 
@@ -87,6 +87,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                             <div class="mt-3">
+                                {{ $pengguna->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
                         </div>

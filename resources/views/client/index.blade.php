@@ -184,7 +184,7 @@
                                         </div>
                                         <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
                                         <span class="stats-number purecounter" data-purecounter-start="0"
-                                            data-purecounter-end="{{ $subpotensi->jumlah ?? 0 }}"
+                                            data-purecounter-end="{{ $countpotensiKehutanan }}"
                                             data-purecounter-duration="1"></span>
                                     </div>
                                 </a>

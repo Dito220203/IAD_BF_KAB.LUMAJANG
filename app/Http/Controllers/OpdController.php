@@ -14,7 +14,7 @@ class OpdController extends Controller
      */
     public function index()
     {
-        $opd = Opd::all();
+        $opd = Opd::paginate(10);
         return view('admin.Opd.index', compact('opd'));
     }
 

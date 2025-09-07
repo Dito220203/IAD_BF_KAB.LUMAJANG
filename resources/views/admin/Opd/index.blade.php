@@ -62,7 +62,8 @@
 
                                 <div class="d-flex align-items-center ">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect" data-target="TableOpd">
+                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"
+                                        data-target="TableOpd">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -72,7 +73,7 @@
                                 </div>
 
                                 <div class="input-group w-auto">
-                                   <input type="text" class="form-control searchInput" data-target="TableOpd"
+                                    <input type="text" class="form-control searchInput" data-target="TableOpd"
                                         placeholder="Cari Data...">
                                 </div>
                             </div>
@@ -91,7 +92,7 @@
                                     <tbody>
                                         @foreach ($opd as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $opd->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->nama }}</td>
                                                 <td> {{ $data->status }}</td>
                                                 <td class="text-center align-middle">
@@ -165,6 +166,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $opd->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
                         </div>

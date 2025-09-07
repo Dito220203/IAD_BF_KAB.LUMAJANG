@@ -50,14 +50,14 @@
                                             <th>Judul</th>
                                             <th data-type="date" data-format="YYYY/DD/MM">Tanggal Dibuat</th>
                                             <th>Status</th>
-                                            <th>Image</th>
+                                            <th>File</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($regulasi as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                 <td>{{ $regulasi->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td>{{ $data->tanggal }}</td>
                                                 <td>
@@ -124,6 +124,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $regulasi->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
                         </div>

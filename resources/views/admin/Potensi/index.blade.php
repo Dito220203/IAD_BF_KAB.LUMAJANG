@@ -56,7 +56,7 @@
                                     <tbody>
                                         @foreach ($potensi as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $potensi->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td> Desa/Kelurahan: {{ $data->desa->name ?? '-' }},
                                                     Kecamatan: {{ $data->kecamatan->name ?? '-' }}
@@ -89,6 +89,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $potensi->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
                         </div>

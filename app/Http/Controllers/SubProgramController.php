@@ -16,8 +16,8 @@ class SubProgramController extends Controller
      */
     public function index()
     {
-        $produk = FotoSubprogram::with('subprogram')->get();
-        $subprogram = Subprogram::all();
+        $produk = FotoSubprogram::with('subprogram')->paginate(10,['*'], 'produk_page');
+        $subprogram = Subprogram::paginate(10,['*'], 'subprogram_page');
         return view('admin.Subprogram.index', compact('subprogram','produk'));
     }
 
