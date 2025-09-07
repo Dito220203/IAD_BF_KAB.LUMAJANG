@@ -15,7 +15,7 @@ class KupsController extends Controller
      */
     public function index()
     {
-        $kups = Kups::all();
+        $kups = Kups::paginate(10);
         $kth = Kth::all();
         return view('admin.Kups.index', compact('kups', 'kth'));
     }
@@ -66,7 +66,7 @@ class KupsController extends Controller
 
         $kupsEdit = Kups::findOrFail($id);
         $kth = Kth::all();
-        $kups = Kups::with('kth')->get();
+        $kups = Kups::with('kth')->paginate(10);
         return view('admin.Kups.index', compact('kups', 'kupsEdit', 'kth'));
     }
 

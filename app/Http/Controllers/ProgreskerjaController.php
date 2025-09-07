@@ -21,7 +21,7 @@ class ProgreskerjaController extends Controller
     public function index()
     {
         $user = Auth::guard('pengguna')->user();
-        $user->level == 'Super Admin' ? $progres = ProgresKerja::all() : $progres = ProgresKerja::where('id_pengguna', $user->id)->get();
+        $user->level == 'Super Admin' ? $progres = ProgresKerja::paginate(10) : $progres = ProgresKerja::where('id_pengguna', $user->id)->paginate(10);
         return view('admin.ProgresKerja.index', compact('progres'));
     }
 

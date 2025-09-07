@@ -61,7 +61,6 @@
                                                  <option value="">Pilih</option>
                                                  <option value="Super Admin">Super Admin</option>
                                                  <option value="Admin">Admin</option>
-                                                 <option value="adminsekretariat">Admin Sekretariat</option>
                                              </select>
                                          </div>
                                      </div>

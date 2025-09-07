@@ -15,7 +15,7 @@ class RegulasiController extends Controller
      */
     public function index()
     {
-        $regulasi = Regulasi::all();
+        $regulasi = Regulasi::paginate(10);
         return view('admin.Regulasi.index', compact('regulasi'));
     }
 

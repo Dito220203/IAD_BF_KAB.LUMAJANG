@@ -98,7 +98,7 @@
                                     <tbody>
                                         @foreach ($subprogram as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $subprogram->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->program }}</td>
                                                 <td>{{ $data->subprogram }}</td>
                                                 <td class="text-center align-middle">
@@ -174,6 +174,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $subprogram->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table Sub Program -->
                         </div>
@@ -279,7 +282,7 @@
                                     <tbody>
                                         @foreach ($produk as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $produk->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td>{{ $data->keterangan }}</td>
@@ -309,6 +312,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $produk->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- Modal Update Produk -->
                             @foreach ($produk as $data)

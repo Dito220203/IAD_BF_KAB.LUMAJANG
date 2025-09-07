@@ -68,7 +68,7 @@
                                     <tbody>
                                         @foreach ($subpotensi as $item)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $subpotensi->firstItem() + $loop->index }}</td>
                                                 <td>{{ $item->sub_potensi }}</td>
                                                 <td>{{ $item->keterangan }}</td>
                                                 <td>
@@ -132,7 +132,9 @@
                                     </tbody>
                                 </table>
                             </div>
-
+                            <div class="mt-3">
+                                {{ $subpotensi->links('vendor.pagination.bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,7 +221,7 @@
                                     <tbody>
                                         @foreach ($potensi as $item)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $potensi->firstItem() + $loop->index }}</td>
                                                 <td>{{ $item->SubpotensiKehutanan->sub_potensi ?? '-' }}</td>
                                                 <td>{{ $item->judul }}</td>
                                                 <td>
@@ -307,8 +309,7 @@
                                                                     <label>Judul</label>
                                                                     <input type="text" name="e_judul"
                                                                         class="form-control"
-                                                                        value="{{ old('judul', $item->judul) }}"
-                                                                        required>
+                                                                        value="{{ old('judul', $item->judul) }}" required>
                                                                 </div>
 
 
@@ -375,7 +376,9 @@
                                     </tbody>
                                 </table>
                             </div>
-
+                            <div class="mt-3">
+                                {{ $potensi->links('vendor.pagination.bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

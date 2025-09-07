@@ -162,124 +162,6 @@
 
         </section>
 
-        <!-- JUMLAH PENDAPATAN TIAP KUPS -->
-        {{-- <section id="kups" class="kups">
-            <div class="container" data-aos="fade-up" data-aos-delay="100">
-                <div class="global-title">
-                    <h2>IAD POTENSI TIAP KUPS</h2>
-                </div>
-
-                <!-- SCROLL WRAPPER -->
-                <div class="kups-cards" data-aos="fade-down" data-aos-delay="200">
-                    <div class="kups-scroll">
-                        <div class="row gy-4 flex-nowrap">
-
-                            <!-- Card 1 -->
-                            <div class="col-lg-3 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fa-solid fa-cow"></i></div>
-                                        <p class="stats-label">POTENSI PETERNAKAN</p>
-                                        <span class="stats-number purecounter" data-purecounter-start="0"
-                                            data-purecounter-end="123" data-purecounter-duration="1"></span>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Card 2 -->
-                            <div class="col-lg-3 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fas fa-mountain"></i></div>
-                                        <p class="stats-label">POTENSI GUNUNG</p>
-                                        <span class="stats-number">88</span>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Card lainnya... -->
-                            <div class="col-lg-3 col-md-6">
-                                <a href="{{ url('/daftarpotensi') }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon"><i class="fas fa-mountain"></i></div>
-                                        <p class="stats-label">POTENSI GUNUNG</p>
-                                        <span class="stats-number">88</span>
-                                    </div>
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <!-- chart kups Section -->
-            <div data-aos="fade-up" data-aos-delay="250" id="pendapatanChart" class="pendapatanChart">
-            </div>
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    // Contoh data, nanti bisa diganti dari card
-                    const dataValues = [
-                        ['Pisang', 182.93],
-                        ['Olahan Susu', 222.44],
-                        ['Potensi Peternakan', 151.41],
-                        ['Olahan Kopi', 154.00]
-                    ];
-
-                    Highcharts.chart('pendapatanChart', {
-                        chart: {
-                            type: 'pie',
-                            backgroundColor: '#fff', // putih
-                            options3d: {
-                                enabled: true,
-                                alpha: 30, // kemiringan pas, tidak terlalu miring
-                                beta: 0
-                            }
-                        },
-                        title: {
-                            text: 'Nilai Ekonomi Tiap KUPS'
-                        },
-                        subtitle: {
-                            text: 'Unit: Dalam Rupiah',
-                            align: 'right'
-                        },
-                        plotOptions: {
-                            pie: {
-                                allowPointSelect: true,
-                                cursor: 'pointer',
-                                depth: 25, // tipis → tidak timpang tindih
-                                borderWidth: 2, // garis pemisah antar slice
-                                borderColor: '#fff', // garis putih biar rapi
-                                dataLabels: {
-                                    enabled: true,
-                                    format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
-                                    connectorColor: 'silver'
-                                },
-                                showInLegend: true
-                            }
-                        },
-                        tooltip: {
-                            pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
-                        },
-                        series: [{
-                            name: 'Pendapatan',
-                            data: [
-                                ['Pisang', 182.93],
-                                ['Olahan Susu', 222.44],
-                                ['Potensi Peternakan', 151.41],
-                                ['Olahan Kopi', 154.00]
-                            ],
-                            colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
-                        }]
-                    });
-
-                });
-            </script>
-
-        </section> --}}
         <section id="kups" class="kups">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="global-title">
@@ -303,7 +185,7 @@
                                             </div>
                                             <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
                                             <span class="stats-number purecounter" data-purecounter-start="0"
-                                                data-purecounter-end="{{ $subpotensi->jumlah ?? 0 }}"
+                                                data-purecounter-end=" {{ $countpotensiKehutanan }}"
                                                 data-purecounter-duration="1"></span>
                                         </div>
                                     </a>
@@ -324,7 +206,7 @@
                 <div class="chart-wrapper" data-aos="fade-up">
 
                     {{-- Header sekarang berisi JUDUL dan FILTER --}}
-                    <<div class="chart-header">
+                    <div class="chart-header">
                         <h3 class="chart-title">Nilai Ekonomi Tiap KUPS</h3>
 
                         {{-- TAMBAHKAN KEMBALI PEMBUNGKUS INI --}}
@@ -342,151 +224,151 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    {{-- Chart Area --}}
+                    <div id="pendapatanChart" class="pendapatanChart"></div>
                 </div>
 
-                {{-- Chart Area --}}
-                <div id="pendapatanChart" class="pendapatanChart"></div>
-            </div>
+                {{-- Script Highcharts (posisinya tetap setelah HTML chart) --}}
+                <script src="https://code.highcharts.com/highcharts.js"></script>
+                <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
 
-            {{-- Script Highcharts (posisinya tetap setelah HTML chart) --}}
-            <script src="https://code.highcharts.com/highcharts.js"></script>
-            <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-            <script>
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // =========================================================
-    // BAGIAN 1: KODE UNTUK HIGHCHARTS
-    // =========================================================
-    const tahunSelect = document.getElementById("tahunSelect");
+                        // =========================================================
+                        // BAGIAN 1: KODE UNTUK HIGHCHARTS
+                        // =========================================================
+                        const tahunSelect = document.getElementById("tahunSelect");
 
-    function renderChart(dataValues, tahun) {
-        Highcharts.chart('pendapatanChart', {
-            chart: {
-                type: 'pie',
-                backgroundColor: '#f0f0f0',
-                options3d: {
-                    enabled: true,
-                    alpha: 30
-                }
-            },
-            title: {
-                text: null
-            },
-            subtitle: {
-                text: 'Unit: Dalam Rupiah - Tahun: ' + tahun,
-                align: 'left'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    depth: 25,
-                    borderWidth: 2,
-                    borderColor: '#fff',
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
-                        connectorColor: 'silver'
-                    },
-                    showInLegend: true
-                }
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
-            },
-            series: [{
-                name: 'Pendapatan',
-                data: dataValues,
-                colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
-            }]
-        });
-    }
-
-    // Render awal chart
-    renderChart(@json($chartData), {{ $currentYear }});
-
-    // Event filter tahun (akan dipicu oleh script dropdown di bawah)
-    tahunSelect.addEventListener("change", function() {
-        const selectedYear = this.value;
-        fetch(`/kups/chart-data/${selectedYear}`)
-            .then(res => res.json())
-            .then(data => renderChart(data, selectedYear));
-    });
-
-
-    // =========================================================
-    // BAGIAN 2: KODE UNTUK DROPDOWN KUSTOM
-    // =========================================================
-    var x, i, j, l, ll, selElmnt, a, b, c;
-    x = document.getElementsByClassName("custom-select-wrapper");
-    l = x.length;
-    for (i = 0; i < l; i++) {
-        selElmnt = x[i].getElementsByTagName("select")[0];
-        ll = selElmnt.length;
-        a = document.createElement("DIV");
-        a.setAttribute("class", "select-selected");
-        a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-        x[i].appendChild(a);
-        b = document.createElement("DIV");
-        b.setAttribute("class", "select-items select-hide");
-        for (j = 0; j < ll; j++) { // Loop dimulai dari 0 agar semua tahun muncul
-            c = document.createElement("DIV");
-            c.innerHTML = selElmnt.options[j].innerHTML;
-            c.addEventListener("click", function(e) {
-                var y, i, k, s, h, sl, yl;
-                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-                sl = s.length;
-                h = this.parentNode.previousSibling;
-                for (i = 0; i < sl; i++) {
-                    if (s.options[i].innerHTML == this.innerHTML) {
-                        s.selectedIndex = i;
-                        h.innerHTML = this.innerHTML;
-                        y = this.parentNode.getElementsByClassName("same-as-selected");
-                        yl = y.length;
-                        for (k = 0; k < yl; k++) {
-                            y[k].removeAttribute("class");
+                        function renderChart(dataValues, tahun) {
+                            Highcharts.chart('pendapatanChart', {
+                                chart: {
+                                    type: 'pie',
+                                    backgroundColor: '#f0f0f0',
+                                    options3d: {
+                                        enabled: true,
+                                        alpha: 30
+                                    }
+                                },
+                                title: {
+                                    text: null
+                                },
+                                subtitle: {
+                                    text: 'Unit: Dalam Rupiah - Tahun: ' + tahun,
+                                    align: 'left'
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        allowPointSelect: true,
+                                        cursor: 'pointer',
+                                        depth: 25,
+                                        borderWidth: 2,
+                                        borderColor: '#fff',
+                                        dataLabels: {
+                                            enabled: true,
+                                            format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
+                                            connectorColor: 'silver'
+                                        },
+                                        showInLegend: true
+                                    }
+                                },
+                                tooltip: {
+                                    pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
+                                },
+                                series: [{
+                                    name: 'Pendapatan',
+                                    data: dataValues,
+                                    colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
+                                }]
+                            });
                         }
-                        this.setAttribute("class", "same-as-selected");
-                        
-                        // Memicu event 'change' agar chart tetap update
-                        s.dispatchEvent(new Event('change')); 
-                        
-                        break;
-                    }
-                }
-                h.click();
-            });
-            b.appendChild(c);
-        }
-        x[i].appendChild(b);
-        a.addEventListener("click", function(e) {
-            e.stopPropagation();
-            closeAllSelect(this);
-            this.nextSibling.classList.toggle("select-hide");
-        });
-    }
 
-    function closeAllSelect(elmnt) {
-        var x, y, i, xl, yl, arrNo = [];
-        x = document.getElementsByClassName("select-items");
-        y = document.getElementsByClassName("select-selected");
-        xl = x.length;
-        yl = y.length;
-        for (i = 0; i < yl; i++) {
-            if (elmnt != y[i]) {
-                y[i].classList.remove("select-arrow-active");
-            }
-        }
-        for (i = 0; i < xl; i++) {
-            if (elmnt != y[i]) {
-                x[i].classList.add("select-hide");
-            }
-        }
-    }
-    document.addEventListener("click", closeAllSelect);
-    
-});
-</script>
+                        // Render awal chart
+                        renderChart(@json($chartData), {{ $currentYear }});
+
+                        // Event filter tahun (akan dipicu oleh script dropdown di bawah)
+                        tahunSelect.addEventListener("change", function() {
+                            const selectedYear = this.value;
+                            fetch(`/kups/chart-data/${selectedYear}`)
+                                .then(res => res.json())
+                                .then(data => renderChart(data, selectedYear));
+                        });
+
+
+                        // =========================================================
+                        // BAGIAN 2: KODE UNTUK DROPDOWN KUSTOM
+                        // =========================================================
+                        var x, i, j, l, ll, selElmnt, a, b, c;
+                        x = document.getElementsByClassName("custom-select-wrapper");
+                        l = x.length;
+                        for (i = 0; i < l; i++) {
+                            selElmnt = x[i].getElementsByTagName("select")[0];
+                            ll = selElmnt.length;
+                            a = document.createElement("DIV");
+                            a.setAttribute("class", "select-selected");
+                            a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                            x[i].appendChild(a);
+                            b = document.createElement("DIV");
+                            b.setAttribute("class", "select-items select-hide");
+                            for (j = 0; j < ll; j++) { // Loop dimulai dari 0 agar semua tahun muncul
+                                c = document.createElement("DIV");
+                                c.innerHTML = selElmnt.options[j].innerHTML;
+                                c.addEventListener("click", function(e) {
+                                    var y, i, k, s, h, sl, yl;
+                                    s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                                    sl = s.length;
+                                    h = this.parentNode.previousSibling;
+                                    for (i = 0; i < sl; i++) {
+                                        if (s.options[i].innerHTML == this.innerHTML) {
+                                            s.selectedIndex = i;
+                                            h.innerHTML = this.innerHTML;
+                                            y = this.parentNode.getElementsByClassName("same-as-selected");
+                                            yl = y.length;
+                                            for (k = 0; k < yl; k++) {
+                                                y[k].removeAttribute("class");
+                                            }
+                                            this.setAttribute("class", "same-as-selected");
+
+                                            // Memicu event 'change' agar chart tetap update
+                                            s.dispatchEvent(new Event('change'));
+
+                                            break;
+                                        }
+                                    }
+                                    h.click();
+                                });
+                                b.appendChild(c);
+                            }
+                            x[i].appendChild(b);
+                            a.addEventListener("click", function(e) {
+                                e.stopPropagation();
+                                closeAllSelect(this);
+                                this.nextSibling.classList.toggle("select-hide");
+                            });
+                        }
+
+                        function closeAllSelect(elmnt) {
+                            var x, y, i, xl, yl, arrNo = [];
+                            x = document.getElementsByClassName("select-items");
+                            y = document.getElementsByClassName("select-selected");
+                            xl = x.length;
+                            yl = y.length;
+                            for (i = 0; i < yl; i++) {
+                                if (elmnt != y[i]) {
+                                    y[i].classList.remove("select-arrow-active");
+                                }
+                            }
+                            for (i = 0; i < xl; i++) {
+                                if (elmnt != y[i]) {
+                                    x[i].classList.add("select-hide");
+                                }
+                            }
+                        }
+                        document.addEventListener("click", closeAllSelect);
+
+                    });
+                </script>
         </section> {{-- <-- PENUTUP SECTION#KUPS YANG BENAR --}}
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
 

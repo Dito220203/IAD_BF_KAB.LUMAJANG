@@ -69,7 +69,7 @@ class BannerController extends Controller
     public function edit(string $id)
     {
         $bannerEdit = Banner::findOrFail($id);
-        $banner = Banner::all();
+        $banner = Banner::paginate(10);
         return view('admin.banner.index', compact('banner', 'bannerEdit'));
     }
 

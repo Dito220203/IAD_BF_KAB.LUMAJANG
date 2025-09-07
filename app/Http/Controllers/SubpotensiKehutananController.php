@@ -16,8 +16,8 @@ class SubpotensiKehutananController extends Controller
      */
     public function index()
     {
-        $potensi = PotensiKehutanan::all();
-        $subpotensi = SubpotensiKehutanan::all();
+        $subpotensi = SubpotensiKehutanan::paginate(10, ['*'], 'subpotensi_page');
+        $potensi = PotensiKehutanan::paginate(10, ['*'], 'potensi_page');
         return view('admin.subpotensiKehutanan.index', compact('subpotensi', 'potensi'));
     }
 

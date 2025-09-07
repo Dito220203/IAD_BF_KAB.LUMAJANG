@@ -20,9 +20,11 @@ use App\Http\Controllers\RencanakerjaController;
 use App\Http\Controllers\SubProgramController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\PesanController;
 use App\Http\Controllers\PotensiKupsController;
 use App\Http\Controllers\ProdukKupsController;
 use App\Http\Controllers\SubpotensiKehutananController;
+use App\Models\Pesan;
 use Illuminate\Support\Facades\Route;
 
 //client
@@ -83,8 +85,8 @@ Route::get('/detailvideo', [ClientController::class, 'detailvideo'])->name('clie
 Route::get('/daftarpotensi/{id}', [ClientController::class, 'daftarpotensi'])->name('client.daftarpotensi');
 Route::get('/detailpotensi/{id}', [ClientController::class, 'detailpotensi'])
     ->name('client.detailpotensi');
-    Route::get('/kups/chart-data/{tahun}', [ClientController::class, 'chartData']);
-//tamabahan potensi
+Route::get('/kups/chart-data/{tahun}', [ClientController::class, 'chartData']);
+
 
 
 
@@ -135,11 +137,11 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::put('/kups-update/{id}', [KupsController::class, 'update'])->name('kups.update');
     Route::delete('/kups-delete/{id}', [KupsController::class, 'destroy'])->name('kups.delete');
 
-     Route::get('/produk-kups', [ProdukKupsController::class, 'index'])->name('produkKups');
-     Route::post('/produk-kups', [ProdukKupsController::class, 'store'])->name('produkKups.store');
-     Route::get('/produk-kups/{id}', [ProdukKupsController::class, 'edit'])->name('produkKups.edit');
-     Route::put('/produk-kups/{id}', [ProdukKupsController::class, 'update'])->name('produkKups.update');
-     Route::delete('/produk-kups/{id}', [ProdukKupsController::class, 'destroy'])->name('produkKups.delete');
+    Route::get('/produk-kups', [ProdukKupsController::class, 'index'])->name('produkKups');
+    Route::post('/produk-kups', [ProdukKupsController::class, 'store'])->name('produkKups.store');
+    Route::get('/produk-kups/{id}', [ProdukKupsController::class, 'edit'])->name('produkKups.edit');
+    Route::put('/produk-kups/{id}', [ProdukKupsController::class, 'update'])->name('produkKups.update');
+    Route::delete('/produk-kups/{id}', [ProdukKupsController::class, 'destroy'])->name('produkKups.delete');
 
     Route::get('subpotensi-kehutanan', [SubpotensiKehutananController::class, 'index'])->name('SubpotensiKehutanan');
     Route::post('subpotensi-kehutanan', [SubpotensiKehutananController::class, 'store'])->name('subpotensi.store');

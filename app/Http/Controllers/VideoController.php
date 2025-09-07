@@ -60,7 +60,7 @@ class VideoController extends Controller
     public function edit(string $id)
     {
         $videoEdit = Video::findOrFail($id);
-        $video = Video::all();
+        $video = Video::paginate(10);
         return view('admin.Video.index', compact('video', 'videoEdit'));
     }
 

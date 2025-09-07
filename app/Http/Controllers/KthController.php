@@ -59,7 +59,7 @@ class KthController extends Controller
     public function edit(string $id)
     {
         $kthEdit = Kth::findOrFail($id);
-        $kth = Kth::all();
+        $kth = Kth::paginate(10);
         return view('admin.Kth.index', compact('kth', 'kthEdit'));
     }
 

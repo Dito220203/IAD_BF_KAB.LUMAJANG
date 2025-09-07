@@ -17,7 +17,8 @@
                     <div class="card ">
                         <div class="card-body">
                             <!-- Header control: Tambah, Search, Tampilkan Data -->
-                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-4 mt-3">
+                            <div
+                                class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-4 mt-3">
 
                                 <a href="{{ route('monev.create') }}" class="btn btn-primary">
                                     + Tambah Monitoring Evaluasi
@@ -85,7 +86,7 @@
                                         @foreach ($monev as $data)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                 <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
+                                                <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                 <td>{{ $data->rencanaKerja->judul ?? '-' }}</td>
                                                 <td>{{ $data->rka }}</td>
 

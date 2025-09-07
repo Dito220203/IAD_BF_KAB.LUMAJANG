@@ -56,7 +56,7 @@
                                      <tbody>
                                          @foreach ($progres as $data)
                                              <tr>
-                                                 <td>{{ $loop->iteration }}</td>
+                                                 <td>{{ $progres->firstItem() + $loop->index }}</td>
                                                  <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
 
                                                  <td>{{ $data->judul }}</td>
@@ -123,6 +123,9 @@
                                  <!-- End Table with stripped rows -->
 
                              </div>
+                              <div class="mt-3">
+                                {{ $progres->links('vendor.pagination.bootstrap-5') }}
+                            </div>
                          </div>
 
                      </div>

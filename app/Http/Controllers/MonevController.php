@@ -17,47 +17,47 @@ class MonevController extends Controller
     /**
      * Display a listing of the resource.
      */
-public function index(Request $request)
-{
-    $user = Auth::guard('pengguna')->user();
-    $query = Monev::query();
+    public function index(Request $request)
+    {
+        $user = Auth::guard('pengguna')->user();
+        $query = Monev::query();
 
-    if ($user->level !== 'Super Admin') {
-        $query->where('id_pengguna', $user->id);
-    }
-
-    // Filter Triwulan
-    if ($request->filled('triwulan')) {
-        $triwulan = $request->triwulan;
-
-        switch ($triwulan) {
-            case 1:
-                $query->whereMonth('tahun', '>=', 1)->whereMonth('tahun', '<=', 3);
-                break;
-            case 2:
-                $query->whereMonth('tahun', '>=', 4)->whereMonth('tahun', '<=', 6);
-                break;
-            case 3:
-                $query->whereMonth('tahun', '>=', 7)->whereMonth('tahun', '<=', 9);
-                break;
-            case 4:
-                $query->whereMonth('tahun', '>=', 10)->whereMonth('tahun', '<=', 12);
-                break;
+        if ($user->level !== 'Super Admin') {
+            $query->where('id_pengguna', $user->id);
         }
+
+        // Filter Triwulan
+        if ($request->filled('triwulan')) {
+            $triwulan = $request->triwulan;
+
+            switch ($triwulan) {
+                case 1:
+                    $query->whereMonth('tahun', '>=', 1)->whereMonth('tahun', '<=', 3);
+                    break;
+                case 2:
+                    $query->whereMonth('tahun', '>=', 4)->whereMonth('tahun', '<=', 6);
+                    break;
+                case 3:
+                    $query->whereMonth('tahun', '>=', 7)->whereMonth('tahun', '<=', 9);
+                    break;
+                case 4:
+                    $query->whereMonth('tahun', '>=', 10)->whereMonth('tahun', '<=', 12);
+                    break;
+            }
+        }
+
+        // Filter Tahun
+        if ($request->filled('tahun')) {
+            $query->whereYear('tahun', $request->tahun);
+        }
+
+        $monev = $query->orderBy('tahun', 'desc')->paginate(10)->withQueryString();
+
+        // Untuk dropdown tahun
+        $tahun_list = Monev::selectRaw('YEAR(tahun) as tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+
+        return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
     }
-
-    // Filter Tahun
-    if ($request->filled('tahun')) {
-        $query->whereYear('tahun', $request->tahun);
-    }
-
-    $monev = $query->orderBy('tahun', 'desc')->paginate(10)->withQueryString();
-
-    // Untuk dropdown tahun
-    $tahun_list = Monev::selectRaw('YEAR(tahun) as tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
-
-    return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
-}
 
 
 
@@ -77,7 +77,7 @@ public function index(Request $request)
             'anggaran' => $rencana->anggaran ?? '',
             'opd' => $rencana->opd->nama ?? '',
             'opd_id' => $rencana->opd->id ?? '',
-             'subprogram_id' => $rencana->id_subprogram ?? '',
+            'subprogram_id' => $rencana->id_subprogram ?? '',
         ]);
     }
 
@@ -190,39 +190,39 @@ public function index(Request $request)
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-{
-    $user = Auth::guard('pengguna')->user();
-    $monev = Monev::findOrFail($id);
+    {
+        $user = Auth::guard('pengguna')->user();
+        $monev = Monev::findOrFail($id);
 
-    // validasi sama seperti store()
-    $rules = [
-        'program' => 'required',
-        'id_renja' => 'nullable|exists:rencana_kerjas,id',
-        'lokasi' => 'nullable|string',
-        'tahun' => 'required',
-        'anggaran' => 'nullable|string',
-        'rka' => 'required',
-        'realisasi' => 'required',
-        'keterangan' => 'nullable|string',
-    ];
+        // validasi sama seperti store()
+        $rules = [
+            'program' => 'required',
+            'id_renja' => 'nullable|exists:rencana_kerjas,id',
+            'lokasi' => 'nullable|string',
+            'tahun' => 'required',
+            'anggaran' => 'nullable|string',
+            'rka' => 'required',
+            'realisasi' => 'required',
+            'keterangan' => 'nullable|string',
+        ];
 
-    if ($user->level === 'Super Admin') {
-        $rules['id_opd'] = 'required|exists:opds,id';
+        if ($user->level === 'Super Admin') {
+            $rules['id_opd'] = 'required|exists:opds,id';
+        }
+
+        $validate = $request->validate($rules);
+
+        // mapping langsung seperti store()
+        $validate['id_pengguna'] = $user->id;
+        if ($user->level !== 'Super Admin') {
+            $validate['id_opd'] = $user->id_opd;
+        }
+
+        $monev->update($validate);
+
+        LogHelper::add('Mengupdate data Monev');
+        return redirect()->route('monev')->with('success', 'Data Berhasil Diupdate');
     }
-
-    $validate = $request->validate($rules);
-
-    // mapping langsung seperti store()
-    $validate['id_pengguna'] = $user->id;
-    if ($user->level !== 'Super Admin') {
-        $validate['id_opd'] = $user->id_opd;
-    }
-
-    $monev->update($validate);
-
-    LogHelper::add('Mengupdate data Monev');
-    return redirect()->route('monev')->with('success', 'Data Berhasil Diupdate');
-}
 
 
 

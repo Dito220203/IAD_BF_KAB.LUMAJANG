@@ -126,7 +126,7 @@
                                     <tbody>
                                         @foreach ($produkKups as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                               <td>{{ $produkKups->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->nama }}</td>
                                                 <td>
                                                     @if ($data->gambar)
@@ -162,6 +162,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                              <div class="mt-3">
+                                {{ $produkKups->links('vendor.pagination.bootstrap-5') }}
                             </div>
                         </div>
                     </div>

@@ -25,7 +25,8 @@
 
                                 <div class="d-flex align-items-center ">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect" data-target="TableRencana">
+                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"
+                                        data-target="TableRencana">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
@@ -35,7 +36,7 @@
                                 </div>
 
                                 <div class="input-group w-auto">
-                                     <input type="text" class="form-control searchInput" data-target="TableRencana"
+                                    <input type="text" class="form-control searchInput" data-target="TableRencana"
                                         placeholder="Cari Data...">
                                 </div>
                             </div>
@@ -48,20 +49,15 @@
                                             <th>No</th>
                                             <th>Judul</th>
                                             <th>Lokasi</th>
-                                            {{-- <th>Tahun</th> --}}
-                                            {{-- <th>Perangkat Daerah</th> --}}
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($rencana as $data)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $rencana->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td>{{ $data->lokasi }}</td>
-                                                {{-- <td>{{ $data->tahun }}</td> --}}
-                                                {{-- <td>{{ $data->anggaran }}</td> --}}
-                                                {{-- <td>{{ $data->id_opd }}</td> --}}
                                                 <td>
                                                     @if ($data->status === 'Valid')
                                                         <span class="badge bg-success">{{ $data->status }}</span>
@@ -125,6 +121,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $rencana->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->
                         </div>

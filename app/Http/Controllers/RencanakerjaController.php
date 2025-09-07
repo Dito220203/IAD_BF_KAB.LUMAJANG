@@ -19,7 +19,7 @@ class RencanakerjaController extends Controller
     public function index()
     {
         $user = Auth::guard('pengguna')->user();
-        $user->level == 'Super Admin' ? $rencana = RencanaKerja::all() : $rencana = RencanaKerja::where('id_pengguna', $user->id)->get();
+        $user->level == 'Super Admin' ? $rencana = RencanaKerja::paginate(10) : $rencana = RencanaKerja::where('id_pengguna', $user->id)->paginate(10);
         return view('admin.RencanaKerja.index', compact('rencana'));
     }
 
