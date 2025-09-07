@@ -315,87 +315,179 @@
 
                 </div>
 
+                {{-- ... kups-pagination ... --}}
                 <div class="kups-pagination" id="kupsPagination"></div>
-                <div class="filter-tahun" style="margin-bottom: 15px;">
-                    <label for="tahunSelect">Pilih Tahun:</label>
-                    <select id="tahunSelect">
-                        @foreach ($years as $year)
-                            <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>
-                                {{ $year }}
-                            </option>
-                        @endforeach
-                    </select>
+
+                {{-- ========================================================= --}}
+                {{-- MULAI PEMBUNGKUS CHART BARU DI SINI --}}
+                {{-- ========================================================= --}}
+                <div class="chart-wrapper" data-aos="fade-up">
+
+                    {{-- Header sekarang berisi JUDUL dan FILTER --}}
+                    <<div class="chart-header">
+                        <h3 class="chart-title">Nilai Ekonomi Tiap KUPS</h3>
+
+                        {{-- TAMBAHKAN KEMBALI PEMBUNGKUS INI --}}
+                        <div class="custom-select-wrapper">
+                            <div class="year-filter">
+                                <label for="tahunSelect">Pilih Tahun:</label>
+                                <select id="tahunSelect">
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year }}"
+                                            {{ $year == $currentYear ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="250" id="pendapatanChart" class="pendapatanChart"></div>
+                {{-- Chart Area --}}
+                <div id="pendapatanChart" class="pendapatanChart"></div>
+            </div>
 
-                <script src="https://code.highcharts.com/highcharts.js"></script>
-                <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+            {{-- Script Highcharts (posisinya tetap setelah HTML chart) --}}
+            <script src="https://code.highcharts.com/highcharts.js"></script>
+            <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+            <script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // =========================================================
+    // BAGIAN 1: KODE UNTUK HIGHCHARTS
+    // =========================================================
+    const tahunSelect = document.getElementById("tahunSelect");
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        const tahunSelect = document.getElementById("tahunSelect");
+    function renderChart(dataValues, tahun) {
+        Highcharts.chart('pendapatanChart', {
+            chart: {
+                type: 'pie',
+                backgroundColor: '#f0f0f0',
+                options3d: {
+                    enabled: true,
+                    alpha: 30
+                }
+            },
+            title: {
+                text: null
+            },
+            subtitle: {
+                text: 'Unit: Dalam Rupiah - Tahun: ' + tahun,
+                align: 'left'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 25,
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
+                        connectorColor: 'silver'
+                    },
+                    showInLegend: true
+                }
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
+            },
+            series: [{
+                name: 'Pendapatan',
+                data: dataValues,
+                colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
+            }]
+        });
+    }
 
-                        function renderChart(dataValues, tahun) {
-                            Highcharts.chart('pendapatanChart', {
-                                chart: {
-                                    type: 'pie',
-                                    backgroundColor: '#fff',
-                                    options3d: {
-                                        enabled: true,
-                                        alpha: 30
-                                    }
-                                },
-                                title: {
-                                    text: 'Nilai Ekonomi Tiap KUPS'
-                                },
+    // Render awal chart
+    renderChart(@json($chartData), {{ $currentYear }});
 
-                                subtitle: {
-                                    text: 'Unit: Dalam Rupiah - Tahun: ' + tahun,
-                                    align: 'right'
-                                },
-                                plotOptions: {
-                                    pie: {
-                                        allowPointSelect: true,
-                                        cursor: 'pointer',
-                                        depth: 25,
-                                        borderWidth: 2,
-                                        borderColor: '#fff',
-                                        dataLabels: {
-                                            enabled: true,
-                                            format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
-                                            connectorColor: 'silver'
-                                        },
-                                        showInLegend: true
-                                    }
-                                },
-                                tooltip: {
-                                    pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
-                                },
-                                series: [{
-                                    name: 'Pendapatan',
-                                    data: dataValues,
-                                    colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
-                                }]
-                            });
+    // Event filter tahun (akan dipicu oleh script dropdown di bawah)
+    tahunSelect.addEventListener("change", function() {
+        const selectedYear = this.value;
+        fetch(`/kups/chart-data/${selectedYear}`)
+            .then(res => res.json())
+            .then(data => renderChart(data, selectedYear));
+    });
+
+
+    // =========================================================
+    // BAGIAN 2: KODE UNTUK DROPDOWN KUSTOM
+    // =========================================================
+    var x, i, j, l, ll, selElmnt, a, b, c;
+    x = document.getElementsByClassName("custom-select-wrapper");
+    l = x.length;
+    for (i = 0; i < l; i++) {
+        selElmnt = x[i].getElementsByTagName("select")[0];
+        ll = selElmnt.length;
+        a = document.createElement("DIV");
+        a.setAttribute("class", "select-selected");
+        a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+        x[i].appendChild(a);
+        b = document.createElement("DIV");
+        b.setAttribute("class", "select-items select-hide");
+        for (j = 0; j < ll; j++) { // Loop dimulai dari 0 agar semua tahun muncul
+            c = document.createElement("DIV");
+            c.innerHTML = selElmnt.options[j].innerHTML;
+            c.addEventListener("click", function(e) {
+                var y, i, k, s, h, sl, yl;
+                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                sl = s.length;
+                h = this.parentNode.previousSibling;
+                for (i = 0; i < sl; i++) {
+                    if (s.options[i].innerHTML == this.innerHTML) {
+                        s.selectedIndex = i;
+                        h.innerHTML = this.innerHTML;
+                        y = this.parentNode.getElementsByClassName("same-as-selected");
+                        yl = y.length;
+                        for (k = 0; k < yl; k++) {
+                            y[k].removeAttribute("class");
                         }
+                        this.setAttribute("class", "same-as-selected");
+                        
+                        // Memicu event 'change' agar chart tetap update
+                        s.dispatchEvent(new Event('change')); 
+                        
+                        break;
+                    }
+                }
+                h.click();
+            });
+            b.appendChild(c);
+        }
+        x[i].appendChild(b);
+        a.addEventListener("click", function(e) {
+            e.stopPropagation();
+            closeAllSelect(this);
+            this.nextSibling.classList.toggle("select-hide");
+        });
+    }
 
-                        // Render awal chart
-                        renderChart(@json($chartData), {{ $currentYear }});
-
-                        // Event filter tahun
-                        tahunSelect.addEventListener("change", function() {
-                            const selectedYear = this.value;
-                            fetch(`/kups/chart-data/${selectedYear}`)
-                                .then(res => res.json())
-                                .then(data => renderChart(data, selectedYear));
-                        });
-                    });
-                </script>
-
-
-
-        </section>
+    function closeAllSelect(elmnt) {
+        var x, y, i, xl, yl, arrNo = [];
+        x = document.getElementsByClassName("select-items");
+        y = document.getElementsByClassName("select-selected");
+        xl = x.length;
+        yl = y.length;
+        for (i = 0; i < yl; i++) {
+            if (elmnt != y[i]) {
+                y[i].classList.remove("select-arrow-active");
+            }
+        }
+        for (i = 0; i < xl; i++) {
+            if (elmnt != y[i]) {
+                x[i].classList.add("select-hide");
+            }
+        }
+    }
+    document.addEventListener("click", closeAllSelect);
+    
+});
+</script>
+        </section> {{-- <-- PENUTUP SECTION#KUPS YANG BENAR --}}
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
 
         <!-- PRODUCT KUPS -->
@@ -438,7 +530,8 @@
 
                                 <div class="informasi-footer">
                                     <span>{{ $info->tanggal }}</span>
-                                    <a href="{{ route('informasi.show', $info->id) }}" class="showinfo">Lebih Lengkap...</a>
+                                    <a href="{{ route('informasi.show', $info->id) }}" class="showinfo">Lebih
+                                        Lengkap...</a>
                                 </div>
                             </div>
                         </div>
@@ -673,7 +766,7 @@
                                 <div class="error-message"></div>
                                 <div class="sent-message">Your message has been sent. Thank you!</div>
 
-                                <button type="submit" >Send Message</button>
+                                <button type="submit">Send Message</button>
                             </div>
 
 

@@ -1466,21 +1466,22 @@ section,
 /* D. PENGATURAN CHART (Hanya untuk KUPS)
 /* ================================================== */
 .pendapatanChart {
-  height: 800px;
+  height: 600px;
+  
   margin: 50px;
   padding: 20px;
   border-radius: 12px;
-  background-color: #fff;
+  background-color: #f0f0f0;
   box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 }
 
 /* ================================================== */
-/* E. RESPONSIVE - GABUNGAN FINAL
+/* E. RESPONSIVE - GABUNGAN FINAL (ID Disesuaikan)
 /* ================================================== */
 
 /* Tampilan Tablet & Mobile (di bawah 992px) */
 @media (max-width: 991.98px) {
-  /* Pengaturan scroll snap untuk KUPS di mobile */
+  /* --- PENGATURAN KUPS (SLIDER) --- */
   #kups .kups-scroll {
     max-width: 100%;
     scroll-snap-type: x mandatory;
@@ -1488,16 +1489,15 @@ section,
   
   #kups .kups-scroll .row {
       gap: 15px;
-      padding: 0 7.5%;
+      padding: 0 7.5%; 
   }
 
-  /* Ukuran kartu KUPS di mobile */
   #kups .kups-scroll .col-lg-4 {
     flex-basis: 85%;
     scroll-snap-align: center;
   }
 
-  /* Pengaturan Chart */
+  /* --- PENGATURAN CHART --- */
   .pendapatanChart {
     height: 600px !important;
     margin: 30px 20px !important;
@@ -1507,16 +1507,17 @@ section,
 
 /* Tampilan Mobile Sedang (di bawah 768px) */
 @media (max-width: 767.98px) {
-    /* Pengaturan Perhutanan (Vertikal & lebih kecil) */
-    #perhutanan div.col-lg-3 { /* KUNCI PERBAIKAN KARTU PERHUTANAN */
+    /* --- PENGATURAN PERHUTANAN (VERTIKAL & LEBIH KECIL) --- */
+    /* DIUBAH: Selector sekarang menggunakan #perhut */
+    #perhut .row .col-lg-3 {
         flex: 0 0 100%;
-        max-width: 280px;
+        max-width: 300px; /* Kartu dibuat lebih kecil */
         margin-left: auto;
         margin-right: auto;
         margin-bottom: 25px;
     }
 
-    /* Pengaturan Chart */
+    /* --- PENGATURAN CHART --- */
     .pendapatanChart {
         height: 450px !important;
         margin: 20px 10px !important;
@@ -1531,6 +1532,144 @@ section,
         margin: 15px 5px !important;
         padding: 10px !important;
     }
+}
+/*--------------------------------------------------------------
+# Wrapper Chart Modern
+--------------------------------------------------------------*/
+.chart-wrapper {
+  background-color: #ffffff;
+  border-radius: 16px; /* Sudut lebih modern */
+  padding: 25px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* Bayangan lebih lembut */
+  margin-top: 50px;
+}
+
+/* Header di dalam wrapper */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e9ecef; /* Garis pemisah tipis */
+  margin-bottom: 20px;
+}
+
+.chart-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+}
+
+/*--------------------------------------------------------------
+# Style Final untuk Header Chart & Dropdown Kustom
+--------------------------------------------------------------*/
+
+/* Pembungkus utama chart */
+.chart-wrapper {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  margin-top: 50px;
+}
+
+/* Header untuk judul dan filter */
+.chart-header {
+  display: flex;
+  justify-content: space-between; /* KUNCI: Judul kiri, filter kanan */
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 20px;
+}
+
+.chart-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+}
+
+/* ====== Style Dropdown Kustom ====== */
+.custom-select-wrapper {
+  position: relative; /* Wajib ada agar menu dropdown tahu posisinya */
+}
+/* Sembunyikan dropdown asli */
+.custom-select-wrapper select {
+  display: none;
+}
+
+.select-selected {
+  background-color: #196b4a;
+  color: #ffffff;
+  padding: 8px 30px 8px 12px;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.select-selected:hover {
+  background-color: #14573b;
+}
+
+/* Ikon panah */
+.select-selected::after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* Menu Pilihan */
+.select-items {
+  position: absolute;
+  background-color: #196b4a;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  border-radius: 8px;
+  margin-top: 4px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Sembunyikan menu secara default */
+.select-hide {
+  display: none;
+}
+
+/* Setiap item pilihan */
+.select-items div {
+  color: #ffffff;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Efek hover pada pilihan */
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+
+/* ====== Responsif ====== */
+@media (max-width: 767px) {
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
 }
 
 /*--------------------------------------------------------------
@@ -2299,6 +2438,7 @@ section,
     max-height: 400px;
 }
 
+
 /* Responsive */
 @media (max-width: 768px) {
     .row {
@@ -2330,7 +2470,33 @@ section,
     margin: 5px 0;
     color: #444;
 }
+/*--------------------------------------------------------------
+# PERBAIKAN TAMPILAN PDF VIEWER (FINAL)
+--------------------------------------------------------------*/
 
+/* Target khusus untuk card di halaman detail regulasi */
+.page-regulasi-detail .detail-card {
+  padding: 20px; /* Kurangi padding agar iframe lebih pas */
+}
+
+/* Target khusus untuk iframe di dalam card */
+.page-regulasi-detail .detail-card iframe {
+  width: 100%;
+  height: 75vh; /* Gunakan 75% dari tinggi viewport */
+  border: 1px solid #ddd; /* Tambahkan border tipis */
+  border-radius: 10px; /* Samakan sudutnya dengan card */
+}
+
+/* --- Tampilan Mobile --- */
+@media (max-width: 767px) {
+  .page-regulasi-detail .detail-card {
+    padding: 15px; /* Padding lebih kecil di mobile */
+  }
+
+  .page-regulasi-detail .detail-card iframe {
+    height: 80vh; /* Buat sedikit lebih tinggi di mobile */
+  }
+}
 /*--------------------------------------------------------------
 # GALERI DOKUMENTASI - SOLUSI FINAL
 --------------------------------------------------------------*/

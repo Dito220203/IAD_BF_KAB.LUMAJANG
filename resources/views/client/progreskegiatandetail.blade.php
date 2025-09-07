@@ -78,37 +78,37 @@
             <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
             <script>
-    const gallery = document.querySelector('.documentation-gallery');
-    if (gallery) {
-        const photoCount = parseInt(gallery.getAttribute('data-photo-count'), 10) || 0;
+                const gallery = document.querySelector('.documentation-gallery');
+                if (gallery) {
+                    const photoCount = parseInt(gallery.getAttribute('data-photo-count'), 10) || 0;
 
-        if (photoCount > 3) {
-            gallery.classList.add('swiper', 'mySwiper');
+                    if (photoCount > 3) {
+                        gallery.classList.add('swiper', 'mySwiper');
 
-            var swiper = new Swiper(".mySwiper", {
-                // === PERUBAHAN UTAMA DI SINI ===
-                effect: "slide", // Ganti dari "coverflow" menjadi "slide"
-                grabCursor: true,
-                centeredSlides: true,
-                slidesPerView: "auto", // Biarkan Swiper mengatur jumlah slide
-                spaceBetween: 30, // Jarak antar slide
-                // ================================
-                
-                loop: true,
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                },
-                
-                // Hapus atau komentari blok coverflowEffect
-                // coverflowEffect: { ... }, 
+                        var swiper = new Swiper(".mySwiper", {
+                            // === PERUBAHAN UTAMA DI SINI ===
+                            effect: "slide", // Ganti dari "coverflow" menjadi "slide"
+                            grabCursor: true,
+                            centeredSlides: true,
+                            slidesPerView: "auto", // Biarkan Swiper mengatur jumlah slide
+                            spaceBetween: 30, // Jarak antar slide
+                            // ================================
 
-                // Breakpoints bisa disederhanakan atau dihapus
-                // breakpoints: { ... }
-            });
-        }
-    }
-</script>
+                            loop: true,
+                            autoplay: {
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            },
+
+                            // Hapus atau komentari blok coverflowEffect
+                            // coverflowEffect: { ... }, 
+
+                            // Breakpoints bisa disederhanakan atau dihapus
+                            // breakpoints: { ... }
+                        });
+                    }
+                }
+            </script>
 
         </section>
     </section>
