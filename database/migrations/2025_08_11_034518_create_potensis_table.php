@@ -14,8 +14,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->string('judul');
-            $table->string('kecamatan');
-            $table->string('desa');
+            $table->foreignId('id_kecamatan')->references('id')->on('kecamatans')->onDelete('cascade');
+            $table->foreignId('id_desa')->references('id')->on('desas')->onDelete('cascade');
             $table->string('gambar');
             $table->string('tanggal');
             $table->longText('uraian');

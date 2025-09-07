@@ -43,8 +43,14 @@ Route::get('/progreskegiatandetail/{id}', [ClientController::class, 'progreskegi
 // });
 
 
-Route::get('/profilkawasan', [ClientController::class, 'profilkawasan'])->name('client.profilkawasan');
-Route::get('/profilkawasandetail', [ClientController::class, 'profilkawasandetail'])->name('client.profilkawasandetail');
+// Route::get('/profilkawasan', [ClientController::class, 'profilkawasan'])->name('client.profilkawasan');
+Route::get('/get-desa/client/{kecamatanId}', [ClientController::class, 'getDesaByKecamatan']);
+Route::get('/profilkawasan/search', [ClientController::class, 'searchPotensi'])->name('profilkawasan.search');
+Route::get('/profil', [ClientController::class, 'Daftarprofilkawasan'])
+    ->name('client.Daftarprofilkawasan');
+Route::get('/profilkawasan/{id}', [ClientController::class, 'profilkawasandetail'])
+    ->name('profilkawasan.detail');
+
 
 
 Route::prefix('subprogram/{id}')->group(function () {
@@ -189,7 +195,7 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::get('/potensi/create', [PotensiController::class, 'create'])->name('potensi.create');
     Route::get('/Potensi', [PotensiController::class, 'index'])->name('potensi');
     Route::post('/potensi/store', [PotensiController::class, 'store'])->name('potensi.store');
-    Route::get('/get-desa/{id_kec}', [PotensiController::class, 'getDesa']);
+    Route::get('/get-desa/{code}', [PotensiController::class, 'getDesa'])->name('get-desa');
     Route::get('/potensi/edit/{id}', [PotensiController::class, 'edit'])->name('potensi.edit');
     Route::put('/potensi/update/{id}', [PotensiController::class, 'update'])->name('potensi.update');
     Route::delete('/potensi/delete/{id}', [PotensiController::class, 'destroy'])->name('potensi.destroy');

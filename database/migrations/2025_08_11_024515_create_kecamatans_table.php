@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('kecamatans', function (Blueprint $table) {
             $table->id();
-             $table->string('kode');
-             $table->string('kecamatan');
-             $table->string('jml_desa');
+            $table->string('code')->unique();
+            $table->string('name');
+
             $table->timestamps();
         });
     }

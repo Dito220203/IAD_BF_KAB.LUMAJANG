@@ -3,17 +3,13 @@
     <section class="section_page">
 
         <div class="global-title" data-aos="fade-up">
-            <h2>sesuai judul</h2>
+            <h2>DETAIL PROFIL KAWASAN</h2>
         </div>
 
         <section id="detail-kegiatan" class="container">
             <div class="detail-card">
-                <h3>Normalisasi Ranu Pani</h3>
-                <p><strong>Keterangan:</strong> There are many variations of passages of Lorem Ipsum available, but the
-                    majority have suffered alteration in some form, by injected humour, or randomised words which don't look
-                    even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there
-                    isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet
-                    tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.</p>
+                <h3>{{ $profilkawasanDetail->judul }}</h3>
+                <p><strong>Keterangan:</strong> {{ $profilkawasanDetail->uraian }}</p>
 
                 <hr>
 
@@ -22,7 +18,9 @@
                     <div class="swiper-wrapper">
 
                         <div class="swiper-slide">
-                            <img src="{{ asset('client/assets/img/prdt3.jpg') }}" alt="Dokumentasi 1">
+                            @if ($profilkawasanDetail->gambar)
+                                <img src="{{ asset('storage/' . $profilkawasanDetail->gambar) }}" alt="Gambar Potensi">
+                            @endif
                         </div>
                         <div class="swiper-slide">
                             <img src="{{ asset('client/assets/img/prdt5.jpg') }}" alt="Dokumentasi 2">

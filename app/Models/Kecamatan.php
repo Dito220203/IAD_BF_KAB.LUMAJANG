@@ -11,4 +11,9 @@ class Kecamatan extends Model
     use HasFactory;
     protected $table = 'kecamatans';
      protected $fillable = ['kode','kecamatan','jml_desa'];
+
+      public function potensi()
+    {
+        return $this->hasMany(Potensi::class, 'id_kecamatan', 'id');
+    }
 }

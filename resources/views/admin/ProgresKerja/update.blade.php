@@ -1,227 +1,340 @@
 @extends('components.layout')
 @section('content')
-<main id="main" class="main">
+    <main id="main" class="main">
 
-    <div class="pagetitle">
-        <h1>Edit Progres</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('progres') }}">Beranda</a></li>
-                <li class="breadcrumb-item">Progres Kerja</li>
-                <li class="breadcrumb-item active">Edit Progres</li>
-            </ol>
-        </nav>
-    </div>
+        <div class="pagetitle">
+            <h1>Edit Progres</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('progres') }}">Beranda</a></li>
+                    <li class="breadcrumb-item">Progres Kerja</li>
+                    <li class="breadcrumb-item active">Edit Progres</li>
+                </ol>
+            </nav>
+        </div>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin="" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin="" />
 
-    <style>
-        #map {
-            width: 100%;
-            height: 400px;
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .foto-item { position: relative; display: inline-block; margin-right:10px; margin-bottom:10px;}
-        .foto-item img { width: 150px; height: 100px; object-fit: cover; border-radius:5px; border:1px solid #ddd;}
-        .foto-item button { position: absolute; top:0; right:0; z-index:10; }
-    </style>
+        <style>
+            #map {
+                width: 100%;
+                height: 400px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-top: 10px;
+            }
 
-    <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card shadow-sm">
-                    <div class="card-body pt-4">
+            .upload-box {
+                border: 2px dashed #4caf50;
+                border-radius: 10px;
+                padding: 30px;
+                text-align: center;
+                background: #f9fdf9;
+                cursor: pointer;
+                transition: 0.3s;
+            }
 
-                        <form action="{{ route('progres.update', $progres->id) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
+            .upload-box:hover {
+                background: #e6ffe6;
+            }
 
-                            {{-- Sub Program --}}
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Sub Program</label>
-                                <div class="col-sm-10">
-                                    <select name="subprogram" class="form-select" required>
-                                        <option value="">Pilih</option>
-                                        @foreach ($subprogram as $data)
-                                            <option value="{{ $data->id }}" {{ $data->id == $progres->id_subprogram ? 'selected' : '' }}>
-                                                {{ $data->subprogram }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+            .upload-list {
+                margin-top: 15px;
+            }
 
-                            {{-- Judul --}}
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Judul Progres</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="judul" value="{{ old('judul', $progres->judul) }}" class="form-control" required>
-                                </div>
-                            </div>
+            .upload-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 10px;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
 
-                            {{-- Tahun --}}
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Tahun</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="tahun" value="{{ old('tahun', $progres->tahun) }}" class="form-control" required>
-                                </div>
-                            </div>
+            .upload-item img {
+                width: 60px;
+                height: 45px;
+                object-fit: cover;
+                border-radius: 5px;
+                margin-right: 10px;
+            }
 
-                            {{-- Sumber Dana --}}
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Sumber Dana</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="sumber_dana" value="{{ old('sumber_dana', $progres->sumber_dana) }}" class="form-control">
-                                </div>
-                            </div>
+            .upload-item span {
+                flex: 1;
+                font-size: 14px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
 
-                            {{-- Jumlah Anggaran --}}
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="jumlah_anggaran" value="{{ old('jumlah_anggaran', $progres->jumlah_anggaran) }}" class="form-control">
-                                </div>
-                            </div>
+            .remove-btn {
+                color: red;
+                cursor: pointer;
+                font-weight: bold;
+            }
 
-                            {{-- Penerima --}}
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Penerima</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="penerima" value="{{ old('penerima', $progres->penerima) }}" class="form-control">
-                                </div>
-                            </div>
+            .hidden-input {
+                display: none;
+            }
+        </style>
 
-                            {{-- Uraian --}}
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Uraian</label>
-                                <div class="col-sm-10">
-                                    <textarea name="uraian" class="form-control" rows="3">{{ old('uraian', $progres->uraian) }}</textarea>
-                                </div>
-                            </div>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body pt-4">
+                            <form action="{{ route('progres.update', $progres->id) }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
 
-                            {{-- Map Lokasi --}}
-                            <div class="row mb-4">
-                                <label class="col-sm-2 col-form-label">Map Lokasi</label>
-                                <div class="col-sm-10">
-                                    <div class="coordinates-container">
-                                        @foreach ($progres->maps as $map)
-                                            <input type="hidden" name="longitude" value="{{ $map->longitude }}">
-                                            <input type="hidden" name="latitude" value="{{ $map->latitude }}">
-                                        @endforeach
+                                {{-- Sub Program --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Sub Program</label>
+                                    <div class="col-sm-10">
+                                        <select name="subprogram" class="form-select" required>
+                                            <option value="">Pilih</option>
+                                            @foreach ($subprogram as $data)
+                                                <option value="{{ $data->id }}"
+                                                    {{ $data->id == $progres->id_subprogram ? 'selected' : '' }}>
+                                                    {{ $data->subprogram }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    <div id="map"></div>
                                 </div>
-                            </div>
 
-                            {{-- Foto Progres --}}
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Foto Progres</label>
-                                <div class="col-sm-10" id="foto-container">
-                                    @php
-                                        $fotoProgresAll = $progres->fotoProgres()->get();
-                                    @endphp
-                                    @if($fotoProgresAll->count() > 0)
-                                        @foreach ($fotoProgresAll as $foto)
-                                            <div class="foto-item">
-                                                <img src="{{ asset('storage/foto_progres/' . $foto->foto) }}">
-                                                <button type="button" class="btn btn-sm btn-danger" onclick="hapusFoto(this)">&times;</button>
-                                                <input type="hidden" name="foto_lama[]" value="{{ $foto->id }}">
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                    <div class="foto-item">
-                                        <input class="form-control mb-2" type="file" name="foto[]" accept="image/*" onchange="previewFoto(event, this)">
-                                        <img src="{{ asset('images/placeholder-image.png') }}">
+                                {{-- Judul --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Judul Progres</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="judul" value="{{ old('judul', $progres->judul) }}"
+                                            class="form-control" required>
                                     </div>
-                                    <button type="button" class="btn btn-primary mt-2" onclick="tambahFoto()">+ Tambah Foto</button>
-                                    <small class="text-muted d-block mt-2">Opsional. Maks 2MB per foto.</small>
                                 </div>
-                            </div>
 
-                            {{-- Tombol --}}
-                            <div class="row mb-3">
-                                <div class="col-sm-10 offset-sm-2 d-flex gap-2">
-                                    <button type="submit" class="btn btn-success">Update</button>
-                                    <a href="{{ route('progres') }}" class="btn btn-warning">Kembali</a>
+                                {{-- Tahun --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Tahun</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="tahun" value="{{ old('tahun', $progres->tahun) }}"
+                                            class="form-control" required>
+                                    </div>
                                 </div>
-                            </div>
 
-                        </form>
+                                {{-- Sumber Dana --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Sumber Dana</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="sumber_dana"
+                                            value="{{ old('sumber_dana', $progres->sumber_dana) }}" class="form-control">
+                                    </div>
+                                </div>
 
+                                {{-- Jumlah Anggaran --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="jumlah_anggaran"
+                                            value="{{ old('jumlah_anggaran', $progres->jumlah_anggaran) }}"
+                                            class="form-control">
+                                    </div>
+                                </div>
+
+                                {{-- Penerima --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Penerima</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="penerima"
+                                            value="{{ old('penerima', $progres->penerima) }}" class="form-control">
+                                    </div>
+                                </div>
+
+                                {{-- Uraian --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Uraian</label>
+                                    <div class="col-sm-10">
+                                        <textarea name="uraian" class="form-control" rows="3">{{ old('uraian', $progres->uraian) }}</textarea>
+                                    </div>
+                                </div>
+
+                                {{-- Map --}}
+                                <div class="row mb-4">
+                                    <label class="col-sm-2 col-form-label">Map Lokasi</label>
+                                    <div class="col-sm-10">
+                                        <div class="coordinates-container"></div>
+                                        <div id="map"></div>
+                                    </div>
+                                </div>
+
+                                {{-- Foto --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Foto Progres</label>
+                                    <div class="col-sm-10">
+                                        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+                                            <p>Upload gambar progres<br>
+                                                <small>Drag & drop atau klik untuk pilih (JPG, PNG, Maks 2MB)</small>
+                                            </p>
+                                            <input id="fileInput" type="file" name="foto[]" accept="image/*"
+                                                class="hidden-input" multiple onchange="handleFiles(this.files)">
+                                        </div>
+
+                                        <div class="upload-list" id="uploadList">
+                                            {{-- Foto lama --}}
+                                            @foreach ($progres->fotoProgres as $foto)
+                                                <div class="upload-item old-file-item">
+                                                    <img src="{{ asset('storage/foto_progres/' . $foto->foto) }}">
+                                                    <span>{{ $foto->foto }} (lama)</span>
+                                                    <input type="hidden" name="foto_lama[]" value="{{ $foto->id }}">
+                                                    <span class="remove-btn"
+                                                        onclick="removeOldFile({{ $foto->id }}, this)">&times;</span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                        <small class="text-muted d-block mt-2">
+                                            Opsional. Format: jpg, jpeg, png. Maks 2MB per foto.
+                                        </small>
+                                    </div>
+                                </div>
+
+                                {{-- Tombol --}}
+                                <div class="row mb-3">
+                                    <div class="col-sm-10 offset-sm-2 d-flex gap-2">
+                                        <button type="submit" class="btn btn-success">Update</button>
+                                        <a href="{{ route('progres') }}" class="btn btn-warning">Kembali</a>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
-    <script>
-        // =================== FOTO ===================
-        function previewFoto(event, input) {
-            const file = event.target.files[0];
-            const img = input.nextElementSibling;
-            if(file){
-                if(file.size > 2*1024*1024){ alert("Ukuran maksimal 2MB"); input.value=""; return; }
-                const reader = new FileReader();
-                reader.onload = function(e){ img.src = e.target.result; }
-                reader.readAsDataURL(file);
-            } else {
-                img.src = "{{ asset('images/placeholder-image.png') }}";
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
+
+        <script>
+            // =================== FOTO ===================
+            let fileList = [];
+
+            function handleFiles(files) {
+                for (let file of files) {
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('Maks 2MB');
+                        continue;
+                    }
+                    if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+                        alert('Format JPG/PNG');
+                        continue;
+                    }
+                    fileList.push(file);
+                }
+                renderFileList();
             }
-        }
-        function tambahFoto(){
-            const container = document.getElementById('foto-container');
-            const div = document.createElement('div'); div.classList.add('foto-item');
-            div.innerHTML = `
-                <input class="form-control mb-2" type="file" name="foto[]" accept="image/*" onchange="previewFoto(event, this)">
-                <img src="{{ asset('images/placeholder-image.png') }}">
-            `;
-            container.appendChild(div);
-        }
-        function hapusFoto(btn){
-            btn.parentElement.remove();
-        }
 
-        // =================== MAP ===================
-        var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution:'&copy; OpenStreetMap contributors', maxZoom:18
-        }).addTo(mymap);
-        let markers = [];
+            function renderFileList() {
+                const uploadList = document.getElementById('uploadList');
+                uploadList.innerHTML = '';
 
-        var oldCoordinates = @json($progres->maps);
-        if(oldCoordinates.length > 0){
-            let first = oldCoordinates[0];
-            markers[0] = L.marker([first.latitude, first.longitude], {draggable:true}).addTo(mymap);
-            mymap.setView([first.latitude, first.longitude], 15);
-            markers[0].on('dragend', function(e){
-                const pos = e.target.getLatLng();
-                document.querySelector('input[name="latitude"]').value = pos.lat;
-                document.querySelector('input[name="longitude"]').value = pos.lng;
+                // Foto lama
+                document.querySelectorAll('.old-file-item').forEach(el => uploadList.appendChild(el));
+
+                // Foto baru
+                fileList.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const item = document.createElement('div');
+                        item.classList.add('upload-item');
+                        item.innerHTML = `
+                        <img src="${e.target.result}">
+                        <span>${file.name} (${(file.size/1024).toFixed(1)} KB)</span>
+                        <span class="remove-btn" onclick="removeFile(${index})">&times;</span>
+                    `;
+                        uploadList.appendChild(item);
+                    }
+                    reader.readAsDataURL(file);
+                });
+
+                const dt = new DataTransfer();
+                fileList.forEach(f => dt.items.add(f));
+                document.getElementById('fileInput').files = dt.files;
+            }
+
+            function removeFile(index) {
+                fileList.splice(index, 1);
+                renderFileList();
+            }
+
+            function removeOldFile(id, el) {
+                el.parentElement.remove();
+                document.querySelector(`input[value="${id}"]`).remove();
+            }
+
+            // Drag & drop
+            const uploadBox = document.querySelector('.upload-box');
+            uploadBox.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadBox.style.background = '#e6ffe6';
             });
-        }
+            uploadBox.addEventListener('dragleave', () => {
+                uploadBox.style.background = '#f9fdf9';
+            });
+            uploadBox.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadBox.style.background = '#f9fdf9';
+                handleFiles(e.dataTransfer.files);
+            });
 
-        function onMapClick(e){
-            if(markers.length>0){
-                mymap.removeLayer(markers[0]);
-                document.querySelectorAll('.coordinates-container input').forEach(el=>el.remove());
-                markers=[];
+            // =================== MAP ===================
+            var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(mymap);
+
+            let markers = [];
+
+            var oldCoordinates = @json($progres->maps);
+            if (oldCoordinates.length > 0) {
+                let first = oldCoordinates[0];
+                markers[0] = L.marker([first.latitude, first.longitude], {
+                    draggable: true
+                }).addTo(mymap);
+                mymap.setView([first.latitude, first.longitude], 15);
+                markers[0].on('dragend', function(e) {
+                    const pos = e.target.getLatLng();
+                    document.querySelector('input[name="latitude"]').value = pos.lat;
+                    document.querySelector('input[name="longitude"]').value = pos.lng;
+                });
             }
-            let marker = L.marker(e.latlng,{draggable:true}).addTo(mymap);
-            markers.push(marker);
-            document.querySelector('.coordinates-container').innerHTML = `
+
+            function onMapClick(e) {
+                if (markers.length > 0) {
+                    mymap.removeLayer(markers[0]);
+                    document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
+                    markers = [];
+                }
+                let marker = L.marker(e.latlng, {
+                    draggable: true
+                }).addTo(mymap);
+                markers.push(marker);
+                document.querySelector('.coordinates-container').innerHTML = `
                 <input type="hidden" name="longitude" value="${e.latlng.lng}">
                 <input type="hidden" name="latitude" value="${e.latlng.lat}">
             `;
-            marker.on('dragend', function(event){
-                let pos = event.target.getLatLng();
-                document.querySelector('input[name="latitude"]').value = pos.lat;
-                document.querySelector('input[name="longitude"]').value = pos.lng;
-            });
-        }
-        mymap.on('click', onMapClick);
-    </script>
-</main>
+                marker.on('dragend', function(event) {
+                    let pos = event.target.getLatLng();
+                    document.querySelector('input[name="latitude"]').value = pos.lat;
+                    document.querySelector('input[name="longitude"]').value = pos.lng;
+                });
+            }
+            mymap.on('click', onMapClick);
+        </script>
+
+    </main>
 @endsection

@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Banner;
+use App\Models\Desa;
 use App\Models\FotoSubprogram;
 use App\Models\GambaranUmum;
 use App\Models\Informasi;
+use App\Models\Kecamatan;
 use App\Models\Kontak;
 use App\Models\Kth;
 use App\Models\Kups;
 use App\Models\Map;
 use App\Models\Monev;
 use App\Models\Opd;
+use App\Models\Potensi;
 use App\Models\PotensiKehutanan;
 use App\Models\ProdukKups;
 use App\Models\ProgresKerja;
@@ -121,24 +124,40 @@ class ClientController extends Controller
 
         return view('client.progreskegiatan', compact('contact', 'subprograms', 'subprogram', 'progres'));
     }
-    public function monev($id)
+
+
+    public function monev(Request $request, $id)
     {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         $subprogram = Subprogram::findOrFail($id);
-        $monevs = Monev::with(['rencanaKerja', 'opd'])
-            ->where('id_subprogram', $id)->where('status', 'valid')
-            ->get();
 
-        // kelompokkan per triwulan berdasarkan bulan di created_at
+        // Ambil semua tahun yang ada di tabel monevs untuk dropdown
+        $years = Monev::selectRaw('YEAR(tahun) as year')->distinct()->pluck('year');
+
+        $query = Monev::with(['rencanaKerja', 'opd'])
+            ->where('id_subprogram', $id)
+            ->where('status', 'valid');
+
+        // Filter tahun kalau ada di request
+        if ($request->filled('tahun')) {
+            $query->whereYear('tahun', $request->tahun);
+        }
+
+        $monevs = $query->get();
+
+        // Kelompokkan per triwulan
         $triwulan = [
-            1 => $monevs->filter(fn($item) => $item->created_at->month >= 1 && $item->created_at->month <= 3),
-            2 => $monevs->filter(fn($item) => $item->created_at->month >= 4 && $item->created_at->month <= 6),
-            3 => $monevs->filter(fn($item) => $item->created_at->month >= 7 && $item->created_at->month <= 9),
-            4 => $monevs->filter(fn($item) => $item->created_at->month >= 10 && $item->created_at->month <= 12),
+            1 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 1 && \Carbon\Carbon::parse($item->tahun)->month <= 3),
+            2 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 4 && \Carbon\Carbon::parse($item->tahun)->month <= 6),
+            3 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 7 && \Carbon\Carbon::parse($item->tahun)->month <= 9),
+            4 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 10 && \Carbon\Carbon::parse($item->tahun)->month <= 12),
         ];
-        return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan'));
+
+        return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan', 'years'));
     }
+
+
 
     public function petasebarankegiatan($id)
     {
@@ -170,16 +189,91 @@ class ClientController extends Controller
     {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.profilkawasan', compact('contact', 'subprograms'));
+
+        // Ambil kecamatan yang ada di tabel potensi
+        $kecamatanIds = Potensi::distinct('id_kecamatan')->pluck('id_kecamatan');
+        $kecamatan = Kecamatan::whereIn('id', $kecamatanIds)->get();
+
+        return view('client.profilkawasan', compact('contact', 'subprograms', 'kecamatan'));
     }
 
-    //sub profil kawasanadetail
-    public function profilkawasandetail()
+    // API untuk ambil desa sesuai kecamatan
+    public function getDesaByKecamatan($kecamatanId)
+    {
+        // Ambil code kecamatan
+        $kecamatan = Kecamatan::find($kecamatanId);
+
+        if (!$kecamatan) {
+            return response()->json([]);
+        }
+
+        // Ambil id_desa yang sudah dipakai di potensi sesuai kecamatan terpilih
+        $desaIds = Potensi::where('id_kecamatan', $kecamatanId)
+            ->distinct()
+            ->pluck('id_desa');
+
+        // Ambil data desa hanya dari desa yang ada di potensi
+        $desa = Desa::whereIn('id', $desaIds)->get();
+
+        return response()->json($desa);
+    }
+
+    public function searchPotensi(Request $request)
     {
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.profilkawasandetail', compact('contact', 'subprograms'));
+
+        // Ambil kecamatan yg sudah ada potensi
+        $kecamatanIds = Potensi::distinct('id_kecamatan')->pluck('id_kecamatan');
+        $kecamatan = Kecamatan::whereIn('id', $kecamatanIds)->get();
+
+        // Query potensi
+        $query = Potensi::with(['kecamatan', 'desa']);
+
+        if ($request->filled('kecamatan')) {
+            $query->where('id_kecamatan', $request->kecamatan);
+        }
+
+        if ($request->filled('desa')) {
+            $query->where('id_desa', $request->desa);
+        }
+
+        $potensis = $query->get();
+
+        return view('client.profilkawasan', compact('contact', 'subprograms', 'kecamatan', 'potensis'));
     }
+
+    public function Daftarprofilkawasan(Request $request)
+    {
+        $kecamatanId = $request->query('kecamatan');
+        $desaId = $request->query('desa');
+
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all(); // ini tetap semua (statis)
+
+        // filter potensi berdasarkan kecamatan & desa
+        $potensis = Potensi::query()
+            ->when($kecamatanId, fn($q) => $q->where('id_kecamatan', $kecamatanId))
+            ->when($desaId, fn($q) => $q->where('id_desa', $desaId))
+            ->get();
+
+        return view('client.profilkawasan', compact('contact', 'subprograms', 'potensis'));
+    }
+
+
+    public function profilkawasandetail($id)
+    {
+        // Ambil data potensi berdasarkan ID
+        $profilkawasanDetail = Potensi::findOrFail($id);
+
+        // Data tambahan
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+
+        // Kirim ke view
+        return view('client.profilkawasandetail', compact('profilkawasanDetail', 'contact', 'subprograms'));
+    }
+
 
     public function regulasi()
     {

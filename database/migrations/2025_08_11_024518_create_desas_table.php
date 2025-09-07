@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('desas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_kec')->references('id')->on('kecamatans')->onDelete('cascade');
-            $table->string('kecamatan');
-            $table->string('desa');
-            $table->string('subdomain');
-            $table->string('is_desa');
+            $table->string('code')->unique();
+            $table->string('name');
+            $table->string('district_code');
             $table->timestamps();
         });
     }
