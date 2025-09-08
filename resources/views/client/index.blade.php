@@ -40,7 +40,7 @@
 
                         <!-- Card 1 -->
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detailluasperhutanan') }}" class="stats-link">
+                            <a href="{{ route('client.detailluasperhutanan') }}" class="stats-link">
                                 <div class="stats-card">
                                     <div>
                                         <div class="stats-icon"><i class="fa fa-tree"></i></div>
@@ -55,7 +55,7 @@
                         </div>
                         <!-- Card 2 -->
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detailkth_kups') }}">
+                            <a href="{{ route('client.detailkth_kups') }}">
                                 <div class="stats-card">
                                     <div>
                                         <div class="stats-icon"><i class="fas fa-users"></i></div>
@@ -70,7 +70,7 @@
                         <!-- Card 3 -->
 
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detaikups') }}">
+                            <a href="{{ route('client.detailkups') }}">
                                 <div class="stats-card">
                                     <div>
                                         <div class="stats-icon"><i class="fas fa-store"></i></div>
@@ -85,7 +85,7 @@
 
                         <!-- Card 4 -->
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ url('/detailekonomi') }}">
+                            <a href="{{ route('client.detailekonomi') }}">
                                 <div class="stats-card">
                                     <div>
                                         <div class="stats-icon">
