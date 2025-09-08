@@ -39,7 +39,7 @@ class LoginController extends Controller
         $request->session()->invalidate(); // Hapus semua session
         $request->session()->regenerateToken(); // Buat CSRF token baru
 
-        return redirect('/login');
+        return redirect('/');
     }
 
     public function update_password(Request $request)

@@ -49,6 +49,10 @@
                                     <td>{{ $monev->rka }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Tanggal Monev</th>
+                                    <td>{{ $monev->tanggal }}</td>
+                                </tr>
+                                <tr>
                                     <th>Realisasi</th>
                                     <td>{{ $monev->realisasi }}</td>
                                 </tr>

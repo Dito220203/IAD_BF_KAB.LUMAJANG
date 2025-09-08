@@ -31,33 +31,41 @@ class MonevController extends Controller
             $triwulan = $request->triwulan;
 
             switch ($triwulan) {
-                case 1:
-                    $query->whereMonth('tahun', '>=', 1)->whereMonth('tahun', '<=', 3);
+                case 1: // Jan - Mar
+                    $query->whereMonth('tanggal', '>=', 1)
+                        ->whereMonth('tanggal', '<=', 3);
                     break;
-                case 2:
-                    $query->whereMonth('tahun', '>=', 4)->whereMonth('tahun', '<=', 6);
+                case 2: // Apr - Jun
+                    $query->whereMonth('tanggal', '>=', 4)
+                        ->whereMonth('tanggal', '<=', 6);
                     break;
-                case 3:
-                    $query->whereMonth('tahun', '>=', 7)->whereMonth('tahun', '<=', 9);
+                case 3: // Jul - Sep
+                    $query->whereMonth('tanggal', '>=', 7)
+                        ->whereMonth('tanggal', '<=', 9);
                     break;
-                case 4:
-                    $query->whereMonth('tahun', '>=', 10)->whereMonth('tahun', '<=', 12);
+                case 4: // Okt - Des
+                    $query->whereMonth('tanggal', '>=', 10)
+                        ->whereMonth('tanggal', '<=', 12);
                     break;
             }
         }
 
         // Filter Tahun
         if ($request->filled('tahun')) {
-            $query->whereYear('tahun', $request->tahun);
+            $query->whereYear('tanggal', $request->tahun);
         }
 
-        $monev = $query->orderBy('tahun', 'desc')->paginate(10)->withQueryString();
+        $monev = $query->orderBy('tanggal', 'desc')->paginate(10)->withQueryString();
 
-        // Untuk dropdown tahun
-        $tahun_list = Monev::selectRaw('YEAR(tahun) as tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+        // Untuk dropdown tahun (ambil dari kolom tanggal, bukan tahun)
+        $tahun_list = Monev::selectRaw('YEAR(tanggal) as tahun')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
 
         return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
     }
+
 
 
 
@@ -73,7 +81,7 @@ class MonevController extends Controller
         return response()->json([
             'nama_program' => $rencana->subprogram->subprogram ?? '',
             'lokasi' => $rencana->lokasi ?? '',
-            'tanggal' => $rencana->tanggal ?? '',
+            'tahun' => $rencana->tahun ?? '',
             'anggaran' => $rencana->anggaran ?? '',
             'opd' => $rencana->opd->nama ?? '',
             'opd_id' => $rencana->opd->id ?? '',
@@ -109,6 +117,7 @@ class MonevController extends Controller
             'tahun' => 'required',
             'anggaran' => 'nullable|string',
             'rka' => 'required',
+            'tanggal' => 'required',
             'realisasi' => 'nullable|string',
             'keterangan' => 'nullable|string',
         ];
@@ -178,9 +187,10 @@ class MonevController extends Controller
      */
     public function edit(string $id)
     {
+        $user = Auth::guard('pengguna')->user();
         $monev = Monev::findOrFail($id);
         $subprogram = Subprogram::all();
-        $rencana = RencanaKerja::all();
+        $user->level == 'Super Admin' ? $rencana = RencanaKerja::all() : $rencana = RencanaKerja::where('id_pengguna', $user->id)->get();
         $opd = Opd::all();
 
         return view('admin.MonitoringEvaluasi.update', compact('monev', 'subprogram', 'rencana', 'opd'));
@@ -202,6 +212,7 @@ class MonevController extends Controller
             'tahun' => 'required',
             'anggaran' => 'nullable|string',
             'rka' => 'required',
+            'tanggal' => 'required',
             'realisasi' => 'required',
             'keterangan' => 'nullable|string',
         ];

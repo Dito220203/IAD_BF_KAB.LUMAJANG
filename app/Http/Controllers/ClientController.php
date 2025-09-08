@@ -25,6 +25,7 @@ use App\Models\Subprogram;
 use App\Models\Video;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\MockObject\ReturnValueGenerator;
 
 class ClientController extends Controller
@@ -58,9 +59,12 @@ class ClientController extends Controller
         //     return [$item->kups, (float)$item->pendapatan];
         // });
 
-        $subpotensis = SubpotensiKehutanan::all();
         $produkKups = ProdukKups::all();
-        $countpotensiKehutanan = PotensiKehutanan::count();
+        $subpotensis = SubpotensiKehutanan::all();
+        $counts = PotensiKehutanan::select('id_subpotensi', DB::raw('COUNT(*) as total'))
+            ->groupBy('id_subpotensi')
+            ->pluck('total', 'id_subpotensi');
+
         $jumlahKups = Kups::count();
         $jumlahKth = Kth::count();
         $gambaran = GambaranUmum::where('status', 'Aktif')->get();
@@ -79,7 +83,7 @@ class ClientController extends Controller
             'jumlahKups',
             'produkKups',
             'subpotensis',
-            'countpotensiKehutanan',
+            'counts',
             'chartData',
             'currentYear',
             'years',
@@ -303,7 +307,7 @@ class ClientController extends Controller
     public function detailkth_kups()
     {
 
-        $kthKups = Kups::all();
+        $kthKups = Kth::all();
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.detailkth_kups', compact('contact', 'subprograms', 'kthKups'));

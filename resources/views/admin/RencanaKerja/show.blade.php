@@ -33,7 +33,7 @@
                                 </tr>
                                 <tr>
                                     <th>Tahun</th>
-                                    <td>{{ $rencana->tanggal }}</td>
+                                    <td>{{ $rencana->tahun }}</td>
                                 </tr>
                                 <tr>
                                     <th>Anggaran</th>

@@ -49,6 +49,7 @@
                                             <th>No</th>
                                             <th>Judul</th>
                                             <th>Lokasi</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>

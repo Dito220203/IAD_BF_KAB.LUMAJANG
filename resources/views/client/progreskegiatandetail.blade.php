@@ -67,7 +67,7 @@
 
 
             <div class="text-center mt-4">
-                <a href="{{ url('/progreskegiatan') }}" class="btn-footer-back">
+                <a href="{{ route('client.progreskegiatan', $progres->id) }}" class="btn-footer-back">
                     ← Kembali ke Daftar
                 </a>
             </div>
