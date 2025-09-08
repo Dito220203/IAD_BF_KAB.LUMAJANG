@@ -21,10 +21,6 @@
                     {{-- Viewer PDF --}}
                     <div style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
                         @if ($item->file)
-                            {{-- ========================================================= --}}
-                            {{-- KODE IFRAME ADAPTIF --}}
-                            {{-- ========================================================= --}}
-
                             @if (app()->isLocal())
                                 {{-- KONDISI 1: Jika website berjalan di localhost --}}
                                 

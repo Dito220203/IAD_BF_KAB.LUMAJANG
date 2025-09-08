@@ -11,14 +11,10 @@
         <div class="berita-image">
             <img src="{{ asset('client/assets/img/tes.jpg') }}" alt="Gambar Berita">
         </div>
-
-        <!-- Tanggal -->
         <div class="berita-date">
             01 Agustus 2025
         </div>
         <div class="berita-divider"></div>
-
-        <!-- Deskripsi -->
         <div class="berita-desc">
             <p>
                 Contrary to popular belief, Lorem Ipsum is not simply random text. 
