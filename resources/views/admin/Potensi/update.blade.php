@@ -6,7 +6,7 @@
             <h1>Edit Potensi</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('potensi') }}">Beranda</a></li>
+                    <li class="breadcrumb-item">Beranda</a></li>
                     <li class="breadcrumb-item">Potensi</li>
                     <li class="breadcrumb-item active">Edit Potensi</li>
                 </ol>
