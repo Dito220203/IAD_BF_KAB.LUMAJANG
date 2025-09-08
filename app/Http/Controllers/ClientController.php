@@ -133,36 +133,91 @@ class ClientController extends Controller
     }
 
 
-    public function monev(Request $request, $id)
-    {
-        $contact = Kontak::all();
-        $subprograms = Subprogram::all();
-        $subprogram = Subprogram::findOrFail($id);
+    // public function monev(Request $request, $id)
+    // {
+    //     $contact = Kontak::all();
+    //     $subprograms = Subprogram::all();
+    //     $subprogram = Subprogram::findOrFail($id);
 
-        // Ambil semua tahun yang ada di tabel monevs untuk dropdown
-        $years = Monev::selectRaw('YEAR(tahun) as year')->distinct()->pluck('year');
+    //     // Ambil semua tahun yang ada di tabel monevs untuk dropdown
+    //     $years = Monev::selectRaw('YEAR(tahun) as year')->distinct()->pluck('year');
 
-        $query = Monev::with(['rencanaKerja', 'opd'])
-            ->where('id_subprogram', $id)
-            ->where('status', 'valid');
+    //     $query = Monev::with(['rencanaKerja', 'opd'])
+    //         ->where('id_subprogram', $id)
+    //         ->where('status', 'valid');
 
-        // Filter tahun kalau ada di request
-        if ($request->filled('tahun')) {
-            $query->whereYear('tahun', $request->tahun);
-        }
+    //     // Filter tahun kalau ada di request
+    //     if ($request->filled('tahun')) {
+    //         $query->whereYear('tahun', $request->tahun);
+    //     }
 
-        $monevs = $query->get();
+    //     $monevs = $query->get();
 
-        // Kelompokkan per triwulan
-        $triwulan = [
-            1 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 1 && \Carbon\Carbon::parse($item->tahun)->month <= 3),
-            2 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 4 && \Carbon\Carbon::parse($item->tahun)->month <= 6),
-            3 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 7 && \Carbon\Carbon::parse($item->tahun)->month <= 9),
-            4 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 10 && \Carbon\Carbon::parse($item->tahun)->month <= 12),
-        ];
+    //     // Kelompokkan per triwulan
+    //     $triwulan = [
+    //         1 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 1 && \Carbon\Carbon::parse($item->tahun)->month <= 3),
+    //         2 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 4 && \Carbon\Carbon::parse($item->tahun)->month <= 6),
+    //         3 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 7 && \Carbon\Carbon::parse($item->tahun)->month <= 9),
+    //         4 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 10 && \Carbon\Carbon::parse($item->tahun)->month <= 12),
+    //     ];
 
-        return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan', 'years'));
+    //     return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan', 'years'));
+    // }
+public function monev(Request $request, $id)
+{
+    $contact = Kontak::all();
+    $subprograms = Subprogram::all();
+    $subprogram = Subprogram::findOrFail($id);
+
+    // Ambil semua tahun dari kolom tanggal untuk dropdown
+    $years = Monev::selectRaw('YEAR(tanggal) as year')
+        ->distinct()
+        ->orderBy('year', 'desc')
+        ->pluck('year');
+
+    $query = Monev::with(['rencanaKerja', 'opd'])
+        ->where('id_subprogram', $id)
+        ->where('status', 'valid');
+
+    // Filter Tahun
+    if ($request->filled('tahun')) {
+        $query->whereYear('tanggal', $request->tahun);
     }
+
+    // Filter Triwulan (sama persis dengan admin)
+    if ($request->filled('triwulan')) {
+        switch ($request->triwulan) {
+            case 1: // Jan - Mar
+                $query->whereMonth('tanggal', '>=', 1)
+                      ->whereMonth('tanggal', '<=', 3);
+                break;
+            case 2: // Apr - Jun
+                $query->whereMonth('tanggal', '>=', 4)
+                      ->whereMonth('tanggal', '<=', 6);
+                break;
+            case 3: // Jul - Sep
+                $query->whereMonth('tanggal', '>=', 7)
+                      ->whereMonth('tanggal', '<=', 9);
+                break;
+            case 4: // Okt - Des
+                $query->whereMonth('tanggal', '>=', 10)
+                      ->whereMonth('tanggal', '<=', 12);
+                break;
+        }
+    }
+
+    $monevs = $query->orderBy('tanggal', 'asc')->get();
+
+    // Kelompokkan per triwulan untuk ditampilkan
+    $triwulan = [
+        1 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 1 && \Carbon\Carbon::parse($item->tanggal)->month <= 3),
+        2 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 4 && \Carbon\Carbon::parse($item->tanggal)->month <= 6),
+        3 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 7 && \Carbon\Carbon::parse($item->tanggal)->month <= 9),
+        4 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 10 && \Carbon\Carbon::parse($item->tanggal)->month <= 12),
+    ];
+
+    return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan', 'years'));
+}
 
 
 

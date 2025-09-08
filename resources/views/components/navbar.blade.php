@@ -1,14 +1,14 @@
  <!-- ======= Header ======= -->
  <header id="header" class="header fixed-top d-flex align-items-center">
-
-     <div class="d-flex align-items-center justify-content-between">
-         <a href="index.html" class="logo d-flex align-items-center">
-             <img src="{{ asset('assets/img/logo kabupaten.png') }}" alt="">
-             <span style="font-family: 'Roboto', sans-serif;">Halaman Admin</span>
-
-         </a>
-         <i class="bi bi-list toggle-sidebar-btn"></i>
-     </div><!-- End Logo -->
+<div class="d-flex align-items-center justify-content-between">
+    <a href="index.html" class="logo d-flex align-items-center">
+        <img src="{{ asset('assets/img/logo kabupaten.png') }}" alt="" style="height: 100px; width: auto;">
+        <span style="font-family: 'Roboto', sans-serif; font-size: 13px; margin-left: 10px;">
+            Halaman Admin
+        </span>
+    </a>
+    <i class="bi bi-list toggle-sidebar-btn"></i>
+</div><!-- End Logo -->
 
 
 
