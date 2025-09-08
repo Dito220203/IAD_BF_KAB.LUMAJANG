@@ -5,8 +5,8 @@
              <h1>Tabel Progres</h1>
              <nav>
                  <ol class="breadcrumb">
-                     <li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
-                     <li class="breadcrumb-item">Progres Kerja</li>
+                     <li class="breadcrumb-item">Beranda</a></li>
+                     <li class="breadcrumb-item active">Progres Kerja</li>
                  </ol>
              </nav>
          </div>

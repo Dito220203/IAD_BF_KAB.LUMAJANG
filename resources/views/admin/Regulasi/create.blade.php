@@ -6,7 +6,7 @@
              <h1>Tambah Regulasi</h1>
              <nav>
                  <ol class="breadcrumb">
-                     <li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
+                     <li class="breadcrumb-item">Beranda</a></li>
                      <li class="breadcrumb-item">Regulasi</li>
                      <li class="breadcrumb-item active">Tambah Regulasi</li>
                  </ol>

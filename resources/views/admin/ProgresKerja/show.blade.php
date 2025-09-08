@@ -6,7 +6,7 @@
             <h1>Lihat Progres</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('progres') }}">Beranda</a></li>
+                    <li class="breadcrumb-item">Beranda</a></li>
                     <li class="breadcrumb-item">Progres Kerja</li>
                     <li class="breadcrumb-item active">Lihat Progres</li>
                 </ol>

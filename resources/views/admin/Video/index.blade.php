@@ -6,7 +6,7 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">Beranda</li>
-                    <li class="breadcrumb-item">Video</li>
+                    <li class="breadcrumb-item active">Video</li>
                 </ol>
             </nav>
         </div>

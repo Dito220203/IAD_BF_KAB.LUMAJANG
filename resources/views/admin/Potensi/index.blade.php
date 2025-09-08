@@ -5,8 +5,8 @@
             <h1>Tabel Potensi</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
-                    <li class="breadcrumb-item">Potensi</li>
+                    <li class="breadcrumb-item">Beranda</a></li>
+                    <li class="breadcrumb-item active">Potensi</li>
                 </ol>
             </nav>
         </div>

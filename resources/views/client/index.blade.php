@@ -349,10 +349,6 @@
                             }
                         }
                         document.addEventListener("click", closeAllSelect);
-<<<<<<< HEAD
-
-=======
->>>>>>> 1b179040c006ff33d5ea0e57c0ce6af8768d3dff
                     });
                 </script>
         </section>
@@ -374,7 +370,7 @@
                 @endforeach
             </div>
         </section>
-        
+
         <!-- /PRODUCT KUPS -->
 
         <!-- Informasi Section -->
