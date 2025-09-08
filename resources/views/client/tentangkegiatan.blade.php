@@ -11,7 +11,6 @@
         </div>
     </section>
 
-    {{-- A completely SEPARATE section for the slider --}}
     <section class="product-slider">
         <div class="slider-wrapper">
             @forelse ($fotosubprogram as $index => $foto)
@@ -20,7 +19,7 @@
                         <img src="{{ asset('storage/' . $foto->foto) }}" alt="{{ $foto->judul }}">
                     </div>
                     <div class="slide-content">
-                        <h3>{{ $foto->judul }}</h3>
+                        <h2>{{ $foto->judul }}</h2>
                         <p>{{ $foto->keterangan }}</p>
                     </div>
                 </div>

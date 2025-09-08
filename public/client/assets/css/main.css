@@ -1907,12 +1907,16 @@ section,
   }
 }
 
-/*--------------------------------------------------------------
-# Product Section (VERSI SUPER FINAL FIX)
---------------------------------------------------------------*/
+
+
+
+
+
+
+
 .product-slider {
   width: 100%;
-  height: 500px;
+  height: 500px; /* default untuk desktop */
   position: relative;
   overflow: hidden;
   background: #f9f9f9;
@@ -1924,6 +1928,7 @@ section,
   transition: transform 1s ease-in-out;
 }
 
+/* ===== Desktop Default ===== */
 .slide {
   min-width: 100%;
   display: flex;
@@ -1933,7 +1938,7 @@ section,
   opacity: 0;
   transform: translateX(100%);
   transition: all 1s ease-in-out;
-  position: absolute; /* ✅ konsisten absolute */
+  position: absolute;
   top: 0;
   left: 0;
   height: 100%;
@@ -1943,7 +1948,7 @@ section,
 .slide.active {
   opacity: 1;
   transform: translateX(0);
-  z-index: 2; /* ✅ biar di atas slide lain */
+  position: relative; /* aktif ikut dorong konten */
 }
 
 .slide-image img {
@@ -1952,6 +1957,10 @@ section,
   object-fit: contain;
   border-radius: 15px; 
   transition: transform 3s ease-in-out;
+}
+
+.slide.active .slide-image img {
+  transform: scale(1.05); /* zoom in pelan */
 }
 
 .slide-content {
@@ -1971,63 +1980,38 @@ section,
   line-height: 1.5;
 }
 
-.slide.active .slide-image img {
-  transform: scale(1.05); /* zoom in pelan */
-}
-
-/* Responsive Product Section - CORRECTED */
-/* Responsive Product Section */
+/* ===== Mobile Responsive ===== */
 @media (max-width: 768px) {
   .product-slider {
-  height: auto; /* biar tinggi ikut isi */
-  min-height: 400px; /* kasih batas bawah biar gak terlalu kecil */
-  position: relative;
-  overflow: hidden;
-}
+    height: auto;          /* tinggi ikut isi */
+    min-height: 400px;     /* jaga jangan terlalu kecil */
+    padding-bottom: 20px;  /* ruang bawah biar teks gak ketutup */
+  }
 
-.slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  opacity: 0;
-  transform: translateX(100%);
-  transition: all 1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 20px;
-}
+  .slide {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+  }
 
-.slide.active {
-  opacity: 1;
-  transform: translateX(0);
-  z-index: 2; /* biar di atas slide lain */
-}
-.slide-image {
-  position: relative;
-  width: 100%;
-  max-height: 400px;
-  overflow: hidden; /* penting biar gambar gak keluar */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 15px; /* radius nempel ke container */
-}
+  .slide-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.slide-image img {
-  width: 100%;
-  height: auto;           /* ✅ jangan paksa 100% tinggi */
-  max-height: 100%;       /* biar gak lebih tinggi dari container */
-  object-fit: cover;      /* cover lebih rapi untuk radius */
-  transition: transform 3s ease-in-out;
-  transform-origin: center center;
-}
-
-/* Zoom aktif */
-.slide.active .slide-image img {
-  transform: scale(1.05);
-}
+  .slide-image img {
+    width: 100%;
+    height: auto;
+    max-height: 250px; /* batasi tinggi gambar */
+    object-fit: cover;
+    border-radius: 10px;
+  }
 
   .slide-content {
     max-width: 100%;
@@ -2040,8 +2024,13 @@ section,
 
   .slide-content p {
     font-size: 14px;
+    line-height: 1.4;
   }
 }
+
+
+
+
 
 
 
