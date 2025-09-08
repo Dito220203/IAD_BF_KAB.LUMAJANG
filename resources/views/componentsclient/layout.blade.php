@@ -65,6 +65,8 @@
 
 <body class="{{ request()->is('/') ? 'index-page' : '' }}">
 
+    <!-- Preloader -->
+    <div id="preloader"></div>
     @include('componentsclient.navbar')
 
     <main class="main">
@@ -112,8 +114,7 @@
     </a>
 
     
-    <!-- Preloader -->
-    <div id="preloader"></div>
+    
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

@@ -17,12 +17,12 @@
 
                 <hr>
                 @php
-                    // Pindahkan ini ke atas
+
                     $photoCount = $progres->fotoProgres->count();
                 @endphp
 
                 <h4>Dokumentasi</h4>
-                <div class="documentation-gallery" data-photo-count="{{ $photoCount }}">
+                <div class="documentation-gallery mySwiper" data-photo-count="{{ $photoCount }}">
                     <div class="swiper-wrapper">
                         @forelse($progres->fotoProgres as $foto)
                             <div class="swiper-slide">
@@ -78,36 +78,48 @@
             <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
             <script>
-                const gallery = document.querySelector('.documentation-gallery');
-                if (gallery) {
-                    const photoCount = parseInt(gallery.getAttribute('data-photo-count'), 10) || 0;
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Targetkan elemen dengan class .mySwiper
+                    const gallery = document.querySelector(".mySwiper");
 
-                    if (photoCount > 3) {
-                        gallery.classList.add('swiper', 'mySwiper');
+                    // Pastikan elemen galeri ada di halaman ini
+                    if (gallery) {
+                        const slideCount = gallery.querySelectorAll(".swiper-slide").length;
 
-                        var swiper = new Swiper(".mySwiper", {
-                            // === PERUBAHAN UTAMA DI SINI ===
-                            effect: "slide", // Ganti dari "coverflow" menjadi "slide"
-                            grabCursor: true,
-                            centeredSlides: true,
-                            slidesPerView: "auto", // Biarkan Swiper mengatur jumlah slide
-                            spaceBetween: 30, // Jarak antar slide
-                            // ================================
-
-                            loop: true,
-                            autoplay: {
-                                delay: 3000,
-                                disableOnInteraction: false,
-                            },
-
-                            // Hapus atau komentari blok coverflowEffect
-                            // coverflowEffect: { ... }, 
-
-                            // Breakpoints bisa disederhanakan atau dihapus
-                            // breakpoints: { ... }
-                        });
+                        // HANYA AKTIFKAN SWIPER JIKA GAMBAR LEBIH DARI 3
+                        if (slideCount > 3) {
+                            var swiper = new Swiper(".mySwiper", {
+                                effect: "coverflow",
+                                grabCursor: true,
+                                centeredSlides: true,
+                                loop: true,
+                                slidesPerView: "auto",
+                                speed: 800,
+                                autoplay: {
+                                    delay: 3000,
+                                    disableOnInteraction: false,
+                                },
+                                coverflowEffect: {
+                                    rotate: 0,
+                                    stretch: 80,
+                                    depth: 200,
+                                    modifier: 1,
+                                    slideShadows: false,
+                                },
+                                breakpoints: {
+                                    768: {
+                                        slidesPerView: 2,
+                                    },
+                                    1024: {
+                                        slidesPerView: 3,
+                                    }
+                                }
+                            });
+                        }
                     }
-                }
+                    // Jika gambar 3 atau kurang, tidak ada JS yang dijalankan,
+                    // dan tampilan akan diatur sepenuhnya oleh CSS.
+                });
             </script>
 
         </section>

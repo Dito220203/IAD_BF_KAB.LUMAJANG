@@ -1019,35 +1019,50 @@ h6 {
 
 
 /*--------------------------------------------------------------
-# Preloader
+# Preloader (VERSI FINAL)
 --------------------------------------------------------------*/
+
+/* 1. Sembunyikan semua konten utama saat preloader aktif */
+body:not(.loaded) > *:not(#preloader) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* 2. Style preloader agar menutupi layar (dari kode Anda) */
 #preloader {
   position: fixed;
   inset: 0;
   z-index: 999999;
   overflow: hidden;
-  background: var(--background-color);
-  transition: all 0.6s ease-out;
+  background: #fff; /* Pastikan ada warna latar */
+  transition: all 0.6s ease-out; /* Animasi fade-out */
 }
 
+/* 3. Aturan untuk menghilangkan preloader saat body.loaded */
+body.loaded #preloader {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* 4. Style spinner (dari kode Anda) */
 #preloader:before {
   content: "";
   position: fixed;
   top: calc(50% - 30px);
   left: calc(50% - 30px);
-  border: 6px solid #ffffff;
-  border-color: var(--accent-color) transparent var(--accent-color) transparent;
+  border: 6px solid #196b4a; /* Warna tema Anda */
+  border-top-color: transparent; /* Buat lebih kontras */
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  animation: animate-preloader 1.5s linear infinite;
+  animation: preloader-spin 1.5s linear infinite;
 }
 
-@keyframes animate-preloader {
+/* 5. Animasi keyframes (dari kode Anda) */
+@keyframes preloader-spin {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
@@ -1893,13 +1908,11 @@ section,
 }
 
 /*--------------------------------------------------------------
-# Product Section (VERSI SUPER FINAL)
+# Product Section (VERSI SUPER FINAL FIX)
 --------------------------------------------------------------*/
-
-
 .product-slider {
   width: 100%;
-  height: 500px; /* bisa kamu atur sesuai kebutuhan */
+  height: 500px;
   position: relative;
   overflow: hidden;
   background: #f9f9f9;
@@ -1920,7 +1933,7 @@ section,
   opacity: 0;
   transform: translateX(100%);
   transition: all 1s ease-in-out;
-  position: absolute;
+  position: absolute; /* ✅ konsisten absolute */
   top: 0;
   left: 0;
   height: 100%;
@@ -1930,7 +1943,7 @@ section,
 .slide.active {
   opacity: 1;
   transform: translateX(0);
-  position: relative;
+  z-index: 2; /* ✅ biar di atas slide lain */
 }
 
 .slide-image img {
@@ -1938,6 +1951,7 @@ section,
   width: auto;
   object-fit: contain;
   border-radius: 15px; 
+  transition: transform 3s ease-in-out;
 }
 
 .slide-content {
@@ -1956,17 +1970,12 @@ section,
   color: #555;
   line-height: 1.5;
 }
-.slide-image img {
-  max-height: 400px;
-  width: auto;
-  object-fit: contain;
-  transition: transform 3s ease-in-out;
-}
 
 .slide.active .slide-image img {
   transform: scale(1.05); /* zoom in pelan */
 }
 
+/* Responsive Product Section - CORRECTED */
 /* Responsive Product Section */
 @media (max-width: 768px) {
   .product-slider {
@@ -2020,8 +2029,6 @@ section,
   transform: scale(1.05);
 }
 
-
-
   .slide-content {
     max-width: 100%;
     text-align: center;
@@ -2035,6 +2042,7 @@ section,
     font-size: 14px;
   }
 }
+
 
 
 
@@ -2628,51 +2636,42 @@ section,
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
-/*--------------------------------------------------------------
-# Styling untuk Dokumentasi Satu Gambar
---------------------------------------------------------------*/
-.dokumentasi-gambar {
-  width: 100%;
-  text-align: center; /* Pusatkan gambar */
-  margin: 20px 0;
-}
 
-.dokumentasi-gambar img {
-  max-width: 100%;
-  height: auto;
-  max-height: 500px; /* Batasi tinggi maksimal */
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Tambah bayangan halus */
-}
 /*--------------------------------------------------------------
 # GALERI DOKUMENTASI - SOLUSI FINAL
 --------------------------------------------------------------*/
-
 .documentation-gallery {
   padding-top: 20px;
   padding-bottom: 40px;
+  min-height: 320px; /* Beri tinggi minimal agar tidak loncat */
 }
 
-/* KASUS 1, 2, 3: LAYOUT STATIS (BUKAN SLIDER) */
+/* KASUS 1, 2, 3: LAYOUT STATIS (SAAT SWIPER TIDAK AKTIF) */
 .documentation-gallery:not(.swiper-initialized) .swiper-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
+  flex-wrap: wrap; /* Izinkan gambar turun baris jika perlu */
 }
 
 .documentation-gallery:not(.swiper-initialized) .swiper-slide {
   width: 30%; /* Default untuk 3 gambar */
   max-width: 350px;
+  opacity: 1 !important; /* Pastikan tidak buram */
+  transform: scale(1) !important; /* Pastikan ukuran normal */
 }
 
+/* Ukuran khusus saat gambar hanya 1 */
 .documentation-gallery:not(.swiper-initialized)[data-photo-count="1"] .swiper-slide {
-  width: 65%;
-  max-width: 550px;
+  width: 70%;
+  max-width: 600px;
 }
 
+/* Ukuran khusus saat gambar hanya 2 */
 .documentation-gallery:not(.swiper-initialized)[data-photo-count="2"] .swiper-slide {
   width: 48%;
+  max-width: 450px;
 }
 
 .documentation-gallery:not(.swiper-initialized) .swiper-slide img {
@@ -2683,7 +2682,6 @@ section,
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .documentation-gallery:not(.swiper-initialized) .swiper-slide img:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
@@ -2693,60 +2691,33 @@ section,
 .documentation-gallery.swiper-initialized {
   cursor: grab;
 }
-
 .documentation-gallery.swiper-initialized .swiper-slide {
+  transition: transform 0.4s, opacity 0.4s;
+  height: auto; /* Biarkan tinggi menyesuaikan */
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
-
 .documentation-gallery.swiper-initialized .swiper-slide img {
   width: 100%;
   height: 280px;
   object-fit: cover;
   border-radius: 15px;
 }
-/* Atur lebar slide untuk efek 'auto' */
-#detail-kegiatan .swiper-slide {
-  width: 70%; /* Slide akan mengambil 70% dari lebar container */
-}
-
-/* Di layar besar, buat lebih kecil agar 3 muat */
-@media (min-width: 1024px) {
-  #detail-kegiatan .swiper-slide {
-    width: 40%;
-  }
-}
-
-/* Transisi untuk slide yang tidak aktif */
-#detail-kegiatan .swiper-slide:not(.swiper-slide-active) {
+/* Efek blur/kecil untuk slide yg tidak aktif */
+.documentation-gallery.swiper-initialized .swiper-slide:not(.swiper-slide-active) {
   transform: scale(0.9);
-  opacity: 0.7;
-  transition: transform 0.4s, opacity 0.4s;
+  opacity: 0.6;
 }
 
-#detail-kegiatan .swiper-slide.swiper-slide-active {
-    transition: transform 0.4s, opacity 0.4s;
-}
-
-/* Responsif untuk gambar di semua kasus */
+/* RESPONSIVE UNTUK SEMUA KASUS */
 @media (max-width: 768px) {
-  .documentation-gallery:not(.swiper-initialized) .swiper-wrapper {
-    flex-direction: column; /* Susun vertikal jika statis di mobile */
-  }
   .documentation-gallery:not(.swiper-initialized) .swiper-slide {
-    width: 90%; /* Ambil lebar penuh */
-    max-width: 400px;
+    width: 90% !important; /* Ambil lebar penuh jika statis */
   }
   .documentation-gallery.swiper-initialized .swiper-slide img,
   .documentation-gallery:not(.swiper-initialized) .swiper-slide img {
-    height: 200px; /* Samakan tinggi gambar di mobile */
-  }
-}
-
-@media (max-width: 768px) {
-  .swiper-slide img {
-    max-height: 160px;
+    height: 220px; /* Samakan tinggi gambar di mobile */
   }
 }
 
@@ -2779,13 +2750,87 @@ section,
 }
 
 
+/*--------------------------------------------------------------
+# Pagination Final (Kecil, Pojok Kanan, Sesuai Tema)
+--------------------------------------------------------------*/
 
+/* Wrapper untuk mengatur posisi ke kanan bawah */
+.pagination-wrapper {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end; /* Posisi di pojok kanan */
+  padding: 0 10px 10px 0; /* Memberi sedikit jarak dari tepi */
+}
 
+.pagination {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  gap: 8px; /* Jarak antar tombol */
+}
 
+/* Style umum untuk tombol pagination */
+.pagination .page-item a,
+.pagination .page-item span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  color: #555;
+}
 
+/* Efek saat kursor di atas tombol */
+.pagination .page-item:not(.active) a:hover {
+  background-color: #e9fbf3; /* Warna hijau muda (sesuai tema) */
+  border-color: #196b4a; /* Warna hijau tua (sesuai tema) */
+  color: #196b4a;
+}
 
+/* Tombol untuk halaman yang sedang aktif */
+.pagination .page-item.active span {
+  background-color: #196b4a; /* Warna hijau tua (sesuai tema) */
+  border-color: #196b4a;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(25, 107, 74, 0.4);
+}
 
+/* Tombol nonaktif (misal "Previous" di halaman 1) */
+.pagination .page-item.disabled span {
+  color: #adb5bd;
+  pointer-events: none;
+  background-color: #f8f9fa;
+}
+.pagination-sm .page-link {
+  padding: 0.2rem 0.5rem !important; /* Perkecil padding internal */
+  font-size: 0.75rem !important;   /* Perkecil ukuran font */
+}
+/*--------------------------------------------------------------
+# Wrapper untuk Summary & Tombol Pagination
+--------------------------------------------------------------*/
+.pagination-summary-wrapper {
+  display: flex;
+  justify-content: space-between; /* Kunci untuk memberi jarak */
+  align-items: center;
+  margin-top: 25px;
+  padding: 0 10px; /* Sedikit padding agar tidak mepet tepi */
+}
 
+/* Style untuk tulisan "Showing..." */
+.pagination-summary-wrapper .summary {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
 
 /*--------------------------------------------------------------
 #  Monev Section

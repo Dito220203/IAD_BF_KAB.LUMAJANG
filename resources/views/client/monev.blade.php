@@ -53,7 +53,7 @@
                         <tbody>
                             @forelse ($triwulan[1] as $index => $item)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->subprogram->subprogram ?? '-' }}</td>
                                     <td>{{ $item->rencanaKerja->judul ?? '-' }}</td>
                                     <td>{{ $item->lokasi }}</td>
@@ -98,7 +98,7 @@
                         <tbody>
                             @forelse ($triwulan[2] as $index => $item)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->subprogram->subprogram ?? '-' }}</td>
                                     <td>{{ $item->rencanaKerja->judul ?? '-' }}</td>
                                     <td>{{ $item->lokasi }}</td>
@@ -142,7 +142,7 @@
                         <tbody>
                             @forelse ($triwulan[3] as $index => $item)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->subprogram->subprogram ?? '-' }}</td>
                                     <td>{{ $item->rencanaKerja->judul ?? '-' }}</td>
                                     <td>{{ $item->lokasi }}</td>
@@ -186,7 +186,7 @@
                         <tbody>
                             @forelse ($triwulan[4] as $index => $item)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->subprogram->subprogram ?? '-' }}</td>
                                     <td>{{ $item->rencanaKerja->judul ?? '-' }}</td>
                                     <td>{{ $item->lokasi }}</td>

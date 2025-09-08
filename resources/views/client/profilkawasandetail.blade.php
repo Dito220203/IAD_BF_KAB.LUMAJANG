@@ -11,18 +11,10 @@
 
                 <hr>
                 <h4>Dokumentasi</h4>
-                <div class="dokumentasi-gambar">
-                    
-
-                        <div class="swiper-slide">
+                <div class="produk">
                             @if ($profilkawasanDetail->gambar)
                                 <img src="{{ asset('storage/' . $profilkawasanDetail->gambar) }}" alt="Gambar Potensi">
                             @endif
-                        </div>
-                        
-
-
-                    
                 </div>
                 <hr>
             </div>

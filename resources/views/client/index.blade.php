@@ -223,12 +223,14 @@
                 <script src="https://code.highcharts.com/highcharts.js"></script>
                 <script src="https://code.highcharts.com/highcharts-3d.js"></script>
                 <script>
-                    document.addEventListener("DOMContentLoaded", function() {
+                    // Ganti dari DOMContentLoaded menjadi window.addEventListener('load', ...)
+                    window.addEventListener('load', function() {
                         const tahunSelect = document.getElementById("tahunSelect");
+                        const pendapatanChart = document.getElementById("pendapatanChart");
 
+                        // Fungsi untuk merender chart (tidak ada perubahan)
                         function renderChart(dataValues, tahun) {
                             Highcharts.chart('pendapatanChart', {
-                                // ... (isi kode Highcharts Anda, sudah benar) ...
                                 chart: {
                                     type: 'pie',
                                     backgroundColor: '#f0f0f0',
@@ -269,7 +271,9 @@
                                 }]
                             });
                         }
-                        if (document.getElementById("pendapatanChart")) { // Cek jika chart ada
+
+                        // Jalankan logika chart hanya jika elemennya ada di halaman ini
+                        if (pendapatanChart && tahunSelect) {
                             renderChart(@json($chartData), {{ $currentYear }});
                             tahunSelect.addEventListener("change", function() {
                                 const selectedYear = this.value;
@@ -279,11 +283,11 @@
                             });
                         }
 
+                        // Logika untuk custom dropdown (tidak ada perubahan)
                         var x, i, j, l, ll, selElmnt, a, b, c;
                         x = document.getElementsByClassName("custom-select-wrapper");
                         l = x.length;
                         for (i = 0; i < l; i++) {
-                            // ... (isi kode dropdown kustom Anda, sudah benar) ...
                             selElmnt = x[i].getElementsByTagName("select")[0];
                             if (!selElmnt) continue;
                             ll = selElmnt.length;
@@ -311,7 +315,7 @@
                                                 y[k].removeAttribute("class");
                                             }
                                             this.setAttribute("class", "same-as-selected");
-                                            s.dispatchEvent(new Event('change'));
+                                            s.dispatchEvent(new Event('change')); // Memicu event change untuk chart
                                             break;
                                         }
                                     }
@@ -345,7 +349,8 @@
                             }
                         }
                         document.addEventListener("click", closeAllSelect);
-                    }); 
+
+                    });
                 </script>
         </section>
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
@@ -366,6 +371,7 @@
                 @endforeach
             </div>
         </section>
+        
         <!-- /PRODUCT KUPS -->
 
         <!-- Informasi Section -->

@@ -317,7 +317,7 @@ class ClientController extends Controller
     }
     public function detailekonomi()
     {
-        $Kups = Kups::all();
+        $Kups = Kups::paginate(10);
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.detailekonomi', compact('contact', 'subprograms', 'Kups'));

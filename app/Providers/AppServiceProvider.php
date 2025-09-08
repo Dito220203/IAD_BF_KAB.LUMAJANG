@@ -6,6 +6,7 @@ use App\Models\Kecamatan;
 use App\Models\Potensi;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
                 'selectedDesa' => $potensi->id_desa ?? null,
             ]);
         });
+        Paginator::useBootstrapFive();
     }
 }

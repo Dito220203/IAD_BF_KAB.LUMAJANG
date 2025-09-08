@@ -1,6 +1,6 @@
 @extends('componentsclient.layout')
 @section('content')
-    <section class="section_page ">
+    <section class="section_page page-progres-kegiatan ">
         <div class="global-title" data-aos="fade-up">
             <h2>PROGRES KEGIATAN {{ $subprogram->subprogram }}</h2>
         </div>

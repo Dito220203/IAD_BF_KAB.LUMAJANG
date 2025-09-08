@@ -22,7 +22,7 @@
                         <tbody>
                             @foreach ($kth as $data)
                                 <tr>
-                                    <td>1</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $data->kth }}</td>
                                     <td>{{ $data->luas }}</td>
                                 </tr>
