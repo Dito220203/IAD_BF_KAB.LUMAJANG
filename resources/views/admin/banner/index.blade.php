@@ -84,7 +84,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="file" class="form-label">Upload Gambar/Video</label>
+                                        <label for="file" class="form-label">Upload Video</label>
                                         <input type="file" name="file" class="form-control" accept="video/*"
                                             onchange="previewFile(event)">
                                         <div class="mt-2">

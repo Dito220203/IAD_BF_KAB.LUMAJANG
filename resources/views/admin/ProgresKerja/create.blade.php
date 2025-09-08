@@ -74,10 +74,20 @@
                 white-space: nowrap;
             }
 
+            .upload-item {
+                position: relative;
+                /* penting supaya child bisa absolute */
+
+            }
+
+
             .upload-item .remove-btn {
+                position: absolute;
                 color: red;
                 cursor: pointer;
                 font-weight: bold;
+                 right: 10px;
+
             }
 
             .hidden-input {
@@ -308,7 +318,9 @@
                     markers = [];
                 }
 
-                let marker = L.marker(e.latlng, { draggable: true }).addTo(mymap);
+                let marker = L.marker(e.latlng, {
+                    draggable: true
+                }).addTo(mymap);
                 markers.push(marker);
 
                 let html = `

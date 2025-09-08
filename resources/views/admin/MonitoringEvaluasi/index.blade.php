@@ -97,7 +97,7 @@
                                                         <span class="badge bg-secondary">{{ $data->status }}</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $data->tahun }}</td>
+                                                <td>{{ $data->tanggal }}</td>
 
                                                 <td class="text-center align-middle">
                                                     <div class="d-flex justify-content-center gap-1">

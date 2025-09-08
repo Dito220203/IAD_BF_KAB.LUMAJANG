@@ -59,8 +59,8 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Tahun</label>
                                     <div class="col-sm-10">
-                                        <input type="date" name="e_tanggal" class="form-control"
-                                            value="{{ $rencana->tanggal }}" required>
+                                        <input type="text" name="e_tahun" class="form-control"
+                                            value="{{ $rencana->tahun }}" required>
                                     </div>
                                 </div>
 

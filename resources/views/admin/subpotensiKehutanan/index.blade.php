@@ -14,7 +14,7 @@
         <section class="section">
             <div class="row">
                 <!-- Kolom Subpotensi Kehutanan -->
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Subpotensi Kehutanan</h5>
@@ -61,7 +61,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Subpotensi</th>
-                                            <th>Keterangan</th>
+                                            {{-- <th>Keterangan</th> --}}
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -70,7 +70,7 @@
                                             <tr>
                                                 <td>{{ $subpotensi->firstItem() + $loop->index }}</td>
                                                 <td>{{ $item->sub_potensi }}</td>
-                                                <td>{{ $item->keterangan }}</td>
+                                                {{-- <td>{{ $item->keterangan }}</td> --}}
                                                 <td>
                                                     <div class="d-flex justify-content-center gap-1">
                                                         <button type="button" class="btn btn-primary btn-sm"
@@ -140,7 +140,7 @@
                 </div>
 
                 <!-- Kolom Potensi Kehutanan -->
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Potensi Kehutanan</h5>

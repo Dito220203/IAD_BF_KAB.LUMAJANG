@@ -19,6 +19,7 @@ class Monev extends Model
         'anggaran',
         'id_opd',
         'rka',
+        'tanggal',
         'realisasi',
         'keterangan'
     ];

@@ -20,7 +20,7 @@
                             @foreach ($kthKups as $data)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td class="text-center">{{ $data->kth->kth ?? '-' }}</td>
+                                    <td class="text-center">{{ $data->kth }}</td>
 
                                 </tr>
                             @endforeach
@@ -28,9 +28,9 @@
                     </table>
                 </div>
             </div>
-            
+
         </section>
-        
+
         <div class="text-center mt-4">
                 <a href="{{ url('/') }}" class="btn-footer-back">
                     ← Kembali

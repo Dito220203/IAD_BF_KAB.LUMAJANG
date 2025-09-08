@@ -184,7 +184,7 @@
                                         </div>
                                         <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
                                         <span class="stats-number purecounter" data-purecounter-start="0"
-                                            data-purecounter-end="{{ $countpotensiKehutanan }}"
+                                            data-purecounter-end="{{ $counts[$subpotensi->id] ?? 0 }}"
                                             data-purecounter-duration="1"></span>
                                     </div>
                                 </a>
@@ -345,7 +345,7 @@
                             }
                         }
                         document.addEventListener("click", closeAllSelect);
-                    }); 
+                    });
                 </script>
         </section>
         <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
@@ -519,40 +519,67 @@
 
                 <div class="row gy-4">
                     <div class="col-lg-6">
-                        <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up"
+                        <form action="#" class="php-email-form" id="contactForm" data-aos="fade-up"
                             data-aos-delay="500">
                             <div class="row gy-4">
-
                                 <div class="col-md-6">
                                     <input type="text" name="name" class="form-control" placeholder="Your Name"
-                                        required="">
+                                        required>
                                 </div>
 
-                                <div class="col-md-6 ">
+                                <div class="col-md-6">
                                     <input type="email" class="form-control" name="email" placeholder="Your Email"
-                                        required="">
+                                        required>
                                 </div>
 
                                 <div class="col-md-12">
                                     <input type="text" class="form-control" name="subject" placeholder="Subject"
-                                        required="">
+                                        required>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <textarea class="form-control" name="message" rows="4" placeholder="Message" required=""></textarea>
+                                    <textarea class="form-control" name="message" rows="4" placeholder="Message" required></textarea>
                                 </div>
                             </div>
 
                             <div class="col-mt-3 text-center">
-                                <div class="loading">Loading</div>
-                                <div class="error-message"></div>
-                                <div class="sent-message">Your message has been sent. Thank you!</div>
+                                <div class="loading" style="display:none;">Loading...</div>
+                                <div class="sent-message" style="display:none; color:green;">✅ Your message has been sent.
+                                    Thank you!</div>
 
                                 <button type="submit">Send Message</button>
                             </div>
-
-
                         </form>
+
+                        <script>
+                            document.getElementById("contactForm").addEventListener("submit", function(e) {
+                                e.preventDefault();
+
+                                let form = this;
+                                let loading = form.querySelector(".loading");
+                                let sentMsg = form.querySelector(".sent-message");
+
+                                // Reset tampilan
+                                sentMsg.style.display = "none";
+                                loading.style.display = "block";
+
+                                // Simulasi kirim (2 detik)
+                                setTimeout(() => {
+                                    // HILANGKAN paksa loading
+                                    loading.style.setProperty("display", "none", "important");
+
+                                    // Baru tampil pesan sukses
+                                    sentMsg.style.display = "block";
+
+                                    // Reset form
+                                    form.reset();
+                                }, 2000);
+                            });
+                        </script>
+
+
+
+
                     </div>
 
                     <div class="col-lg-6 ">

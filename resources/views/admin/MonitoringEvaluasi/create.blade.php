@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
 
-                                {{-- Semua field selain Rencana Kegiatan dibungkus div --}}
+
                                 <div id="form-lanjutan" style="display: none;">
                                     {{-- Nama Program --}}
                                     <div class="row mb-3">
@@ -76,18 +76,34 @@
                                         </div>
                                     </div>
 
-                                    {{-- Perangkat Daerah --}}
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
                                         <div class="col-sm-10">
-                                            <select name="id_opd" id="id_opd" class="form-select">
-                                                <option value="">Pilih</option>
-                                                @foreach ($opd as $data)
-                                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                                @endforeach
-                                            </select>
+                                            @php
+                                                $user = Auth::guard('pengguna')->user();
+                                            @endphp
+
+                                            @if ($user && $user->level === 'Super Admin')
+                                                {{-- Super Admin bisa pilih semua OPD --}}
+                                                <select name="id_opd" id="id_opd" class="form-select" required>
+                                                    <option value="">Pilih</option>
+                                                    @foreach ($opd as $data)
+                                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                            @elseif($user && $user->level === 'Admin')
+                                                {{-- Admin hanya bisa lihat OPD miliknya --}}
+                                                <!-- Menampilkan nama OPD sebagai input read-only agar user bisa melihatnya -->
+                                                <input type="text" class="form-control"
+                                                    value="{{ $user->opd->nama ?? 'OPD Anda' }}" readonly>
+
+                                                <!-- Menyimpan id OPD agar dikirim saat form submit -->
+                                                <input type="hidden" id="id_opd" name="id_opd"
+                                                    value="{{ $user->id_opd }}">
+                                            @endif
                                         </div>
                                     </div>
+
                                 </div>
 
                                 @push('scripts')
@@ -130,7 +146,13 @@
                                         </select>
                                     </div>
                                 </div>
-
+                                {{-- tanggal --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Tanggal Monev</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" name="tanggal" class="form-control" required>
+                                    </div>
+                                </div>
                                 {{-- Realisasi --}}
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Realisasi</label>
@@ -189,7 +211,7 @@
                     .then(response => response.json())
                     .then(data => {
                         lokasiInput.value = data.lokasi || '';
-                        tahunInput.value = data.tanggal || '';
+                        tahunInput.value = data.tahun || '';
                         anggaranInput.value = data.anggaran || '';
                         opdSelect.value = data.opd_id || '';
 

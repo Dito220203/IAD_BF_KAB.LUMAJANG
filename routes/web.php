@@ -29,68 +29,49 @@ use Illuminate\Support\Facades\Route;
 
 //client
 Route::get('/', [ClientController::class, 'index'])->name('client');
-Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer');
-// Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
-// Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
-// Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
-Route::get('/progreskegiatandetail/{id}', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
-// Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
-// Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])->name('client.petasebarankegiatan');
-// Route::get('/search-profilkawasan', [ClientController::class, 'SearchprofilKawasan'])->name('client.profilkawasan');
-// Route::get('/get-desa/{kecamatan}', function ($kecamatan) {
-//     return \App\Models\Potensi::where('kecamatan', $kecamatan)
-//         ->select('desa')
-//         ->distinct()
-//         ->get();
-// });
 
 
-// Route::get('/profilkawasan', [ClientController::class, 'profilkawasan'])->name('client.profilkawasan');
 Route::get('/get-desa/client/{kecamatanId}', [ClientController::class, 'getDesaByKecamatan']);
-Route::get('/profilkawasan/search', [ClientController::class, 'searchPotensi'])->name('profilkawasan.search');
+Route::get('/profil-kawasan/search', [ClientController::class, 'searchPotensi'])->name('profilkawasan.search');
 Route::get('/profil', [ClientController::class, 'Daftarprofilkawasan'])
     ->name('client.Daftarprofilkawasan');
-Route::get('/profilkawasan/{id}', [ClientController::class, 'profilkawasandetail'])
+Route::get('/profil-kawasan/{id}', [ClientController::class, 'profilkawasandetail'])
     ->name('profilkawasan.detail');
-
 
 
 Route::prefix('subprogram/{id}')->group(function () {
     Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
     Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
     Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
-    Route::get('/monev', [ClientController::class, 'monev'])->name('client.monev');
+    Route::get('/monev-client', [ClientController::class, 'monev'])->name('client.monev');
     Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])
         ->name('client.petasebarankegiatan');
 });
-Route::get('/regulasi', [ClientController::class, 'regulasi'])->name('client.regulasi');
-Route::get('/detailregulasi/{id}', [ClientController::class, 'detailregulasi'])->name('client.detailregulasi');
+Route::get('/progres-kegiatandetail/{id}', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
+
+Route::get('/regulasi-client', [ClientController::class, 'regulasi'])->name('client.regulasi');
+Route::get('/detail-regulasi/{id}', [ClientController::class, 'detailregulasi'])->name('client.detailregulasi');
 
 //detail card
 Route::get('/detailluasperhutanan', [ClientController::class, 'detailluasperhutanan'])->name('client.detailluasperhutanan');
-Route::get('/detailkth_kups', [ClientController::class, 'detailkth_kups'])->name('client.detailkth_kups');
-Route::get('/detaikups', [ClientController::class, 'detailkups'])->name('client.detailkups');
-Route::get('/detailekonomi', [ClientController::class, 'detailekonomi'])->name('client.detailekonomi');
+Route::get('/detail-kth', [ClientController::class, 'detailkth_kups'])->name('client.detailkth_kups');
+Route::get('/detail-kups', [ClientController::class, 'detailkups'])->name('client.detailkups');
+Route::get('/detail-ekonomi', [ClientController::class, 'detailekonomi'])->name('client.detailekonomi');
 
 //detail berita&video
-Route::get('/detailinformasi/{id}', [ClientController::class, 'detailinformasi'])->name('informasi.show');
-Route::get('/detailvideo', [ClientController::class, 'detailvideo'])->name('client.detailvideo');
-
-//tamabahan potensi
-// Route::get('/detailpotensipeternakan', [ClientController::class, 'detailpotensipeternakan'])->name('client.detailpotensipeternakan');
-// Route::get('/detailpotensiwisata', [ClientController::class, 'detailpotensiwisata'])->name('client.detailpotensiwisata');
-// Route::get('/detailpotensipertanian', [ClientController::class, 'detailpotensipertanian'])->name('client.detailpotensipertanian');
+Route::get('/detail-informasi/{id}', [ClientController::class, 'detailinformasi'])->name('informasi.show');
+Route::get('/detail-video', [ClientController::class, 'detailvideo'])->name('client.detailvideo');
 
 
-Route::get('/daftarpotensi/{id}', [ClientController::class, 'daftarpotensi'])->name('client.daftarpotensi');
-Route::get('/detailpotensi/{id}', [ClientController::class, 'detailpotensi'])
+Route::get('/daftar-potensi/{id}', [ClientController::class, 'daftarpotensi'])->name('client.daftarpotensi');
+Route::get('/detail-potensi/{id}', [ClientController::class, 'detailpotensi'])
     ->name('client.detailpotensi');
 Route::get('/kups/chart-data/{tahun}', [ClientController::class, 'chartData']);
 
 
 
 
-
+Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer');
 // Admin
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.post');
@@ -100,30 +81,29 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
 
     Route::get('/admin', [DasboardAdminController::class, 'index'])->name('dashboard');
 
-    Route::get('/Banner', [BannerController::class, 'index'])->name('banner');
-    // Route::get('/TambahBanner', [BannerController::class, 'create'])->name('create.banner');
-    Route::post('/Save', [BannerController::class, 'store'])->name('banner.store');
-    Route::get('/banner/{id}/edit', [BannerController::class, 'edit'])->name('banner.edit');
-    Route::put('/banner/{id}', [BannerController::class, 'update'])->name('banner.update');
-    Route::delete('/banner/{id}/delete', [BannerController::class, 'destroy'])->name('banner.delete');
+    Route::get('/banner', [BannerController::class, 'index'])->name('banner');
+    Route::post('/banner-save', [BannerController::class, 'store'])->name('banner.store');
+    Route::get('/banner-edit/{id}', [BannerController::class, 'edit'])->name('banner.edit');
+    Route::put('/banner-update/{id}', [BannerController::class, 'update'])->name('banner.update');
+    Route::delete('/banner-delete/{id}', [BannerController::class, 'destroy'])->name('banner.delete');
 
-    Route::get('/gambaranumum', [GambaranUmumController::class, 'index'])->name('gambaran');
-    Route::post('/create-gambaranUmum', [GambaranUmumController::class, 'store'])->name('creategambaran');
-    Route::put('/update-gambaranUmum/{id}', [GambaranUmumController::class, 'update'])->name('updategambaran');
-    Route::delete('/delete-gambaranUmum/{id}', [GambaranUmumController::class, 'destroy'])->name('deletegambaran');
+    Route::get('/gambaran-umum', [GambaranUmumController::class, 'index'])->name('gambaran');
+    Route::post('/gambaran-create', [GambaranUmumController::class, 'store'])->name('creategambaran');
+    Route::put('/gambaran-update/{id}', [GambaranUmumController::class, 'update'])->name('updategambaran');
+    Route::delete('/gambaran-delete/{id}', [GambaranUmumController::class, 'destroy'])->name('deletegambaran');
 
     Route::get('/informasi', [InformasiController::class, 'index'])->name('informasi');
-    Route::get('/tambah-informasi', [InformasiController::class, 'create'])->name('informasicreate');
-    Route::post('/sive-informasi', [InformasiController::class, 'store'])->name('informasi.store');
-    Route::get('/informasi/{id}/Edit', [InformasiController::class, 'edit'])->name('informasi.edit');
-    Route::put('/informasi/{id}/Update', [InformasiController::class, 'update'])->name('informasi.update');
-    Route::delete('/HapusInformasi/{id}', [InformasiController::class, 'destroy'])->name('informasi.delete');
+    Route::get('/informasi-create', [InformasiController::class, 'create'])->name('informasicreate');
+    Route::post('/informasi-sive', [InformasiController::class, 'store'])->name('informasi.store');
+    Route::get('/informasi-edit/{id}', [InformasiController::class, 'edit'])->name('informasi.edit');
+    Route::put('/informasi-update/{id}', [InformasiController::class, 'update'])->name('informasi.update');
+    Route::delete('/hapusInformasi/{id}', [InformasiController::class, 'destroy'])->name('informasi.delete');
 
-    Route::get('/Video', [VideoController::class, 'index'])->name('video');
-    Route::post('/TambahVideo', [VideoController::class, 'store'])->name('video.store');
-    Route::get('/Edit/{id}', [VideoController::class, 'edit'])->name('video.edit');
-    Route::put('/Update/{id}', [VideoController::class, 'update'])->name('video.update');
-    Route::delete('/DeleteVideo/{id}', [VideoController::class, 'destroy'])->name('deletevideo');
+    Route::get('/video', [VideoController::class, 'index'])->name('video');
+    Route::post('/video-create', [VideoController::class, 'store'])->name('video.store');
+    Route::get('/video-edit/{id}', [VideoController::class, 'edit'])->name('video.edit');
+    Route::put('/video-update/{id}', [VideoController::class, 'update'])->name('video.update');
+    Route::delete('/video-delete/{id}', [VideoController::class, 'destroy'])->name('deletevideo');
 
     Route::get('/kth', [KthController::class, 'index'])->name('kth');
     Route::post('/kth-store', [KthController::class, 'store'])->name('kth.store');
@@ -155,74 +135,74 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
 
 
 
-    Route::get('/SubProgram', [SubProgramController::class, 'index'])->name('subprogram');
-    Route::post('/create', [SubProgramController::class, 'store'])->name('subrogram.store');
+    Route::get('/subProgram', [SubProgramController::class, 'index'])->name('subprogram');
+    Route::post('/subprogram-create', [SubProgramController::class, 'store'])->name('subrogram.store');
     Route::post('/store-produk', [SubProgramController::class, 'storeProduk'])->name('produk.store');
-    Route::put('/Subprogram/{id}/update', [SubProgramController::class, 'update'])->name('subprogram.update');
-    Route::delete('/Supprogram/{id}/delete', [SubProgramController::class, 'destroy'])->name('subrogram.delete');
-    Route::put('/sub-produk/{id}/update', [SubProgramController::class, 'updateProduk'])->name('update.produk');
+    Route::put('/subprogram-update/{id}', [SubProgramController::class, 'update'])->name('subprogram.update');
+    Route::delete('/supprogram-delete/{id}', [SubProgramController::class, 'destroy'])->name('subrogram.delete');
+    Route::put('/sub-produk-update/{id}', [SubProgramController::class, 'updateProduk'])->name('update.produk');
     Route::delete('/sub-produk/{id}/delete', [SubProgramController::class, 'destroyProduk'])->name('delete.produk');
 
 
-    Route::get('/RencanKerja', [RencanakerjaController::class, 'index'])->name('rencanakerja');
-    Route::get('/Rencana/create', [RencanakerjaController::class, 'create'])->name('rencana.create');
-    Route::post('/Rencana/store', [RencanakerjaController::class, 'store'])->name('rencana.store');
+    Route::get('/rencan-kerja', [RencanakerjaController::class, 'index'])->name('rencanakerja');
+    Route::get('/rencana-create', [RencanakerjaController::class, 'create'])->name('rencana.create');
+    Route::post('/rencana-store', [RencanakerjaController::class, 'store'])->name('rencana.store');
     Route::put('/rencana/{id}/validasi', [RencanakerjaController::class, 'updateStatus'])->name('rencana.validasi');
-    Route::get('/rencanakerja/{id}', [RencanakerjaController::class, 'show'])->name('rencana.show');
-    Route::get('/rencana/edit/{id}', [RencanakerjaController::class, 'edit'])->name('rencana.edit');
-    Route::put('/rencana/{id}/update', [RencanakerjaController::class, 'update'])->name('rencana.update');
-    Route::delete('/Delete/{id}', [RencanakerjaController::class, 'destroy'])->name('rencana.delete');
+    Route::get('/rencana-kerja/{id}', [RencanakerjaController::class, 'show'])->name('rencana.show');
+    Route::get('/rencana-edit/{id}', [RencanakerjaController::class, 'edit'])->name('rencana.edit');
+    Route::put('/rencana-update/{id}', [RencanakerjaController::class, 'update'])->name('rencana.update');
+    Route::delete('/rencana-delete/{id}', [RencanakerjaController::class, 'destroy'])->name('rencana.delete');
 
-    Route::get('/Progres', [ProgreskerjaController::class, 'index'])->name('progres');
-    Route::get('/TambahProgres', [ProgreskerjaController::class, 'create'])->name('progrescreate');
-    Route::post('/Progres-sive', [ProgreskerjaController::class, 'store'])->name('progres.store');
+    Route::get('/progres', [ProgreskerjaController::class, 'index'])->name('progres');
+    Route::get('/progres-create', [ProgreskerjaController::class, 'create'])->name('progrescreate');
+    Route::post('/progres-sive', [ProgreskerjaController::class, 'store'])->name('progres.store');
     Route::put('/progres/{id}/status', [ProgreskerjaController::class, 'updateStatus'])->name('progres.updateStatus');
     Route::get('/progres/{id}', [ProgresKerjaController::class, 'show'])->name('progres.show');
-    Route::get('/Progres/edit/{id}', [ProgreskerjaController::class, 'edit'])->name('progres.edit');
-    Route::put('/Progres/update/{id}', [ProgreskerjaController::class, 'update'])->name('progres.update');
-    Route::delete('/Progres/delete/{id}', [ProgreskerjaController::class, 'destroy'])->name('progres.delete');
+    Route::get('/progres-edit/{id}', [ProgreskerjaController::class, 'edit'])->name('progres.edit');
+    Route::put('/progres-update/{id}', [ProgreskerjaController::class, 'update'])->name('progres.update');
+    Route::delete('/progres-delete/{id}', [ProgreskerjaController::class, 'destroy'])->name('progres.delete');
 
     Route::get('/rencana/{id}', [MonevController::class, 'getRencana'])->name('rencana.get');
 
-    Route::get('/Monev', [MonevController::class, 'index'])->name('monev');
-    Route::get('/create-monev', [MonevController::class, 'create'])->name('monev.create');
-    Route::post('/sive-monev', [MonevController::class, 'store'])->name('monev.store');
+    Route::get('/monev', [MonevController::class, 'index'])->name('monev');
+    Route::get('/monev-create', [MonevController::class, 'create'])->name('monev.create');
+    Route::post('/monev-sive', [MonevController::class, 'store'])->name('monev.store');
     Route::put('/monev/{id}/validasi', [MonevController::class, 'updateStatus'])->name('monev.validasi');
     Route::get('/monev-edit/{id}', [MonevController::class, 'edit'])->name('monev.edit');
     Route::put('/monev-update/{id}', [MonevController::class, 'update'])->name('monev.update');
     Route::get('/monev-show/{id}', [MonevController::class, 'show'])->name('monev.show');
     Route::delete('/monev-delete/{id}', [MonevController::class, 'destroy'])->name('monev.delete');
 
-    Route::get('/Potensi', [PotensiController::class, 'index'])->name('potensi');
-    Route::get('/potensi/create', [PotensiController::class, 'create'])->name('potensi.create');
-    Route::get('/Potensi', [PotensiController::class, 'index'])->name('potensi');
-    Route::post('/potensi/store', [PotensiController::class, 'store'])->name('potensi.store');
+    // Route::get('/potensi', [PotensiController::class, 'index'])->name('potensi');
+    Route::get('/potensi', [PotensiController::class, 'index'])->name('potensi');
+    Route::get('/potensi-create', [PotensiController::class, 'create'])->name('potensi.create');
+    Route::post('/potensi-store', [PotensiController::class, 'store'])->name('potensi.store');
     Route::get('/get-desa/{code}', [PotensiController::class, 'getDesa'])->name('get-desa');
-    Route::get('/potensi/edit/{id}', [PotensiController::class, 'edit'])->name('potensi.edit');
-    Route::put('/potensi/update/{id}', [PotensiController::class, 'update'])->name('potensi.update');
-    Route::delete('/potensi/delete/{id}', [PotensiController::class, 'destroy'])->name('potensi.destroy');
+    Route::get('/potensi-edit/{id}', [PotensiController::class, 'edit'])->name('potensi.edit');
+    Route::put('/potensi-update/{id}', [PotensiController::class, 'update'])->name('potensi.update');
+    Route::delete('/potensi-delete/{id}', [PotensiController::class, 'destroy'])->name('potensi.destroy');
 
-    Route::get('/Regulasi', [RegulasiController::class, 'index'])->name('regulasi');
-    Route::get('/Regulasi/create', [RegulasiController::class, 'create'])->name('regulasi.create');
-    Route::post('/Regulasi/store', [RegulasiController::class, 'store'])->name('regulasi.store');
-    Route::get('/Regulasi/edit/{id}', [RegulasiController::class, 'edit'])->name('regulasi.edit');
-    Route::put('/Regulasi/update/{id}', [RegulasiController::class, 'update'])->name('regulasi.update');
-    Route::delete('Regulasi/delete/{id}', [RegulasiController::class, 'destroy'])->name('regulasi.delete');
+    Route::get('/regulasi', [RegulasiController::class, 'index'])->name('regulasi');
+    Route::get('/regulasi-create', [RegulasiController::class, 'create'])->name('regulasi.create');
+    Route::post('/regulasi-store', [RegulasiController::class, 'store'])->name('regulasi.store');
+    Route::get('/regulasi-edit/{id}', [RegulasiController::class, 'edit'])->name('regulasi.edit');
+    Route::put('/regulasi-update/{id}', [RegulasiController::class, 'update'])->name('regulasi.update');
+    Route::delete('regulasi-delete/{id}', [RegulasiController::class, 'destroy'])->name('regulasi.delete');
 
-    Route::get('/Kontak', [KontakController::class, 'index'])->name('kontak');;
+    Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');;
     Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
 
-    Route::get('/Opd', [OpdController::class, 'index'])->name('opd');
-    Route::post('/Opd/store', [OpdController::class, 'store'])->name('opd.store');
-    Route::put('/Opd/update/{id}', [OpdController::class, 'update'])->name('opd.update');
-    Route::delete('/Opd/delete/{id}', [OpdController::class, 'destroy'])->name('opd.destroy');
+    Route::get('/opd', [OpdController::class, 'index'])->name('opd');
+    Route::post('/opd-store', [OpdController::class, 'store'])->name('opd.store');
+    Route::put('/opd-update/{id}', [OpdController::class, 'update'])->name('opd.update');
+    Route::delete('/opd-delete/{id}', [OpdController::class, 'destroy'])->name('opd.destroy');
 
-    Route::get('/Pengguna', [PenggunaController::class, 'index'])->name('pengguna');
-    Route::get('/create', [PenggunaController::class, 'create'])->name('pengguna.create');
-    Route::post('/store', [PenggunaController::class, 'store'])->name('pengguna.store');
-    Route::get('/edit/{id}', [PenggunaController::class, 'edit'])->name('pengguna.edit');
-    Route::put('/update/{id}', [PenggunaController::class, 'update'])->name('pengguna.update');
-    Route::delete('/delete/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna');
+    Route::get('/pengguna-create', [PenggunaController::class, 'create'])->name('pengguna.create');
+    Route::post('/pengguna-store', [PenggunaController::class, 'store'])->name('pengguna.store');
+    Route::get('/pengguna-edit/{id}', [PenggunaController::class, 'edit'])->name('pengguna.edit');
+    Route::put('/pengguna-update/{id}', [PenggunaController::class, 'update'])->name('pengguna.update');
+    Route::delete('/pengguna-delete/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
 
     Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
 
