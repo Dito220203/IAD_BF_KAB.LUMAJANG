@@ -16,6 +16,10 @@ class Opd extends Model
     {
         return $this->hasMany(Pengguna::class, 'id_opd', 'id');
     }
+     public function rencana_aksi()
+    {
+        return $this->hasMany(RencanaAksi_6_tahun::class, 'id_opd', 'id');
+    }
      public function rencana_kerjas()
     {
         return $this->hasMany(RencanaKerja::class, 'id_opd', 'id');

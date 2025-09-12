@@ -16,10 +16,16 @@ return new class extends Migration
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->foreignId('id_opd')->references('id')->on('opds')->onDelete('cascade');
             $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
-            $table->string('judul');
+            $table->string('rencana_aksi');
+            $table->longText('sub_kegiatan');
+            $table->longText('kegiatan');
+            $table->string('nama_program');
             $table->string('lokasi');
-            $table->string('tahun');
+            $table->string('volume');
+            $table->string('satuan');
             $table->string('anggaran');
+            $table->string('sumberdana');
+            $table->string('tahun');
             $table->string('status')->default('tidak valid');
             $table->longText('keterangan');
             $table->timestamps();

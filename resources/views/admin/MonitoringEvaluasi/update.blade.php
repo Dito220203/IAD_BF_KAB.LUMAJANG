@@ -1,13 +1,13 @@
 @extends('components.layout')
+
 @section('content')
     <main id="main" class="main">
         <div class="pagetitle">
             <h1>Edit Monitoring Evaluasi</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item">Beranda</li>
                     <li class="breadcrumb-item">Monitoring Evaluasi</li>
-                    <li class="breadcrumb-item active">Edit</li>
+                    <li class="breadcrumb-item active">Edit Monitoring Evaluasi</li>
                 </ol>
             </nav>
         </div>
@@ -16,79 +16,125 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Form Edit Monitoring Evaluasi</h5>
+                        <div class="card-body p-4">
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
                             <form action="{{ route('monev.update', $monev->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
-                                {{-- Hidden subprogram id --}}
-                                <input type="hidden" name="program" id="id_subprogram" value="{{ $monev->program }}">
-
-                                {{-- Rencana Kegiatan --}}
+                                <!-- Subprogram & Rencana Aksi -->
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Rencana Kegiatan</label>
-                                    <div class="col-sm-10">
-                                        <select name="id_renja" id="id_renja" class="form-select">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sub Program</label>
+                                        <select name="id_subprogram" id="subprogram" class="form-select" required>
                                             <option value="">Pilih</option>
-                                            @foreach ($rencana as $data)
+                                            @foreach ($subprogram as $data)
                                                 <option value="{{ $data->id }}"
-                                                    {{ $monev->id_renja == $data->id ? 'selected' : '' }}>
-                                                    {{ $data->judul }}
+                                                    {{ $monev->id_subprogram == $data->id ? 'selected' : '' }}>
+                                                    {{ $data->subprogram }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
-
-                                {{-- Nama Program --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Nama Program</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="nama_program" name="program" class="form-control"
-                                            value="{{ old('program', $monev->subprogram->subprogram ?? '-') }}" readonly>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Rencana Aksi</label>
+                                        <select name="rencanaAksi" id="rencanaAksi" class="form-select" required>
+                                            <option value="{{ $monev->rencana_aksi }}" selected>{{ $monev->rencana_aksi }}
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
 
-                                {{-- Lokasi --}}
+                                <!-- Kegiatan & Sub Kegiatan -->
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Lokasi</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="lokasi" id="lokasi" class="form-control"
-                                            value="{{ old('lokasi', $monev->lokasi) }}">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sub Kegiatan</label>
+                                        <select name="sub_kegiatan" id="sub_kegiatan" class="form-select" required>
+                                            <option value="{{ $monev->sub_kegiatan }}" selected>{{ $monev->sub_kegiatan }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Kegiatan</label>
+                                        <select name="kegiatan" id="kegiatan" class="form-select" required>
+                                            <option value="{{ $monev->kegiatan }}" selected>{{ $monev->kegiatan }}</option>
+                                        </select>
                                     </div>
                                 </div>
 
-                                {{-- Tahun --}}
+                                <!-- Nama Program & Lokasi -->
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Tahun</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="tahun" id="tahun" class="form-control"
-                                            value="{{ old('tahun', $monev->tahun) }}" readonly>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Program</label>
+                                        <select name="nama_program" id="nama_program" class="form-select" required>
+                                            <option value="{{ $monev->nama_program }}" selected>{{ $monev->nama_program }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Lokasi</label>
+                                        <input type="text" name="lokasi" class="form-control"
+                                            value="{{ old('lokasi', $monev->lokasi) }}" required>
                                     </div>
                                 </div>
 
-                                {{-- Anggaran --}}
+                                <!-- Volume & Satuan -->
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Anggaran</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="anggaran" id="anggaran" class="form-control"
-                                            value="{{ old('anggaran', $monev->anggaran) }}" readonly>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Volume</label>
+                                        <input type="text" name="volume" class="form-control"
+                                            value="{{ old('volume', $monev->volume) }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Satuan</label>
+                                        <input type="text" name="satuan" class="form-control"
+                                            value="{{ old('satuan', $monev->satuan) }}" required>
                                     </div>
                                 </div>
 
-                                {{-- Perangkat Daerah --}}
+                                <!-- Anggaran & Sumber Dana -->
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
-                                    <div class="col-sm-10">
-                                        @php
-                                            $user = Auth::guard('pengguna')->user();
-                                        @endphp
+                                    <div class="col-md-6">
+                                        <label class="form-label">Anggaran</label>
+                                        <input type="text" name="anggaran" class="form-control"
+                                            value="{{ old('anggaran', $monev->anggaran) }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sumber Dana</label>
+                                        <input type="text" name="sumberdana" class="form-control"
+                                            value="{{ old('sumberdana', $monev->sumberdana) }}" required>
+                                    </div>
+                                </div>
 
-                                        @if ($user && $user->level === 'Super Admin')
-                                            {{-- Super Admin bisa pilih semua OPD --}}
-                                            <select name="id_opd" id="id_opd" class="form-select" required>
+                                <!-- Tahun & OPD -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tahun</label>
+                                        <select name="tahun" id="tahun" class="form-select" required>
+                                            <option value="{{ $monev->tahun }}" selected>{{ $monev->tahun }}</option>
+                                        </select>
+                                    </div>
+                                    @php
+                                        $user = Auth::guard('pengguna')->user();
+                                    @endphp
+                                    <div class="col-md-6">
+                                        <label class="form-label">Perangkat Daerah</label>
+                                        @if ($user && $user->level == 'Admin')
+                                            <input type="hidden" name="id_opd" value="{{ $user->id_opd }}">
+                                            <input type="text" class="form-control"
+                                                value="{{ $user->opd->nama ?? '-' }}" readonly>
+                                        @else
+                                            <select name="id_opd" class="form-select" required>
                                                 <option value="">Pilih</option>
                                                 @foreach ($opd as $data)
                                                     <option value="{{ $data->id }}"
@@ -97,63 +143,44 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                        @elseif($user && $user->level === 'Admin')
-                                            {{-- Admin hanya bisa lihat OPD miliknya --}}
-                                            <input type="text" class="form-control"
-                                                value="{{ $user->opd->nama ?? 'OPD Anda' }}" readonly>
-
-                                            <!-- Menyimpan id OPD agar dikirim saat form submit -->
-                                            <input type="hidden" id="id_opd" name="id_opd"
-                                                value="{{ $user->id_opd }}">
                                         @endif
                                     </div>
+
                                 </div>
 
-
-                                {{-- RKA --}}
+                                <!-- RKA, Realisasi, Tanggal -->
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">RKA</label>
-                                    <div class="col-sm-10">
+                                    <div class="col-md-4">
+                                        <label class="form-label">RKA</label>
                                         <select name="rka" class="form-select" required>
-                                            <option value="">Pilih</option>
                                             <option value="sudah" {{ $monev->rka == 'sudah' ? 'selected' : '' }}>Sudah
                                             </option>
                                             <option value="belum" {{ $monev->rka == 'belum' ? 'selected' : '' }}>Belum
                                             </option>
                                         </select>
                                     </div>
-                                </div>
-                                {{-- tanggal --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Tanggal Monev</label>
-                                    <div class="col-sm-10">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Realisasi</label>
+                                        <input type="text" name="realisasi" class="form-control"
+                                            value="{{ old('realisasi', $monev->realisasi) }}" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Tanggal Monev</label>
                                         <input type="date" name="tanggal" class="form-control"
                                             value="{{ old('tanggal', $monev->tanggal) }}" required>
                                     </div>
                                 </div>
-                                {{-- Realisasi --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Realisasi</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="realisasi" class="form-control"
-                                            value="{{ old('realisasi', $monev->realisasi) }}">
-                                    </div>
+
+                                <!-- Keterangan -->
+                                <div class="mb-3">
+                                    <label class="form-label">Keterangan</label>
+                                    <textarea name="keterangan" class="form-control" rows="3" required>{{ old('keterangan', $monev->keterangan) }}</textarea>
                                 </div>
 
-                                {{-- Keterangan --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Keterangan</label>
-                                    <div class="col-sm-10">
-                                        <textarea name="keterangan" class="form-control" rows="4">{{ old('keterangan', $monev->keterangan) }}</textarea>
-                                    </div>
-                                </div>
-
-                                {{-- Tombol --}}
-                                <div class="row mb-3">
-                                    <div class="col-sm-10 offset-sm-2 d-flex gap-2">
-                                        <button type="submit" class="btn btn-success">Update</button>
-                                        <a href="{{ route('monev') }}" class="btn btn-warning">Kembali</a>
-                                    </div>
+                                <!-- Tombol -->
+                                <div class="d-flex justify-content-end gap-2 mt-4">
+                                    <a href="{{ route('monev') }}" class="btn btn-warning">Batal</a>
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
                             </form>
 
@@ -164,40 +191,40 @@
         </section>
     </main>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const rencanaSelect = document.getElementById('id_renja');
-            const lokasiInput = document.getElementById('lokasi');
-            const tahunInput = document.getElementById('tahun');
-            const anggaranInput = document.getElementById('anggaran');
-            const opdSelect = document.getElementById('id_opd');
-            const subprogramInput = document.getElementById('id_subprogram');
-            const namaProgramInput = document.getElementById('nama_program');
+        $('#subprogram').on('change', function() {
+            var id_subprogram = $(this).val();
+            if (id_subprogram) {
+                $.ajax({
+                    url: "{{ url('/get-rencana-kerja') }}/" + id_subprogram,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $('#rencanaAksi').empty().append(
+                            '<option value="">-- Pilih Rencana Aksi --</option>');
+                        $('#kegiatan').empty().append('<option value="">-- Pilih Kegiatan --</option>');
+                        $('#sub_kegiatan').empty().append(
+                            '<option value="">-- Pilih Sub Kegiatan --</option>');
+                        $('#nama_program').empty().append(
+                            '<option value="">-- Pilih Nama Program --</option>');
+                        $('#tahun').empty().append('<option value="">-- Pilih Tahun --</option>');
 
-            rencanaSelect.addEventListener('change', function() {
-                const id = this.value;
-                if (!id) {
-                    lokasiInput.value = '';
-                    tahunInput.value = '';
-                    anggaranInput.value = '';
-                    opdSelect.value = '';
-                    subprogramInput.value = '';
-                    namaProgramInput.value = '';
-                    return;
-                }
-
-                fetch(`/rencana/${id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        lokasiInput.value = data.lokasi || '';
-                        tahunInput.value = data.tahun || '';
-                        anggaranInput.value = data.anggaran || '';
-                        opdSelect.value = data.opd_id || '';
-                        subprogramInput.value = data.subprogram_id || '';
-                        namaProgramInput.value = data.nama_program || '';
-                    })
-                    .catch(err => console.error(err));
-            });
+                        $.each(data, function(key, value) {
+                            $('#rencanaAksi').append('<option value="' + value.rencana_aksi +
+                                '">' + value.rencana_aksi + '</option>');
+                            $('#kegiatan').append('<option value="' + value.kegiatan + '">' +
+                                value.kegiatan + '</option>');
+                            $('#sub_kegiatan').append('<option value="' + value.sub_kegiatan +
+                                '">' + value.sub_kegiatan + '</option>');
+                            $('#nama_program').append('<option value="' + value.nama_program +
+                                '">' + value.nama_program + '</option>');
+                            $('#tahun').append('<option value="' + value.tahun + '">' + value
+                                .tahun + '</option>');
+                        });
+                    }
+                });
+            }
         });
     </script>
 @endsection

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Providers;
 
 use Illuminate\Support\Facades\View;
@@ -6,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\RencanaKerja;
 use App\Models\ProgresKerja;
 use App\Models\Monev;
+use App\Models\Pesan;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,8 @@ class ViewServiceProvider extends ServiceProvider
                 ->concat($monev)
                 ->sortByDesc('created_at')
                 ->take(5);
+
+
 
             $view->with('notifikasi', $notifikasi);
         });

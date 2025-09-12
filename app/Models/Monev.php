@@ -13,22 +13,32 @@ class Monev extends Model
     protected $fillable = [
         'id_pengguna',
         'id_subprogram',
-        'id_renja',
+        'rencana_aksi',
+        'sub_kegiatan',
+        'kegiatan',
+        'nama_program',
         'lokasi',
-        'tahun',
+        'volume',
+        'satuan',
         'anggaran',
+        'sumberdana',
+        'tahun',
         'id_opd',
+
+        'realisasi',
         'rka',
         'tanggal',
-        'realisasi',
+        'pesan',
+        'status',
         'keterangan'
     ];
+
 
     public function penggunas()
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
     }
-       public function subprogram()
+    public function subprogram()
     {
         return $this->belongsTo(Subprogram::class, 'id_subprogram', 'id');
     }
@@ -42,5 +52,4 @@ class Monev extends Model
     {
         return $this->belongsTo(Opd::class, 'id_opd', 'id');
     }
-
 }

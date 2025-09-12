@@ -1,14 +1,14 @@
  <!-- ======= Header ======= -->
  <header id="header" class="header fixed-top d-flex align-items-center">
-<div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
-        <img src="{{ asset('assets/img/logo kabupaten.png') }}" alt="" style="height: 100px; width: auto;">
-        <span style="font-family: 'Roboto', sans-serif; font-size: 13px; margin-left: 10px;">
-            Halaman Admin
-        </span>
-    </a>
-    <i class="bi bi-list toggle-sidebar-btn"></i>
-</div><!-- End Logo -->
+     <div class="d-flex align-items-center justify-content-between">
+         <a href="#" class="logo d-flex align-items-center">
+             <img src="{{ asset('assets/img/logo kabupaten.png') }}" alt="" style="height: 100px; width: auto;">
+             <span style="font-family: 'Roboto', sans-serif; font-size: 13px; margin-left: 10px;">
+                 Halaman Admin
+             </span>
+         </a>
+         <i class="bi bi-list toggle-sidebar-btn"></i>
+     </div><!-- End Logo -->
 
 
 
@@ -42,14 +42,14 @@
                                          <p>{{ $item->created_at->diffForHumans() }}</p>
                                      </div>
                                  @elseif($item instanceof \App\Models\ProgresKerja)
-                                      <i class="bi bi-card-list"></i>
+                                     <i class="bi bi-card-list"></i>
                                      <div>
                                          <h4>Progres Kerja Baru</h4>
                                          <p>{{ $item->judul }}</p>
                                          <p>{{ $item->created_at->diffForHumans() }}</p>
                                      </div>
                                  @elseif($item instanceof \App\Models\Monev)
-                                    <i class="bi bi-clipboard-check"></i>
+                                     <i class="bi bi-clipboard-check"></i>
                                      <div>
                                          <h4>Monitoring & Evaluasi</h4>
                                          <p>{{ $item->keterangan }}</p>
@@ -71,22 +71,52 @@
                      </ul>
                  </li>
 
-                 <li class="nav-item dropdown">
 
-                     <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                         <i class="bi bi-chat-left-text"></i>
-                         {{-- <span class="badge bg-success badge-number">3</span> --}}
-                     </a><!-- End Messages Icon -->
-                 </li>
-            @endif
-                 <li class="nav-item dropdown pe-3">
+             @endif
+             {{-- <li class="nav-item dropdown">
+                 <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                     <i class="bi bi-chat-left-text"></i>
+                     @if ($jumlahPesan > 0)
+                         <span class="badge bg-success badge-number">{{ $jumlahPesan }}</span>
+                     @endif
+                 </a>
 
-                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
-                         data-bs-toggle="dropdown">
+                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                     <li class="dropdown-header">
+                         Kamu punya {{ $jumlahPesan }} pesan baru
+                     </li>
+                     <li>
+                         <hr class="dropdown-divider">
+                     </li>
 
-                         <span
-                             >{{ Auth::guard('pengguna')->user()->nama }}</span>
-                     </a><!-- End Profile Iamge Icon -->
+                     @foreach ($pesanBaru as $pesan)
+                         <li class="message-item">
+                             <a href="#">
+                                 <div>
+                                     <h6>{{ $pesan->pengirim->nama ?? 'Pengguna' }}</h6>
+                                     <p>{{ Str::limit($pesan->pesan, 40) }}</p>
+                                     <p class="small text-muted">{{ $pesan->created_at->diffForHumans() }}</p>
+                                 </div>
+                             </a>
+                         </li>
+                         <li>
+                             <hr class="dropdown-divider">
+                         </li>
+                     @endforeach
+
+                     <li class="dropdown-footer">
+                         <a href="#">Lihat semua pesan</a>
+                     </li>
+                 </ul>
+             </li> --}}
+
+             <li class="nav-item dropdown pe-3">
+
+                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                     data-bs-toggle="dropdown">
+
+                     <span>{{ Auth::guard('pengguna')->user()->nama }}</span>
+                 </a><!-- End Profile Iamge Icon -->
 
              </li><!-- End Profile Nav -->
 

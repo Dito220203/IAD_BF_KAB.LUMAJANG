@@ -14,23 +14,24 @@ return new class extends Migration
         Schema::create('monevs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
-             $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
-            $table->unsignedBigInteger('id_renja')->nullable();
-            $table->foreign('id_renja')
-                ->references('id')
-                ->on('rencana_kerjas')
-                ->onDelete('cascade');
-            $table->string('lokasi')->nullable();
+            $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
+            $table->string('rencana_aksi');
+            $table->string('sub_kegiatan');
+            $table->longText('kegiatan');
+            $table->string('nama_program');
+            $table->string('lokasi');
+            $table->string('volume');
+            $table->string('satuan');
+            $table->string('anggaran');
+            $table->string('sumberdana');
             $table->string('tahun');
-            $table->string('anggaran')->nullable();
             $table->unsignedBigInteger('id_opd')->nullable();
-            $table->foreign('id_opd')
-                ->references('id')
-                ->on('opds')
-                ->onDelete('set null');
+            $table->foreign('id_opd')->references('id')->on('opds')->onDelete('set null');
 
             $table->string('rka')->nullable();
             $table->date('tanggal');
+            $table->string('pesan')->nullable();
+
             $table->string('status')->default('tidak valid');
             $table->string('realisasi')->nullable();
             $table->longText('keterangan')->nullable();

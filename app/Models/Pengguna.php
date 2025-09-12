@@ -59,6 +59,10 @@ class Pengguna extends Authenticatable
     {
         return $this->hasMany(FotoSubprogram::class, 'id_pengguna', 'id');
     }
+    public function rencana_aksi()
+    {
+        return $this->hasMany(RencanaAksi_6_tahun::class, 'id_pengguna', 'id');
+    }
     public function rencana_kerja()
     {
         return $this->hasMany(RencanaKerja::class, 'id_pengguna', 'id');
