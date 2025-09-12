@@ -128,7 +128,7 @@ class ClientController extends Controller
     }
     public function rencanaaksi($id)
     {
-        $rencanaAksi = RencanaAksi_6_tahun::all();
+        $rencanaAksi = RencanaAksi_6_tahun::paginate(10);
         $contact = Kontak::all();
         $subprogram = Subprogram::findOrFail($id);
         $subprograms = Subprogram::all();
@@ -139,7 +139,7 @@ class ClientController extends Controller
 
         $subprograms = Subprogram::all();
         $subprogram = Subprogram::findOrFail($id);
-        $rencanaKegiatan = RencanaKerja::where('id_subprogram', $id)->where('status', 'valid')->get();
+        $rencanaKegiatan = RencanaKerja::where('id_subprogram', $id)->where('status', 'valid')->paginate(10);
         $opd = Opd::all();
         $contact = Kontak::all();
         return view('client.rencanakegiatan', compact('contact', 'subprograms', 'rencanaKegiatan', 'subprogram', 'opd'));
@@ -332,7 +332,6 @@ class ClientController extends Controller
         // Kirim ke view
         return view('client.profilkawasandetail', compact('profilkawasanDetail', 'contact', 'subprograms'));
     }
-
 
     public function regulasi()
     {
