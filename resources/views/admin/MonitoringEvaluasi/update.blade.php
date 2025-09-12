@@ -180,7 +180,7 @@
                                 <!-- Tombol -->
                                 <div class="d-flex justify-content-end gap-2 mt-4">
                                     <a href="{{ route('monev') }}" class="btn btn-warning">Batal</a>
-                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <button type="submit" class="btn btn-success">Update</button>
                                 </div>
                             </form>
 

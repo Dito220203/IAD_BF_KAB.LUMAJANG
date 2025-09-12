@@ -132,7 +132,7 @@
                                 <!-- Tombol -->
                                 <div class="d-flex justify-content-end gap-2">
                                     <a href="{{ route('rencana6tahun') }}" class="btn btn-warning">Batal</a>
-                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <button type="submit" class="btn btn-success">Update</button>
                                 </div>
                             </form>
 

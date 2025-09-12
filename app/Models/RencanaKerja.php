@@ -40,7 +40,7 @@ class RencanaKerja extends Model
     }
     public function rencanaAksi()
     {
-        return $this->belongsTo(RencanaAksi_6_tahun::class, 'id_renja', 'id');
+        return $this->belongsTo(RencanaAksi_6_tahun::class, 'rencana_aksi', 'id');
     }
 
     public function opd()

@@ -76,7 +76,7 @@
                                             <tr>
                                                 <td class="text-center">{{ $rencana->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
-                                                <td>{{ $data->rencana_aksi }}</td>
+                                                <td>{{ $data->rencanaAksi->rencana_aksi ?? '-' }}</td>
                                                 <td>{{ $data->sub_kegiatan }}</td>
                                                 <td>{{ $data->kegiatan }}</td>
                                                 <td>{{ $data->nama_program }}</td>

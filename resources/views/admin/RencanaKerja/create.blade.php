@@ -177,8 +177,8 @@
                         $.each(data, function(key, value) {
                             $('#nama_program').append('<option value="' + value.nama_program +
                                 '">' + value.nama_program + '</option>');
-                            $('#rencanaAksi').append('<option value="' + value.rencana_aksi +
-                                '">' + value.rencana_aksi + '</option>');
+                            $('#rencanaAksi').append('<option value="' + value.id + '">' + value
+                                .rencana_aksi + '</option>');
                             $('#kegiatan').append('<option value="' + value.kegiatan + '">' +
                                 value.kegiatan + '</option>');
                             $('#sub_kegiatan').append('<option value="' + value.sub_kegiatan +

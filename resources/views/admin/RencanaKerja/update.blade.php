@@ -52,7 +52,7 @@
                                             <option value="">-- Pilih Rencana Aksi --</option>
                                             @if ($rencana->rencana_aksi)
                                                 <option value="{{ $rencana->rencana_aksi }}" selected>
-                                                    {{ $rencana->rencana_aksi }}
+                                                    {{ $rencana->rencanaAksi->rencana_aksi }}
                                                 </option>
                                             @endif
                                         </select>

@@ -42,7 +42,7 @@ class RencanaAksi_6_tahun extends Model
 
     public function rencana_kerja()
     {
-        return $this->hasMany(RencanaKerja::class, 'id_renja', 'id');
+        return $this->hasMany(RencanaKerja::class, 'rencana_aksi', 'id');
     }
 }
 

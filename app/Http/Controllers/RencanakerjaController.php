@@ -52,7 +52,7 @@ class RencanakerjaController extends Controller
     {
         $validate = $request->validate([
             'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required|string',
+            'rencanaAksi' => 'required|exists:rencana_aksi_6_tahuns,id',
             'sub_kegiatan'   => 'required|string',
             'kegiatan'       => 'required|string',
             'nama_program' => 'required|string',
@@ -136,7 +136,7 @@ class RencanakerjaController extends Controller
     {
         $validate = $request->validate([
             'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required|string',
+            'rencanaAksi' => 'required|exists:rencana_aksi_6_tahuns,id',
             'sub_kegiatan'   => 'required|string',
             'kegiatan'       => 'required|string',
             'nama_program'   => 'required|string',
