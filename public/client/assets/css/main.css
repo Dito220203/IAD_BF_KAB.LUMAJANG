@@ -2348,7 +2348,7 @@ section,
 
 
 
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 #  Rencana Kegiatan Section
 --------------------------------------------------------------*/
 .rencana-section {
@@ -2366,7 +2366,35 @@ section,
 }
 
 .table-wrapper {
-  overflow-x: auto; /* biar responsif di mobile */
+  overflow-x: auto; }
+/* 1. Mengatur ukuran scrollbar */
+.table-wrapper::-webkit-scrollbar {
+    height: 10px; /* Atur ketebalan untuk scrollbar horizontal */
+    width: 10px;  /* Atur ketebalan untuk scrollbar vertikal */
+}
+
+/* 2. Mengatur 'jalur' scrollbar (bagian latar belakangnya) */
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Warna latar belakang jalur */
+    border-radius: 10px;
+}
+
+/* 3. Mengatur 'pegangan' scrollbar (bagian yang bisa digeser) */
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #2c7a7b; /* <-- GANTI WARNA UTAMA SCROLLBAR DI SINI */
+    border-radius: 10px;
+}
+
+/* 4. Mengatur warna 'pegangan' saat cursor diarahkan ke atasnya (hover) */
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #aaaaaa; /* <-- GANTI WARNA HOVER DI SINI */
+}
+
+
+/* --- Standar untuk Browser Firefox --- */
+.table-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: #2c7a7b #f1f1f1; /* Ganti dua warna ini (pegangan dan jalur) */
 }
 
 .rencana-table {
@@ -2400,6 +2428,39 @@ section,
 .rencana-table tbody tr:hover {
   background: #e6fffa; /* hover modern */
   transition: 0.3s;
+}
+.rencana-table .kolom-keterangan {
+    width: 50%; /* Coba atur 30% dari total lebar tabel */
+    min-width: 800px; /* Atur lebar minimal agar tidak terlalu kecil */
+}
+/* Style untuk footer tabel yang tidak ikut scroll */
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #555;
+    background: #fff; /* Pastikan background-nya putih seperti tabel */
+}
+
+/* Style untuk merapikan link pagination */
+.table-footer .pagination-links nav {
+    box-shadow: none !important;
+}
+
+.table-footer .summary,
+.table-footer .pagination-links {
+    flex-basis: 50%; /* Bagi lebar jadi dua */
+}
+
+.table-footer .summary {
+    text-align: left;
+}
+
+.table-footer .pagination-links {
+    text-align: right;
 }
 
 
