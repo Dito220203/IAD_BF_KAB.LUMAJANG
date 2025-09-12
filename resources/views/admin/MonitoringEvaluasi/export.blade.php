@@ -215,7 +215,7 @@
 
 <body>
     <div class="header-section">
-        <h1>Laporan Monitoring dan Evaluasi</h1>
+        <h1>Monitoring dan Evaluasi IAD Perhutanan Sosial </h1>
         {{-- <h2>Sistem Informasi Perencanaan Daerah</h2> --}}
     </div>
 
@@ -264,9 +264,9 @@
                     <th class="col-volume">Vol</th>
                     <th class="col-satuan">Satuan</th>
                     <th class="col-anggaran">Anggaran</th>
-                    <th class="col-sumber">Sumber</th>
+                    <th class="col-sumber">Sumber Dana</th>
                     <th class="col-tahun">Tahun</th>
-                    <th class="col-opd">OPD</th>
+                    <th class="col-opd">Perangkat Daerah</th>
                     <th class="col-realisasi">Realisasi</th>
                     <th class="col-rka">RKA</th>
                     <th class="col-status">Status</th>

@@ -19,6 +19,7 @@ use App\Models\PotensiKehutanan;
 use App\Models\ProdukKups;
 use App\Models\ProgresKerja;
 use App\Models\Regulasi;
+use App\Models\RencanaAksi_6_tahun;
 use App\Models\RencanaKerja;
 use App\Models\SubpotensiKehutanan;
 use App\Models\Subprogram;
@@ -49,8 +50,7 @@ class ClientController extends Controller
                 'name' => $item->kups,
                 'y' => (float) $item->pendapatan,
                 'kth' => $item->kth->kth ?? 'KTH tidak diketahui' // Menambahkan nama KTH
-            ];
-            ;
+            ];;
         });
 
         // Ambil daftar tahun unik dari tabel KUPS untuk dropdown
@@ -64,6 +64,7 @@ class ClientController extends Controller
         // $chartData = $kupsData->map(function ($item) {
         //     return [$item->kups, (float)$item->pendapatan];
         // });
+
 
         $produkKups = ProdukKups::all();
         $subpotensis = SubpotensiKehutanan::all();
@@ -125,11 +126,13 @@ class ClientController extends Controller
         $fotosubprogram = FotoSubprogram::where('id_subprogram', $id)->get();
         return view('client.tentangkegiatan', compact('contact', 'subprograms', 'subprogram', 'fotosubprogram'));
     }
-    public function rencanaaksi()
+    public function rencanaaksi($id)
     {
+        $rencanaAksi = RencanaAksi_6_tahun::all();
         $contact = Kontak::all();
+        $subprogram = Subprogram::findOrFail($id);
         $subprograms = Subprogram::all();
-        return view('client.rencanaaksi', compact('contact', 'subprograms'));
+        return view('client.rencanaaksi', compact('contact', 'subprograms','subprogram', 'rencanaAksi'));
     }
     public function rencanakegiatan($id)
     {

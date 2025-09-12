@@ -32,9 +32,9 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('client.rencanaaksi', ) }}"
-                                            >
-                                            RENCANA AKSI TAHUNAN
+                                       <a href="{{ route('client.rencanaaksi', ['id' => $subprogram->id]) }}"
+                                            class="{{ request()->is('subprogram/' . $subprogram->id . '/rencana-aksi') ? 'active' : '' }}">
+                                            RENCANA AKSI
                                         </a>
                                     </li>
                                     <li>

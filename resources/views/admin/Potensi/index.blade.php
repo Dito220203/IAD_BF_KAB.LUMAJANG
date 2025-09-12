@@ -2,11 +2,11 @@
 @section('content')
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Tabel Potensi</h1>
+            <h1>Tabel Profil Kawasan IAD Perhutanan Sosial</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">Beranda</a></li>
-                    <li class="breadcrumb-item active">Potensi</li>
+                    <li class="breadcrumb-item active">Profil Kawasan IAD Perhutanan Sosial</li>
                 </ol>
             </nav>
         </div>
@@ -20,7 +20,7 @@
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
 
                                 <a href="{{ route('potensi.create') }}" class="btn btn-primary">
-                                    + Tambah Potensi
+                                    + Tambah
                                 </a>
 
                                 <div class="d-flex align-items-center ">

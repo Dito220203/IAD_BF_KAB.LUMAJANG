@@ -2,7 +2,7 @@
 @section('content')
     <section class="section_page">
         <div class="global-title" data-aos="fade-up">
-            <h2>RENCANA AKSI TAHUNAN</h2>
+            <h2>RENCANA AKSI {{ $subprogram->subprogram }}</h2>
         </div>
 
         <section class="rencana-section" id="rencanaaksi">
@@ -28,32 +28,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @forelse($rencanaKegiatan as $index => $rk) --}}
-                            <tr>
-                                <td>1</td>
-                                <td>Sub Program</td>
-                                <td>Rencana Aksi/Aktivitas</td>
-                                <td>Sub Kegiatan</td>
-                                <td>Kegiatan</td>
-                                <td>Program</td>
-                                <td>Lokasi</td>
-                                <td>Volume</td>
-                                <td>Satuan</td>
-                                <td>Anggaran</td>
-                                <td>Sumber Dana</td>
-                                <td>Tahun Pelaksanaan</td>
-                                <td>Perangkat Daerah</td>
-                                <td>keterangan</td>
-                            </tr>
-                            {{-- @empty
+                            @forelse($rencanaAksi as $index => $rk)
                                 <tr>
-                                    <td colspan="6" class="text-center">Belum ada data rencana kegiatan untuk subprogram
-                                        ini.</td>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $rk->subprogram->subprogram ?? '-' }}</td>
+                                    <td>{{ $rk->rencana_aksi }}</td>
+                                    <td>{{ $rk->sub_kegiatan }}</td>
+                                    <td>{{ $rk->kegiatan }}</td>
+                                    <td>{{ $rk->nama_program }}</td>
+                                    <td>{{ $rk->lokasi }}</td>
+                                    <td>{{ $rk->volume }}</td>
+                                    <td>{{ $rk->satuan }}</td>
+                                    <td>{{ $rk->anggaran}}</td>
+                                    <td>{{ $rk->sumberdana }}</td>
+                                    <td>{{ $rk->tahun }}</td>
+                                    <td>{{ $rk->opd->nama ?? '-' }}</td>
+                                    <td>{{ $rk->keterangan }}</td>
                                 </tr>
-                            @endforelse --}}
+                            @empty
+                                <tr>
+                                    <td colspan="14" class="text-center">
+                                        Belum ada data rencana kegiatan untuk subprogram ini.
+                                    </td>
+                                </tr>
+                            @endforelse
+
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </section>

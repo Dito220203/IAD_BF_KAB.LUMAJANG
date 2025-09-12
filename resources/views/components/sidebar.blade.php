@@ -398,7 +398,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('potensi*') ? '' : 'collapsed' }}" href="{{ route('potensi') }}">
                     <i class="bi bi-bar-chart-line"></i>
-                    <span>Potensi Profil Kawasan IAD</span>
+                    <span>Profil Kawasan IAD</span>
                 </a>
             </li>
             <li class="nav-item">

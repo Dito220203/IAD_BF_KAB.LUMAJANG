@@ -28,29 +28,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @forelse($rencanaKegiatan as $index => $rk) --}}
-                            <tr>
-                                <td>1</td>
-                                <td>Sub Program</td>
-                                <td>Rencana Aksi/Aktivitas</td>
-                                <td>Sub Kegiatan</td>
-                                <td>Kegiatan</td>
-                                <td>Program</td>
-                                <td>Lokasi</td>
-                                <td>Volume</td>
-                                <td>Satuan</td>
-                                <td>Anggaran</td>
-                                <td>Sumber Dana</td>
-                                <td>Tahun Pelaksanaan</td>
-                                <td>Perangkat Daerah</td>
-                                <td>keterangan</td>
-                            </tr>
-                            {{-- @empty
+                            @forelse($rencanaKegiatan as $index => $rk)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $rk->subprogram->subprogram ?? '-' }}</td>
+                                    <td>{{ $rk->rencana_aksi }}</td>
+                                    <td>{{ $rk->sub_kegiatan }}</td>
+                                    <td>{{ $rk->kegiatan }}</td>
+                                    <td>{{ $rk->nama_program }}</td>
+                                    <td>{{ $rk->lokasi }}</td>
+                                    <td>{{ $rk->volume }}</td>
+                                    <td>{{ $rk->satuan }}</td>
+                                    <td>{{ $rk->anggaran}}</td>
+                                    <td>{{ $rk->sumberdana }}</td>
+                                    <td>{{ $rk->tahun }}</td>
+                                    <td>{{ $rk->opd->nama ?? '-' }}</td>
+                                    <td>{{ $rk->keterangan }}</td>
+                                </tr>
+                            @empty
                                 <tr>
                                     <td colspan="6" class="text-center">Belum ada data rencana kegiatan untuk subprogram
                                         ini.</td>
                                 </tr>
-                            @endforelse --}}
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

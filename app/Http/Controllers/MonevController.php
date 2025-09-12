@@ -228,7 +228,7 @@ class MonevController extends Controller
 
     public function exportPDF(Request $request)
     {
-        $tahun = $request->tahun;
+        $tahun    = $request->tahun;
         $triwulan = $request->triwulan;
 
         $user = Auth::guard('pengguna')->user();
@@ -240,25 +240,42 @@ class MonevController extends Controller
             $query->where('id_pengguna', $user->id);
         }
 
-        // Kalau mau filter tahun/triwulan juga:
-        if ($tahun) {
-            $query->where('tahun', $tahun);
-        }
+        // Filter Triwulan (pakai kolom tanggal, bukan kolom 'triwulan')
         if ($triwulan) {
-            $query->where('triwulan', $triwulan);
+            switch ($triwulan) {
+                case 1: // Jan - Mar
+                    $query->whereMonth('tanggal', '>=', 1)
+                        ->whereMonth('tanggal', '<=', 3);
+                    break;
+                case 2: // Apr - Jun
+                    $query->whereMonth('tanggal', '>=', 4)
+                        ->whereMonth('tanggal', '<=', 6);
+                    break;
+                case 3: // Jul - Sep
+                    $query->whereMonth('tanggal', '>=', 7)
+                        ->whereMonth('tanggal', '<=', 9);
+                    break;
+                case 4: // Okt - Des
+                    $query->whereMonth('tanggal', '>=', 10)
+                        ->whereMonth('tanggal', '<=', 12);
+                    break;
+            }
         }
 
-        $monev = $query->get();
+        // Filter Tahun (juga pakai kolom tanggal)
+        if ($tahun) {
+            $query->whereYear('tanggal', $tahun);
+        }
+
+        $monev = $query->orderBy('tanggal', 'desc')->get();
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
             'admin.MonitoringEvaluasi.export',
             compact('monev', 'tahun', 'triwulan')
-        )
-            ->setPaper('a4', 'landscape');
+        )->setPaper('a4', 'landscape');
 
         return $pdf->download('laporan_monev.pdf');
     }
-
 
 
     public function show(string $id)

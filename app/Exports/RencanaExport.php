@@ -84,7 +84,7 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
     {
         // Judul
         $sheet->mergeCells('A1:O1');
-        $sheet->setCellValue('A1', 'Laporan Rencana Kerja');
+        $sheet->setCellValue('A1', 'Rencana Kegiatan IAD Perhutanan Sosial');
 
         $lastColumn = $sheet->getHighestColumn();
         $lastRow    = $sheet->getHighestRow();

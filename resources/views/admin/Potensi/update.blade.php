@@ -3,12 +3,12 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Edit Potensi</h1>
+            <h1>Edit Profil Kawasan IAD Perhutanan Sosial</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">Beranda</a></li>
-                    <li class="breadcrumb-item">Potensi</li>
-                    <li class="breadcrumb-item active">Edit Potensi</li>
+                    <li class="breadcrumb-item">Profil Kawasan IAD Perhutanan Sosial</li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </nav>
         </div>
@@ -27,7 +27,7 @@
 
                                     {{-- Judul --}}
                                     <div class="row mb-3">
-                                        <label class="col-sm-2 col-form-label">Judul Potensi</label>
+                                        <label class="col-sm-2 col-form-label">Judul</label>
                                         <div class="col-sm-10">
                                             <input type="text" name="judul" class="form-control"
                                                 value="{{ old('judul', $potensi->judul) }}" required>

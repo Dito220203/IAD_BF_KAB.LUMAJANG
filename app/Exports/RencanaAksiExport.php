@@ -73,7 +73,7 @@ class RencanaAksiExport implements FromCollection, WithHeadings, WithStyles, Wit
     {
         // Judul
         $sheet->mergeCells('A1:O1');
-        $sheet->setCellValue('A1', 'Laporan Rencana Aksi 6 Tahun');
+        $sheet->setCellValue('A1', 'Rencana Aksi IAD Perhutanan Sosial');
 
         $lastColumn = $sheet->getHighestColumn();
         $lastRow    = $sheet->getHighestRow();
