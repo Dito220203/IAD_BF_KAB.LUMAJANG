@@ -2,10 +2,10 @@
 @section('content')
     <section class="section_page">
         <div class="global-title" data-aos="fade-up">
-            <h2>RENCANA KEGIATAN {{ $subprogram->subprogram }}</h2>
+            <h2>RENCANA AKSI TAHUNAN</h2>
         </div>
 
-        <section class="rencana-section" id="rencana">
+        <section class="rencana-section" id="rencanaaksi">
             <div class="container">
                 <div class="table-wrapper">
                     <table class="rencana-table">
@@ -53,6 +53,7 @@
                             @endforelse --}}
                         </tbody>
                     </table>
+                    
                 </div>
             </div>
         </section>

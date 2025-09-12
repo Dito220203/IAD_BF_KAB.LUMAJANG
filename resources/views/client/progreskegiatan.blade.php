@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="progres-body">
                                         <p>Sumber Anggaran : {{ $item->sumber_dana }}</p>
-                                        <p>Jumlah Anggaran : {{ $item->jumlah_anggaran }}</p>
+                                        <p>Jumlah Anggaran : Rp {{ $item->jumlah_anggaran }}</p>
                                         <p>Penerima : {{ $item->penerima }}</p>
                                     </div>
                                     <div class="progres-footer">

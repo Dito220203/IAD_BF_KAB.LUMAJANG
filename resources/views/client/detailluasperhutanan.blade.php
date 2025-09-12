@@ -22,7 +22,7 @@
                         <tbody>
                             @foreach ($kth as $data)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{($kth->currentPage() - 1) * $kth->perPage() + $loop->iteration }}</td>
                                     <td>{{ $data->kth }}</td>
                                     <td>{{ $data->luas }}</td>
                                 </tr>
@@ -30,11 +30,17 @@
 
                         </tbody>
                     </table>
-
+                    <div class="pagination-summary-wrapper">
+                        <div class="summary">
+                            Showing {{ $kth->firstItem() }} to {{ $kth->lastItem() }} of {{ $kth->total() }} results
+                        </div>
+                        <div class="pagination-sm">
+                            {{-- Panggil view pagination kustom kita --}}
+                            {{ $kth->onEachSide(1)->links('vendor.pagination.buttons-only') }}
+                        </div>
+                    </div>
                 </div>
-
             </div>
-
         </section>
         <div class="text-center mt-4">
             <a href="{{ url('/') }}" class="btn-footer-back">

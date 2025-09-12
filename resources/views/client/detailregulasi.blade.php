@@ -23,7 +23,7 @@
                         @if ($item->file)
                             @if (app()->isLocal())
                                 {{-- KONDISI 1: Jika website berjalan di localhost --}}
-                                
+
                                 <iframe src="{{ asset(Storage::url('regulasi/' . $item->file)) }}" width="100%"
                                     height="700"></iframe>
                             @else
@@ -44,7 +44,6 @@
                 <hr>
             </div>
         </section>
-
         <div class="text-center mt-4">
             <a href="{{ route('client.regulasi') }}" class="btn-footer-back">
                 ← Kembali

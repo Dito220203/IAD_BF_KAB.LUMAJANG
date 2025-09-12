@@ -4,11 +4,7 @@
         <div class="global-title" data-aos="fade-up">
             <h2>MONITORING EVALUASI {{ $subprogram->subprogram }}</h2>
         </div>
-
         <section class="monev-section container">
-
-
-
             <!-- Table Wrapper -->
             <div class="table-wrapper">
                 <!-- Filter Tahun -->

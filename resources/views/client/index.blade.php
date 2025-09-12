@@ -108,24 +108,27 @@
             </div>
 
             @php
-                use Illuminate\Support\Arr;
+                $colorMap = [
+                    'biru' => '#3498db',
+                    'silver' => '#C0C0C0',
+                    'emas' => '#FFD700',
+                    'platinum' => '#6c757d',
+                ];
+                $defaultColor = '#E0E0E0';
 
-                // Ambil kategori unik dan hitung jumlah produk per kategori
                 $kategoriData = \App\Models\Kups::select('kategori')
                     ->selectRaw('COUNT(*) as total')
                     ->groupBy('kategori')
                     ->get();
 
-                // Labels (kategori)
                 $labels = $kategoriData->pluck('kategori')->toArray();
 
-                // Data (jumlah per kategori)
                 $data = $kategoriData->pluck('total')->toArray();
 
-                // Generate warna random untuk setiap kategori
                 $backgroundColor = [];
                 foreach ($labels as $label) {
-                    $backgroundColor[] = '#' . substr(md5($label), 0, 6); // warna unik dari nama kategori
+                    $lookupKey = strtolower($label);
+                    $backgroundColor[] = $colorMap[$lookupKey] ?? $defaultColor;
                 }
             @endphp
 
@@ -138,28 +141,6 @@
                     </div>
                 </div>
             </section>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const donutCtx = document.getElementById('donutChart').getContext('2d');
-                    new Chart(donutCtx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: @json($labels),
-                            datasets: [{
-                                data: @json($data),
-                                backgroundColor: @json($backgroundColor)
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false
-                        }
-                    });
-                });
-            </script>
-
-
         </section>
 
         <!-- IAD POTENSI TIAP KUPS -->
@@ -179,7 +160,7 @@
                                             @if (!empty($subpotensi->icon))
                                                 <i class="{{ $subpotensi->icon }}"></i>
                                             @else
-                                                <i class="fa-solid fa-leaf"></i>
+                                                <i class="fas fa-seedling"></i>
                                             @endif
                                         </div>
                                         <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
@@ -193,13 +174,10 @@
                     </div>
                     <div class="kups-pagination" id="kupsPagination"></div>
                 </div>
-                <div class="chart-wrapper" data-aos="fade-up">
 
-                    {{-- Header sekarang berisi JUDUL dan FILTER --}}
+                <div class="chart-wrapper" data-aos="fade-up">
                     <div class="chart-header">
                         <h3 class="chart-title">Nilai Ekonomi Tiap KUPS</h3>
-
-                        {{-- TAMBAHKAN KEMBALI PEMBUNGKUS INI --}}
                         <div class="custom-select-wrapper">
                             <div class="year-filter">
                                 <label for="tahunSelect">Pilih Tahun:</label>
@@ -213,159 +191,13 @@
                                 </select>
                             </div>
                         </div>
-
                     </div>
-
-                    {{-- Chart Area --}}
                     <div id="pendapatanChart" class="pendapatanChart"></div>
                 </div>
-                <script src="https://code.highcharts.com/highcharts.js"></script>
-                <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-                <script>
-                    window.addEventListener('load', function() {
-                        const tahunSelect = document.getElementById("tahunSelect");
-                        const pendapatanChart = document.getElementById("pendapatanChart");
 
-                        // fungsi render chart dengan fallback kalau data kosong
-                        function renderChart(dataValues, tahun) {
-                            if (!Array.isArray(dataValues) || dataValues.length === 0) {
-                                dataValues = [
-                                    ['Tidak ada data', 0]
-                                ];
-                            }
-
-                            Highcharts.chart('pendapatanChart', {
-                                chart: {
-                                    type: 'pie',
-                                    backgroundColor: '#f0f0f0',
-                                    options3d: {
-                                        enabled: true,
-                                        alpha: 30
-                                    }
-                                },
-                                title: {
-                                    text: null
-                                },
-                                subtitle: {
-                                    text: 'Unit: Dalam Rupiah - Tahun: ' + tahun,
-                                    align: 'left'
-                                },
-                                plotOptions: {
-                                    pie: {
-                                        allowPointSelect: true,
-                                        cursor: 'pointer',
-                                        depth: 25,
-                                        borderWidth: 2,
-                                        borderColor: '#fff',
-                                        dataLabels: {
-                                            enabled: true,
-                                            format: '{point.name} <br> <span style="color:{point.color};">{point.y:,.2f}</span> ({point.percentage:.2f}%)',
-                                            connectorColor: 'silver'
-                                        },
-                                        showInLegend: true
-                                    }
-                                },
-                                tooltip: {
-                                    pointFormat: '{series.name}: <b>{point.y:,.2f}</b> ({point.percentage:.2f}%)'
-                                },
-                                series: [{
-                                    name: 'Pendapatan',
-                                    data: dataValues,
-                                    colors: ['#9370DB', '#FF7F7F', '#00CED1', '#FFA500']
-                                }]
-                            });
-                        }
-
-                        // render chart hanya kalau elemen ada
-                        if (pendapatanChart && tahunSelect) {
-                            renderChart(@json($chartData), {{ $currentYear }});
-                            tahunSelect.addEventListener("change", function() {
-                                const selectedYear = this.value;
-                                fetch(`/kups/chart-data/${selectedYear}`)
-                                    .then(res => res.json())
-                                    .then(data => renderChart(data, selectedYear));
-                            });
-                        }
-
-                        // custom dropdown aman
-                        var x, i, j, l, ll, selElmnt, a, b, c;
-                        x = document.getElementsByClassName("custom-select-wrapper");
-                        l = x.length;
-                        for (i = 0; i < l; i++) {
-                            selElmnt = x[i].getElementsByTagName("select")[0];
-                            if (!selElmnt) continue;
-
-                            ll = selElmnt.length;
-                            a = document.createElement("DIV");
-                            a.setAttribute("class", "select-selected");
-
-                            if (selElmnt.options.length > 0) {
-                                a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
-                            } else {
-                                a.innerHTML = "Tidak ada data";
-                            }
-                            x[i].appendChild(a);
-
-                            b = document.createElement("DIV");
-                            b.setAttribute("class", "select-items select-hide");
-
-                            for (j = 0; j < ll; j++) {
-                                c = document.createElement("DIV");
-                                c.innerHTML = selElmnt.options[j].innerHTML;
-                                c.addEventListener("click", function(e) {
-                                    var y, i, k, s, h, sl, yl;
-                                    s = this.parentNode.parentNode.getElementsByTagName("select")[0];
-                                    sl = s.length;
-                                    h = this.parentNode.previousSibling;
-                                    for (i = 0; i < sl; i++) {
-                                        if (s.options[i].innerHTML == this.innerHTML) {
-                                            s.selectedIndex = i;
-                                            h.innerHTML = this.innerHTML;
-                                            y = this.parentNode.getElementsByClassName("same-as-selected");
-                                            yl = y.length;
-                                            for (k = 0; k < yl; k++) {
-                                                y[k].removeAttribute("class");
-                                            }
-                                            this.setAttribute("class", "same-as-selected");
-                                            s.dispatchEvent(new Event('change')); // trigger chart update
-                                            break;
-                                        }
-                                    }
-                                    h.click();
-                                });
-                                b.appendChild(c);
-                            }
-                            x[i].appendChild(b);
-                            a.addEventListener("click", function(e) {
-                                e.stopPropagation();
-                                closeAllSelect(this);
-                                this.nextSibling.classList.toggle("select-hide");
-                            });
-                        }
-
-                        function closeAllSelect(elmnt) {
-                            var x, y, i, xl, yl;
-                            x = document.getElementsByClassName("select-items");
-                            y = document.getElementsByClassName("select-selected");
-                            xl = x.length;
-                            yl = y.length;
-                            for (i = 0; i < yl; i++) {
-                                if (elmnt != y[i]) {
-                                    y[i].classList.remove("select-arrow-active");
-                                }
-                            }
-                            for (i = 0; i < xl; i++) {
-                                if (elmnt != y[i]) {
-                                    x[i].classList.add("select-hide");
-                                }
-                            }
-                        }
-                        document.addEventListener("click", closeAllSelect);
-                    });
-                </script>
 
         </section>
-        <!-- /JUMLAH PENDAPATAN TIAP KUPS -->
+        <!-- /IAD POTENSI TIAP KUPS -->
 
         <!-- PRODUCT KUPS -->
         <section class="product-slider">
@@ -383,7 +215,6 @@
                 @endforeach
             </div>
         </section>
-
         <!-- /PRODUCT KUPS -->
 
         <!-- Informasi Section -->
@@ -417,66 +248,6 @@
                     @endforelse
                 </div>
                 <div class="informasi-pagination" id="informasiPagination"></div>
-
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        function initializeSlider(sliderSelector, paginationId, cardSelector) {
-                            const slider = document.querySelector(sliderSelector);
-                            const pagination = document.getElementById(paginationId);
-                            const cards = document.querySelectorAll(cardSelector);
-
-                            // Pengecekan ini sangat penting, akan menghentikan error
-                            if (!slider || !pagination || cards.length === 0) {
-                                return;
-                            }
-
-                            pagination.innerHTML = '';
-                            const gap = parseInt(window.getComputedStyle(slider).gap) || 20;
-
-                            // 1. Buat dots
-                            cards.forEach((_, index) => {
-                                const dot = document.createElement("div");
-                                dot.classList.add("dot");
-                                if (index === 0) dot.classList.add("active");
-                                pagination.appendChild(dot);
-                            });
-
-                            const allDots = pagination.querySelectorAll(".dot");
-                            if (allDots.length <= 1) {
-                                pagination.style.display = 'none';
-                            }
-
-                            // 2. Fungsi Klik
-                            allDots.forEach((dot, index) => {
-                                dot.addEventListener("click", () => {
-                                    const cardWidth = cards[0].offsetWidth;
-                                    const scrollPosition = index * (cardWidth + gap);
-                                    slider.scrollTo({
-                                        left: scrollPosition,
-                                        behavior: "smooth"
-                                    });
-                                });
-                            });
-
-                            // 3. Fungsi Scroll
-                            slider.addEventListener("scroll", () => {
-                                const cardWidth = cards[0].offsetWidth;
-                                const activeIndex = Math.round(slider.scrollLeft / (cardWidth + gap));
-                                allDots.forEach((dot, index) => {
-                                    dot.classList.toggle("active", index === activeIndex);
-                                });
-                            });
-                        }
-                        try {
-                            initializeSlider(".kups-slider", "kupsPagination", ".kups-card-item");
-                            initializeSlider(".informasi-cards", "informasiPagination", ".informasi-card");
-                            initializeSlider(".video-cards", "videoPagination", ".video-card");
-                        } catch (e) {
-                            console.error("Terjadi error saat menginisialisasi slider:", e);
-                        }
-
-                    });
-                </script>
             </div>
         </section>
 
@@ -489,7 +260,6 @@
                 <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
                     @forelse ($videos as $video)
                         @php
-                            // Ambil video ID dari link YouTube
                             preg_match(
                                 '/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w\-]+)/',
                                 $video->link,
@@ -502,7 +272,7 @@
                         @endphp
 
                         <div class="video-card">
-                            <a href="{{ $video->link }}" target="_blank"> <!-- buka langsung video -->
+                            <a href="{{ $video->link }}" target="_blank">
                                 <div class="video-image">
                                     <img src="{{ $thumbnail }}" alt="{{ $video->judul }}">
                                 </div>
@@ -527,119 +297,295 @@
 
         <!-- Contact Section -->
         <section id="contact" class="contact section">
-
-            <!-- Section Title -->
-            <div class="global-title" data-aos="fade-up">
+            <div class="global-title">
                 <h2>Contact</h2>
-            </div><!-- End Section Title -->
-
-            <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="row gy-4">
-                    <div class="col-lg-6">
-                        <form action="#" class="php-email-form" id="contactForm" data-aos="fade-up"
-                            data-aos-delay="500">
-                            <div class="row gy-4">
-                                <div class="col-md-6">
-                                    <input type="text" name="name" class="form-control" placeholder="Your Name"
-                                        required>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <input type="email" class="form-control" name="email" placeholder="Your Email"
-                                        required>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <input type="text" class="form-control" name="subject" placeholder="Subject"
-                                        required>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <textarea class="form-control" name="message" rows="4" placeholder="Message" required></textarea>
-                                </div>
-                            </div>
-
-                            <div class="col-mt-3 text-center">
-                                <div class="loading" style="display:none;">Loading...</div>
-                                <div class="sent-message" style="display:none; color:green;">✅ Your message has been sent.
-                                    Thank you!</div>
-
-                                <button type="submit">Send Message</button>
-                            </div>
-                        </form>
-
-                        <script>
-                            document.getElementById("contactForm").addEventListener("submit", function(e) {
-                                e.preventDefault();
-
-                                let form = this;
-                                let loading = form.querySelector(".loading");
-                                let sentMsg = form.querySelector(".sent-message");
-
-                                // Reset tampilan
-                                sentMsg.style.display = "none";
-                                loading.style.display = "block";
-
-                                // Simulasi kirim (2 detik)
-                                setTimeout(() => {
-                                    // HILANGKAN paksa loading
-                                    loading.style.setProperty("display", "none", "important");
-
-                                    // Baru tampil pesan sukses
-                                    sentMsg.style.display = "block";
-
-                                    // Reset form
-                                    form.reset();
-                                }, 2000);
-                            });
-                        </script>
-
-
-
-
-                    </div>
-
-                    <div class="col-lg-6 ">
-                        <div class="row gy-4">
-                            @foreach ($contact as $kontak)
-                                <div class="col-lg-12">
-                                    <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                                        data-aos="fade-up" data-aos-delay="200">
-                                        <i class="bi bi-geo-alt"></i>
-                                        <h3>Address</h3>
-                                        <p>{{ $kontak->alamat }}</p>
-                                    </div>
-                                </div><!-- End Info Item -->
-
-                                <div class="col-md-6">
-                                    <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                                        data-aos="fade-up" data-aos-delay="300">
-                                        <i class="bi bi-telephone"></i>
-                                        <h3>Call Us</h3>
-                                        <p>{{ $kontak->telepon }}</p>
-                                    </div>
-                                </div><!-- End Info Item -->
-
-                                <div class="col-md-6">
-                                    <div class="info-item d-flex flex-column justify-content-center align-items-center"
-                                        data-aos="fade-up" data-aos-delay="400">
-                                        <i class="bi bi-envelope"></i>
-                                        <h3>Email Us</h3>
-                                        <p>{{ $kontak->email }}</p>
-                                    </div>
-                                </div><!-- End Info Item -->
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <!-- End Contact Form -->
-
-                </div>
-
             </div>
+            <div class="container" ><div class="col-lg-12  ">
+                <div class="row gy-4">
+                    @foreach ($contact as $kontak)
+                        <div class="col-lg-12 ">
+                            <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                                <i class="bi bi-geo-alt"></i>
+                                <h3>Address</h3>
+                                <p>{{ $kontak->alamat }}</p>
+                            </div>
+                        </div>
 
+                        <div class="col-md-6">
+                            <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                                <i class="bi bi-telephone"></i>
+                                <h3>Call Us</h3>
+                                <p>{{ $kontak->telepon }}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                                <i class="bi bi-envelope"></i>
+                                <h3>Email Us</h3>
+                                <p>{{ $kontak->email }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            </div>
         </section>
         <!-- /Contact Section -->
 
+        <!-- Chart -->
+        @push('scripts')
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    //chart perhut
+                    if (document.getElementById('donutChart')) {
+                        const donutCtx = document.getElementById('donutChart').getContext('2d');
+                        new Chart(donutCtx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: @json($labels),
+                                datasets: [{
+                                    data: @json($data),
+                                    backgroundColor: @json($backgroundColor)
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                    //bar chart kups
+                    const tahunSelect = document.getElementById("tahunSelect");
+                    const chartElementId = 'pendapatanChart';
+                    let myChart;
+                    const initialChartData = @json($chartData ?? []);
+                    const initialYear = {{ $currentYear }};
+
+                    if (document.getElementById(chartElementId) && tahunSelect) {
+                        myChart = Highcharts.chart(chartElementId, {
+                            chart: {
+                                type: 'column',
+                                backgroundColor: 'transparent',
+                                style: {
+                                    fontFamily: 'Poppins, sans-serif'
+                                }
+                            },
+                            title: {
+                                text: null
+                            },
+                            subtitle: {
+                                text: 'Data Pendapatan KUPS Tahun: ' + initialYear,
+                                align: 'left',
+                                style: {
+                                    color: '#666'
+                                }
+                            },
+                            xAxis: {
+                                type: 'category',
+                                labels: {
+                                    style: {
+                                        fontSize: '12px',
+                                        color: '#333'
+                                    }
+                                },
+                                lineColor: 'transparent',
+                                tickColor: 'transparent'
+                            },
+                            yAxis: {
+                                title: {
+                                    text: null
+                                },
+                                gridLineColor: '#E0E0E0',
+                                labels: {
+                                    format: 'Rp {value:,.0f}',
+                                    style: {
+                                        fontSize: '12px',
+                                        color: '#666'
+                                    }
+                                }
+                            },
+                            legend: {
+                                enabled: false
+                            },
+                            plotOptions: {
+                                series: {
+                                    borderRadius: 6,
+                                    borderWidth: 0
+                                }
+                            },
+                            tooltip: {
+                                headerFormat: '<b>{point.key}</b><br>',
+                                pointFormat: 'KTH: <b>{point.options.kth}</b><br><span style="color:{point.color}">●</span> {series.name}: <b>Rp {point.y:,.0f}</b>',
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                borderColor: '#DDD',
+                                borderRadius: 8,
+                                shadow: true,
+                                style: {
+                                    fontSize: '13px'
+                                }
+                            },
+                            series: [{
+                                name: 'Pendapatan',
+                                colorByPoint: true,
+                                data: initialChartData,
+                                colors: ['#5A67D8', '#38A169', '#DD6B20', '#3182CE', '#805AD5']
+                            }],
+                            credits: {
+                                enabled: false
+                            },
+                            lang: {
+                                noData: "Tidak ada data untuk ditampilkan pada tahun ini."
+                            },
+                            noData: {
+                                style: {
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    color: '#303030'
+                                }
+                            }
+                        });
+
+                        function updateChartData() {
+                            const selectedYear = tahunSelect.value;
+                            myChart.showLoading('Memuat data...');
+                            fetch(`/kups/chart-data/${selectedYear}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    myChart.series[0].setData(data, true);
+                                    myChart.setSubtitle({
+                                        text: 'Data Pendapatan KUPS Tahun: ' + selectedYear
+                                    });
+                                    myChart.hideLoading();
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    myChart.showLoading('Gagal memuat data!');
+                                });
+                        }
+                        tahunSelect.addEventListener("change", updateChartData);
+                    }
+                    //slider & pagination landingpage
+                    function initializeSlider(sliderSelector, paginationId, cardSelector) {
+                        const slider = document.querySelector(sliderSelector);
+                        const pagination = document.getElementById(paginationId);
+                        const cards = document.querySelectorAll(cardSelector);
+                        if (!slider || !pagination || cards.length === 0) return;
+
+                        pagination.innerHTML = '';
+                        const gap = parseInt(window.getComputedStyle(slider).gap) || 20;
+
+                        cards.forEach((_, index) => {
+                            const dot = document.createElement("div");
+                            dot.classList.add("dot");
+                            if (index === 0) dot.classList.add("active");
+                            pagination.appendChild(dot);
+                        });
+
+                        const allDots = pagination.querySelectorAll(".dot");
+                        if (allDots.length <= 1) {
+                            pagination.style.display = 'none';
+                        }
+
+                        allDots.forEach((dot, index) => {
+                            dot.addEventListener("click", () => {
+                                const cardWidth = cards[0].offsetWidth;
+                                const scrollPosition = index * (cardWidth + gap);
+                                slider.scrollTo({
+                                    left: scrollPosition,
+                                    behavior: "smooth"
+                                });
+                            });
+                        });
+
+                        slider.addEventListener("scroll", () => {
+                            const cardWidth = cards[0].offsetWidth;
+                            const activeIndex = Math.round(slider.scrollLeft / (cardWidth + gap));
+                            allDots.forEach((dot, index) => {
+                                dot.classList.toggle("active", index === activeIndex);
+                            });
+                        });
+                    }
+                    try {
+                        initializeSlider(".kups-slider", "kupsPagination", ".kups-card-item");
+                        initializeSlider(".informasi-cards", "informasiPagination", ".informasi-card");
+                        initializeSlider(".video-cards", "videoPagination", ".video-card");
+                    } catch (e) {
+                        console.error("Terjadi error saat menginisialisasi slider:", e);
+                    }
+                    //dropdown custom
+                    var x, i, j, l, ll, selElmnt, a, b, c;
+                    x = document.getElementsByClassName("custom-select-wrapper");
+                    l = x.length;
+                    for (i = 0; i < l; i++) {
+                        selElmnt = x[i].getElementsByTagName("select")[0];
+                        if (!selElmnt) continue;
+                        ll = selElmnt.length;
+                        a = document.createElement("DIV");
+                        a.setAttribute("class", "select-selected");
+                        if (selElmnt.options.length > 0) {
+                            a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                        } else {
+                            a.innerHTML = "Tidak ada data";
+                        }
+                        x[i].appendChild(a);
+                        b = document.createElement("DIV");
+                        b.setAttribute("class", "select-items select-hide");
+                        for (j = 0; j < ll; j++) {
+                            c = document.createElement("DIV");
+                            c.innerHTML = selElmnt.options[j].innerHTML;
+                            c.addEventListener("click", function(e) {
+                                var y, i, k, s, h, sl, yl;
+                                s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                                sl = s.length;
+                                h = this.parentNode.previousSibling;
+                                for (i = 0; i < sl; i++) {
+                                    if (s.options[i].innerHTML == this.innerHTML) {
+                                        s.selectedIndex = i;
+                                        h.innerHTML = this.innerHTML;
+                                        y = this.parentNode.getElementsByClassName("same-as-selected");
+                                        yl = y.length;
+                                        for (k = 0; k < yl; k++) {
+                                            y[k].removeAttribute("class");
+                                        }
+                                        this.setAttribute("class", "same-as-selected");
+                                        s.dispatchEvent(new Event('change'));
+                                        break;
+                                    }
+                                }
+                                h.click();
+                            });
+                            b.appendChild(c);
+                        }
+                        x[i].appendChild(b);
+                        a.addEventListener("click", function(e) {
+                            e.stopPropagation();
+                            closeAllSelect(this);
+                            this.nextSibling.classList.toggle("select-hide");
+                            this.classList.toggle("select-arrow-active");
+                        });
+                    }
+
+                    function closeAllSelect(elmnt) {
+                        var x, y, i, xl, yl;
+                        x = document.getElementsByClassName("select-items");
+                        y = document.getElementsByClassName("select-selected");
+                        xl = x.length;
+                        yl = y.length;
+                        for (i = 0; i < yl; i++) {
+                            if (elmnt != y[i]) {
+                                y[i].classList.remove("select-arrow-active");
+                            }
+                        }
+                        for (i = 0; i < xl; i++) {
+                            if (elmnt.nextSibling != x[i]) {
+                                x[i].classList.add("select-hide");
+                            }
+                        }
+                    }
+                    document.addEventListener("click", closeAllSelect);
+                });
+            </script>
+        @endpush
+        <!-- /Chart -->
     </main>

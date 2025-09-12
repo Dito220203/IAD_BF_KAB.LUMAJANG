@@ -27,6 +27,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\MockObject\ReturnValueGenerator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClientController extends Controller
 {
@@ -38,13 +39,18 @@ class ClientController extends Controller
         $currentYear = Carbon::now()->year;
 
         // Ambil data KUPS untuk tahun sekarang
-        $kupsData = Kups::where('tahun', $currentYear)
-            ->select('kups', 'pendapatan')
+        $kupsData = Kups::with('kth') // <-- TAMBAHKAN BARIS INI
+            ->where('tahun', $currentYear)
             ->get();
 
         // Format data untuk Highcharts
         $chartData = $kupsData->map(function ($item) {
-            return [$item->kups, (float)$item->pendapatan];
+            return [
+                'name' => $item->kups,
+                'y' => (float) $item->pendapatan,
+                'kth' => $item->kth->kth ?? 'KTH tidak diketahui' // Menambahkan nama KTH
+            ];
+            ;
         });
 
         // Ambil daftar tahun unik dari tabel KUPS untuk dropdown
@@ -91,14 +97,21 @@ class ClientController extends Controller
 
         ));
     }
+
     public function chartData($tahun)
     {
-        $kupsData = Kups::where('tahun', $tahun)
-            ->select('kups', 'pendapatan')
+        // Gunakan with() untuk memuat relasi 'kth' secara efisien
+        $kupsData = Kups::with('kth')
+            ->where('tahun', $tahun)
             ->get();
 
         $chartData = $kupsData->map(function ($item) {
-            return [$item->kups, (float)$item->pendapatan];
+            return [
+                'name' => $item->kups,
+                'y' => (float) $item->pendapatan,
+                // KUNCI PERBAIKAN: Cek dulu apakah relasi 'kth' ada
+                'kth' => $item->kth ? $item->kth->kth : 'KTH tidak diketahui'
+            ];
         });
 
         return response()->json($chartData);
@@ -111,6 +124,12 @@ class ClientController extends Controller
         $subprogram = Subprogram::findOrFail($id);
         $fotosubprogram = FotoSubprogram::where('id_subprogram', $id)->get();
         return view('client.tentangkegiatan', compact('contact', 'subprograms', 'subprogram', 'fotosubprogram'));
+    }
+    public function rencanaaksi()
+    {
+        $contact = Kontak::all();
+        $subprograms = Subprogram::all();
+        return view('client.rencanaaksi', compact('contact', 'subprograms'));
     }
     public function rencanakegiatan($id)
     {
@@ -132,92 +151,61 @@ class ClientController extends Controller
         return view('client.progreskegiatan', compact('contact', 'subprograms', 'subprogram', 'progres'));
     }
 
-
     // public function monev(Request $request, $id)
     // {
     //     $contact = Kontak::all();
     //     $subprograms = Subprogram::all();
     //     $subprogram = Subprogram::findOrFail($id);
 
-    //     // Ambil semua tahun yang ada di tabel monevs untuk dropdown
-    //     $years = Monev::selectRaw('YEAR(tahun) as year')->distinct()->pluck('year');
+    //     // Ambil semua tahun dari kolom tanggal untuk dropdown
+    //     $years = Monev::selectRaw('YEAR(tanggal) as year')
+    //         ->distinct()
+    //         ->orderBy('year', 'desc')
+    //         ->pluck('year');
 
     //     $query = Monev::with(['rencanaKerja', 'opd'])
     //         ->where('id_subprogram', $id)
     //         ->where('status', 'valid');
 
-    //     // Filter tahun kalau ada di request
+    //     // Filter Tahun
     //     if ($request->filled('tahun')) {
-    //         $query->whereYear('tahun', $request->tahun);
+    //         $query->whereYear('tanggal', $request->tahun);
     //     }
 
-    //     $monevs = $query->get();
+    //     // Filter Triwulan (sama persis dengan admin)
+    //     if ($request->filled('triwulan')) {
+    //         switch ($request->triwulan) {
+    //             case 1: // Jan - Mar
+    //                 $query->whereMonth('tanggal', '>=', 1)
+    //                     ->whereMonth('tanggal', '<=', 3);
+    //                 break;
+    //             case 2: // Apr - Jun
+    //                 $query->whereMonth('tanggal', '>=', 4)
+    //                     ->whereMonth('tanggal', '<=', 6);
+    //                 break;
+    //             case 3: // Jul - Sep
+    //                 $query->whereMonth('tanggal', '>=', 7)
+    //                     ->whereMonth('tanggal', '<=', 9);
+    //                 break;
+    //             case 4: // Okt - Des
+    //                 $query->whereMonth('tanggal', '>=', 10)
+    //                     ->whereMonth('tanggal', '<=', 12);
+    //                 break;
+    //         }
+    //     }
 
-    //     // Kelompokkan per triwulan
+    //     $monevs = $query->orderBy('tanggal', 'asc')->get();
+
+    //     // Kelompokkan per triwulan untuk ditampilkan
     //     $triwulan = [
-    //         1 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 1 && \Carbon\Carbon::parse($item->tahun)->month <= 3),
-    //         2 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 4 && \Carbon\Carbon::parse($item->tahun)->month <= 6),
-    //         3 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 7 && \Carbon\Carbon::parse($item->tahun)->month <= 9),
-    //         4 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tahun)->month >= 10 && \Carbon\Carbon::parse($item->tahun)->month <= 12),
+    //         1 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 1 && \Carbon\Carbon::parse($item->tanggal)->month <= 3),
+    //         2 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 4 && \Carbon\Carbon::parse($item->tanggal)->month <= 6),
+    //         3 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 7 && \Carbon\Carbon::parse($item->tanggal)->month <= 9),
+    //         4 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 10 && \Carbon\Carbon::parse($item->tanggal)->month <= 12),
     //     ];
 
     //     return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan', 'years'));
     // }
-public function monev(Request $request, $id)
-{
-    $contact = Kontak::all();
-    $subprograms = Subprogram::all();
-    $subprogram = Subprogram::findOrFail($id);
-
-    // Ambil semua tahun dari kolom tanggal untuk dropdown
-    $years = Monev::selectRaw('YEAR(tanggal) as year')
-        ->distinct()
-        ->orderBy('year', 'desc')
-        ->pluck('year');
-
-    $query = Monev::with(['rencanaKerja', 'opd'])
-        ->where('id_subprogram', $id)
-        ->where('status', 'valid');
-
-    // Filter Tahun
-    if ($request->filled('tahun')) {
-        $query->whereYear('tanggal', $request->tahun);
-    }
-
-    // Filter Triwulan (sama persis dengan admin)
-    if ($request->filled('triwulan')) {
-        switch ($request->triwulan) {
-            case 1: // Jan - Mar
-                $query->whereMonth('tanggal', '>=', 1)
-                      ->whereMonth('tanggal', '<=', 3);
-                break;
-            case 2: // Apr - Jun
-                $query->whereMonth('tanggal', '>=', 4)
-                      ->whereMonth('tanggal', '<=', 6);
-                break;
-            case 3: // Jul - Sep
-                $query->whereMonth('tanggal', '>=', 7)
-                      ->whereMonth('tanggal', '<=', 9);
-                break;
-            case 4: // Okt - Des
-                $query->whereMonth('tanggal', '>=', 10)
-                      ->whereMonth('tanggal', '<=', 12);
-                break;
-        }
-    }
-
-    $monevs = $query->orderBy('tanggal', 'asc')->get();
-
-    // Kelompokkan per triwulan untuk ditampilkan
-    $triwulan = [
-        1 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 1 && \Carbon\Carbon::parse($item->tanggal)->month <= 3),
-        2 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 4 && \Carbon\Carbon::parse($item->tanggal)->month <= 6),
-        3 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 7 && \Carbon\Carbon::parse($item->tanggal)->month <= 9),
-        4 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 10 && \Carbon\Carbon::parse($item->tanggal)->month <= 12),
-    ];
-
-    return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan', 'years'));
-}
 
 
 
@@ -244,7 +232,13 @@ public function monev(Request $request, $id)
             ->findOrFail($id);
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.progreskegiatandetail', compact('contact', 'subprograms', 'progres'));
+        $photoCount = $progres->fotoProgres->count();
+        return view('client.progreskegiatandetail', compact(
+            'contact',
+            'subprograms',
+            'progres',
+            'photoCount'
+        ));
     }
 
     public function profilkawasan()
@@ -346,7 +340,7 @@ public function monev(Request $request, $id)
     }
     public function detailregulasi($id)
     {
-        $item        = Regulasi::where('status', 'Aktif')->findOrFail($id);
+        $item = Regulasi::where('status', 'Aktif')->findOrFail($id);
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.detailregulasi', compact('contact', 'subprograms', 'item'));
@@ -354,7 +348,7 @@ public function monev(Request $request, $id)
 
     public function detailluasperhutanan()
     {
-        $kth = Kth::all();
+        $kth = Kth::paginate(10);
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.detailluasperhutanan', compact('contact', 'subprograms', 'kth'));
@@ -362,25 +356,47 @@ public function monev(Request $request, $id)
     public function detailkth_kups()
     {
 
-        $kthKups = Kth::all();
+        $kthKups = Kth::paginate(10);
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.detailkth_kups', compact('contact', 'subprograms', 'kthKups'));
     }
     public function detailkups()
     {
-        $Kups = Kups::all();
+        $Kups = Kups::paginate(10);
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
         return view('client.detailkups', compact('contact', 'subprograms', 'Kups'));
     }
-    public function detailekonomi()
+
+
+    public function detailekonomi(Request $request)
     {
-        $Kups = Kups::paginate(10);
+        $selectedYear = $request->input('tahun');
+        if ($selectedYear == 'semua') {
+            $selectedYear = null;
+        }
+
+        // rapikan daftar tahun
+        $years = Kups::selectRaw("DISTINCT TRIM(tahun) as tahun")
+            ->whereNotNull('tahun')
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+        $kupsQuery = Kups::with('kth');
+
+        if ($selectedYear) {
+            $kupsQuery->whereRaw("TRIM(tahun) = ?", [$selectedYear]);
+        }
+
+        $kups = $kupsQuery->orderBy('tahun', 'desc')->paginate(10);
+
         $contact = Kontak::all();
         $subprograms = Subprogram::all();
-        return view('client.detailekonomi', compact('contact', 'subprograms', 'Kups'));
+
+        return view('client.detailekonomi', compact('contact', 'subprograms', 'kups', 'years', 'selectedYear'));
     }
+
 
 
     //detail informasi &video

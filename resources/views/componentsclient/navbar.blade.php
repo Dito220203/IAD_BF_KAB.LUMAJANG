@@ -32,6 +32,12 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="{{ route('client.rencanaaksi', ) }}"
+                                            >
+                                            RENCANA AKSI TAHUNAN
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('client.rencanakegiatan', ['id' => $subprogram->id]) }}"
                                             class="{{ request()->is('subprogram/' . $subprogram->id . '/rencana') ? 'active' : '' }}">
                                             RENCANA KEGIATAN
@@ -43,12 +49,12 @@
                                             PROGRES KEGIATAN
                                         </a>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <a href="{{ route('client.monev', ['id' => $subprogram->id]) }}"
                                             class="{{ request()->is('subprogram/' . $subprogram->id . '/monev') ? 'active' : '' }}">
                                             MONITORING & EVALUASI
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     <li>
                                         <a href="{{ route('client.petasebarankegiatan', ['id' => $subprogram->id]) }}"
                                             class="{{ request()->is('subprogram/' . $subprogram->id . '/peta') ? 'active' : '' }}">

@@ -51,6 +51,11 @@
                 </div>
             </div>
         </section>
+        <div class="text-center mt-4">
+            <a href="{{ url('/') }}" class="btn-footer-back">
+                ← Kembali
+            </a>
+        </div>
     </section>
 @section('scripts')
     <script>

@@ -88,58 +88,6 @@ h6 {
   font-family: var(--heading-font);
 }
 
-/* PHP Email Form Messages
-------------------------------*/
-.php-email-form .error-message {
-  display: none;
-  background: #df1529;
-  color: #ffffff;
-  text-align: left;
-  padding: 15px;
-  margin-bottom: 24px;
-  font-weight: 600;
-}
-
-.php-email-form .sent-message {
-  display: none;
-  color: #ffffff;
-  background: #059652;
-  text-align: center;
-  padding: 15px;
-  margin-bottom: 24px;
-  font-weight: 600;
-}
-
-.php-email-form .loading {
-  display: none;
-  background: var(--surface-color);
-  text-align: center;
-  padding: 15px;
-  margin-bottom: 24px;
-}
-
-.php-email-form .loading:before {
-  content: "";
-  display: inline-block;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  margin: 0 10px -6px 0;
-  border: 3px solid var(--accent-color);
-  border-top-color: var(--surface-color);
-  animation: php-email-form-loading 1s linear infinite;
-}
-
-@keyframes php-email-form-loading {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 /* global title & btn back
 ------------------------------*/
 .section_page{
@@ -258,10 +206,6 @@ h6 {
     padding: 0 10px;        /* jangan full edge ke layar */
   }
 }
-
-
-
-
 /*--------------------------------------------------------------
 # Global Header
 --------------------------------------------------------------*/
@@ -346,17 +290,9 @@ h6 {
   --background-color: rgba(36,104,83,0.8);
 }
 
-
-
-
-
-
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
-/* =========================
-   Desktop Navigation (≥1200px)
-   ========================= */
 @media (min-width: 1200px) {
   .navmenu {
     padding: 0;
@@ -512,9 +448,6 @@ h6 {
 }
 
 
-/* =========================
-   Mobile Navigation (≤1199px)
-   ========================= */
 @media (max-width: 1199px) {
   .mobile-nav-toggle {
     color: var(--nav-color);
@@ -545,8 +478,6 @@ h6 {
     z-index: 9998;
   }
 
-  /* Link menu mobile */
-  /* Link menu mobile */
 /* Link menu mobile */
 .navmenu a,
 .navmenu a:focus {
@@ -791,18 +722,9 @@ h6 {
   box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.1);
 }
 
-
-
-
-
-
-
-
-
 /*--------------------------------------------------------------
 # Global Footer
 --------------------------------------------------------------*/
-/* ================= Footer Style ================= */
 .footer {
   font-family: Arial, sans-serif;
   background-color: #1d6b57;
@@ -1221,28 +1143,23 @@ section,
 --------------------------------------------------------------*/
 /* CSS untuk Hero Section */
 .hero {
-    /* Atur posisi relatif untuk menjadi acuan video */
     position: relative;
-    /* Atur tinggi hero section agar menutupi seluruh layar */
     min-height: 100vh;
-    /* Gunakan Flexbox untuk memusatkan konten secara vertikal dan horizontal */
     display: flex;
-    justify-content: center; /* Pusatkan secara horizontal */
-    align-items: center;   /* Pusatkan secara vertikal */
-    overflow: hidden; /* Penting untuk menyembunyikan video yang melebihi batas */
+    justify-content: center; 
+    align-items: center;   
+    overflow: hidden;
 }
 
 /* CSS untuk Video Background */
 .background-video {
-    /* Atur posisi absolut agar berada di belakang konten */
     position: absolute;
     top: 0;
     left: 0;
-    /* Pastikan video menutupi seluruh area hero section */
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Penting agar video mengisi seluruh area tanpa terdistorsi */
-    z-index: 1; /* Letakkan video di belakang konten lain */
+    object-fit: cover; 
+    z-index: 1; 
 }
 
 /* CSS untuk Konten (logo dan paragraf) */
@@ -1476,6 +1393,9 @@ section,
   background-color: #f4c20d;
   transform: scale(1.5);
 }
+.highcharts-loading {
+                        z-index: 100 !important;
+                    }
 
 /* ================================================== */
 /* D. PENGATURAN CHART (Hanya untuk KUPS)
@@ -1690,6 +1610,7 @@ section,
   font-size: 14px;
   font-weight: 500;
   transition: background-color 0.3s ease;
+  /* width: 130px; */
 }
 
 .select-selected:hover {
@@ -1749,6 +1670,69 @@ section,
     gap: 15px;
   }
 }
+
+/* detailekonomi */
+
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+}
+
+.custom-select-wrapper select {
+  display: none; /* Sembunyikan bawaan */
+}
+
+.select-selected {
+  background-color: #196b4a;
+  color: #ffffff;
+  padding: 8px 30px 8px 12px;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+.select-items {
+  position: absolute;
+  background-color: #196b4a;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  border-radius: 8px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.select-hide {
+  display: none;
+}
+
+.select-items div {
+  color: #ffffff;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.select-items div:hover,
+.same-as-selected {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 
 /*--------------------------------------------------------------
 # Informasi Section
@@ -1829,34 +1813,51 @@ section,
   justify-content: space-between;
   transition: transform .3s ease;
 }
+
 .informasi-card:hover .informasi-content {
   transform: translateY(-8px);
 }
+
+/* Judul (h3) - Dibatasi maksimal 3 baris */
 .informasi-content h3 {
   font-size: 18px;
+  font-weight: 600; /* Sedikit tebalkan agar lebih terbaca */
   margin-bottom: 10px;
-  line-height: 1.3em;
-  max-height: 2.6em; /* 2 baris */
+  line-height: 1.4em; /* Spasi antar baris */
+  min-height: 4.2em;
+  
+  /* Properti untuk memotong teks setelah 3 baris */
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* max 2 baris */
+  -webkit-line-clamp: 3; /* UBAH JADI 3 BARIS */
   -webkit-box-orient: vertical;
 }
 
+/* Deskripsi (p) - Dibuat fleksibel */
 .informasi-content p {
   font-size: 14px;
   color: #555;
-  max-height: 100px;
+  
+  /* KUNCI UTAMA: Paksa elemen ini mengisi sisa ruang kosong */
+  flex-grow: 1; 
+  
+  /* Batasi juga deskripsi agar tidak terlalu panjang (opsional) */
   overflow: hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Maksimal 4 baris untuk deskripsi */
+  -webkit-box-orient: vertical;
 }
+
 .informasi-footer {
-  margin-top: 10px;
+  margin-top: 15px; /* Beri jarak sedikit dari deskripsi */
   display: flex;
   justify-content: space-between;
   font-size: 13px;
+  flex-shrink: 0; /* Pastikan footer tidak ikut menyusut */
 }
+
 .showinfo{
   color: #196b4a;
 }
@@ -1908,131 +1909,119 @@ section,
 }
 
 
-
-
-
-
-
+/* ======================================================= */
+/* ===== SLIDER FINAL (SUPER SIMPLE & SMOOTH) ====== */
+/* ======================================================= */
 
 .product-slider {
   width: 100%;
-  height: 500px; /* default untuk desktop */
+  height: 550px; /* Tinggi tetap untuk desktop */
   position: relative;
   overflow: hidden;
-  background: #f9f9f9;
+  background: #fff;
 }
 
 .slider-wrapper {
   display: flex;
+  width: 100%;
   height: 100%;
-  transition: transform 1s ease-in-out;
+  transition: transform 1s cubic-bezier(0.45, 0.05, 0.55, 0.95); /* Transisi halus */
 }
 
-/* ===== Desktop Default ===== */
 .slide {
   min-width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 40px 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
-  opacity: 0;
-  transform: translateX(100%);
-  transition: all 1s ease-in-out;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  padding: 0 60px;
+  gap: 50px;
 }
 
-.slide.active {
-  opacity: 1;
-  transform: translateX(0);
-  position: relative; /* aktif ikut dorong konten */
+.slide-image {
+  width: 450px;   /* Atur lebar frame */
+  height: 450px;  /* Atur tinggi frame (buat rasio 1:1 atau persegi) */
+  flex-shrink: 0;
+  
+  /* KUNCI UTAMA DI SINI */
+  border-radius: 15px; /* Ini yang akan membuat sudutnya melengkung */
+  overflow: hidden;    /* Ini yang akan "memotong" gambar mengikuti frame */
 }
 
 .slide-image img {
-  max-height: 400px;
-  width: auto;
-  object-fit: contain;
-  border-radius: 15px; 
-  transition: transform 3s ease-in-out;
-}
-
-.slide.active .slide-image img {
-  transform: scale(1.05); /* zoom in pelan */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 'cover' akan mengisi frame, cocok untuk semua orientasi */
 }
 
 .slide-content {
+  flex: 1;
   max-width: 500px;
 }
 
 .slide-content h2 {
   font-size: 28px;
-  margin-bottom: 10px;
-  font-weight: 700;
-  color: #1a1a1a;
+  margin-bottom: 15px;
 }
 
 .slide-content p {
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 1.6;
   color: #555;
-  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: calc(1.6 * 16px * 8);
 }
 
-/* ===== Mobile Responsive ===== */
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .product-slider { height: 480px; }
+  .slide { padding: 30px 40px; gap: 30px; }
+  .slide-image { width: 400px; height: 360px; }
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
   .product-slider {
-    height: auto;          /* tinggi ikut isi */
-    min-height: 400px;     /* jaga jangan terlalu kecil */
-    padding-bottom: 20px;  /* ruang bawah biar teks gak ketutup */
+    height: auto; /* Biarkan tinggi slider utama menyesuaikan */
+    padding: 20px 0;
   }
 
   .slide {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
-    height: auto;
+    flex-direction: column; /* Susun ke bawah */
     padding: 20px;
+    gap: 20px;
   }
 
+  /* KUNCI UTAMA DI SINI */
   .slide-image {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;           /* Lebar frame penuh */
+    height: 250px;         /* TINGGI FRAME DIPAKSA 250PX */
+    flex-shrink: 0;
+    border-radius: 15px;   /* Jaga sudut melengkung */
+    overflow: hidden;      /* Jaga gambar tidak keluar frame */
   }
 
   .slide-image img {
     width: 100%;
-    height: auto;
-    max-height: 250px; /* batasi tinggi gambar */
-    object-fit: cover;
-    border-radius: 10px;
+    height: 100%;        /* Gambar dipaksa mengisi frame 250px */
+    object-fit: cover;   /* 'Cover' akan mengisi frame, memotong jika perlu */
   }
 
   .slide-content {
-    max-width: 100%;
+    width: 100%;
     text-align: center;
+    max-width: 100%;
   }
-
-  .slide-content h2 {
-    font-size: 20px;
-  }
-
+  
   .slide-content p {
-    font-size: 14px;
-    line-height: 1.4;
+    -webkit-line-clamp: 6; /* Batasi teks jadi 6 baris */
   }
 }
-
-
-
-
-
-
 
 
 
@@ -2237,16 +2226,27 @@ section,
 
 .contact .info-item {
   background-color: var(--surface-color);
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  padding: 24px 0 30px 0;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08); /* Bayangan awal lebih soft */
+  padding: 30px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
+  border-radius: 10px; /* Tambahkan sudut melengkung */
+  
+  /* KUNCI 1: Tambahkan transisi yang halus di sini */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.contact .info-item:hover {
+ 
+  transform: translateY(-8px);
+  box-shadow:  0 5px 15px #374b44;
 }
 
 .contact .container {
-  padding: 0 0 30px 0;   /* ✅ fix: hapus padding-top biar sejajar global-title */
+  padding: 0 15px 30px 15px;
 }
 
 .contact .info-item i {
@@ -2258,26 +2258,36 @@ section,
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  transition: all 0.3s ease-in-out;
   border: 2px dotted color-mix(in srgb, var(--accent-color), transparent 40%);
+  flex-shrink: 0;
 }
 
 .contact .info-item h3 {
   font-size: 18px;
-  align-items: center;
   font-weight: 700;
-  margin: 10px 0;
-  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  margin: 15px 0 10px 0;
 }
 
 .contact .info-item p {
-  padding: 0;
-  align-items: center;
+  padding: 0 15px;
   margin-bottom: 0;
   font-size: 14px;
+  line-height: 1.6;
 }
 
-.contact .php-email-form {
+/* KUNCI 2: Perbaikan Tampilan Mobile */
+@media (max-width: 768px) {
+  .contact .info-item {
+    width: 100%; /* Gunakan lebar penuh agar konsisten */
+  }
+
+  /* Khusus untuk alamat yang panjang, buat rata kiri agar mudah dibaca */
+  .contact .info-item i.bi-geo-alt + h3 + p {
+    text-align: left;
+  }
+}
+
+/* .contact .php-email-form {
   background-color: var(--surface-color);
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   height: 100%;
@@ -2291,9 +2301,9 @@ section,
 
 .contact .php-email-form button[type=submit] {
   align-self: center;
-}
+} */
 
-@media (max-width: 575px) {
+/* @media (max-width: 575px) {
   .contact .php-email-form {
     padding: 20px;
   }
@@ -2334,7 +2344,7 @@ section,
 
 .contact .php-email-form button[type=submit]:hover {
   background: #ffc107;
-}
+} */
 
 
 
@@ -2488,6 +2498,11 @@ section,
     font-size: 14px;
     color: #444;
     margin-bottom: 10px;
+    overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Coba batasi 3 baris */
+  -webkit-box-orient: vertical;
 }
 .progres-footer {
     text-align: right;
@@ -2629,56 +2644,62 @@ section,
 /*--------------------------------------------------------------
 # GALERI DOKUMENTASI - SOLUSI FINAL
 --------------------------------------------------------------*/
-.documentation-gallery {
-  padding-top: 20px;
-  padding-bottom: 40px;
-  min-height: 320px; /* Beri tinggi minimal agar tidak loncat */
-}
+/* --- BLOK FINAL CSS UNTUK GALERI STATIS --- */
 
-/* KASUS 1, 2, 3: LAYOUT STATIS (SAAT SWIPER TIDAK AKTIF) */
+/* Wadah utama untuk semua kasus statis */
 .documentation-gallery:not(.swiper-initialized) .swiper-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
-  flex-wrap: wrap; /* Izinkan gambar turun baris jika perlu */
+  flex-wrap: wrap; 
 }
 
+/* Aturan umum untuk slide statis */
 .documentation-gallery:not(.swiper-initialized) .swiper-slide {
-  width: 30%; /* Default untuk 3 gambar */
-  max-width: 350px;
-  opacity: 1 !important; /* Pastikan tidak buram */
-  transform: scale(1) !important; /* Pastikan ukuran normal */
+  opacity: 1 !important;
+  transform: scale(1) !important;
 }
 
-/* Ukuran khusus saat gambar hanya 1 */
+/* Tampilan untuk 1 GAMBAR */
 .documentation-gallery:not(.swiper-initialized)[data-photo-count="1"] .swiper-slide {
   width: 70%;
   max-width: 600px;
 }
 
-/* Ukuran khusus saat gambar hanya 2 */
+/* Tampilan untuk 2 GAMBAR */
 .documentation-gallery:not(.swiper-initialized)[data-photo-count="2"] .swiper-slide {
   width: 48%;
   max-width: 450px;
 }
 
+/* Tampilan untuk 3 GAMBAR */
+.documentation-gallery:not(.swiper-initialized)[data-photo-count="3"] .swiper-slide {
+  width: 31%;
+  max-width: 350px;
+}
+
+/* Aturan untuk gambar di dalam slide statis */
 .documentation-gallery:not(.swiper-initialized) .swiper-slide img {
   width: 100%;
   height: 280px;
   object-fit: cover;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
 }
+
 .documentation-gallery:not(.swiper-initialized) .swiper-slide img:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 /* KASUS 4+: LAYOUT SLIDER (SAAT SWIPER AKTIF) */
+/* KASUS 4+: LAYOUT SLIDER (SAAT SWIPER AKTIF) */
 .documentation-gallery.swiper-initialized {
   cursor: grab;
+  overflow: hidden; /* Tambahkan ini untuk memotong gambar yang keluar */
+  padding-top: 10px;    /* Opsional: Beri ruang agar bayangan/efek tidak terpotong */
+  padding-bottom: 10px; /* Opsional: Beri ruang agar bayangan/efek tidak terpotong */
 }
 .documentation-gallery.swiper-initialized .swiper-slide {
   transition: transform 0.4s, opacity 0.4s;
@@ -2715,6 +2736,7 @@ section,
     max-height: 280px;
   }
 }
+
 
 .produk {
   display: flex;
@@ -3110,8 +3132,37 @@ section,
 
 
 /*--------------------------------------------------------------
-#  .. Section
+#  detailekonomi Section
 --------------------------------------------------------------*/
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap; /* Agar responsif di layar kecil */
+    gap: 20px; /* Jarak antar elemen */
+}
+
+/* Form filter */
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Jarak antara label dan dropdown */
+}
+
+.filter-form label {
+    font-weight: 500;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+/* Kontainer untuk dropdown agar bisa diberi panah custom */
+.select-container {
+    position: relative;
+}
+
+
 
 /*--------------------------------------------------------------
 #  .. Section

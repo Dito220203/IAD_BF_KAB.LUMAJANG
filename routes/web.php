@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 
 //client
 Route::get('/', [ClientController::class, 'index'])->name('client');
+// routes/web.php
 
 
 Route::get('/get-desa/client/{kecamatanId}', [ClientController::class, 'getDesaByKecamatan']);
@@ -38,12 +39,13 @@ Route::get('/profil', [ClientController::class, 'Daftarprofilkawasan'])
 Route::get('/profil-kawasan/{id}', [ClientController::class, 'profilkawasandetail'])
     ->name('profilkawasan.detail');
 
+    Route::get('/rencanaaksi', [ClientController::class, 'rencanaaksi'])->name('client.rencanaaksi');
 
 Route::prefix('subprogram/{id}')->group(function () {
     Route::get('/tentangkegiatan', [ClientController::class, 'tentangkegiatan'])->name('client.tentangkegiatan');
     Route::get('/rencanakegiatan', [ClientController::class, 'rencanakegiatan'])->name('client.rencanakegiatan');
     Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
-    Route::get('/monev-client', [ClientController::class, 'monev'])->name('client.monev');
+    // Route::get('/monev-client', [ClientController::class, 'monev'])->name('client.monev');
     Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])
         ->name('client.petasebarankegiatan');
 });
@@ -189,7 +191,8 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::put('/regulasi-update/{id}', [RegulasiController::class, 'update'])->name('regulasi.update');
     Route::delete('regulasi-delete/{id}', [RegulasiController::class, 'destroy'])->name('regulasi.delete');
 
-    Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');;
+    Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
+    ;
     Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
 
     Route::get('/opd', [OpdController::class, 'index'])->name('opd');

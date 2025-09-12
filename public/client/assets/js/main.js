@@ -1,21 +1,13 @@
 (function () {
     "use strict";
 
-    /**
-     * ==================================================================================
-     * BAGIAN 1: SCRIPT INISIALISASI
-     * Semua kode di blok ini akan menunggu preloader selesai dan semua aset halaman siap.
-     * Ini adalah kunci untuk memperbaiki masalah "kadang muncul, kadang tidak".
-     * ==================================================================================
-     */
-    window.addEventListener('load', () => {
-
+    window.addEventListener("load", () => {
         /**
          * 1. PRELOADER (VERSI BARU & STABIL)
          */
-        const preloader = document.querySelector('#preloader');
+        const preloader = document.querySelector("#preloader");
         if (preloader) {
-            document.body.classList.add('loaded');
+            document.body.classList.add("loaded");
             setTimeout(() => {
                 preloader.remove();
             }, 600);
@@ -24,50 +16,88 @@
         /**
          * 2. AOS, GLIGHTBOX, PURE COUNTER
          */
-        if (typeof AOS !== "undefined") { AOS.init({ duration: 600, easing: "ease-in-out", once: true, mirror: false }); }
-        if (typeof GLightbox !== "undefined") { GLightbox({ selector: ".glightbox" }); }
-        if (typeof PureCounter !== "undefined") { new PureCounter(); }
+        if (typeof AOS !== "undefined") {
+            AOS.init({
+                duration: 600,
+                easing: "ease-in-out",
+                once: true,
+                mirror: false,
+            });
+        }
+        if (typeof GLightbox !== "undefined") {
+            GLightbox({ selector: ".glightbox" });
+        }
+        if (typeof PureCounter !== "undefined") {
+            new PureCounter();
+        }
 
         /**
          * 3. ISOTOPE LAYOUT (Filter Galeri)
          */
-        document.querySelectorAll(".isotope-layout").forEach(function (isotopeItem) {
-            let container = isotopeItem.querySelector(".isotope-container");
-            if (container) {
-                imagesLoaded(container, function () {
-                    let layout = isotopeItem.getAttribute("data-layout") ?? "masonry";
-                    let filter = isotopeItem.getAttribute("data-default-filter") ?? "*";
-                    let sort = isotopeItem.getAttribute("data-sort") ?? "original-order";
-                    let initIsotope = new Isotope(container, {
-                        itemSelector: ".isotope-item",
-                        layoutMode: layout,
-                        filter: filter,
-                        sortBy: sort,
+        document
+            .querySelectorAll(".isotope-layout")
+            .forEach(function (isotopeItem) {
+                let container = isotopeItem.querySelector(".isotope-container");
+                if (container) {
+                    imagesLoaded(container, function () {
+                        let layout =
+                            isotopeItem.getAttribute("data-layout") ??
+                            "masonry";
+                        let filter =
+                            isotopeItem.getAttribute("data-default-filter") ??
+                            "*";
+                        let sort =
+                            isotopeItem.getAttribute("data-sort") ??
+                            "original-order";
+                        let initIsotope = new Isotope(container, {
+                            itemSelector: ".isotope-item",
+                            layoutMode: layout,
+                            filter: filter,
+                            sortBy: sort,
+                        });
+                        isotopeItem
+                            .querySelectorAll(".isotope-filters li")
+                            .forEach(function (filters) {
+                                filters.addEventListener(
+                                    "click",
+                                    function () {
+                                        isotopeItem
+                                            .querySelector(
+                                                ".isotope-filters .filter-active"
+                                            )
+                                            .classList.remove("filter-active");
+                                        this.classList.add("filter-active");
+                                        initIsotope.arrange({
+                                            filter: this.getAttribute(
+                                                "data-filter"
+                                            ),
+                                        });
+                                        if (typeof AOS !== "undefined")
+                                            AOS.refresh();
+                                    },
+                                    false
+                                );
+                            });
                     });
-                    isotopeItem.querySelectorAll(".isotope-filters li").forEach(function (filters) {
-                        filters.addEventListener("click", function () {
-                            isotopeItem.querySelector(".isotope-filters .filter-active").classList.remove("filter-active");
-                            this.classList.add("filter-active");
-                            initIsotope.arrange({ filter: this.getAttribute("data-filter") });
-                            if (typeof AOS !== "undefined") AOS.refresh();
-                        }, false);
-                    });
-                });
-            }
-        });
-        
+                }
+            });
+
         /**
          * 4. SWIPER SLIDERS
          */
-        document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
-            let configEl = swiperElement.querySelector(".swiper-config");
-            if (configEl) {
-                try {
-                    let config = JSON.parse(configEl.innerHTML.trim());
-                    new Swiper(swiperElement, config);
-                } catch (err) { console.warn("Swiper config error:", err); }
-            }
-        });
+        document
+            .querySelectorAll(".init-swiper")
+            .forEach(function (swiperElement) {
+                let configEl = swiperElement.querySelector(".swiper-config");
+                if (configEl) {
+                    try {
+                        let config = JSON.parse(configEl.innerHTML.trim());
+                        new Swiper(swiperElement, config);
+                    } catch (err) {
+                        console.warn("Swiper config error:", err);
+                    }
+                }
+            });
 
         /**
          * 5. SLIDER INFORMASI (dengan pagination)
@@ -77,18 +107,27 @@
             // ... (Seluruh logika slider informasi Anda yang sudah benar ada di sini)
         }
 
-        /**
-         * 6. SLIDER PRODUK KUPS (Otomatis)
-         */
-        const productSlides = document.querySelectorAll(".product-slider .slide");
-        if (productSlides.length > 0) {
-            let currentIndex = 0;
-            const showSlide = (index) => productSlides.forEach((s, i) => s.classList.toggle('active', i === index));
-            const nextSlide = () => { currentIndex = (currentIndex + 1) % productSlides.length; showSlide(currentIndex); };
-            setInterval(nextSlide, 3000);
-            if (productSlides.length > 0) showSlide(0);
-        }
+      /**
+       * 6. SLIDER PRODUK (PING-PONG EFFECT)
+       */
+      const sliderWrapper = document.querySelector('.product-slider .slider-wrapper');
+      const slides = document.querySelectorAll('.product-slider .slide');
 
+      if (sliderWrapper && slides.length > 1) {
+          let currentIndex = 0;
+          let direction = 1; // 1 untuk maju, -1 untuk mundur
+
+          setInterval(() => {
+              // Pindahkan ke slide berikutnya sesuai arah
+              currentIndex += direction;
+              sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+              // Jika sudah sampai di ujung (akhir atau awal), balik arah
+              if (currentIndex === slides.length - 1 || currentIndex === 0) {
+                  direction *= -1; // Balik arah (dari 1 menjadi -1, atau sebaliknya)
+              }
+          }, 5000); // Ganti slide setiap 5 detik
+      }
         /**
          * 7. PROGRES & POTENSI LIST (PENCARIAN & LOAD MORE)
          */
@@ -101,14 +140,20 @@
             // --- Logika Pencarian ---
             const filterItems = () => {
                 const keyword = searchInput.value.toLowerCase();
-                items.forEach(item => {
-                    const title = item.querySelector("h6").innerText.toLowerCase();
-                    item.style.display = title.includes(keyword) ? "flex" : "none";
+                items.forEach((item) => {
+                    const title = item
+                        .querySelector("h6")
+                        .innerText.toLowerCase();
+                    item.style.display = title.includes(keyword)
+                        ? "flex"
+                        : "none";
                 });
             };
-            if(searchBtn && searchInput) {
+            if (searchBtn && searchInput) {
                 searchBtn.addEventListener("click", filterItems);
-                searchInput.addEventListener("keyup", (e) => { if (e.key === 'Enter') filterItems(); });
+                searchInput.addEventListener("keyup", (e) => {
+                    if (e.key === "Enter") filterItems();
+                });
             }
 
             // --- Logika Load More (Hanya di halaman progres) ---
@@ -116,12 +161,16 @@
                 let visibleCount = 3;
                 function showItems() {
                     items.forEach((item, index) => {
-                        item.style.display = index < visibleCount ? "flex" : "none";
+                        item.style.display =
+                            index < visibleCount ? "flex" : "none";
                     });
                 }
                 showItems();
                 progresList.addEventListener("scroll", () => {
-                    if (progresList.scrollTop + progresList.clientHeight >= progresList.scrollHeight - 10) {
+                    if (
+                        progresList.scrollTop + progresList.clientHeight >=
+                        progresList.scrollHeight - 10
+                    ) {
                         visibleCount += 3;
                         showItems();
                     }
@@ -135,12 +184,14 @@
         const tabs = document.querySelectorAll(".tab-btn");
         if (tabs.length > 0) {
             const contents = document.querySelectorAll(".table-content");
-            tabs.forEach(tab => {
+            tabs.forEach((tab) => {
                 tab.addEventListener("click", () => {
-                    tabs.forEach(t => t.classList.remove("active"));
-                    contents.forEach(c => c.classList.remove("active"));
+                    tabs.forEach((t) => t.classList.remove("active"));
+                    contents.forEach((c) => c.classList.remove("active"));
                     tab.classList.add("active");
-                    const targetContent = document.getElementById(tab.dataset.target);
+                    const targetContent = document.getElementById(
+                        tab.dataset.target
+                    );
                     if (targetContent) targetContent.classList.add("active");
                 });
             });
@@ -149,15 +200,13 @@
         /**
          * 9. NAVBAR PROFIL DROPDOWN (jQuery)
          */
-        if (typeof $ !== 'undefined' && $(".select2").length) {
-            $('.select2').select2({
-                width: '100%',
-                dropdownParent: $('.profil-dropdown')
+        if (typeof $ !== "undefined" && $(".select2").length) {
+            $(".select2").select2({
+                width: "100%",
+                dropdownParent: $(".profil-dropdown"),
             });
         }
-        
     }); // *** AKHIR DARI window.addEventListener('load') ***
-
 
     /**
      * ==================================================================================
@@ -165,23 +214,24 @@
      * Kode di bawah ini aman di luar 'load' karena hanya merespons aksi pengguna.
      * ==================================================================================
      */
-    
+
     /**
      * EFEK PADA HEADER & TOMBOL SCROLL-TOP
      */
     const header = document.querySelector("#header");
     const scrollTop = document.querySelector(".scroll-top");
     function handleScrollEffects() {
-        const isHomePage = document.body.classList.contains('index-page');
+        const isHomePage = document.body.classList.contains("index-page");
         if (window.scrollY > 100) {
-            if(header) header.classList.add("header-scrolled");
-            if(scrollTop) scrollTop.classList.add("active");
+            if (header) header.classList.add("header-scrolled");
+            if (scrollTop) scrollTop.classList.add("active");
         } else {
-            if(header && isHomePage) header.classList.remove("header-scrolled");
-            if(scrollTop) scrollTop.classList.remove("active");
+            if (header && isHomePage)
+                header.classList.remove("header-scrolled");
+            if (scrollTop) scrollTop.classList.remove("active");
         }
-        if(header && !isHomePage) {
-            header.classList.add('header-scrolled');
+        if (header && !isHomePage) {
+            header.classList.add("header-scrolled");
         }
     }
     window.addEventListener("load", handleScrollEffects);
@@ -199,7 +249,9 @@
     const mobileNavToggleBtn = document.querySelector(".mobile-nav-toggle");
     if (mobileNavToggleBtn) {
         const mobileNavToogle = () => {
-            document.querySelector("body").classList.toggle("mobile-nav-active");
+            document
+                .querySelector("body")
+                .classList.toggle("mobile-nav-active");
             mobileNavToggleBtn.classList.toggle("bi-list");
             mobileNavToggleBtn.classList.toggle("bi-x");
         };
@@ -225,10 +277,10 @@
     /**
      * PENCARIAN PROFIL KAWASAN (Tombol Cari di Navbar)
      */
-    if (typeof $ !== 'undefined') {
-        $('.profil-search-btn').on('click', function(){
-            let kecamatan = $('#kecamatan').val();
-            let desa = $('#desa').val();
+    if (typeof $ !== "undefined") {
+        $(".profil-search-btn").on("click", function () {
+            let kecamatan = $("#kecamatan").val();
+            let desa = $("#desa").val();
             if (kecamatan && desa) {
                 window.location.href = `/profil?kecamatan=${kecamatan}&desa=${desa}`;
             } else {
@@ -236,5 +288,6 @@
             }
         });
     }
-
+    
+    
 })();
