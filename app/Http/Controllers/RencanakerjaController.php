@@ -4,79 +4,91 @@ namespace App\Http\Controllers;
 
 use App\Helpers\LogHelper;
 use App\Models\Opd;
+use App\Models\RencanaAksi_6_tahun;
 use App\Models\RencanaKerja;
 use App\Models\Subprogram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RencanaExport;
 
 class RencanakerjaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $user = Auth::guard('pengguna')->user();
-        $user->level == 'Super Admin' ? $rencana = RencanaKerja::paginate(10) : $rencana = RencanaKerja::where('id_pengguna', $user->id)->paginate(10);
+        $rencana = $user->level == 'Super Admin'
+            ? RencanaKerja::paginate(10)
+            : RencanaKerja::where('id_pengguna', $user->id)->paginate(10);
+
         return view('admin.RencanaKerja.index', compact('rencana'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function getRencanaAksi($id_subprogram)
+    {
+        $rencanaAksi = RencanaAksi_6_tahun::where('id_subprogram', $id_subprogram)->get();
+
+        return response()->json($rencanaAksi);
+    }
+
+
     public function create()
     {
         $subprogram = Subprogram::all();
-        $opd = Opd::all(); // ambil semua data opd
+        $opd = Opd::all();
+        $rencanaAksi = RencanaAksi_6_tahun::all();
 
-        return view('admin.RencanaKerja.create', compact('subprogram', 'opd'));
+        return view('admin.RencanaKerja.create', compact('subprogram', 'opd', 'rencanaAksi'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function exportExcel()
     {
         $user = Auth::guard('pengguna')->user();
 
-        // validasi dasar
-        $rules = [
-            'subprogram' => 'required|exists:subprograms,id',
-            'judul' => 'required',
-            'lokasi' => 'required',
-            'tahun' => 'required',
-            'anggaran' => 'required',
-            'keterangan' => 'required',
-        ];
-
-        // Kalau Super Admin wajib pilih OPD
-        if ($user->level === 'Super Admin') {
-            $rules['id_opd'] = 'required|exists:opds,id';
-        }
-
-        $validate = $request->validate($rules);
-
-        // mapping subprogram
-        $validate['id_subprogram'] = $validate['subprogram'];
-        unset($validate['subprogram']);
-
-        // set pengguna
-        $validate['id_pengguna'] = $user->id;
-
-        // set opd otomatis kalau bukan super admin
-        if ($user->level !== 'Super Admin') {
-            $validate['id_opd'] = $user->id_opd; // pastikan kolom id_opd ada di tabel pengguna
-        }
-
-        $validate['status'] = 'Belum Validasi';
-
-        RencanaKerja::create($validate);
-        LogHelper::add('Menambah data Rencana Kerja');
-        return redirect()->route('rencanakerja')->with('success', 'Data Berhasil Ditambahkan');
+        return Excel::download(new RencanaExport($user), 'rencana_kerja.xlsx');
     }
 
+    public function store(Request $request)
+    {
+        $validate = $request->validate([
+            'id_subprogram'  => 'required|exists:subprograms,id',
+            'rencanaAksi' => 'required|string',
+            'sub_kegiatan'   => 'required|string',
+            'kegiatan'       => 'required|string',
+            'nama_program' => 'required|string',
+            'tahun'          => 'required',
+            'volume' => 'required',
+            'satuan' => 'required',
+            'anggaran'       => 'required',
+            'sumberdana' => 'required',
+            'lokasi'         => 'required|string',
+            'id_opd'         => 'required|exists:opds,id',
+            'keterangan'     => 'required|string'
+        ]);
+
+        RencanaKerja::create([
+            'id_pengguna'      => Auth::guard('pengguna')->id(),
+            'id_subprogram'    => $validate['id_subprogram'],
+            'rencana_aksi'  => $validate['rencanaAksi'],
+            'sub_kegiatan'     => $validate['sub_kegiatan'],
+            'kegiatan'         => $validate['kegiatan'],
+            'nama_program'  => $validate['nama_program'],
+            'lokasi'           => $validate['lokasi'],
+            'volume' => $validate['volume'],
+            'satuan' => $validate['satuan'],
+            'anggaran'         => $validate['anggaran'],
+            'sumberdana' => $validate['sumberdana'],
+            'tahun'            => $validate['tahun'],
+            'id_opd'           => $validate['id_opd'],
+            'status'           => 'Belum divalidasi',
+            'keterangan'       => $validate['keterangan'],
+        ]);
+
+        LogHelper::add('Menambah Data Rencana Kerja');
+
+        return redirect()->route('rencanakerja')
+            ->with('success', 'Rencana Kerja berhasil ditambahkan!');
+    }
 
 
     public function validasi(string $id)
@@ -84,6 +96,7 @@ class RencanakerjaController extends Controller
         $rencana = RencanaKerja::findOrFail($id);
         $rencana->status = 'Valid';
         $rencana->save();
+
         LogHelper::add('Memvalidasi data Rencana Kerja');
         return redirect()->route('rencanakerja')->with('success', 'Status berhasil divalidasi');
     }
@@ -91,111 +104,73 @@ class RencanakerjaController extends Controller
     public function updateStatus(string $id)
     {
         $rencana = RencanaKerja::findOrFail($id);
-
-        $rencana->status = $rencana->status === 'Valid' ? 'Belum Validasi' : 'Valid';
+        $rencana->status = $rencana->status === 'Valid' ? 'Belum divalidasi' : 'Valid';
         $rencana->save();
+
         LogHelper::add('Mengubah status data Rencana Kerja');
         return redirect()->route('rencanakerja')->with('success', 'Status berhasil diperbarui');
     }
 
-
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $rencana = RencanaKerja::with(['subprogram', 'opd'])->findOrFail($id);
+
         LogHelper::add('Melihat detail data Rencana Kerja');
         return view('admin.RencanaKerja.show', compact('rencana'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(string $id)
     {
-        // Ambil data rencana kerja berdasarkan ID
-        $rencana = RencanaKerja::findOrFail($id);
+        $user = Auth::guard('pengguna')->user();
 
+        $rencana = RencanaKerja::findOrFail($id);
 
         $subprogram = Subprogram::all();
         $opd = Opd::all();
 
-
         return view('admin.RencanaKerja.update', compact('rencana', 'subprogram', 'opd'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        $user = Auth::guard('pengguna')->user();
+        $validate = $request->validate([
+            'id_subprogram'  => 'required|exists:subprograms,id',
+            'rencanaAksi' => 'required|string',
+            'sub_kegiatan'   => 'required|string',
+            'kegiatan'       => 'required|string',
+            'nama_program'   => 'required|string',
+            'lokasi'         => 'required|string',
+            'volume' => 'required',
+            'satuan' => 'required',
+            'anggaran'       => 'required',
+            'sumberdana'       => 'required',
+            'tahun'          => 'required',
+            'id_opd'         => 'required|exists:opds,id',
+            'keterangan'     => 'required|string'
+        ]);
+
         $rencana = RencanaKerja::findOrFail($id);
+        $rencana->update($validate);
 
-        // aturan validasi dasar
-        $rules = [
-            'e_subprogram' => 'required|exists:subprograms,id',
-            'e_judul' => 'required',
-            'e_lokasi' => 'required',
-            'e_tahun' => 'required',
-            'e_anggaran' => 'required',
-            'status' => 'nullable|string',
-            'e_keterangan' => 'required',
-        ];
+        LogHelper::add('Mengedit Data Rencana Kerja');
 
-        // kalau Super Admin wajib pilih OPD
-        if ($user->level === 'Super Admin') {
-            $rules['e_opd'] = 'required|exists:opds,id';
-        }
-
-        $validate = $request->validate($rules);
-
-        // mapping data
-        $data = [
-            'id_subprogram' => $validate['e_subprogram'],
-            'judul' => $validate['e_judul'],
-            'lokasi' => $validate['e_lokasi'],
-            'tahun' => $validate['e_tahun'],
-            'anggaran' => $validate['e_anggaran'],
-            'status' => $validate['status'] ?? 'Belum Validasi',
-            'keterangan' => $validate['e_keterangan'],
-        ];
-
-        // set OPD sesuai role
-        if ($user->level === 'Super Admin') {
-            $data['id_opd'] = $validate['e_opd'];
-        } else {
-            $data['id_opd'] = $user->id_opd;
-        }
-
-        // update ke database
-        $rencana->update($data);
-
-        LogHelper::add('Mengubah data Rencana Kerja');
-        return redirect()->route('rencanakerja')->with('success', 'Data Berhasil Diperbarui');
+        return redirect()->route('rencanakerja')
+            ->with('success', 'Rencana Kerja berhasil diperbarui!');
     }
 
 
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $rencana = RencanaKerja::findOrFail($id);
 
-        // Hapus file dari storage kalau ada
         if ($rencana->file && Storage::disk('public')->exists($rencana->file)) {
             Storage::disk('public')->delete($rencana->file);
         }
 
-        // Hapus data dari database
         $rencana->delete();
         LogHelper::add('Menghapus data Rencana Kerja');
+
         return redirect()->route('rencanakerja')->with('success', 'Data berhasil dihapus');
     }
 }

@@ -23,6 +23,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\PotensiKupsController;
 use App\Http\Controllers\ProdukKupsController;
+use App\Http\Controllers\RencanaAksi_6TahunController;
 use App\Http\Controllers\SubpotensiKehutananController;
 use App\Models\Pesan;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,6 @@ use Illuminate\Support\Facades\Route;
 //client
 Route::get('/', [ClientController::class, 'index'])->name('client');
 // routes/web.php
-
 
 Route::get('/get-desa/client/{kecamatanId}', [ClientController::class, 'getDesaByKecamatan']);
 Route::get('/profil-kawasan/search', [ClientController::class, 'searchPotensi'])->name('profilkawasan.search');
@@ -70,14 +70,12 @@ Route::get('/detail-potensi/{id}', [ClientController::class, 'detailpotensi'])
     ->name('client.detailpotensi');
 Route::get('/kups/chart-data/{tahun}', [ClientController::class, 'chartData']);
 
-
-
-
 Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer');
-// Admin
+
+
+//admin
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.post');
-
 
 Route::middleware(['authadmin', 'noCache'])->group(function () {
 
@@ -146,7 +144,20 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::delete('/sub-produk/{id}/delete', [SubProgramController::class, 'destroyProduk'])->name('delete.produk');
 
 
+    Route::get('/rencan-aksi', [RencanaAksi_6TahunController::class, 'index'])->name('rencana6tahun');
+    Route::get('/rencana-aksi/export-excel', [RencanaAksi_6TahunController::class, 'exportExcelAksi'])
+        ->name('rencanaAksi.export.excel');
+    Route::get('/rencan-aksi-create', [RencanaAksi_6TahunController::class, 'create'])->name('rencanaAksi.create');
+    Route::post('/rencan-aksi-save', [RencanaAksi_6TahunController::class, 'store'])->name('rencanaAksi.store');
+    Route::get('/rencan-aksi-edit/{id}', [RencanaAksi_6TahunController::class, 'edit'])->name('rencanaAksi.edit');
+    Route::put('/rencan-aksi-update/{id}', [RencanaAksi_6TahunController::class, 'update'])->name('rencanaAksi.update');
+    Route::delete('/rencan-aksi-delete/{id}', [RencanaAksi_6TahunController::class, 'destroy'])->name('rencanaAksi.destroy');
+
     Route::get('/rencan-kerja', [RencanakerjaController::class, 'index'])->name('rencanakerja');
+    Route::get('/rencana/export-excel', [RencanakerjaController::class, 'exportExcel'])
+        ->name('rencana.export.excel');
+    Route::get('/get-rencana-aksi/{id_subprogram}', [RencanakerjaController::class, 'getRencanaAksi'])
+        ->name('get.rencana.aksi');
     Route::get('/rencana-create', [RencanakerjaController::class, 'create'])->name('rencana.create');
     Route::post('/rencana-store', [RencanakerjaController::class, 'store'])->name('rencana.store');
     Route::put('/rencana/{id}/validasi', [RencanakerjaController::class, 'updateStatus'])->name('rencana.validasi');
@@ -168,11 +179,14 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
 
     Route::get('/monev', [MonevController::class, 'index'])->name('monev');
     Route::get('/monev-create', [MonevController::class, 'create'])->name('monev.create');
+    Route::get('/get-rencana-kerja/{id_subprogram}', [MonevController::class, 'getRencanaKerja']);
     Route::post('/monev-sive', [MonevController::class, 'store'])->name('monev.store');
+    Route::put('/monev/{id}/pesan', [MonevController::class, 'updatePesan'])->name('monev.pesan');
+    Route::get('/monev/export', [MonevController::class, 'exportPDF'])->name('monev.export');
+
     Route::put('/monev/{id}/validasi', [MonevController::class, 'updateStatus'])->name('monev.validasi');
     Route::get('/monev-edit/{id}', [MonevController::class, 'edit'])->name('monev.edit');
     Route::put('/monev-update/{id}', [MonevController::class, 'update'])->name('monev.update');
-    Route::get('/monev-show/{id}', [MonevController::class, 'show'])->name('monev.show');
     Route::delete('/monev-delete/{id}', [MonevController::class, 'destroy'])->name('monev.delete');
 
     // Route::get('/potensi', [PotensiController::class, 'index'])->name('potensi');
@@ -208,8 +222,6 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::delete('/pengguna-delete/{id}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
 
     Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
-
     Route::post('/ganti-password', [LoginController::class, 'update_password'])->name('update.password');
-
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });

@@ -72,6 +72,18 @@
         .footer {
             transition: opacity 0.5s ease-in-out;
         }
+
+        html.turbo-visit-from-cache .main,
+        html.turbo-visit-from-cache .footer {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        html.turbo-visit .main,
+        html.turbo-visit .footer {
+            opacity: 0 !important;
+            transition: none !important;
+        }
     </style>
 
 </head>

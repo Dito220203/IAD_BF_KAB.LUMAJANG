@@ -16,6 +16,10 @@ class Subprogram extends Model
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
     }
+    public function rencana_aksi()
+    {
+        return $this->hasMany(RencanaAksi_6_tahun::class, 'id_subprogram', 'id');
+    }
     public function rencanaKerjas()
     {
         return $this->hasMany(RencanaKerja::class, 'id_subprogram', 'id');

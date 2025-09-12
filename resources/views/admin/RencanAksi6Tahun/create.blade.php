@@ -1,0 +1,134 @@
+@extends('components.layout')
+
+@section('content')
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Tambah Rencana Aksi</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Rencana Aksi</li>
+                    <li class="breadcrumb-item active">Tambah</li>
+                </ol>
+            </nav>
+        </div>
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body p-4">
+
+                            <!-- Pesan error -->
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <!-- Form -->
+                            <form action="{{ route('rencanaAksi.store') }}" method="POST">
+                                @csrf
+
+                                <!-- Sub Program & Nama Program -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sub Program</label>
+                                        <select name="sub_program" class="form-select" required>
+                                            <option value="">-- Pilih Sub Program --</option>
+                                            @foreach ($subprogram as $data)
+                                                <option value="{{ $data->id }}">{{ $data->subprogram }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Rencana Aksi / Aktivitas</label>
+                                        <input type="text" name="rencanaAksi" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sub Kegiatan</label>
+                                        <input type="text" name="sub_kegiatan" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Kegiatan</label>
+                                        <input type="text" name="kegiatan" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Program</label>
+                                        <input type="text" name="nama_program" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Lokasi</label>
+                                        <input type="text" name="lokasi" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Volume</label>
+                                        <input type="text" name="volume" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Satuan</label>
+                                        <input type="text" name="satuan" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Anggaran</label>
+                                        <input type="text" name="anggaran" value="{{ old('anggaran') }}"
+                                            class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Sumber Dana</label>
+                                        <input type="text" name="sumberdana" value="{{ old('sumberdana') }}"
+                                            class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tahun</label>
+                                        <input type="text" name="tahun" class="form-control" placeholder="YYYY"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Perangkat Daerah</label>
+                                        <select name="id_opd" class="form-select" required>
+                                            <option value="">-- Pilih OPD --</option>
+                                            @foreach ($opds as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                   \
+                                        <!-- Keterangan -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Keterangan</label>
+                                            <textarea name="keterangan" class="form-control" rows="3" required>{{ old('keterangan') }}</textarea>
+                                        </div>
+
+
+                                    <div class="d-flex justify-content-end gap-2 mt-4">
+                                        <a href="{{ route('rencana6tahun') }}" class="btn btn-warning">Batal</a>
+                                        <button type="submit" class="btn btn-success">Simpan</button>
+                                    </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+@endsection
