@@ -22,23 +22,70 @@ class DasboardAdminController extends Controller
         // Ambil pengguna terbaru (misal 5)
         $penggunaTerbaru = Pengguna::latest()->take(5)->get();
 
-        $informasi = Informasi::all();
 
-        // Contoh data progres tiap OPD (nanti bisa diambil dari tabel monitoring/evaluasi)
-        $progresOpd = [
-            ['nama' => 'Dinas Pendidikan', 'persentase' => 80],
-            ['nama' => 'Dinas Kesehatan',  'persentase' => 60],
-            ['nama' => 'Dinas PU',         'persentase' => 90],
-            ['nama' => 'Dinas Sosial',     'persentase' => 50],
-        ];
+
+        // ===== Bagian untuk Rencana Kerja =====
+        $totalRencanaKerja = RencanaKerja::count();
+        $rencanaSelesai    = RencanaKerja::where('status', 'Valid')->count();
+        $rencanaProgress   = RencanaKerja::where('status', 'Belum divalidasi')->count();
+
+        // ===== Bagian untuk Monev =====
+        // ambil semua data monev
+        $allMonev = Monev::all();
+
+        // filter data lengkap
+        $monevLengkap = $allMonev->filter(function ($item) {
+            // kolom yang WAJIB diisi
+            $requiredFields = [
+                'id_pengguna',
+                'id_subprogram',
+                'rencana_aksi',
+                'sub_kegiatan',
+                'kegiatan',
+                'nama_program',
+                'lokasi',
+                'volume',
+                'satuan',
+                'anggaran',
+                'sumberdana',
+                'tahun',
+                'id_opd',
+                'realisasi',
+                'rka',
+                'tanggal'
+            ];
+
+            // cek kalau ada yang kosong/null
+            foreach ($requiredFields as $field) {
+                if (empty($item->$field)) {
+                    return false; // tidak lengkap
+                }
+            }
+
+            return true; // lengkap
+        })->count();
+
+        // total monev
+        $totalMonev = $allMonev->count();
+
+        // sisanya = belum lengkap
+        $monevBelumLengkap = $totalMonev - $monevLengkap;
+
+
 
         return view('admin.Dasboard.index', compact(
             'totalPengguna',
             'penggunaTerbaru',
-            'informasi',
-            'progresOpd'
+
+            'totalRencanaKerja',
+            'rencanaSelesai',
+            'rencanaProgress',
+            'totalMonev',
+            'monevLengkap',
+            'monevBelumLengkap'
         ));
     }
+
 
 
     /**
