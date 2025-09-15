@@ -93,66 +93,72 @@
 
                     <!-- Anggaran, Sumber Dana, OPD -->
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="form-label">Anggaran</label>
                             <input type="number" name="anggaran" class="form-control"
                                 value="{{ old('anggaran', $monev->anggaran) }}">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="form-label">Sumber Dana</label>
                             <input type="text" name="sumberdana" class="form-control"
                                 value="{{ old('sumberdana', $monev->sumberdana) }}">
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Lokasi</label>
-                                <input type="text" id="lokasi" name="lokasi" class="form-control"
-                                    value="{{ old('lokasi', $monev->lokasi) }}">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">OPD</label>
-                                <select name="id_opd" class="form-select" required>
-                                    <option value="">-- Pilih OPD --</option>
-                                    @foreach ($opd as $o)
-                                        <option value="{{ $o->id }}"
-                                            {{ $monev->id_opd == $o->id ? 'selected' : '' }}>
-                                            {{ $o->nama }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
                     </div>
-
-                    <!-- RKA, Realisasi, Tanggal -->
                     <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label">RKA</label>
-                            <input type="text" name="rka" class="form-control"
-                                value="{{ old('rka', $monev->rka) }}">
+                        <div class="col-md-6">
+                            <label class="form-label">Lokasi</label>
+                            <input type="text" id="lokasi" name="lokasi" class="form-control"
+                                value="{{ old('lokasi', $monev->lokasi) }}">
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Realisasi</label>
-                            <input type="text" name="realisasi" class="form-control"
-                                value="{{ old('realisasi', $monev->realisasi) }}">
+                        <div class="col-md-6">
+                            <label class="form-label">OPD</label>
+                            <select name="id_opd" class="form-select" required>
+                                <option value="">-- Pilih OPD --</option>
+                                @foreach ($opd as $o)
+                                    <option value="{{ $o->id }}" {{ $monev->id_opd == $o->id ? 'selected' : '' }}>
+                                        {{ $o->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Tanggal</label>
-                            <input type="date" name="tanggal" class="form-control"
-                                value="{{ old('tanggal', $monev->tanggal) }}">
-                        </div>
-                    </div>
+                   
+            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Keterangan</label>
-                        <textarea name="keterangan" class="form-control" rows="3" required>{{ old('keterangan', $monev->keterangan) }}</textarea>
-                    </div>
+            <!-- RKA, Realisasi, Tanggal -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">RKA</label>
+                    <select name="rka" class="form-select">
+                        <option value="">-- Pilih --</option>
+                        <option value="sudah" {{ old('rka', $monev->rka) == 'sudah' ? 'selected' : '' }}>Sudah
+                        </option>
+                        <option value="Belum" {{ old('rka', $monev->rka) == 'Belum' ? 'selected' : '' }}>Belum
+                        </option>
+                    </select>
+                </div>
 
-                    <div class="d-flex justify-content-end">
-                        <a href="{{ route('monev') }}" class="btn btn-secondary me-2">Batal</a>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
+                <div class="col-md-4">
+                    <label class="form-label">Realisasi</label>
+                    <input type="text" name="realisasi" class="form-control"
+                        value="{{ old('realisasi', $monev->realisasi) }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tanggal</label>
+                    <input type="date" name="tanggal" class="form-control"
+                        value="{{ old('tanggal', $monev->tanggal) }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Keterangan</label>
+                <textarea name="keterangan" class="form-control" rows="3" required>{{ old('keterangan', $monev->keterangan) }}</textarea>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('monev') }}" class="btn btn-secondary me-2">Batal</a>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+            </form>
             </div>
         </section>
     </main>
