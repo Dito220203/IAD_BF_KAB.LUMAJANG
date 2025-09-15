@@ -53,4 +53,9 @@ class RencanaKerja extends Model
     {
         return $this->hasMany(Monev::class, 'rencana_aksi', 'id');
     }
+    // di dalam model RencanaKerja.php
+    public function scopeActive($query)
+    {
+        return $query->where('delete_at', '0');
+    }
 }
