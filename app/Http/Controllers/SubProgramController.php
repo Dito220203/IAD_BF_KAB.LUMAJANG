@@ -16,9 +16,9 @@ class SubProgramController extends Controller
      */
     public function index()
     {
-        $produk = FotoSubprogram::with('subprogram')->paginate(10,['*'], 'produk_page');
-        $subprogram = Subprogram::paginate(10,['*'], 'subprogram_page');
-        return view('admin.Subprogram.index', compact('subprogram','produk'));
+        $produk = FotoSubprogram::with('subprogram')->paginate(10, ['*'], 'produk_page');
+        $subprogram = Subprogram::where('delete_at', '0')->paginate(10, ['*'], 'subprogram_page');
+        return view('admin.Subprogram.index', compact('subprogram', 'produk'));
     }
 
     /**
@@ -62,7 +62,9 @@ class SubProgramController extends Controller
         ]);
 
 
-        $filePath = $request->file('foto')->store('produk', 'public');
+        $filename = time() . '.' . $request->file('foto')->getClientOriginalExtension();
+        $filePath = $request->file('foto')->storeAs('produk', $filename, 'public');
+
 
         FotoSubprogram::create([
             'id_pengguna' => Auth::guard('pengguna')->id(),
@@ -139,7 +141,9 @@ class SubProgramController extends Controller
      */
     public function destroy(string $id)
     {
-        Subprogram::where('id', $id)->delete();
+        Subprogram::where('id', $id)->update([
+            'delete_at' => '1'
+        ]);
         LogHelper::add('Menghapus data Subprogram');
         return redirect()->route('subprogram')->with('success', 'Data Berhasil Dihapus');
     }

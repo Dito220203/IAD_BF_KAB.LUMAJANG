@@ -30,7 +30,7 @@ class ProgreskerjaController extends Controller
      */
     public function create()
     {
-        $subprogram = Subprogram::all();
+        $subprogram = Subprogram::where('delete_at', '0')->get();
         return view('admin.ProgresKerja.create', compact('subprogram'));
     }
 

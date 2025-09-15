@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
-            $table->string('rencana_aksi');
+              $table->foreignId('rencana_aksi')->references('id')->on('rencana_kerjas')->onDelete('cascade');
             $table->string('sub_kegiatan');
             $table->longText('kegiatan');
             $table->string('nama_program');
@@ -29,9 +29,8 @@ return new class extends Migration
             $table->foreign('id_opd')->references('id')->on('opds')->onDelete('set null');
 
             $table->string('rka')->nullable();
-            $table->date('tanggal');
+            $table->date('tanggal')->nullable();
             $table->string('pesan')->nullable();
-
             $table->string('status')->default('tidak valid');
             $table->string('realisasi')->nullable();
             $table->longText('keterangan')->nullable();

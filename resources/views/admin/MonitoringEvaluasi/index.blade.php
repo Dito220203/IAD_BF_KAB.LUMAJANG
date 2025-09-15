@@ -18,7 +18,7 @@
                     <div class="card ">
                         <div class="card-body">
                             <!-- Header control: Tambah, Search, Tampilkan Data -->
-                             <div class="row g-3 align-items-center mb-4 mt-3">
+                            <div class="row g-3 align-items-center mb-4 mt-3">
                                 <!-- Tambah Button -->
                                 <div class="col-12 col-lg-auto">
                                     <a href="{{ route('monev.create') }}" class="btn btn-primary w-100 w-lg-auto">
@@ -96,25 +96,26 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th  class="text-center" style="width: 200px;" >Sub Program</th>
-                                            <th  class="text-center" style="width: 500px;">Rencana Aksi/Aktivitas</th>
-                                            <th  class="text-center" style="width: 350px;">Sub Kegiatan</th>
-                                            <th  class="text-center" style="width: 250px;">Kegiatan</th>
-                                            <th  class="text-center" style="width: 300px;">Nama Program</th>
-                                            <th  class="text-center" style="width: 200px;">Lokasi</th>
-                                            <th  class="text-center">Volume</th>
-                                            <th  class="text-center">Satuan</th>
-                                            <th  class="text-center" style="width: 150px;">Anggaran</th>
-                                            <th  class="text-center" style="width: 200px;">Sumber Dana</th>
-                                            <th  class="text-center">Tahun</th>
-                                            <th  class="text-center" style="width: 200px;">Perangkat Daerah</th>
-                                            <th  class="text-center">Input RKA</th>
-                                            <th  class="text-center">Status</th>
-                                            <th  class="text-center">Tanggal</th>
+                                            <th class="text-center" style="width: 200px;">Sub Program</th>
+                                            <th class="text-center" style="width: 500px;">Rencana Aksi/Aktivitas</th>
+                                            <th class="text-center" style="width: 350px;">Sub Kegiatan</th>
+                                            <th class="text-center" style="width: 250px;">Kegiatan</th>
+                                            <th class="text-center" style="width: 300px;">Nama Program</th>
+                                            <th class="text-center" style="width: 200px;">Lokasi</th>
+                                            <th class="text-center">Volume</th>
+                                            <th class="text-center">Satuan</th>
+                                            <th class="text-center" style="width: 150px;">Anggaran</th>
+                                            <th class="text-center" style="width: 200px;">Sumber Dana</th>
+                                            <th class="text-center">Tahun</th>
+                                            <th class="text-center" style="width: 200px;">Perangkat Daerah</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Input RKA</th>
+                                            <th class="text-center">Realisasi</th>
+                                            <th class="text-center">Tanggal</th>
                                             @if ($adaPesan)
-                                                <th  class="text-center" style="width: 200px">Catatan</th>
+                                                <th class="text-center" style="width: 300px">Catatan</th>
                                             @endif
-                                            <th  class="text-center">Aksi</th>
+                                            <th class="text-center">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -122,33 +123,36 @@
                                             <tr>
                                                 <td>{{ $monev->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
-                                                <td>{{ $data->rencana_aksi }}</td>
+                                                <td>{{ $data->rencanakerja->rencana_aksi ?? '-' }}</td>
                                                 <td>{{ $data->sub_kegiatan }}</td>
                                                 <td>{{ $data->kegiatan }}</td>
                                                 <td>{{ $data->nama_program }}</td>
-                                                <td  class="text-center">{{ $data->lokasi }}</td>
-                                                <td  class="text-center">{{ $data->volume }}</td>
-                                                <td  class="text-center">{{ $data->satuan }}</td>
-                                                <td  class="text-center">{{ $data->anggaran }}</td>
-                                                <td  class="text-center">{{ $data->sumberdana }}</td>
-                                                <td  class="text-center">{{ $data->tahun }}</td>
-                                                <td  class="text-center"  class="text-center">{{ $data->opd->nama ?? '-' }}</td>
-                                                <td  class="text-center">
-                                                    @if ($data->rka === 'sudah')
-                                                        <span class="badge bg-success">{{ $data->rka }}</span>
-                                                    @else
-                                                        <span class="badge bg-danger">{{ $data->rka }}</span>
-                                                    @endif
+                                                <td class="text-center">{{ $data->lokasi }}</td>
+                                                <td class="text-center">{{ $data->volume }}</td>
+                                                <td class="text-center">{{ $data->satuan }}</td>
+                                                <td class="text-center">{{ $data->anggaran }}</td>
+                                                <td class="text-center">{{ $data->sumberdana }}</td>
+                                                <td class="text-center">{{ $data->tahun }}</td>
+                                                <td class="text-center" class="text-center">{{ $data->opd->nama ?? '-' }}
                                                 </td>
 
-                                                <td  class="text-center">
+
+                                                <td class="text-center">
                                                     @if ($data->status === 'Valid')
                                                         <span class="badge bg-success">{{ $data->status }}</span>
                                                     @else
                                                         <span class="badge bg-secondary">{{ $data->status }}</span>
                                                     @endif
                                                 </td>
-                                                <td  class="text-center">{{ $data->tanggal }}</td>
+                                                <td class="text-center">
+                                                    @if ($data->rka === 'sudah')
+                                                        <span class="badge bg-success">{{ $data->rka }}</span>
+                                                    @else
+                                                        <span class="badge bg-danger">{{ $data->rka }}</span>
+                                                    @endif
+                                                </td>
+                                                 <td class="text-center">{{ $data->realisasi }}</td>
+                                                <td class="text-center">{{ $data->tanggal }}</td>
                                                 @if ($adaPesan)
                                                     <td>{{ $data->pesan }}</td>
                                                 @endif
@@ -184,16 +188,17 @@
                                                             </form>
                                                         @endif
 
-                                                        <form action="{{ route('monev.edit', $data->id) }}" method="GET">
+                                                        <form action="{{ route('monev.edit', $data->id) }}"
+                                                            method="GET">
                                                             <button class="btn btn-primary btn-sm">
-                                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                                <i class="fa-solid fa-pen-to-square">  </i>
                                                             </button>
                                                         </form>
 
                                                         {{-- Tombol Delete --}}
                                                         <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('monev.delete', $data->id) }}" method="POST"
-                                                            style="display:inline;">
+                                                            action="{{ route('monev.delete', $data->id) }}"
+                                                            method="POST" style="display:inline;">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="button" class="btn btn-danger btn-sm"

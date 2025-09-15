@@ -19,7 +19,7 @@ class RencanaAksi_6TahunController extends Controller
      */
     public function index()
     {
-        $rencanaAksi = RencanaAksi_6_tahun::paginate(10);
+        $rencanaAksi = RencanaAksi_6_tahun::where('delete_at', '0')->paginate(10);
         return view('admin.RencanAksi6Tahun.index', compact('rencanaAksi'));
     }
 
@@ -28,8 +28,8 @@ class RencanaAksi_6TahunController extends Controller
      */
     public function create()
     {
-        $subprogram = Subprogram::all();
-        $opds = Opd::all();
+        $subprogram = Subprogram::where('delete_at', '0')->get();
+        $opds = Opd::where('delete_at', '0')->get();
         return view('admin.RencanAksi6Tahun.create', compact('subprogram', 'opds'));
     }
     public function exportExcelAksi()
@@ -148,7 +148,9 @@ class RencanaAksi_6TahunController extends Controller
     public function destroy(string $id)
     {
         $rencanaAksi = RencanaAksi_6_tahun::findOrFail($id);
-        $rencanaAksi->delete();
+        $rencanaAksi->update([
+            'delete_at' => '1'
+        ]);
         LogHelper::add('Menghapus Data Rencana Aksi');
         return redirect()->route('rencana6tahun')
             ->with('success', 'Rencana Aksi berhasil dihapus!');

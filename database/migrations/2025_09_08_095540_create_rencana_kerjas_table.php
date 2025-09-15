@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('tahun');
             $table->string('status')->default('tidak valid');
             $table->longText('keterangan');
+            $table->enum('delete_at', ['0', '1'])->default('0')->nullable();
             $table->timestamps();
         });
     }

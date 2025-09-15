@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('program');
             $table->string('subprogram');
             $table->longText('uraian');
+            $table->enum('delete_at',['0','1'])->default('0')->nullable();
             $table->timestamps();
         });
     }

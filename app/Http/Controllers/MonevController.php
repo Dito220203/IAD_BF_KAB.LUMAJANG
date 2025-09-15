@@ -70,6 +70,7 @@ class MonevController extends Controller
     }
 
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -77,55 +78,51 @@ class MonevController extends Controller
     {
         $user = Auth::guard('pengguna')->user();
 
-        if ($user->level === 'Super Admin') {
-            // Super Admin lihat semua subprogram yang dipakai di Rencana Kerja
-            $subprogram = Subprogram::whereIn('id', RencanaKerja::pluck('id_subprogram'))->get();
-            $rencana = RencanaKerja::all();
-        } else {
-            // User biasa hanya subprogram dari Rencana Kerja miliknya
-            $subprogram = Subprogram::whereIn(
-                'id',
-                RencanaKerja::where('id_pengguna', $user->id)->pluck('id_subprogram')
-            )->get();
+        $subprogram = Subprogram::where('delete_at', '0')->get();
 
-            $rencana = RencanaKerja::where('id_pengguna', $user->id)->get();
+        if ($user->level === 'Super Admin') {
+            $rencana = RencanaKerja::where('delete_at', '0')->get();
+        } else {
+            $rencana = RencanaKerja::where('id_pengguna', $user->id)
+                ->where('delete_at', '0')
+                ->get();
         }
 
-        $opd = Opd::all();
+        $opd = Opd::where('delete_at', '0')->get();
 
         return view('admin.MonitoringEvaluasi.create', compact('subprogram', 'rencana', 'opd'));
     }
 
+    // Ambil daftar rencana kerja berdasarkan subprogram
     public function getRencanaKerja($id_subprogram)
     {
         $user = Auth::guard('pengguna')->user();
 
         if ($user->level === 'Super Admin') {
-            // Super Admin bisa lihat semua
             $rencanaKerja = RencanaKerja::where('id_subprogram', $id_subprogram)
-                ->get([
-                    'id',
-                    'rencana_aksi',
-                    'sub_kegiatan',
-                    'kegiatan',
-                    'nama_program',
-                    'tahun'
-                ]);
+                ->where('delete_at', '0')
+                ->get(['id', 'rencana_aksi']);
         } else {
-            // User biasa hanya data miliknya
             $rencanaKerja = RencanaKerja::where('id_subprogram', $id_subprogram)
                 ->where('id_pengguna', $user->id)
-                ->get([
-                    'id',
-                    'rencana_aksi',
-                    'sub_kegiatan',
-                    'kegiatan',
-                    'nama_program',
-                    'tahun'
-                ]);
+                ->where('delete_at', '0')
+                ->get(['id', 'rencana_aksi']);
         }
 
         return response()->json($rencanaKerja);
+    }
+
+    // Ambil detail rencana kerja
+    public function getDetailRencanaKerja($id)
+    {
+        $rencana = RencanaKerja::where('delete_at', '0')->findOrFail($id);
+
+        return response()->json([
+            'sub_kegiatan' => $rencana->sub_kegiatan,
+            'kegiatan'     => $rencana->kegiatan,
+            'nama_program' => $rencana->nama_program,
+            'tahun'        => $rencana->tahun,
+        ]);
     }
 
 
@@ -141,7 +138,7 @@ class MonevController extends Controller
 
         $validate = $request->validate([
             'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required|string',
+            'rencanaAksi' => 'required|exists:rencana_kerjas,id',
             'sub_kegiatan'   => 'required|string',
             'kegiatan'       => 'required|string',
             'nama_program' => 'required|string',
@@ -152,10 +149,11 @@ class MonevController extends Controller
             'sumberdana' => 'required',
             'lokasi'         => 'required|string',
             'id_opd'         => 'required|exists:opds,id',
-            'rka' => 'required',
-            'realisasi' => 'required',
-            'tanggal' => 'required',
-            'keterangan'     => 'required|string'
+            'rka' => 'nullable|string',
+            'realisasi' => 'nullable|string',
+            'tanggal' => 'nullable|date',
+            'keterangan' => 'nullable|string',
+
         ]);
 
         Monev::create([
@@ -330,11 +328,11 @@ class MonevController extends Controller
             'sumberdana'       => 'required',
             'tahun'          => 'required',
             'id_opd'         => 'required|exists:opds,id',
-            'rka' => 'required',
-            'realisasi' => 'required',
-            'tanggal' => 'required',
+            'rka' => 'nullable|string',
+            'realisasi' => 'nullable|string',
+            'tanggal' => 'nullable|date',
             'pesan' => 'nullable|string|max:255',
-            'keterangan'     => 'required|string'
+            'keterangan' => 'nullable|string'
         ]);
 
         $monev = Monev::findOrFail($id);

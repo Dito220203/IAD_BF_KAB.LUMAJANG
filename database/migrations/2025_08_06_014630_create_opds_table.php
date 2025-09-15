@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('status');
+            $table->enum('delete_at', ['0', '1'])->default('0')->nullable();
             $table->timestamps();
         });
     }

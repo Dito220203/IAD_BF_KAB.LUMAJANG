@@ -26,6 +26,7 @@ use App\Http\Controllers\ProdukKupsController;
 use App\Http\Controllers\RencanaAksi_6TahunController;
 use App\Http\Controllers\SubpotensiKehutananController;
 use App\Models\Pesan;
+use App\Models\RencanaKerja;
 use Illuminate\Support\Facades\Route;
 
 //client
@@ -158,6 +159,7 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
         ->name('rencana.export.excel');
     Route::get('/get-rencana-aksi/{id_subprogram}', [RencanakerjaController::class, 'getRencanaAksi'])
         ->name('get.rencana.aksi');
+    Route::get('/get-detail-rencana-aksi/{id}', [RencanakerjaController::class, 'getDetail']);
     Route::get('/rencana-create', [RencanakerjaController::class, 'create'])->name('rencana.create');
     Route::post('/rencana-store', [RencanakerjaController::class, 'store'])->name('rencana.store');
     Route::put('/rencana/{id}/validasi', [RencanakerjaController::class, 'updateStatus'])->name('rencana.validasi');
@@ -175,11 +177,12 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::put('/progres-update/{id}', [ProgreskerjaController::class, 'update'])->name('progres.update');
     Route::delete('/progres-delete/{id}', [ProgreskerjaController::class, 'destroy'])->name('progres.delete');
 
-    Route::get('/rencana/{id}', [MonevController::class, 'getRencana'])->name('rencana.get');
 
     Route::get('/monev', [MonevController::class, 'index'])->name('monev');
     Route::get('/monev-create', [MonevController::class, 'create'])->name('monev.create');
     Route::get('/get-rencana-kerja/{id_subprogram}', [MonevController::class, 'getRencanaKerja']);
+    Route::get('/get-detail-rencana-kerja/{id}', [MonevController::class, 'getDetailRencanaKerja']);
+
     Route::post('/monev-sive', [MonevController::class, 'store'])->name('monev.store');
     Route::put('/monev/{id}/pesan', [MonevController::class, 'updatePesan'])->name('monev.pesan');
     Route::get('/monev/export', [MonevController::class, 'exportPDF'])->name('monev.export');

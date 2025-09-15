@@ -30,7 +30,7 @@ return new class extends Migration
                 ->constrained('opds')
                 ->onDelete('cascade');
             $table->longText('keterangan');
-
+            $table->enum('delete_at', ['0', '1'])->default('0')->nullable();
             $table->timestamps();
         });
     }
