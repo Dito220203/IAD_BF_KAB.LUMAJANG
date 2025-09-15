@@ -9,7 +9,7 @@ class FotoSubprogram extends Model
 {
     Use HasFactory;
     protected $table = 'foto_subprograms';
-    protected $fillable = ['id_pengguna','id_subprogram','judul','keterangan', 'foto'];
+    protected $fillable = ['id_pengguna','id_subprogram','judul','keterangan', 'foto','delete_at'];
 
      public function subprogram()
     {

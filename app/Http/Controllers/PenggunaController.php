@@ -26,7 +26,7 @@ class PenggunaController extends Controller
      */
     public function create()
     {
-        $opd = Opd::all();
+        $opd = Opd::where('delete_at', '0')->get();
         return view('admin.Pengguna.create', compact('opd'));
     }
 

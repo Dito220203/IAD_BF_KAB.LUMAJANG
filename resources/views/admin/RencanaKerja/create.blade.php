@@ -47,6 +47,8 @@
                                         <select name="rencanaAksi" id="rencanaAksi" class="form-select" required>
                                             <option value="">Pilih</option>
                                         </select>
+                                        <!-- kalau masih butuh id -->
+                                        <input type="hidden" name="id_rencana_aksi" id="id_rencana_aksi">
                                     </div>
                                 </div>
 
@@ -54,32 +56,31 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Sub Kegiatan</label>
-                                        <select name="sub_kegiatan" id="sub_kegiatan" class="form-select" required>
-                                            <option value="">-- Pilih Sub Kegiatan --</option>
-                                        </select>
+                                        <input type="text" id="sub_kegiatan_display" class="form-control bg-light" readonly>
+                                        <input type="hidden" name="sub_kegiatan" id="sub_kegiatan_hidden">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Kegiatan</label>
-                                        <select name="kegiatan" id="kegiatan" class="form-select" required>
-                                            <option value="">-- Pilih Kegiatan --</option>
-                                        </select>
+                                        <input type="text" id="kegiatan_display" class="form-control bg-light" readonly>
+                                        <input type="hidden" name="kegiatan" id="kegiatan_hidden">
                                     </div>
                                 </div>
 
-                                <!-- Nama Program & Lokasi -->
+                                <!-- Nama Program & Tahun -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Nama Program</label>
-                                        <select name="nama_program" id="nama_program" class="form-select" required>
-                                            <option value="">-- Pilih Nama Program --</option>
-                                        </select>
+                                        <input type="text" id="nama_program_display" class="form-control bg-light" readonly>
+                                        <input type="hidden" name="nama_program" id="nama_program_hidden">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Lokasi</label>
-                                        <input type="text" name="lokasi" class="form-control">
+                                        <label class="form-label">Tahun</label>
+                                        <input type="text" id="tahun_display" class="form-control bg-light" readonly>
+                                        <input type="hidden" name="tahun" id="tahun_hidden">
                                     </div>
-
                                 </div>
+
+                                <!-- Volume & Satuan -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Volume</label>
@@ -89,28 +90,25 @@
                                         <label class="form-label">Satuan</label>
                                         <input type="text" name="satuan" class="form-control" required>
                                     </div>
-
                                 </div>
+
+                                <!-- Anggaran & Sumber Dana -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Anggaran</label>
-                                        <input type="text" name="anggaran" value="{{ old('anggaran') }}"
-                                            class="form-control" required>
+                                        <input type="text" name="anggaran" value="{{ old('anggaran') }}" class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Sumber Dana</label>
-                                        <input type="text" name="sumberdana" value="{{ old('sumberdana') }}"
-                                            class="form-control" required>
+                                        <input type="text" name="sumberdana" value="{{ old('sumberdana') }}" class="form-control" required>
                                     </div>
                                 </div>
 
-                                <!-- Tahun & Perangkat Daerah -->
+                                <!-- Lokasi & Perangkat Daerah -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Tahun</label>
-                                        <select name="tahun" id="tahun" class="form-select" required>
-                                            <option value="">-- Pilih Tahun --</option>
-                                        </select>
+                                        <label class="form-label">Lokasi</label>
+                                        <input type="text" name="lokasi" class="form-control">
                                     </div>
 
                                     @php
@@ -120,8 +118,7 @@
                                         <label class="form-label">Perangkat Daerah</label>
                                         @if ($user && $user->level == 'Admin')
                                             <input type="hidden" name="id_opd" value="{{ $user->id_opd }}">
-                                            <input type="text" class="form-control" value="{{ $user->opd->nama ?? '-' }}"
-                                                readonly>
+                                            <input type="text" class="form-control" value="{{ $user->opd->nama ?? '-' }}" readonly>
                                         @else
                                             <select name="id_opd" class="form-select" required>
                                                 <option value="">Pilih</option>
@@ -132,8 +129,6 @@
                                         @endif
                                     </div>
                                 </div>
-
-
 
                                 <!-- Keterangan -->
                                 <div class="mb-3">
@@ -157,6 +152,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // Step 1: Ambil daftar Rencana Aksi berdasarkan Subprogram
         $('#subprogram').on('change', function() {
             var id_subprogram = $(this).val();
             if (id_subprogram) {
@@ -165,27 +161,41 @@
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        $('#nama_program').empty().append(
-                            '<option value="">-- Pilih Nama Program --</option>');
-                        $('#rencanaAksi').empty().append(
-                            '<option value="">-- Pilih Rencana Aksi --</option>');
-                        $('#kegiatan').empty().append('<option value="">-- Pilih Kegiatan --</option>');
-                        $('#sub_kegiatan').empty().append(
-                            '<option value="">-- Pilih Sub Kegiatan --</option>');
-                        $('#tahun').empty().append('<option value="">-- Pilih Tahun --</option>');
-
+                        $('#rencanaAksi').empty().append('<option value="">-- Pilih Rencana Aksi --</option>');
                         $.each(data, function(key, value) {
-                            $('#nama_program').append('<option value="' + value.nama_program +
-                                '">' + value.nama_program + '</option>');
-                            $('#rencanaAksi').append('<option value="' + value.id + '">' + value
-                                .rencana_aksi + '</option>');
-                            $('#kegiatan').append('<option value="' + value.kegiatan + '">' +
-                                value.kegiatan + '</option>');
-                            $('#sub_kegiatan').append('<option value="' + value.sub_kegiatan +
-                                '">' + value.sub_kegiatan + '</option>');
-                            $('#tahun').append('<option value="' + value.tahun + '">' + value
-                                .tahun + '</option>');
+                            // simpan string rencana_aksi, bukan id
+                            $('#rencanaAksi').append('<option value="' + value.rencana_aksi + '" data-id="' + value.id + '">' + value.rencana_aksi + '</option>');
                         });
+                    }
+                });
+            }
+        });
+
+        // Step 2: Ambil detail Rencana Aksi untuk mengisi otomatis field lain
+        $('#rencanaAksi').on('change', function() {
+            var selectedText = $("#rencanaAksi option:selected").text();
+            var selectedId   = $("#rencanaAksi option:selected").data("id");
+
+            // isi hidden
+            $('#id_rencana_aksi').val(selectedId);
+
+            if (selectedId) {
+                $.ajax({
+                    url: "{{ url('/get-detail-rencana-aksi') }}/" + selectedId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $('#sub_kegiatan_display').val(data.sub_kegiatan);
+                        $('#sub_kegiatan_hidden').val(data.sub_kegiatan);
+
+                        $('#kegiatan_display').val(data.kegiatan);
+                        $('#kegiatan_hidden').val(data.kegiatan);
+
+                        $('#nama_program_display').val(data.nama_program);
+                        $('#nama_program_hidden').val(data.nama_program);
+
+                        $('#tahun_display').val(data.tahun);
+                        $('#tahun_hidden').val(data.tahun);
                     }
                 });
             }

@@ -20,7 +20,7 @@
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('rencana.create') }}" class="btn btn-primary">
-                                        + Tambah Rencana Aksi
+                                        + Tambah Rencana
                                     </a>
                                     <a href="{{ route('rencana.export.excel') }}" class="btn btn-success">
                                         <i class="fa-solid fa-file-excel"></i> Export Excel
@@ -76,7 +76,7 @@
                                             <tr>
                                                 <td class="text-center">{{ $rencana->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
-                                                <td>{{ $data->rencanaAksi->rencana_aksi ?? '-' }}</td>
+                                                <td>{{ $data->rencana_aksi}}</td>
                                                 <td>{{ $data->sub_kegiatan }}</td>
                                                 <td>{{ $data->kegiatan }}</td>
                                                 <td>{{ $data->nama_program }}</td>

@@ -43,11 +43,14 @@ class Monev extends Model
         return $this->belongsTo(Subprogram::class, 'id_subprogram', 'id');
     }
 
-    public function rencanaKerja()
+    // public function rencanaKerja()
+    // {
+    //     return $this->belongsTo(RencanaKerja::class, 'id_renja', 'id');
+    // }
+    public function rencanakerja()
     {
-        return $this->belongsTo(RencanaKerja::class, 'id_renja', 'id');
+        return $this->belongsTo(RencanaKerja::class, 'rencana_aksi', 'id');
     }
-
     public function opd()
     {
         return $this->belongsTo(Opd::class, 'id_opd', 'id');

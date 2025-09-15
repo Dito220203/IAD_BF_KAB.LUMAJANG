@@ -24,6 +24,7 @@ class RencanaAksi_6_tahun extends Model
         'tahun',
         'id_opd',
         'keterangan',
+        'delete_at'
 
     ];
 
@@ -44,5 +45,9 @@ class RencanaAksi_6_tahun extends Model
     {
         return $this->hasMany(RencanaKerja::class, 'rencana_aksi', 'id');
     }
+    // public function monev()
+    // {
+    //     return $this->hasMany(RencanaKerja::class, 'rencana_aksi', 'id');
+    // }
 }
 

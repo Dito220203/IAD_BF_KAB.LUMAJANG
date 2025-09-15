@@ -14,7 +14,7 @@ class OpdController extends Controller
      */
     public function index()
     {
-        $opd = Opd::paginate(10);
+        $opd = Opd::where('delete_at', '0')->paginate(10);
         return view('admin.Opd.index', compact('opd'));
     }
 
@@ -81,7 +81,9 @@ class OpdController extends Controller
      */
     public function destroy(string $id)
     {
-        Opd::where('id', $id)->delete();
+        Opd::where('id', $id)->update([
+            'delete_at' => '1'
+        ]);
         LogHelper::add('Menghapus data OPD');
         return redirect()->route('opd')->with('success', 'Data Berhasil Dihapus');
     }

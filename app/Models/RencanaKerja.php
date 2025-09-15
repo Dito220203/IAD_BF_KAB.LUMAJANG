@@ -27,6 +27,7 @@ class RencanaKerja extends Model
         'id_opd',
         'status',
         'keterangan',
+        'delete_at'
     ];
 
     public function pengguna()
@@ -50,6 +51,6 @@ class RencanaKerja extends Model
 
     public function monev()
     {
-        return $this->hasMany(Monev::class, 'id_renja', 'id');
+        return $this->hasMany(Monev::class, 'rencana_aksi', 'id');
     }
 }

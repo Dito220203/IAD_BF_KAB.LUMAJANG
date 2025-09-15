@@ -37,7 +37,7 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
             return [
                 'NO'              => $no++, // nomor berurutan
                 'Sub Program'     => $item->subprogram->subprogram ?? '-',
-                'Rencana Aksi'    => $item->rencana_aksi,
+                'Rencana Aksi'    => $item->rencanaAksi->rencana_aksi ?? '-',
                 'Sub Kegiatan'    => $item->sub_kegiatan,
                 'Kegiatan'        => $item->kegiatan,
                 'Nama Program'    => $item->nama_program,

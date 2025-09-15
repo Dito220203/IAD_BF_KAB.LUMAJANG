@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\RencanaExport;
+use App\Models\Monev;
 
 class RencanakerjaController extends Controller
 {
@@ -19,7 +20,7 @@ class RencanakerjaController extends Controller
     {
         $user = Auth::guard('pengguna')->user();
         $rencana = $user->level == 'Super Admin'
-            ? RencanaKerja::paginate(10)
+            ? RencanaKerja::where('delete_at', '0')->paginate(10)
             : RencanaKerja::where('id_pengguna', $user->id)->paginate(10);
 
         return view('admin.RencanaKerja.index', compact('rencana'));
@@ -27,17 +28,31 @@ class RencanakerjaController extends Controller
 
     public function getRencanaAksi($id_subprogram)
     {
-        $rencanaAksi = RencanaAksi_6_tahun::where('id_subprogram', $id_subprogram)->get();
+        $rencanaAksi = RencanaAksi_6_tahun::where('id_subprogram', $id_subprogram)->where('delete_at', '0')
+            ->get();
 
         return response()->json($rencanaAksi);
     }
+    public function getDetail($id)
+    {
+        $data = RencanaAksi_6_tahun::with(['subprogram'])->findOrFail($id);
+
+        return response()->json([
+            'sub_kegiatan' => $data->sub_kegiatan,
+            'kegiatan'     => $data->kegiatan,
+            'nama_program' => $data->nama_program,
+            'tahun'        => $data->tahun,
+        ]);
+    }
+
+
 
 
     public function create()
     {
-        $subprogram = Subprogram::all();
-        $opd = Opd::all();
-        $rencanaAksi = RencanaAksi_6_tahun::all();
+        $subprogram = Subprogram::where('delete_at', '0')->get();
+        $opd = Opd::where('delete_at', '0')->get();
+        $rencanaAksi =  RencanaAksi_6_tahun::all();
 
         return view('admin.RencanaKerja.create', compact('subprogram', 'opd', 'rencanaAksi'));
     }
@@ -52,43 +67,66 @@ class RencanakerjaController extends Controller
     {
         $validate = $request->validate([
             'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required|exists:rencana_aksi_6_tahuns,id',
+            'rencanaAksi'    => 'required|string',
             'sub_kegiatan'   => 'required|string',
             'kegiatan'       => 'required|string',
-            'nama_program' => 'required|string',
+            'nama_program'   => 'required|string',
             'tahun'          => 'required',
-            'volume' => 'required',
-            'satuan' => 'required',
+            'volume'         => 'required',
+            'satuan'         => 'required',
             'anggaran'       => 'required',
-            'sumberdana' => 'required',
+            'sumberdana'     => 'required',
             'lokasi'         => 'required|string',
             'id_opd'         => 'required|exists:opds,id',
             'keterangan'     => 'required|string'
         ]);
 
-        RencanaKerja::create([
-            'id_pengguna'      => Auth::guard('pengguna')->id(),
-            'id_subprogram'    => $validate['id_subprogram'],
+        // simpan ke tabel rencana kerja
+        $rencana = RencanaKerja::create([
+            'id_pengguna'   => Auth::guard('pengguna')->id(),
+            'id_subprogram' => $validate['id_subprogram'],
             'rencana_aksi'  => $validate['rencanaAksi'],
-            'sub_kegiatan'     => $validate['sub_kegiatan'],
-            'kegiatan'         => $validate['kegiatan'],
+            'sub_kegiatan'  => $validate['sub_kegiatan'],
+            'kegiatan'      => $validate['kegiatan'],
             'nama_program'  => $validate['nama_program'],
-            'lokasi'           => $validate['lokasi'],
-            'volume' => $validate['volume'],
-            'satuan' => $validate['satuan'],
-            'anggaran'         => $validate['anggaran'],
-            'sumberdana' => $validate['sumberdana'],
-            'tahun'            => $validate['tahun'],
-            'id_opd'           => $validate['id_opd'],
-            'status'           => 'Belum divalidasi',
-            'keterangan'       => $validate['keterangan'],
+            'lokasi'        => $validate['lokasi'],
+            'volume'        => $validate['volume'],
+            'satuan'        => $validate['satuan'],
+            'anggaran'      => $validate['anggaran'],
+            'sumberdana'    => $validate['sumberdana'],
+            'tahun'         => $validate['tahun'],
+            'id_opd'        => $validate['id_opd'],
+            'status'        => 'Belum divalidasi',
+            'keterangan'    => $validate['keterangan'],
         ]);
 
-        LogHelper::add('Menambah Data Rencana Kerja');
+        // otomatis simpan juga ke tabel monev
+        Monev::create([
+            'id_pengguna'   => $rencana->id_pengguna,
+            'id_subprogram' => $rencana->id_subprogram,
+            'rencana_aksi'  => $rencana->id,
+            'sub_kegiatan'  => $rencana->sub_kegiatan,
+            'kegiatan'      => $rencana->kegiatan,
+            'nama_program'  => $rencana->nama_program,
+            'lokasi'        => $rencana->lokasi,
+            'volume'        => $rencana->volume,
+            'satuan'        => $rencana->satuan,
+            'anggaran'      => $rencana->anggaran,
+            'sumberdana'    => $rencana->sumberdana,
+            'tahun'         => $rencana->tahun,
+            'id_opd'        => $rencana->id_opd,
+            'status'        => $rencana->status,
+
+
+
+        ]);
+
+        LogHelper::add('Menambah Data Rencana Kerja + otomatis ke Monev');
 
         return redirect()->route('rencanakerja')
             ->with('success', 'Rencana Kerja berhasil ditambahkan!');
     }
+
 
 
     public function validasi(string $id)
@@ -126,8 +164,8 @@ class RencanakerjaController extends Controller
 
         $rencana = RencanaKerja::findOrFail($id);
 
-        $subprogram = Subprogram::all();
-        $opd = Opd::all();
+        $subprogram = Subprogram::where('delete_at', '0')->get();
+        $opd = Opd::where('delete_at', '0')->get();
 
         return view('admin.RencanaKerja.update', compact('rencana', 'subprogram', 'opd'));
     }
@@ -168,7 +206,9 @@ class RencanakerjaController extends Controller
             Storage::disk('public')->delete($rencana->file);
         }
 
-        $rencana->delete();
+        $rencana->update([
+            'delete_at' => '1'
+        ]);
         LogHelper::add('Menghapus data Rencana Kerja');
 
         return redirect()->route('rencanakerja')->with('success', 'Data berhasil dihapus');

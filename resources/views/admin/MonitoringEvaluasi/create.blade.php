@@ -18,6 +18,7 @@
                     <div class="card">
                         <div class="card-body p-4">
 
+                            {{-- Tampilkan error validasi --}}
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul class="mb-0">
@@ -34,9 +35,9 @@
                                 <!-- Subprogram & Rencana Aksi -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Sub Program IAD Perhutanan Sosial</label>
+                                        <label class="form-label">Sub Program</label>
                                         <select name="id_subprogram" id="subprogram" class="form-select" required>
-                                            <option value="">Pilih</option>
+                                            <option value="">-- Pilih Subprogram --</option>
                                             @foreach ($subprogram as $data)
                                                 <option value="{{ $data->id }}">{{ $data->subprogram }}</option>
                                             @endforeach
@@ -45,42 +46,40 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Rencana Aksi</label>
                                         <select name="rencanaAksi" id="rencanaAksi" class="form-select" required>
-                                            <option value="">Pilih</option>
+                                            <option value="">-- Pilih Rencana Aksi --</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <!-- Kegiatan & Sub Kegiatan -->
+                                <!-- Sub Kegiatan & Kegiatan -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Sub Kegiatan</label>
-                                        <select name="sub_kegiatan" id="sub_kegiatan" class="form-select" required>
-                                            <option value="">-- Pilih Sub Kegiatan --</option>
-                                        </select>
+                                        <input type="text" id="sub_kegiatan" name="sub_kegiatan" class="form-control"
+                                            readonly>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Kegiatan</label>
-                                        <select name="kegiatan" id="kegiatan" class="form-select" required>
-                                            <option value="">-- Pilih Kegiatan --</option>
-                                        </select>
+                                        <input type="text" id="kegiatan" name="kegiatan" class="form-control" readonly>
                                     </div>
                                 </div>
 
-                                <!-- Nama Program & Lokasi -->
+                                <!-- Nama Program & Tahun -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Nama Program</label>
-                                        <select name="nama_program" id="nama_program" class="form-select" required>
-                                            <option value="">-- Pilih Nama Program --</option>
-                                        </select>
+                                        <input type="text" id="nama_program" name="nama_program" class="form-control"
+                                            readonly>
                                     </div>
-
                                     <div class="col-md-6">
-                                        <label class="form-label">Lokasi</label>
-                                        <input type="text" name="lokasi" class="form-control">
+                                        <label class="form-label">Tahun</label>
+                                        <input type="text" id="tahun" name="tahun" class="form-control" readonly>
                                     </div>
-
                                 </div>
+
+
+
+                                <!-- Volume & Satuan -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Volume</label>
@@ -90,8 +89,9 @@
                                         <label class="form-label">Satuan</label>
                                         <input type="text" name="satuan" class="form-control" required>
                                     </div>
-
                                 </div>
+
+                                <!-- Anggaran & Sumber Dana -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Anggaran</label>
@@ -108,10 +108,8 @@
                                 <!-- Tahun & Perangkat Daerah -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Tahun</label>
-                                        <select name="tahun" id="tahun" class="form-select" required>
-                                            <option value="">-- Pilih Tahun --</option>
-                                        </select>
+                                        <label class="form-label">Lokasi</label>
+                                        <input type="text" name="lokasi" class="form-control">
                                     </div>
 
                                     @php
@@ -125,7 +123,7 @@
                                                 readonly>
                                         @else
                                             <select name="id_opd" class="form-select" required>
-                                                <option value="">Pilih</option>
+                                                <option value="">-- Pilih OPD --</option>
                                                 @foreach ($opd as $data)
                                                     <option value="{{ $data->id }}">{{ $data->nama }}</option>
                                                 @endforeach
@@ -134,12 +132,12 @@
                                     </div>
                                 </div>
 
-
+                                <!-- RKA, Realisasi, Tanggal -->
                                 <div class="row mb-3">
                                     <div class="col-md-4">
                                         <label class="form-label">RKA</label>
                                         <select name="rka" class="form-select" required>
-                                            <option value="">Pilih</option>
+                                            <option value="">-- Pilih --</option>
                                             <option value="sudah">Sudah</option>
                                             <option value="belum">Belum</option>
                                         </select>
@@ -148,18 +146,11 @@
                                         <label class="form-label">Realisasi</label>
                                         <input type="text" name="realisasi" class="form-control" required>
                                     </div>
-
                                     <div class="col-md-4">
                                         <label class="form-label">Tanggal Monev</label>
                                         <input type="date" name="tanggal" class="form-control" required>
                                     </div>
-
                                 </div>
-
-
-
-
-
 
                                 <!-- Keterangan -->
                                 <div class="mb-3">
@@ -180,39 +171,45 @@
             </div>
         </section>
     </main>
+
+    {{-- jQuery untuk AJAX --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $('#subprogram').on('change', function() {
-            var id_subprogram = $(this).val();
-            if (id_subprogram) {
+       // Ambil daftar rencana kerja
+$('#subprogram').on('change', function() {
+    var id_subprogram = $(this).val();
+    if (id_subprogram) {
+        $.ajax({
+            url: "{{ url('/get-rencana-kerja') }}/" + id_subprogram,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                $('#rencanaAksi').empty().append('<option value="">-- Pilih Rencana Aksi --</option>');
+                $.each(data, function(key, value) {
+                    $('#rencanaAksi').append(
+                        '<option value="' + value.id + '">' + value.rencana_aksi + '</option>'
+                    );
+                });
+            }
+        });
+    }
+});
+
+
+        // Ambil detail saat pilih rencana aksi
+        $('#rencanaAksi').on('change', function() {
+            var id = $(this).val();
+            if (id) {
                 $.ajax({
-                    url: "{{ url('/get-rencana-kerja') }}/" + id_subprogram,
+                    url: "{{ url('/get-detail-rencana-kerja') }}/" + id,
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        // kosongkan dulu semua select
-                        $('#rencanaAksi').empty().append(
-                            '<option value="">-- Pilih Rencana Aksi --</option>');
-                        $('#kegiatan').empty().append('<option value="">-- Pilih Kegiatan --</option>');
-                        $('#sub_kegiatan').empty().append(
-                            '<option value="">-- Pilih Sub Kegiatan --</option>');
-                        $('#nama_program').empty().append(
-                            '<option value="">-- Pilih Nama Program --</option>');
-                        $('#tahun').empty().append('<option value="">-- Pilih Tahun --</option>');
-
-                        // isi dari data JSON
-                        $.each(data, function(key, value) {
-                            $('#rencanaAksi').append('<option value="' + value.rencana_aksi +
-                                '">' + value.rencana_aksi + '</option>');
-                            $('#kegiatan').append('<option value="' + value.kegiatan + '">' +
-                                value.kegiatan + '</option>');
-                            $('#sub_kegiatan').append('<option value="' + value.sub_kegiatan +
-                                '">' + value.sub_kegiatan + '</option>');
-                            $('#nama_program').append('<option value="' + value.nama_program +
-                                '">' + value.nama_program + '</option>');
-                            $('#tahun').append('<option value="' + value.tahun + '">' + value
-                                .tahun + '</option>');
-                        });
+                        $('#sub_kegiatan').val(data.sub_kegiatan);
+                        $('#kegiatan').val(data.kegiatan);
+                        $('#nama_program').val(data.nama_program);
+                        $('#tahun').val(data.tahun);
+                        $('#lokasi').val(data.lokasi ?? '-');
                     }
                 });
             }
