@@ -20,8 +20,8 @@ class RencanakerjaController extends Controller
     {
         $user = Auth::guard('pengguna')->user();
         $rencana = $user->level == 'Super Admin'
-            ? RencanaKerja::where('delete_at', '0')->paginate(10)
-            : RencanaKerja::where('id_pengguna', $user->id)->paginate(10);
+            ? RencanaKerja::active()->paginate(10)
+            : RencanaKerja::active()->where('id_pengguna', $user->id)->paginate(10);
 
         return view('admin.RencanaKerja.index', compact('rencana'));
     }

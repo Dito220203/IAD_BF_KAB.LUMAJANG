@@ -15,76 +15,70 @@ class DasboardAdminController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        // Hitung jumlah pengguna
-        $totalPengguna = Pengguna::count();
+{
+    $user = auth()->guard('pengguna')->user();
 
-        // Ambil pengguna terbaru (misal 5)
-        $penggunaTerbaru = Pengguna::latest()->take(5)->get();
-
-
-
-        // ===== Bagian untuk Rencana Kerja =====
-        $totalRencanaKerja = RencanaKerja::count();
-        $rencanaSelesai    = RencanaKerja::where('status', 'Valid')->count();
-        $rencanaProgress   = RencanaKerja::where('status', 'Belum divalidasi')->count();
-
-        // ===== Bagian untuk Monev =====
-        // ambil semua data monev
-        $allMonev = Monev::all();
-
-        // filter data lengkap
-        $monevLengkap = $allMonev->filter(function ($item) {
-            // kolom yang WAJIB diisi
-            $requiredFields = [
-                'id_pengguna',
-                'id_subprogram',
-                'rencana_aksi',
-                'sub_kegiatan',
-                'kegiatan',
-                'nama_program',
-                'lokasi',
-                'volume',
-                'satuan',
-                'anggaran',
-                'sumberdana',
-                'tahun',
-                'id_opd',
-                'realisasi',
-                'rka',
-                'tanggal'
-            ];
-
-            // cek kalau ada yang kosong/null
-            foreach ($requiredFields as $field) {
-                if (empty($item->$field)) {
-                    return false; // tidak lengkap
-                }
-            }
-
-            return true; // lengkap
-        })->count();
-
-        // total monev
-        $totalMonev = $allMonev->count();
-
-        // sisanya = belum lengkap
-        $monevBelumLengkap = $totalMonev - $monevLengkap;
-
-
-
-        return view('admin.Dasboard.index', compact(
-            'totalPengguna',
-            'penggunaTerbaru',
-
-            'totalRencanaKerja',
-            'rencanaSelesai',
-            'rencanaProgress',
-            'totalMonev',
-            'monevLengkap',
-            'monevBelumLengkap'
-        ));
+    // ===== Bagian untuk Rencana Kerja =====
+    if ($user->level == 'Super Admin') {
+        $totalRencanaKerja = RencanaKerja::active()->count();
+        $rencanaSelesai    = RencanaKerja::active()->where('status', 'Valid')->count();
+        $rencanaProgress   = RencanaKerja::active()->where('status', 'Belum divalidasi')->count();
+    } else {
+        $totalRencanaKerja = RencanaKerja::active()->where('id_pengguna', $user->id)->count();
+        $rencanaSelesai    = RencanaKerja::active()->where('id_pengguna', $user->id)->where('status', 'Valid')->count();
+        $rencanaProgress   = RencanaKerja::active()->where('id_pengguna', $user->id)->where('status', 'Belum divalidasi')->count();
     }
+
+    // ===== Bagian untuk Monev =====
+    if ($user->level == 'Super Admin') {
+        $allMonev = Monev::all();
+    } else {
+        $allMonev = Monev::where('id_pengguna', $user->id)->get();
+    }
+
+    // filter data lengkap
+    $monevLengkap = $allMonev->filter(function ($item) {
+        $requiredFields = [
+            'id_pengguna',
+            'id_subprogram',
+            'rencana_aksi',
+            'sub_kegiatan',
+            'kegiatan',
+            'nama_program',
+            'lokasi',
+            'volume',
+            'satuan',
+            'anggaran',
+            'sumberdana',
+            'tahun',
+            'id_opd',
+            'realisasi',
+            'rka',
+            'tanggal'
+        ];
+
+        foreach ($requiredFields as $field) {
+            if (empty($item->$field)) {
+                return false; // tidak lengkap
+            }
+        }
+
+        return true; // lengkap
+    })->count();
+
+    $totalMonev = $allMonev->count();
+    $monevBelumLengkap = $totalMonev - $monevLengkap;
+
+    return view('admin.Dasboard.index', compact(
+        'totalRencanaKerja',
+        'rencanaSelesai',
+        'rencanaProgress',
+        'totalMonev',
+        'monevLengkap',
+        'monevBelumLengkap'
+    ));
+}
+
 
 
 

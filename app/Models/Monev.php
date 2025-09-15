@@ -55,4 +55,5 @@ class Monev extends Model
     {
         return $this->belongsTo(Opd::class, 'id_opd', 'id');
     }
+    
 }
