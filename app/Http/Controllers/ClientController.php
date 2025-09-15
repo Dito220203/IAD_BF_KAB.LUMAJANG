@@ -50,7 +50,8 @@ class ClientController extends Controller
                 'name' => $item->kups,
                 'y' => (float) $item->pendapatan,
                 'kth' => $item->kth->kth ?? 'KTH tidak diketahui' // Menambahkan nama KTH
-            ];;
+            ];
+            ;
         });
 
         // Ambil daftar tahun unik dari tabel KUPS untuk dropdown
@@ -126,24 +127,77 @@ class ClientController extends Controller
         $fotosubprogram = FotoSubprogram::where('id_subprogram', $id)->get();
         return view('client.tentangkegiatan', compact('contact', 'subprograms', 'subprogram', 'fotosubprogram'));
     }
-    public function rencanaaksi($id)
-    {
-        $rencanaAksi = RencanaAksi_6_tahun::paginate(10);
-        $contact = Kontak::all();
-        $subprogram = Subprogram::findOrFail($id);
-        $subprograms = Subprogram::all();
-        return view('client.rencanaaksi', compact('contact', 'subprograms','subprogram', 'rencanaAksi'));
-    }
-    public function rencanakegiatan($id)
-    {
 
-        $subprograms = Subprogram::all();
-        $subprogram = Subprogram::findOrFail($id);
-        $rencanaKegiatan = RencanaKerja::where('id_subprogram', $id)->where('status', 'valid')->paginate(10);
-        $opd = Opd::all();
+    public function rencanaaksi(Request $request, $id)
+    {
+        // 1. Ambil input tahun dari request
+        $selectedYear = $request->input('tahun');
+        if ($selectedYear == 'semua') {
+            $selectedYear = null;
+        }
+
+        // 2. Ambil daftar tahun unik dari model
+        $years = RencanaAksi_6_tahun::selectRaw("DISTINCT TRIM(tahun) as tahun")
+            ->where('id_subprogram', $id) // Pastikan ini nama kolom yang benar
+            ->whereNotNull('tahun')
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+        // 3. Bangun query dasar
+        $rencanaAksiQuery = RencanaAksi_6_tahun::where('id_subprogram', $id); // <-- PERBAIKI DI SINI
+
+        // 4. Tambahkan filter tahun jika ada tahun yang dipilih
+        if ($selectedYear) {
+            $rencanaAksiQuery->whereRaw("TRIM(tahun) = ?", [$selectedYear]);
+        }
+
+        // 5. Eksekusi query yang SUDAH difilter
+        $rencanaAksi = $rencanaAksiQuery->orderBy('tahun', 'desc')->paginate(10);
+
+        // Variabel lain yang dibutuhkan view
         $contact = Kontak::all();
-        return view('client.rencanakegiatan', compact('contact', 'subprograms', 'rencanaKegiatan', 'subprogram', 'opd'));
+        $subprogram = Subprogram::findOrFail($id);
+        $subprograms = Subprogram::all();
+
+        return view('client.rencanaaksi', compact('contact', 'subprograms', 'subprogram', 'rencanaAksi', 'years', 'selectedYear'));
     }
+    public function rencanakegiatan(Request $request, $id)
+{
+    // 1. Ambil input tahun dari request
+    $selectedYear = $request->input('tahun');
+    if ($selectedYear == 'semua') {
+        $selectedYear = null;
+    }
+
+    // 2. Ambil daftar tahun unik untuk dropdown
+    $years = RencanaKerja::selectRaw("DISTINCT TRIM(tahun) as tahun")
+        ->where('id_subprogram', $id) // Pastikan 'id_subprogram' adalah nama kolom yang benar
+        ->where('status', 'valid')
+        ->whereNotNull('tahun')
+        ->orderBy('tahun', 'desc')
+        ->pluck('tahun');
+
+    // 3. Bangun query dasar dengan filter wajib (subprogram dan status)
+    $rencanaKegiatanQuery = RencanaKerja::where('id_subprogram', $id) // Pastikan 'id_subprogram' adalah nama kolom yang benar
+                                         ->where('status', 'valid');
+
+    // 4. Tambahkan filter tahun jika ada tahun yang dipilih
+    if ($selectedYear) {
+        $rencanaKegiatanQuery->whereRaw("TRIM(tahun) = ?", [$selectedYear]);
+    }
+
+    // 5. Eksekusi query yang sudah lengkap dengan semua filter
+    $rencanaKegiatan = $rencanaKegiatanQuery->orderBy('tahun', 'desc')->paginate(10);
+
+    // Ambil data lain yang dibutuhkan oleh view
+    $subprograms = Subprogram::all();
+    $subprogram = Subprogram::findOrFail($id);
+    $opd = Opd::all();
+    $contact = Kontak::all();
+    
+    // 6. Kirim semua data ke view
+    return view('client.rencanakegiatan', compact('contact', 'subprograms', 'rencanaKegiatan', 'subprogram', 'opd', 'years', 'selectedYear'));
+}
     public function progreskegiatan($id)
     {
         $contact = Kontak::all();

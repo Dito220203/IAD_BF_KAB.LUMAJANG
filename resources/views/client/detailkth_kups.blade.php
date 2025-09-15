@@ -5,30 +5,34 @@
             <h2>IAD Kelompok Tani Hutan</h2>
         </div>
 
-        <section class="monev-section container no-tabs">
-            <div class="table-wrapper">
-                <div class="table-content active" id="tableluasperhut">
-                    <table class="monev-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>KELOMPOK TANI HUTAN (KTH)</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($kthKups as $data)
+        <section class="detail-form-section">
+            <div class="container">
+                <div class="card-table-container">
+                    <div class="table-wrapper">
+                        <table class="monev-table">
+                            <thead>
                                 <tr>
-                                    <td>{{ ($kthKups->currentPage() - 1) * $kthKups->perPage() + $loop->iteration }}</td>
-                                    <td class="text-center">{{ $data->kth }}</td>
+                                    <th>No</th>
+                                    <th>KELOMPOK TANI HUTAN (KTH)</th>
 
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <div class="pagination-summary-wrapper">
+                            </thead>
+                            <tbody>
+                                @foreach ($kthKups as $data)
+                                    <tr>
+                                        <td>{{ ($kthKups->currentPage() - 1) * $kthKups->perPage() + $loop->iteration }}
+                                        </td>
+                                        <td class="text-center">{{ $data->kth }}</td>
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
                         <div class="summary">
-                            Showing {{ $kthKups->firstItem() }} to {{ $kthKups->lastItem() }} of {{ $kthKups->total() }} results
+                            Showing {{ $kthKups->firstItem() }} to {{ $kthKups->lastItem() }} of {{ $kthKups->total() }}
+                            results
                         </div>
                         <div class="pagination-sm">
                             {{-- Panggil view pagination kustom kita --}}
@@ -37,7 +41,6 @@
                     </div>
                 </div>
             </div>
-
         </section>
 
         <div class="text-center mt-4">

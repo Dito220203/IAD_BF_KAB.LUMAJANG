@@ -13,20 +13,16 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Raleway:wght@300;400;500;700;900&family=Inter:wght@300;400;500;700;900&display=swap"
-        rel="stylesheet">
+
 
     <link href="{{ asset('client/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/aos/aos.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-    {{-- <link href="{{ asset('client/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('client/assets/css/main.css') }}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link href="{{ asset('client/assets/vendor/fontawesome5/all.min.css') }}"></link>
+    <link href="{{ asset('client/assets/vendor/leaflet/leaflet.css') }}"></link>
+
 
     <style>
         .card-title {
@@ -136,7 +132,7 @@
         <i class="bi bi-arrow-up-short"></i>
     </a>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('client/assets/vendor/jquery/jquery-3.6.0.min.js') }}"></script>
 
     <script src="{{ asset('client/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('client/assets/vendor/php-email-form/validate.js') }}"></script>
@@ -147,12 +143,13 @@
     <script src="{{ asset('client/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
     <script src="{{ asset('client/assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="{{ asset('client/assets/vendor/leaflet/leaflet.js') }}"></script>
+    <script src="{{ asset('client/assets/vendor/chart/chart.js') }}"></script>
+    <script src="{{ asset('client/assets/vendor/highchart/highcharts.js') }}"></script>
+    <script src="{{ asset('client/assets/vendor/highchart/exporting.js') }}"></script>
+    <script src="{{ asset('client/assets/vendor/highchart/export-data.js') }}"></script>
+    <script src="{{ asset('client/assets/vendor/highchart/accessibility.js') }}"></script>
+
 
     <script src="{{ asset('client/assets/js/main.js') }}"></script>
 

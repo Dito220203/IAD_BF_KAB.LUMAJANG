@@ -5,32 +5,33 @@
             <h2>IAD Luas Perhutanan Sosial</h2>
         </div>
 
-        <section class="monev-section container no-tabs">
-            <!-- Table Wrapper -->
-            <div class="table-wrapper">
-                <!-- Table -->
-                <div class="table-content active" id="tableluasperhut">
-                    <table class="monev-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>KELOMPOK TANI HUTAN (KTH)</th>
-                                <th>LUAS AREAL KELOLA SESUAI SK (Ha)</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($kth as $data)
+        <section class="detail-form-section">
+            <div class="container">
+                <div class="card-table-container">
+                    <div class="table-wrapper">
+                        <table class="detail-table">
+                            <thead>
                                 <tr>
-                                    <td>{{($kth->currentPage() - 1) * $kth->perPage() + $loop->iteration }}</td>
-                                    <td>{{ $data->kth }}</td>
-                                    <td>{{ $data->luas }}</td>
-                                </tr>
-                            @endforeach
+                                    <th>No</th>
+                                    <th>KELOMPOK TANI HUTAN (KTH)</th>
+                                    <th>LUAS AREAL KELOLA SESUAI SK (Ha)</th>
 
-                        </tbody>
-                    </table>
-                    <div class="pagination-summary-wrapper">
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($kth as $data)
+                                    <tr>
+                                        <td>{{ ($kth->currentPage() - 1) * $kth->perPage() + $loop->iteration }}
+                                        </td>
+                                        <td>{{ $data->kth }}</td>
+                                        <td>{{ $data->luas }}</td>
+                                    </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
                         <div class="summary">
                             Showing {{ $kth->firstItem() }} to {{ $kth->lastItem() }} of {{ $kth->total() }} results
                         </div>
