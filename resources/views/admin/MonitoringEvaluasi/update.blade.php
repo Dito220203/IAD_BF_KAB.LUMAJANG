@@ -81,7 +81,7 @@
 
                         <div class="col-md-6">
                             <label class="form-label">Volume</label>
-                            <input type="number" name="volume" class="form-control"
+                            <input type="text" name="volume" class="form-control"
                                 value="{{ old('volume', $monev->volume) }}">
                         </div>
                         <div class="col-md-6">
