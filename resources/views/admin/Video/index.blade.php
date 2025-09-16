@@ -92,7 +92,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table text-center" id="TableVideo">
+                                <table class="detail-table" id="TableVideo">
                                     <thead>
                                         <tr>
                                             <th>No</th>

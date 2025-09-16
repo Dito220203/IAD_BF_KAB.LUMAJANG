@@ -14,7 +14,6 @@
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
-
                     <div class="card ">
                         <div class="card-body">
                             <!-- Header control: Tambah, Search, Tampilkan Data -->
@@ -83,12 +82,9 @@
                                     </form>
                                 </div>
                             </div>
-
-
-
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table align-middle" id="TableMonev" style="min-width: 2000px;">
+                                <table class="detail-table" id="TableMonev" style="min-width: 2000px;">
                                     @php
                                         $adaPesan = $monev->contains(function ($item) {
                                             return !empty($item->pesan);
@@ -97,25 +93,25 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th class="text-center" style="width: 200px;">Sub Program</th>
-                                            <th class="text-center" style="width: 500px;">Rencana Aksi/Aktivitas</th>
-                                            <th class="text-center" style="width: 350px;">Sub Kegiatan</th>
-                                            <th class="text-center" style="width: 250px;">Kegiatan</th>
-                                            <th class="text-center" style="width: 300px;">Nama Program</th>
-                                            <th class="text-center" style="width: 200px;">Lokasi</th>
+                                            <th class="text-center">Sub Program</th>
+                                            <th class="text-center">Rencana Aksi/Aktivitas</th>
+                                            <th class="text-center">Sub Kegiatan</th>
+                                            <th class="text-center">Kegiatan</th>
+                                            <th class="text-center">Nama Program</th>
+                                            <th class="text-center">Lokasi</th>
                                             <th class="text-center">Volume</th>
                                             <th class="text-center">Satuan</th>
-                                            <th class="text-center" style="width: 150px;">Anggaran</th>
-                                            <th class="text-center" style="width: 200px;">Sumber Dana</th>
+                                            <th class="text-center">Anggaran</th>
+                                            <th class="text-center">Sumber Dana</th>
                                             <th class="text-center">Tahun</th>
-                                            <th class="text-center" style="width: 200px;">Perangkat Daerah</th>
+                                            <th class="text-center">Perangkat Daerah</th>
                                             <th class="text-center">Status</th>
                                             <th class="text-center">Input RKA</th>
                                             <th class="text-center">Realisasi</th>
                                             <th class="text-center">Tanggal</th>
-                                            <th class="text-center">Keterangan</th>
+                                            <th class="text-center kolom-keterangan">Keterangan</th>
                                             @if ($adaPesan)
-                                                <th class="text-center" style="width: 300px">Catatan</th>
+                                                <th class="text-center">Catatan</th>
                                             @endif
                                             <th class="text-center">Aksi</th>
                                         </tr>
@@ -332,3 +328,4 @@
         });
     </script>
 @endsection
+

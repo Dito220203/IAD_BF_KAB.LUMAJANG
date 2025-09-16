@@ -154,7 +154,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table id="TableKUPS" class="table text-center">
+                                <table id="TableKUPS" class="detail-table">
                                     <thead>
                                         <tr>
                                             <th>No</th>

@@ -34,7 +34,7 @@
     <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-    <!-- Font Awesome CDN -->
+   <!-- Font Awesome CDN -->
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"> --}}
     {{-- <link href="{{ asset('assets/vendor/fontawesome/all.min.css') }}" rel="stylesheet"> --}}
    <link href="{{ asset('assets/vendor/fontawesome/css/all.min.css') }}" rel="stylesheet">

@@ -80,7 +80,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="TableOpd">
+                                <table class="detail-table" id="TableOpd">
                                     <thead>
                                         <tr>
                                             <th>No</th>

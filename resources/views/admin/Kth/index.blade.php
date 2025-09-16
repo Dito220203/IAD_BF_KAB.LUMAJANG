@@ -113,7 +113,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table id="TableKTH" class="table text-center">
+                                <table id="TableKTH" class="detail-table">
                                     <thead>
                                         <tr>
                                             <th>No</th>

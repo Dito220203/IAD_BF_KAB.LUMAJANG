@@ -42,7 +42,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="TablePengguna">
+                                <table class="detail-table" id="TablePengguna">
                                     <thead>
                                         <tr>
                                             <th>No</th>

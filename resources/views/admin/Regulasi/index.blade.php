@@ -43,7 +43,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="TableRegulasi">
+                                <table class="detail-table" id="TableRegulasi">
                                     <thead>
                                         <tr>
                                             <th>No</th>

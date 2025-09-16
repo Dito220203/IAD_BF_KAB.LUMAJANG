@@ -56,7 +56,7 @@
 
                             <!-- Tabel Subpotensi -->
                             <div class="table-responsive">
-                                <table class="table table-bordered text-center" id="TablesubPotensi">
+                                <table class="detail-table" id="TablesubPotensi">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -207,7 +207,7 @@
 
                             <!-- Tabel Potensi Kehutanan-->
                             <div class="table-responsive">
-                                <table class="table table-bordered text-center" id="TablepotensiKehutanan">
+                                <table class="detail-table" id="TablepotensiKehutanan">
                                     <thead>
                                         <tr>
                                             <th>No</th>

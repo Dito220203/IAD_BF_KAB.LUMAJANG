@@ -40,7 +40,7 @@
 
                              <!-- Table -->
                              <div class="table-responsive">
-                                 <table class="table .table-active text-center" id="TableProgres">
+                                 <table class="detail-table" id="TableProgres">
                                      <thead>
                                          <tr>
                                              <th>

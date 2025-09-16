@@ -38,7 +38,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="TableLog">
+                                <table class="detail-table" id="TableLog">
                                     <thead>
                                         <tr>
                                             <th>No</th>
