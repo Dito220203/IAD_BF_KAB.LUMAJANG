@@ -97,84 +97,80 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($subprogram as $data)
-
-                                                <tr>
-                                                    <td>{{ $subprogram->firstItem() + $loop->index }}</td>
-                                                    <td>{{ $data->program }}</td>
-                                                    <td>{{ $data->subprogram }}</td>
-                                                    <td class="text-center align-middle">
-                                                        <div class="d-flex justify-content-center gap-1">
-                                                            <!-- Edit -->
-                                                            <button type="button" class="btn btn-primary btn-sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#Modalupdate{{ $data->id }}">
-                                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            <tr>
+                                                <td>{{ $subprogram->firstItem() + $loop->index }}</td>
+                                                <td>{{ $data->program }}</td>
+                                                <td>{{ $data->subprogram }}</td>
+                                                <td class="text-center align-middle">
+                                                    <div class="d-flex justify-content-center gap-1">
+                                                        <!-- Edit -->
+                                                        <button type="button" class="btn btn-primary btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#Modalupdate{{ $data->id }}">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </button>
+                                                        <!-- Hapus -->
+                                                        <form id="formDelete-{{ $data->id }}"
+                                                            action="{{ route('subrogram.delete', $data->id) }}"
+                                                            method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="button" class="btn btn-danger btn-sm"
+                                                                onclick="confirmDelete('{{ $data->id }}')">
+                                                                <i class="fa-solid fa-trash"></i>
                                                             </button>
-                                                            <!-- Hapus -->
-                                                            <form id="formDelete-{{ $data->id }}"
-                                                                action="{{ route('subrogram.delete', $data->id) }}"
-                                                                method="POST" style="display:inline;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="button" class="btn btn-danger btn-sm"
-                                                                    onclick="confirmDelete('{{ $data->id }}')">
-                                                                    <i class="fa-solid fa-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </td>
+                                                        </form>
+                                                    </div>
+                                                </td>
 
-                                                    <!-- Modal Update Sub Program -->
-                                                    <div class="modal fade" id="Modalupdate{{ $data->id }}"
-                                                        tabindex="-1" aria-hidden="true">
-                                                        <div class="modal-dialog modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Edit Sub Program</h5>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form
-                                                                        action="{{ route('subprogram.update', $data->id) }}"
-                                                                        method="POST" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        @method('PUT')
-                                                                        <div class="mb-3">
-                                                                            <label>Program</label>
-                                                                            <select name="e_program" class="form-select"
-                                                                                required>
-                                                                                <option value="">Pilih</option>
-                                                                                <option value="Program 1"
-                                                                                    {{ $data->program == 'Program 1' ? 'selected' : '' }}>
-                                                                                    Program 1</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <label>Judul Sub Program</label>
-                                                                            <input type="text" class="form-control"
-                                                                                name="e_subprogram"
-                                                                                value="{{ $data->subprogram }}" required>
-                                                                        </div>
-                                                                        <div class="mb-3">
-                                                                            <label>Uraian</label>
-                                                                            <textarea class="form-control" name="e_uraian" rows="4" required>{{ $data->uraian }}</textarea>
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                            <button type="button"
-                                                                                class="btn btn-secondary"
-                                                                                data-bs-dismiss="modal">Batal</button>
-                                                                            <button type="submit"
-                                                                                class="btn btn-primary">Update</button>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
+                                                <!-- Modal Update Sub Program -->
+                                                <div class="modal fade" id="Modalupdate{{ $data->id }}" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Edit Sub Program</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="{{ route('subprogram.update', $data->id) }}"
+                                                                    method="POST" enctype="multipart/form-data">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <div class="mb-3">
+                                                                        <label>Program</label>
+                                                                        <select name="e_program" class="form-select"
+                                                                            required>
+                                                                            <option value="">Pilih</option>
+                                                                            <option value="Program 1"
+                                                                                {{ $data->program == 'Program 1' ? 'selected' : '' }}>
+                                                                                Program 1</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label>Judul Sub Program</label>
+                                                                        <input type="text" class="form-control"
+                                                                            name="e_subprogram"
+                                                                            value="{{ $data->subprogram }}" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label>Uraian</label>
+                                                                        <textarea class="form-control" name="e_uraian" rows="4" required>{{ $data->uraian }}</textarea>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Batal</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Update</button>
+                                                                    </div>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                </tr>
-
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -303,7 +299,7 @@
                                                 <th>No</th>
                                                 <th>Program</th>
                                                 <th>Judul</th>
-                                                <th>Keterangan</th>
+                                                {{-- <th>Keterangan</th> --}}
                                                 <th>Foto</th>
                                                 <th>Aksi</th>
                                             </tr>
@@ -314,10 +310,15 @@
                                                     <td>{{ $produk->firstItem() + $loop->index }}</td>
                                                     <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                     <td>{{ $data->judul }}</td>
-                                                    <td>{{ $data->keterangan }}</td>
+                                                    {{-- <td>{{ $data->keterangan }}</td> --}}
                                                     <td>{{ $data->foto }}</td>
                                                     <td class="text-center align-middle">
                                                         <div class="d-flex justify-content-center gap-1">
+                                                            <button type="button" class="btn btn-info btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#ModalDetailProduk{{ $data->id }}">
+                                                                <i class="fa-solid fa-circle-info"></i>
+                                                            </button>
                                                             <!-- Edit -->
                                                             <button type="button" class="btn btn-primary btn-sm"
                                                                 data-bs-toggle="modal"
@@ -340,6 +341,41 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
+                                        @foreach ($produk as $data)
+                                            <!-- Modal Detail -->
+                                            <div class="modal fade" id="ModalDetailProduk{{ $data->id }}"
+                                                tabindex="-1" aria-labelledby="DetailLabel{{ $data->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-info text-white">
+                                                            <h5 class="modal-title" id="DetailLabel{{ $data->id }}">
+                                                                Detail Produk</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p><strong>Program:</strong>
+                                                                {{ $data->subprogram->subprogram ?? '-' }}</p>
+                                                            <p><strong>Judul:</strong> {{ $data->judul }}</p>
+                                                            <p><strong>Keterangan:</strong> {{ $data->keterangan }}</p>
+                                                            <p><strong>Foto:</strong></p>
+                                                            @if ($data->foto)
+                                                                <img src="{{ asset('storage/' . $data->foto) }}"
+                                                                    class="img-fluid rounded">
+                                                            @else
+                                                                <span class="text-muted">Tidak ada foto</span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Tutup</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+
                                     </table>
                                 </div>
                                 <div class="mt-3">

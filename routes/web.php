@@ -186,7 +186,6 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::post('/monev-sive', [MonevController::class, 'store'])->name('monev.store');
     Route::put('/monev/{id}/pesan', [MonevController::class, 'updatePesan'])->name('monev.pesan');
     Route::get('/monev/export', [MonevController::class, 'exportPDF'])->name('monev.export');
-
     Route::put('/monev/{id}/validasi', [MonevController::class, 'updateStatus'])->name('monev.validasi');
     Route::get('/monev-edit/{id}', [MonevController::class, 'edit'])->name('monev.edit');
     Route::put('/monev-update/{id}', [MonevController::class, 'update'])->name('monev.update');

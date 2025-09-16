@@ -34,12 +34,13 @@
                                     </a>
                                 </div>
 
+
                                 <!-- Filter Controls -->
                                 <div class="col-12">
                                     <form method="GET" action="{{ route('monev') }}" class="row g-2">
                                         <div class="col-12 col-sm-6 col-md-4">
                                             <label for="tahun" class="form-label small mb-1">Tahun</label>
-                                            <select name="tahun" id="tahun" class="form-control"
+                                            <select name="tahun" id="tahun" class="form-select"
                                                 onchange="this.form.submit()">
                                                 <option value="">Semua</option>
                                                 @foreach ($tahun_list as $tahun)
@@ -52,7 +53,7 @@
                                         </div>
                                         <div class="col-12 col-sm-6 col-md-4">
                                             <label for="triwulan" class="form-label small mb-1">Triwulan</label>
-                                            <select name="triwulan" id="triwulan" class="form-control"
+                                            <select name="triwulan" id="triwulan" class="form-select"
                                                 onchange="this.form.submit()">
                                                 <option value="">Semua</option>
                                                 <option value="1" {{ request('triwulan') == 1 ? 'selected' : '' }}>
@@ -151,7 +152,7 @@
                                                         <span class="badge bg-danger">{{ $data->rka }}</span>
                                                     @endif
                                                 </td>
-                                                 <td class="text-center">{{ $data->realisasi }}</td>
+                                                <td class="text-center">{{ $data->realisasi }}</td>
                                                 <td class="text-center">{{ $data->tanggal }}</td>
                                                 @if ($adaPesan)
                                                     <td>{{ $data->pesan }}</td>
@@ -191,7 +192,7 @@
                                                         <form action="{{ route('monev.edit', $data->id) }}"
                                                             method="GET">
                                                             <button class="btn btn-primary btn-sm">
-                                                                <i class="fa-solid fa-pen-to-square">  </i>
+                                                                <i class="fa-solid fa-pen-to-square"> </i>
                                                             </button>
                                                         </form>
 
@@ -206,6 +207,7 @@
                                                                 <i class="fa-solid fa-trash"></i>
                                                             </button>
                                                         </form>
+
                                                     </div>
                                                 </td>
                                             </tr>
