@@ -37,6 +37,16 @@
                                         <input type="text" name="e_luas" class="form-control"
                                             value="{{ $kthEdit->luas }}" required>
                                     </div>
+                                     <div class="mb-3">
+                                        <label class="form-label">Kecamatan</label>
+                                        <input type="text" name="e_kecamatan" class="form-control"
+                                            value="{{ $kthEdit->kecamatan }}" required>
+                                    </div>
+                                     <div class="mb-3">
+                                        <label class="form-label">Desa</label>
+                                        <input type="text" name="e_desa" class="form-control"
+                                            value="{{ $kthEdit->desa }}" required>
+                                    </div>
 
                                     <button type="submit" class="btn btn-primary w-100">Update</button>
                                     <a href="{{ route('kth') }}" class="btn btn-secondary w-100 mt-2">Batal</a>
@@ -54,6 +64,17 @@
                                         <label for="luas" class="form-label">Luas areal kelola sesuai SK (Ha)</label>
                                         <input type="text" name="luas" class="form-control" required>
                                     </div>
+
+                                      <div class="mb-3">
+                                        <label for="kecamatan" class="form-label">Kecamatan</label>
+                                        <input type="text" name="kecamatan" class="form-control" required>
+                                    </div>
+
+                                      <div class="mb-3">
+                                        <label for="desa" class="form-label">Desa</label>
+                                        <input type="text" name="desa" class="form-control" required>
+                                    </div>
+
 
                                     <button type="submit" class="btn btn-success w-100">Simpan</button>
                                 </form>
@@ -98,6 +119,8 @@
                                             <th>No</th>
                                             <th>Nama KTH</th>
                                             <th>Luas areal kelola sesuai SK (Ha)</th>
+                                            <th>Kecamatan</th>
+                                            <th>Desa</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -107,6 +130,8 @@
                                                 <td>{{ $kth->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->kth }}</td>
                                                 <td>{{ $data->luas }}</td>
+                                                <td>{{ $data->kecamatan }}</td>
+                                                <td>{{ $data->desa }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center gap-1">
                                                         <a href="{{ route('kth.edit', $data->id) }}"
