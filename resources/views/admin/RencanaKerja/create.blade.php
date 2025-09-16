@@ -56,7 +56,8 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Sub Kegiatan</label>
-                                        <input type="text" id="sub_kegiatan_display" class="form-control bg-light" readonly>
+                                        <input type="text" id="sub_kegiatan_display" class="form-control bg-light"
+                                            readonly>
                                         <input type="hidden" name="sub_kegiatan" id="sub_kegiatan_hidden">
                                     </div>
                                     <div class="col-md-6">
@@ -70,13 +71,20 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Nama Program</label>
-                                        <input type="text" id="nama_program_display" class="form-control bg-light" readonly>
+                                        <input type="text" id="nama_program_display" class="form-control bg-light"
+                                            readonly>
                                         <input type="hidden" name="nama_program" id="nama_program_hidden">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Tahun</label>
-                                        <input type="text" id="tahun_display" class="form-control bg-light" readonly>
-                                        <input type="hidden" name="tahun" id="tahun_hidden">
+                                        <select name="tahun" id="tahun" class="form-select" required>
+                                            <option value="">Pilih</option>
+                                            @foreach ($rencanaAksi as $data)
+                                                <option value="{{ $data->tahun }}">{{ $data->tahun }}</option>
+                                            @endforeach
+                                        </select>
+                                        {{-- <input type="text" id="tahun_display" class="form-control bg-light" readonly>
+                                        <input type="hidden" name="tahun" id="tahun_hidden"> --}}
                                     </div>
                                 </div>
 
@@ -96,11 +104,13 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Anggaran</label>
-                                        <input type="text" name="anggaran" value="{{ old('anggaran') }}" class="form-control" required>
+                                        <input type="text" name="anggaran" value="{{ old('anggaran') }}"
+                                            class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Sumber Dana</label>
-                                        <input type="text" name="sumberdana" value="{{ old('sumberdana') }}" class="form-control" required>
+                                        <input type="text" name="sumberdana" value="{{ old('sumberdana') }}"
+                                            class="form-control" required>
                                     </div>
                                 </div>
 
@@ -118,7 +128,8 @@
                                         <label class="form-label">Perangkat Daerah</label>
                                         @if ($user && $user->level == 'Admin')
                                             <input type="hidden" name="id_opd" value="{{ $user->id_opd }}">
-                                            <input type="text" class="form-control" value="{{ $user->opd->nama ?? '-' }}" readonly>
+                                            <input type="text" class="form-control"
+                                                value="{{ $user->opd->nama ?? '-' }}" readonly>
                                         @else
                                             <select name="id_opd" class="form-select" required>
                                                 <option value="">Pilih</option>
@@ -161,10 +172,13 @@
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        $('#rencanaAksi').empty().append('<option value="">-- Pilih Rencana Aksi --</option>');
+                        $('#rencanaAksi').empty().append(
+                            '<option value="">-- Pilih Rencana Aksi --</option>');
                         $.each(data, function(key, value) {
                             // simpan string rencana_aksi, bukan id
-                            $('#rencanaAksi').append('<option value="' + value.rencana_aksi + '" data-id="' + value.id + '">' + value.rencana_aksi + '</option>');
+                            $('#rencanaAksi').append('<option value="' + value.rencana_aksi +
+                                '" data-id="' + value.id + '">' + value.rencana_aksi +
+                                '</option>');
                         });
                     }
                 });
@@ -174,7 +188,7 @@
         // Step 2: Ambil detail Rencana Aksi untuk mengisi otomatis field lain
         $('#rencanaAksi').on('change', function() {
             var selectedText = $("#rencanaAksi option:selected").text();
-            var selectedId   = $("#rencanaAksi option:selected").data("id");
+            var selectedId = $("#rencanaAksi option:selected").data("id");
 
             // isi hidden
             $('#id_rencana_aksi').val(selectedId);
@@ -194,8 +208,8 @@
                         $('#nama_program_display').val(data.nama_program);
                         $('#nama_program_hidden').val(data.nama_program);
 
-                        $('#tahun_display').val(data.tahun);
-                        $('#tahun_hidden').val(data.tahun);
+                        // $('#tahun_display').val(data.tahun);
+                        // $('#tahun_hidden').val(data.tahun);
                     }
                 });
             }

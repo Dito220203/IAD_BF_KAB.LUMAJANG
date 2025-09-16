@@ -51,7 +51,7 @@
                                         <select name="rencanaAksi" id="rencanaAksi" class="form-select" required>
                                             <option value="">-- Pilih Rencana Aksi --</option>
                                             @if ($rencana->rencana_aksi)
-                                                <option value="{{ $rencana->rencana_aksi}}" selected>
+                                                <option value="{{ $rencana->rencana_aksi }}" selected>
                                                     {{ $rencana->rencana_aksi }}
                                                 </option>
                                             @endif
@@ -64,16 +64,16 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Sub Kegiatan</label>
                                         <input type="text" id="sub_kegiatan_display" class="form-control bg-light"
-                                               value="{{ old('sub_kegiatan', $rencana->sub_kegiatan) }}" readonly>
+                                            value="{{ old('sub_kegiatan', $rencana->sub_kegiatan) }}" readonly>
                                         <input type="hidden" name="sub_kegiatan" id="sub_kegiatan_hidden"
-                                               value="{{ old('sub_kegiatan', $rencana->sub_kegiatan) }}">
+                                            value="{{ old('sub_kegiatan', $rencana->sub_kegiatan) }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Kegiatan</label>
                                         <input type="text" id="kegiatan_display" class="form-control bg-light"
-                                               value="{{ old('kegiatan', $rencana->kegiatan) }}" readonly>
+                                            value="{{ old('kegiatan', $rencana->kegiatan) }}" readonly>
                                         <input type="hidden" name="kegiatan" id="kegiatan_hidden"
-                                               value="{{ old('kegiatan', $rencana->kegiatan) }}">
+                                            value="{{ old('kegiatan', $rencana->kegiatan) }}">
                                     </div>
                                 </div>
 
@@ -82,16 +82,27 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Nama Program</label>
                                         <input type="text" id="nama_program_display" class="form-control bg-light"
-                                               value="{{ old('nama_program', $rencana->nama_program) }}" readonly>
+                                            value="{{ old('nama_program', $rencana->nama_program) }}" readonly>
                                         <input type="hidden" name="nama_program" id="nama_program_hidden"
-                                               value="{{ old('nama_program', $rencana->nama_program) }}">
+                                            value="{{ old('nama_program', $rencana->nama_program) }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Tahun</label>
-                                        <input type="text" id="tahun_display" class="form-control bg-light"
+                                        <select name="tahun" id="tahun" class="form-select" required>
+                                            <option value="">Pilih</option>
+                                            @foreach ($listTahun as $data)
+                                                <option value="{{ $data->tahun }}"
+                                                    {{ old('tahun', $rencana->tahun) == $data->tahun ? 'selected' : '' }}>
+                                                    {{ $data->tahun }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+
+                                        {{-- <input type="text" id="tahun_display" class="form-control bg-light"
                                                value="{{ old('tahun', $rencana->tahun) }}" readonly>
                                         <input type="hidden" name="tahun" id="tahun_hidden"
-                                               value="{{ old('tahun', $rencana->tahun) }}">
+                                               value="{{ old('tahun', $rencana->tahun) }}"> --}}
                                     </div>
                                 </div>
 
@@ -100,12 +111,12 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Volume</label>
                                         <input type="text" name="volume" class="form-control"
-                                               value="{{ old('volume', $rencana->volume) }}" required>
+                                            value="{{ old('volume', $rencana->volume) }}" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Satuan</label>
                                         <input type="text" name="satuan" class="form-control"
-                                               value="{{ old('satuan', $rencana->satuan) }}" required>
+                                            value="{{ old('satuan', $rencana->satuan) }}" required>
                                     </div>
                                 </div>
 
@@ -114,12 +125,12 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Anggaran</label>
                                         <input type="text" name="anggaran" class="form-control"
-                                               value="{{ old('anggaran', $rencana->anggaran) }}" required>
+                                            value="{{ old('anggaran', $rencana->anggaran) }}" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Sumber Dana</label>
                                         <input type="text" name="sumberdana" class="form-control"
-                                               value="{{ old('sumberdana', $rencana->sumberdana) }}" required>
+                                            value="{{ old('sumberdana', $rencana->sumberdana) }}" required>
                                     </div>
                                 </div>
 
@@ -128,7 +139,7 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Lokasi</label>
                                         <input type="text" name="lokasi" class="form-control"
-                                               value="{{ old('lokasi', $rencana->lokasi) }}">
+                                            value="{{ old('lokasi', $rencana->lokasi) }}">
                                     </div>
 
                                     @php $user = Auth::guard('pengguna')->user(); @endphp
@@ -137,7 +148,7 @@
                                         @if ($user && $user->level == 'Admin')
                                             <input type="hidden" name="id_opd" value="{{ $user->id_opd }}">
                                             <input type="text" class="form-control"
-                                                   value="{{ $user->opd->nama ?? '-' }}" readonly>
+                                                value="{{ $user->opd->nama ?? '-' }}" readonly>
                                         @else
                                             <select name="id_opd" class="form-select" required>
                                                 <option value="">Pilih</option>
@@ -182,9 +193,11 @@
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        $('#rencanaAksi').empty().append('<option value="">-- Pilih Rencana Aksi --</option>');
+                        $('#rencanaAksi').empty().append(
+                            '<option value="">-- Pilih Rencana Aksi --</option>');
                         $.each(data, function(key, value) {
-                            $('#rencanaAksi').append('<option value="' + value.id + '">' + value.rencana_aksi + '</option>');
+                            $('#rencanaAksi').append('<option value="' + value.id + '">' + value
+                                .rencana_aksi + '</option>');
                         });
                     }
                 });
@@ -209,8 +222,8 @@
                         $('#nama_program_display').val(data.nama_program);
                         $('#nama_program_hidden').val(data.nama_program);
 
-                        $('#tahun_display').val(data.tahun);
-                        $('#tahun_hidden').val(data.tahun);
+                        // $('#tahun_display').val(data.tahun);
+                        // $('#tahun_hidden').val(data.tahun);
                     }
                 });
             }

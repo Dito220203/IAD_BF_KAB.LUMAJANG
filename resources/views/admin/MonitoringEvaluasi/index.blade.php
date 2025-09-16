@@ -113,6 +113,7 @@
                                             <th class="text-center">Input RKA</th>
                                             <th class="text-center">Realisasi</th>
                                             <th class="text-center">Tanggal</th>
+                                            <th class="text-center">Keterangan</th>
                                             @if ($adaPesan)
                                                 <th class="text-center" style="width: 300px">Catatan</th>
                                             @endif
@@ -152,22 +153,37 @@
                                                         <span class="badge bg-danger">{{ $data->rka }}</span>
                                                     @endif
                                                 </td>
+
                                                 <td class="text-center">{{ $data->realisasi }}</td>
                                                 <td class="text-center">{{ $data->tanggal }}</td>
+                                                <td>{{ $data->keterangan }}</td>
                                                 @if ($adaPesan)
                                                     <td>{{ $data->pesan }}</td>
                                                 @endif
 
                                                 <td class="text-center align-middle">
                                                     <div class="d-flex justify-content-center gap-1">
+                                                        <form id="form-lanjut-{{ $data->id }}"
+                                                            action="{{ route('monev.lanjut', $data->id) }}"
+                                                            method="POST" style="display:inline;">
+                                                            @csrf
+                                                            <button type="button"
+                                                                class="btn btn-secondary btn-sm btn-lanjut"
+                                                                data-id="{{ $data->id }}">
+                                                                Lanjut
+                                                            </button>
+                                                        </form>
+
+
+                                                        <form action="{{ route('monev.edit', $data->id) }}"
+                                                            method="GET">
+                                                            <button class="btn btn-primary btn-sm">
+                                                               Edit/Lengkapi
+                                                            </button>
+                                                        </form>
 
                                                         @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
-                                                            <button type="button" class="btn btn-info btn-sm"
-                                                                data-bs-toggle="modal" data-bs-target="#modalPesan"
-                                                                data-id="{{ $data->id }}"
-                                                                data-pesan="{{ $data->pesan ?? '' }}">
-                                                                <i class="fa-solid fa-envelope"></i>
-                                                            </button>
+
 
 
                                                             <button
@@ -187,14 +203,15 @@
                                                                 @method('PUT')
                                                                 <input type="hidden" name="status" value="">
                                                             </form>
+                                                             <button type="button" class="btn btn-info btn-sm"
+                                                                data-bs-toggle="modal" data-bs-target="#modalPesan"
+                                                                data-id="{{ $data->id }}"
+                                                                data-pesan="{{ $data->pesan ?? '' }}">
+                                                                <i class="fa-solid fa-envelope"></i>
+                                                            </button>
                                                         @endif
 
-                                                        <form action="{{ route('monev.edit', $data->id) }}"
-                                                            method="GET">
-                                                            <button class="btn btn-primary btn-sm">
-                                                                <i class="fa-solid fa-pen-to-square"> </i>
-                                                            </button>
-                                                        </form>
+
 
                                                         {{-- Tombol Delete --}}
                                                         <form id="formDelete-{{ $data->id }}"
@@ -285,6 +302,32 @@
                 var button = event.relatedTarget;
                 var idMonev = button.getAttribute('data-id');
                 modalPesan.querySelector('#idMonev').value = idMonev;
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn-lanjut').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    let id = this.getAttribute('data-id');
+                    let form = document.getElementById('form-lanjut-' + id);
+
+                    Swal.fire({
+                        title: 'Yakin mau lanjut Ke Triwulan Selanjutnya ?',
+                        text: "Pastikan data sudah benar sebelum dilanjutkan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, lanjutkan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
             });
         });
     </script>

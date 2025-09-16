@@ -14,7 +14,7 @@ class KthController extends Controller
      */
     public function index()
     {
-        $kth = Kth::paginate(10);
+        $kth = Kth::paginate(5);
         return view('admin.Kth.index', compact('kth'));
     }
 
@@ -34,12 +34,16 @@ class KthController extends Controller
         $validatedData = $request->validate([
             'kth' => 'required',
             'luas' => 'required',
+            'kecamatan' => 'required',
+            'desa' => 'required',
         ]);
 
         Kth::create([
             'id_pengguna' => Auth::guard('pengguna')->id(),
             'kth' => $validatedData['kth'],
             'luas' => $validatedData['luas'],
+            'kecamatan' => $validatedData['kecamatan'],
+            'desa' => $validatedData['desa'],
         ]);
         LogHelper::add('Menambah data KTH');
         return redirect()->route('kth')->with('success', 'KTH berhasil ditambahkan.');
@@ -72,11 +76,15 @@ class KthController extends Controller
         $validatedData = $request->validate([
             'e_kth' => 'required',
             'e_luas' => 'required',
+            'e_kecamatan' => 'required',
+            'e_desa' => 'required',
         ]);
 
         $kth->update([
             'kth' => $validatedData['e_kth'],
             'luas' => $validatedData['e_luas'],
+            'kecamatan' => $validatedData['e_kecamatan'],
+            'desa' => $validatedData['e_desa'],
         ]);
         LogHelper::add('Mengubah data KTH');
         return redirect()->route('kth')->with('success', 'KTH berhasil di Update.');

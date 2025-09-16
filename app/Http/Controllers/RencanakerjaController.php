@@ -41,7 +41,7 @@ class RencanakerjaController extends Controller
             'sub_kegiatan' => $data->sub_kegiatan,
             'kegiatan'     => $data->kegiatan,
             'nama_program' => $data->nama_program,
-            'tahun'        => $data->tahun,
+            // 'tahun'        => $data->tahun,
         ]);
     }
 
@@ -67,18 +67,18 @@ class RencanakerjaController extends Controller
     {
         $validate = $request->validate([
             'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi'    => 'required|string',
-            'sub_kegiatan'   => 'required|string',
-            'kegiatan'       => 'required|string',
-            'nama_program'   => 'required|string',
+            'rencanaAksi'    => 'required',
+            'sub_kegiatan'   => 'required',
+            'kegiatan'       => 'required',
+            'nama_program'   => 'required',
             'tahun'          => 'required',
             'volume'         => 'required',
             'satuan'         => 'required',
             'anggaran'       => 'required',
             'sumberdana'     => 'required',
-            'lokasi'         => 'required|string',
+            'lokasi'         => 'required',
             'id_opd'         => 'required|exists:opds,id',
-            'keterangan'     => 'required|string'
+            'keterangan'     => 'required'
         ]);
 
         // simpan ke tabel rencana kerja
@@ -163,29 +163,29 @@ class RencanakerjaController extends Controller
         $user = Auth::guard('pengguna')->user();
 
         $rencana = RencanaKerja::findOrFail($id);
-
+        $listTahun = RencanaAksi_6_tahun::all();
         $subprogram = Subprogram::where('delete_at', '0')->get();
         $opd = Opd::where('delete_at', '0')->get();
 
-        return view('admin.RencanaKerja.update', compact('rencana', 'subprogram', 'opd'));
+        return view('admin.RencanaKerja.update', compact('rencana','listTahun', 'subprogram', 'opd'));
     }
 
     public function update(Request $request, string $id)
     {
         $validate = $request->validate([
             'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required|exists:rencana_aksi_6_tahuns,id',
-            'sub_kegiatan'   => 'required|string',
-            'kegiatan'       => 'required|string',
-            'nama_program'   => 'required|string',
-            'lokasi'         => 'required|string',
+            'rencanaAksi' => 'required',
+            'sub_kegiatan'   => 'required',
+            'kegiatan'       => 'required',
+            'nama_program'   => 'required',
+            'lokasi'         => 'required',
             'volume' => 'required',
             'satuan' => 'required',
             'anggaran'       => 'required',
             'sumberdana'       => 'required',
             'tahun'          => 'required',
             'id_opd'         => 'required|exists:opds,id',
-            'keterangan'     => 'required|string'
+            'keterangan'     => 'required'
         ]);
 
         $rencana = RencanaKerja::findOrFail($id);

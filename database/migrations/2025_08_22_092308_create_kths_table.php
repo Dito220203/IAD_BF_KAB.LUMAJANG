@@ -16,6 +16,8 @@ return new class extends Migration
              $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
              $table->string('kth');
              $table->string('luas');
+             $table->string('kecamatan');
+             $table->string('desa');
             $table->timestamps();
         });
     }

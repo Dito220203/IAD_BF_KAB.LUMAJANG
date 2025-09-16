@@ -139,9 +139,9 @@ class MonevController extends Controller
         $validate = $request->validate([
             'id_subprogram'  => 'required|exists:subprograms,id',
             'rencanaAksi' => 'required|exists:rencana_kerjas,id',
-            'sub_kegiatan'   => 'required|string',
-            'kegiatan'       => 'required|string',
-            'nama_program' => 'required|string',
+            'sub_kegiatan'   => 'required',
+            'kegiatan'       => 'required',
+            'nama_program' => 'required',
             'tahun'          => 'required',
             'volume' => 'required',
             'satuan' => 'required',
@@ -192,6 +192,27 @@ class MonevController extends Controller
 
         return redirect()->route('monev')->with('success', 'Pesan berhasil disimpan');
     }
+
+    public function lanjut($id)
+    {
+        $monev = Monev::findOrFail($id);
+
+        // Duplikasi data (kecuali tanggal, keterangan, pesan)
+        $newMonev = $monev->replicate(['tanggal', 'keterangan', 'pesan']);
+
+        // Set field yang perlu direset
+        $newMonev->tanggal = null;
+        $newMonev->keterangan = null;
+        $newMonev->pesan = null;
+        $newMonev->status = 'Belum divalidasi'; // reset status
+
+        $newMonev->save();
+
+        LogHelper::add("Menduplikat data Monev dari ID {$monev->id} ke ID {$newMonev->id}");
+
+        return redirect()->route('monev')->with('success', 'Data berhasil diduplikat ke Monev selanjutnya');
+    }
+
 
 
 
@@ -317,7 +338,7 @@ class MonevController extends Controller
         // $user = Auth::guard('pengguna')->user();
         $validate = $request->validate([
             'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required|string',
+            'rencanaAksi' => 'required|exists:rencana_kerjas,id',
             'sub_kegiatan'   => 'required|string',
             'kegiatan'       => 'required|string',
             'nama_program'   => 'required|string',
