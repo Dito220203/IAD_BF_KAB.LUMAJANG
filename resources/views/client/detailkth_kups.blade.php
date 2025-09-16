@@ -9,12 +9,13 @@
             <div class="container">
                 <div class="card-table-container">
                     <div class="table-wrapper">
-                        <table class="monev-table">
+                        <table class="detail-table">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>KELOMPOK TANI HUTAN (KTH)</th>
-
+                                    <th>Kecamatan</th>
+                                    <th>Desa</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -23,7 +24,8 @@
                                         <td>{{ ($kthKups->currentPage() - 1) * $kthKups->perPage() + $loop->iteration }}
                                         </td>
                                         <td class="text-center">{{ $data->kth }}</td>
-
+                                        <td>{{ $data->kecamatan }}</td>
+                                        <td>{{ $data->desa }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
