@@ -201,6 +201,8 @@ class MonevController extends Controller
         $newMonev = $monev->replicate(['tanggal', 'keterangan', 'pesan']);
 
         // Set field yang perlu direset
+        $newMonev->rka = null;
+        $newMonev->realisasi = null;
         $newMonev->tanggal = null;
         $newMonev->keterangan = null;
         $newMonev->pesan = null;
