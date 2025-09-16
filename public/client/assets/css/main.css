@@ -2860,7 +2860,7 @@ section,
 --------------------------------------------------------------*/
 .detail-form-section {
   padding: 60px 20px;
-  background: #f9fafb;
+  background: #f0f0f0;
   text-align: center;
 }
 
@@ -2874,12 +2874,7 @@ section,
   background: #196b4a;
   color: #fff;
 }
-/* .status {
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: bold;
-} */
+
 
 .table-content {
   display: none;
@@ -2972,7 +2967,7 @@ section,
 
 .card-table-container {
   border-radius: 12px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
     overflow: hidden;
 }
@@ -3124,23 +3119,23 @@ section,
 
 
 /*--------------------------------------------------------------
-#  detailekonomi Section
+#  button dropdown tahun global
 --------------------------------------------------------------*/
 
 .table-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
-    flex-wrap: wrap; /* Agar responsif di layar kecil */
-    gap: 20px; /* Jarak antar elemen */
+    padding: 20px 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 20px; 
 }
 
-/* Form filter */
 .filter-form {
     display: flex;
     align-items: center;
-    gap: 10px; /* Jarak antara label dan dropdown */
+    gap: 10px; 
 }
 
 .filter-form label {
@@ -3149,10 +3144,10 @@ section,
     font-size: 0.9rem;
 }
 
-/* Kontainer untuk dropdown agar bisa diberi panah custom */
 .select-container {
     position: relative;
 }
+ 
 
 
 
