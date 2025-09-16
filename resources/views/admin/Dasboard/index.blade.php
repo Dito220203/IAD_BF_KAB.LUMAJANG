@@ -18,7 +18,7 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="#" class="text-decoration-none">
+                    <a>
                         <i class="fas fa-home me-1"></i> Home
                     </a>
                 </li>

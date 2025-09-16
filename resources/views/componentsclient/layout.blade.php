@@ -20,7 +20,10 @@
     <link href="{{ asset('client/assets/vendor/aos/aos.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/css/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('client/assets/vendor/fontawesome5/all.min.css') }}"></link>
+
+    {{-- <link href="{{ asset('client/assets/vendor/fontawesome5/css/all.min.css') }}"></link> --}}
+    <link href="{{ asset('client/assets/vendor/fontawesome5/css/all.min.css') }}" rel="stylesheet">
+    
     <link href="{{ asset('client/assets/vendor/leaflet/leaflet.css') }}"></link>
 
 

@@ -89,7 +89,7 @@
                                 <div class="stats-card">
                                     <div>
                                         <div class="stats-icon">
-                                            <i class="fas fa-sack-dollar"></i>
+                                            <i class="fas fa-dollar-sign"></i>
                                         </div>
 
                                     </div>
