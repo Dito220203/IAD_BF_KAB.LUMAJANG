@@ -47,7 +47,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table text-center align-middle" id="TableRencanaAksi"
+                                <table class="detail-table" id="TableRencanaAksi"
                                     style="min-width: 1800px;">
                                     <thead>
                                         <tr>

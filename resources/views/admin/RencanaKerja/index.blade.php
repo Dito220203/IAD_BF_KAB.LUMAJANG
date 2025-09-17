@@ -50,7 +50,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table align-middle" id="TableRencanaAksi" style="min-width: 1800px;">
+                                <table class="detail-table" id="TableRencanaAksi" style="min-width: 1800px;">
                                     <thead>
                                         <tr>
                                             <th class="text-center" style="width: 50px;">No</th>

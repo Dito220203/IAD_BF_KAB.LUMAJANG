@@ -113,7 +113,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table id="produkKups" class="table text-center">
+                                <table id="produkKups" class="detail-table">
                                     <thead>
                                         <tr>
                                             <th>No</th>

@@ -1048,6 +1048,107 @@ h6 {
   max-width: 120px;
 }
 
+
+
+
+/*--------------------------------------------------------------
+# Pengaturan Tabel dengan Sticky Header & Scrollbar Tersembunyi
+--------------------------------------------------------------*/
+
+/* 1. KONTINER UTAMA TABEL */
+.table-responsive {
+    max-height: 75vh;
+    overflow: auto;
+    border-radius: 8px;
+
+    /* Untuk Firefox: hanya tampilkan scrollbar horizontal (jika bisa) */
+    /* Firefox tidak mendukung pemisahan ini, jadi ini kompromi terbaik */
+    scrollbar-width: thin;
+    scrollbar-color: #0084ff #f1f1f1;
+}
+
+/* 2. LOGIKA STICKY HEADER */
+.detail-table > thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #0084ff;
+}
+
+/* 3. STYLING SCROLLBAR KUSTOM (UNTUK CHROME, EDGE) */
+
+/* Atur lebar (vertikal) dan tinggi (horizontal) */
+.table-responsive::-webkit-scrollbar {
+    width: 0;      /* Sembunyikan scrollbar vertikal */
+    height: 8px;   /* Tampilkan scrollbar horizontal dengan tinggi 8px */
+}
+
+/* Latar belakang rel scrollbar */
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle scrollbar yang digeser */
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #0084ff;
+    border-radius: 5px;
+}
+
+/* Efek saat handle disorot mouse */
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #0084ff78;
+}
+
+
+/* 2. PENGATURAN DASAR TABEL */
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    background: #fff;
+}
+
+/* 3. LOGIKA STICKY HEADER */
+.detail-table > thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #0084ff; /* Menggunakan warna yang konsisten dari style Anda */
+}
+
+/* 4. PENGATURAN UNTUK SEMUA SEL (th & td) */
+.detail-table th,
+.detail-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* 5. PENGATURAN SPESIFIK SEL HEADER (th) */
+.detail-table thead th {
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+/* 6. PENGATURAN BODY TABEL */
+.detail-table tbody tr:nth-child(even) {
+    background: #f3f4f6;
+}
+.detail-table tbody tr:hover {
+    background: #e6fffa;
+    transition: 0.3s;
+}
+
+/* Pengaturan lebar kolom spesifik */
+.detail-table .kolom-keterangan {
+    width: 50%;
+    min-width: 600px;
+}
+
 /*--------------------------------------------------------------
 # F.A.Q Page
 --------------------------------------------------------------*/

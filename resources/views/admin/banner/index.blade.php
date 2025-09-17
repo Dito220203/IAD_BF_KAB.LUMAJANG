@@ -129,7 +129,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table id="infoTable" class="table text-center">
+                                <table id="infoTable" class="detail-table">
                                     <thead>
                                         <tr>
                                             <th>No</th>

@@ -86,7 +86,7 @@
 
                             <!-- Table Sub Program -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="TableSubprogram">
+                                <table class="detail-table" id="TableSubprogram">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -293,7 +293,7 @@
 
                                 <!-- Table Produk -->
                                 <div class="table-responsive">
-                                    <table id="TableProduk" class="table .table-active text-center">
+                                    <table id="TableProduk" class="detail-table">
                                         <thead>
                                             <tr>
                                                 <th>No</th>

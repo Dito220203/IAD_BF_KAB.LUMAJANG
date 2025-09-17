@@ -86,7 +86,7 @@
         }
 
         thead {
-            background-color: #1f4e79;
+            background-color: #0084ff;
             color: white;
         }
 

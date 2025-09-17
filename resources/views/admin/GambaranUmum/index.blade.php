@@ -83,7 +83,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="table .table-active text-center" id="Table">
+                                <table class="detail-table" id="Table">
                                     <thead>
                                         <tr>
                                             <th>No</th>
