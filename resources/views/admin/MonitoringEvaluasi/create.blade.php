@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Tahun</label>
-                                        <input type="text" id="tahun" name="tahun" class="form-control" readonly>
+                                        <input type="text" id="tahun" name="tahun" class="form-control">
                                     </div>
                                 </div>
 

@@ -72,7 +72,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Tahun</label>
                             <input type="text" id="tahun" name="tahun" class="form-control"
-                                value="{{ old('tahun', $monev->tahun) }}" readonly>
+                                value="{{ old('tahun', $monev->tahun) }}">
                         </div>
                     </div>
 

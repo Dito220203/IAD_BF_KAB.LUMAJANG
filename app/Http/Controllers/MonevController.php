@@ -197,8 +197,7 @@ class MonevController extends Controller
     {
         $monev = Monev::findOrFail($id);
 
-        // Duplikasi data (kecuali tanggal, keterangan, pesan)
-        $newMonev = $monev->replicate(['tanggal', 'keterangan', 'pesan']);
+        $newMonev = $monev->replicate(['rka','realisai','tanggal', 'keterangan', 'pesan']);
 
         // Set field yang perlu direset
         $newMonev->rka = null;
@@ -326,7 +325,7 @@ class MonevController extends Controller
             $rencana = RencanaKerja::where('id_pengguna', $user->id)->get();
         }
 
-        $opd = Opd::all();
+        $opd = Opd::where('delete_at', '0')->get();
 
         return view('admin.MonitoringEvaluasi.update', compact('monev', 'subprogram', 'rencana', 'opd'));
     }

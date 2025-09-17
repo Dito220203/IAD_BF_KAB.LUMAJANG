@@ -280,7 +280,7 @@
                     <tr>
                         <td class="text-center">{{ $i + 1 }}</td>
                         <td class="text-left long-text">{{ $row->subprogram->subprogram ?? '-' }}</td>
-                        <td class="text-left long-text">{{ Str::limit($row->rencana_aksi, 100) }}</td>
+                        <td class="text-left long-text">{{ Str::limit($row->rencanakerja->rencana_aksi ?? '-' ) }}</td>
                         <td class="text-left long-text">{{ Str::limit($row->sub_kegiatan, 80) }}</td>
                         <td class="text-left long-text">{{ Str::limit($row->kegiatan, 70) }}</td>
                         <td class="text-left long-text">{{ Str::limit($row->nama_program, 80) }}</td>

@@ -52,7 +52,7 @@ class RencanakerjaController extends Controller
     {
         $subprogram = Subprogram::where('delete_at', '0')->get();
         $opd = Opd::where('delete_at', '0')->get();
-        $rencanaAksi =  RencanaAksi_6_tahun::all();
+        $rencanaAksi =  RencanaAksi_6_tahun::where('delete_at', '0')->get();
 
         return view('admin.RencanaKerja.create', compact('subprogram', 'opd', 'rencanaAksi'));
     }
@@ -163,7 +163,7 @@ class RencanakerjaController extends Controller
         $user = Auth::guard('pengguna')->user();
 
         $rencana = RencanaKerja::findOrFail($id);
-        $listTahun = RencanaAksi_6_tahun::all();
+        $listTahun = RencanaAksi_6_tahun::where('delete_at', '0')->get();
         $subprogram = Subprogram::where('delete_at', '0')->get();
         $opd = Opd::where('delete_at', '0')->get();
 

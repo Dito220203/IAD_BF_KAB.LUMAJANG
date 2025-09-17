@@ -94,8 +94,8 @@ class RencanaAksi_6TahunController extends Controller
     public function edit(string $id)
     {
         $rencanaAksi = RencanaAksi_6_tahun::findOrFail($id);
-        $subprogram = Subprogram::all();
-        $opds = Opd::all();
+        $subprogram = Subprogram::where('delete_at', '0')->get();
+        $opds = Opd::where('delete_at', '0')->get();
         return view('admin.RencanAksi6Tahun.update', compact('rencanaAksi', 'subprogram', 'opds'));
     }
 
