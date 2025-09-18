@@ -16,7 +16,7 @@ class SubpotensiKehutananController extends Controller
      */
     public function index()
     {
-        $subpotensi = SubpotensiKehutanan::paginate(10, ['*'], 'subpotensi_page');
+        $subpotensi = SubpotensiKehutanan::where('delete_at', '0')->paginate(10, ['*'], 'subpotensi_page');
         $potensi = PotensiKehutanan::paginate(10, ['*'], 'potensi_page');
         return view('admin.subpotensiKehutanan.index', compact('subpotensi', 'potensi'));
     }
@@ -65,7 +65,9 @@ class SubpotensiKehutananController extends Controller
     public function destroy(string $id)
     {
         $subpotensi = SubpotensiKehutanan::findOrFail($id);
-        $subpotensi->delete();
+        $subpotensi->update([
+            'delete_at' => '1'
+        ]);
         LogHelper::add('Menghapus Sub Potensi Kehutanan');
         return redirect()->route('SubpotensiKehutanan')->with('success', 'Sub Potensi Kehutanan berhasil dihapus.');
     }

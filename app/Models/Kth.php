@@ -10,7 +10,7 @@ class Kth extends Model
 {
     use HasFactory;
     protected $table = 'kths';
-    protected $fillable = ['id_pengguna','kth','luas','kecamatan','desa'];
+    protected $fillable = ['id_pengguna','kth','luas','kecamatan','desa','delete_at'];
 
      public function penggunas()
     {

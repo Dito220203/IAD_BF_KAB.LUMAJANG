@@ -14,7 +14,7 @@ class KthController extends Controller
      */
     public function index()
     {
-        $kth = Kth::paginate(5);
+        $kth = Kth::where('delete_at', '0')->paginate(5);
         return view('admin.Kth.index', compact('kth'));
     }
 
@@ -96,7 +96,9 @@ class KthController extends Controller
     public function destroy(string $id)
     {
         $kth = Kth::findOrFail($id);
-        $kth->delete();
+        $kth->update([
+            'delete_at' => '1'
+        ]);
         LogHelper::add('Menghapus data KTH');
         return redirect()->route('kth')->with('success', 'KTH berhasil dihapus.');
     }

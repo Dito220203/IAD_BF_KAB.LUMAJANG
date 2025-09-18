@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('kths', function (Blueprint $table) {
             $table->id();
-             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
-             $table->string('kth');
-             $table->string('luas');
-             $table->string('kecamatan');
-             $table->string('desa');
+            $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
+            $table->string('kth');
+            $table->string('luas');
+            $table->string('kecamatan');
+            $table->string('desa');
+            $table->enum('delete_at', ['0', '1'])->default('0')->nullable();
             $table->timestamps();
         });
     }

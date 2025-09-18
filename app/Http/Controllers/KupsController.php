@@ -16,7 +16,7 @@ class KupsController extends Controller
     public function index()
     {
         $kups = Kups::paginate(5);
-        $kth = Kth::all();
+        $kth = Kth::where('delete_at', '0')->get();
         return view('admin.Kups.index', compact('kups', 'kth'));
     }
 

@@ -9,7 +9,7 @@ class SubpotensiKehutanan extends Model
 {
     use HasFactory;
     protected $table = 'subpotensi_kehutanans';
-    protected $fillable = ['id_pengguna', 'sub_potensi', 'keterangan'];
+    protected $fillable = ['id_pengguna', 'sub_potensi', 'keterangan','delete_at'];
 
     public function penggunas()
     {
