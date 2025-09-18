@@ -75,7 +75,7 @@
                                         @foreach ($rencana as $data)
                                             <tr>
                                                 <td class="text-center">{{ $rencana->firstItem() + $loop->index }}</td>
-                                                <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
+                                                <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                 <td>{{ $data->rencana_aksi}}</td>
                                                 <td>{{ $data->sub_kegiatan }}</td>
                                                 <td>{{ $data->kegiatan }}</td>
