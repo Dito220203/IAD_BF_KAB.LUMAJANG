@@ -32,6 +32,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClientController extends Controller
 {
+    
+
     /**
      * Display a listing of the resource.
      */

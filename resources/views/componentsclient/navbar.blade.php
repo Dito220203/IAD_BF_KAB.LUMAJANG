@@ -175,7 +175,7 @@
 
                 <li><a href="{{ route('client.regulasi') }}"
                         class="{{ request()->is('regulasi') ? 'active' : '' }}">REGULASI IAD</a></li>
-                <li><a href="{{ route('client') }}#videosection">VIDEO</a></li>
+                <li><a href="{{ route('client') }}#video">VIDEO</a></li>
                 <li><a href="{{ route('client') }}#contact">CONTACT</a></li>
                 <li><a href="{{ url('login') }}">SIGN IN</a></li>
             </ul>

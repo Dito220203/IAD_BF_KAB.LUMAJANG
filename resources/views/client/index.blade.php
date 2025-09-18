@@ -252,7 +252,7 @@
         </section>
 
         <!-- video Section -->
-        <section class="video-section" id="videosection">
+        <section class="video-section" id="video">
             <div class="global-title" data-aos="fade-up">
                 <h2>VIDEO</h2>
             </div>

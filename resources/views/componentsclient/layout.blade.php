@@ -23,8 +23,9 @@
 
     {{-- <link href="{{ asset('client/assets/vendor/fontawesome5/css/all.min.css') }}"></link> --}}
     <link href="{{ asset('client/assets/vendor/fontawesome5/css/all.min.css') }}" rel="stylesheet">
-    
-    <link href="{{ asset('client/assets/vendor/leaflet/leaflet.css') }}"></link>
+
+    <link href="{{ asset('client/assets/vendor/leaflet/leaflet.css') }}">
+    </link>
 
 
     <style>
@@ -154,9 +155,13 @@
     <script src="{{ asset('client/assets/vendor/highchart/accessibility.js') }}"></script>
 
 
+    <script>
+        window.scrollToSection = @json($scrollTo ?? null);
+    </script>
     <script src="{{ asset('client/assets/js/main.js') }}"></script>
 
     @stack('scripts')
+
 
 </body>
 
