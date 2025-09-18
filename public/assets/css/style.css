@@ -1122,7 +1122,7 @@ h6 {
 .detail-table th,
 .detail-table td {
     padding: 12px 15px;
-    text-align: center;
+    /* text-align: center; */
     border-bottom: 1px solid #e5e7eb;
 }
 
