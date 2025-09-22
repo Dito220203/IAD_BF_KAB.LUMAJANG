@@ -8,9 +8,10 @@
         const preloader = document.querySelector("#preloader");
         if (preloader) {
             document.body.classList.add("loaded");
-            setTimeout(() => {
+
+            preloader.addEventListener("transitionend", function () {
                 preloader.remove();
-            }, 600);
+            });
         }
 
         /**
@@ -107,27 +108,31 @@
             // ... (Seluruh logika slider informasi Anda yang sudah benar ada di sini)
         }
 
-      /**
-       * 6. SLIDER PRODUK (PING-PONG EFFECT)
-       */
-      const sliderWrapper = document.querySelector('.product-slider .slider-wrapper');
-      const slides = document.querySelectorAll('.product-slider .slide');
+        /**
+         * 6. SLIDER PRODUK (PING-PONG EFFECT)
+         */
+        const sliderWrapper = document.querySelector(
+            ".product-slider .slider-wrapper"
+        );
+        const slides = document.querySelectorAll(".product-slider .slide");
 
-      if (sliderWrapper && slides.length > 1) {
-          let currentIndex = 0;
-          let direction = 1; // 1 untuk maju, -1 untuk mundur
+        if (sliderWrapper && slides.length > 1) {
+            let currentIndex = 0;
+            let direction = 1; // 1 untuk maju, -1 untuk mundur
 
-          setInterval(() => {
-              // Pindahkan ke slide berikutnya sesuai arah
-              currentIndex += direction;
-              sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+            setInterval(() => {
+                // Pindahkan ke slide berikutnya sesuai arah
+                currentIndex += direction;
+                sliderWrapper.style.transform = `translateX(-${
+                    currentIndex * 100
+                }%)`;
 
-              // Jika sudah sampai di ujung (akhir atau awal), balik arah
-              if (currentIndex === slides.length - 1 || currentIndex === 0) {
-                  direction *= -1; // Balik arah (dari 1 menjadi -1, atau sebaliknya)
-              }
-          }, 5000); // Ganti slide setiap 5 detik
-      }
+                // Jika sudah sampai di ujung (akhir atau awal), balik arah
+                if (currentIndex === slides.length - 1 || currentIndex === 0) {
+                    direction *= -1; // Balik arah (dari 1 menjadi -1, atau sebaliknya)
+                }
+            }, 5000); // Ganti slide setiap 5 detik
+        }
         /**
          * 7. PROGRES & POTENSI LIST (PENCARIAN & LOAD MORE)
          */
@@ -288,6 +293,4 @@
             }
         });
     }
-    
-    
 })();

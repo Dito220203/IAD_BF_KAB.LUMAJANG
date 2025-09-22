@@ -137,7 +137,11 @@
                     data-aos="fade-up" data-aos-delay="250">
                     <div class="chart-box"
                         style="flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <canvas id="donutChart"></canvas>
+                        {{-- <canvas id="donutChart"></canvas> --}}
+                        {{-- Untuk Donut Chart --}}
+                        <canvas id="donutChart" data-labels="{{ json_encode($labels) }}"
+                            data-values="{{ json_encode($data) }}" data-colors="{{ json_encode($backgroundColor) }}">
+                        </canvas>
                     </div>
                 </div>
             </section>
@@ -192,7 +196,11 @@
                             </div>
                         </div>
                     </div>
-                    <div id="pendapatanChart" class="pendapatanChart"></div>
+                    {{-- <div id="pendapatanChart" class="pendapatanChart"></div> --}}
+                    {{-- Untuk Bar Chart --}}
+                    <div id="pendapatanChart" class="pendapatanChart"
+                        data-initial-data="{{ json_encode($chartData ?? []) }}" data-initial-year="{{ $currentYear }}">
+                    </div>
                 </div>
 
 
@@ -300,35 +308,36 @@
             <div class="global-title">
                 <h2>Contact</h2>
             </div>
-            <div class="container" ><div class="col-lg-12  ">
-                <div class="row gy-4">
-                    @foreach ($contact as $kontak)
-                        <div class="col-lg-12 ">
-                            <div class="info-item d-flex flex-column justify-content-center align-items-center">
-                                <i class="bi bi-geo-alt"></i>
-                                <h3>Address</h3>
-                                <p>{{ $kontak->alamat }}</p>
+            <div class="container">
+                <div class="col-lg-12  ">
+                    <div class="row gy-4">
+                        @foreach ($contact as $kontak)
+                            <div class="col-lg-12 ">
+                                <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <h3>Address</h3>
+                                    <p>{{ $kontak->alamat }}</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="info-item d-flex flex-column justify-content-center align-items-center">
-                                <i class="bi bi-telephone"></i>
-                                <h3>Call Us</h3>
-                                <p>{{ $kontak->telepon }}</p>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                                    <i class="bi bi-telephone"></i>
+                                    <h3>Call Us</h3>
+                                    <p>{{ $kontak->telepon }}</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="info-item d-flex flex-column justify-content-center align-items-center">
-                                <i class="bi bi-envelope"></i>
-                                <h3>Email Us</h3>
-                                <p>{{ $kontak->email }}</p>
+                            <div class="col-md-6">
+                                <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                                    <i class="bi bi-envelope"></i>
+                                    <h3>Email Us</h3>
+                                    <p>{{ $kontak->email }}</p>
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-            </div>
             </div>
         </section>
         <!-- /Contact Section -->
@@ -583,7 +592,7 @@
                             }
                         }
                     }
-                    document.addEventListener("click", closeAllSelect);
+                    document.addEventListeners("click", closeAllSelect);
                 });
             </script>
         @endpush
