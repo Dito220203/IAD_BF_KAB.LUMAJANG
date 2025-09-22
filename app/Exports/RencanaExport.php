@@ -26,10 +26,10 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
 
     public function collection()
     {
-        $query = RencanaKerja::with(['subprogram', 'opd', 'pengguna']);
+        $query = RencanaKerja::with(['subprogram', 'opd', 'pengguna'])->where('delete_at', '0');
 
         // Jika bukan super admin → filter by id_pengguna
-        if ($this->user->level !== 'superadmin') {
+        if ($this->user->level !== 'Super Admin') {
             $query->where('id_pengguna', $this->user->id);
         }
         $no = 1;

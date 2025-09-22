@@ -285,7 +285,7 @@
                         <td class="text-left long-text">{{ Str::limit($row->kegiatan, 70) }}</td>
                         <td class="text-left long-text">{{ Str::limit($row->nama_program, 80) }}</td>
                         <td class="text-center">{{ $row->lokasi }}</td>
-                        <td class="text-center">{{ number_format($row->volume, 0, ',', '.') }}</td>
+                        <td class="text-center">{{ $row->volume}}</td>
                         <td class="text-center">{{ $row->satuan }}</td>
                         <td class="text-center">
                            {{$row->anggaran}}

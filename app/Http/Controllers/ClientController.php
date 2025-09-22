@@ -32,7 +32,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClientController extends Controller
 {
-    
+
 
     /**
      * Display a listing of the resource.
@@ -52,8 +52,7 @@ class ClientController extends Controller
                 'name' => $item->kups,
                 'y' => (float) $item->pendapatan,
                 'kth' => $item->kth->kth ?? 'KTH tidak diketahui' // Menambahkan nama KTH
-            ];
-            ;
+            ];;
         });
 
         // Ambil daftar tahun unik dari tabel KUPS untuk dropdown
@@ -70,19 +69,19 @@ class ClientController extends Controller
 
 
         $produkKups = ProdukKups::all();
-        $subpotensis = SubpotensiKehutanan::all();
+        $subpotensis = SubpotensiKehutanan::where('delete_at', '0')->get();
         $counts = PotensiKehutanan::select('id_subpotensi', DB::raw('COUNT(*) as total'))
             ->groupBy('id_subpotensi')
             ->pluck('total', 'id_subpotensi');
 
         $jumlahKups = Kups::count();
-        $jumlahKth = Kth::count();
+        $jumlahKth = Kth::where('delete_at', '0')->count();
         $gambaran = GambaranUmum::where('status', 'Aktif')->get();
         $informasi = Informasi::orderBy('tanggal', 'asc')->get();
         $videos = Video::all();
         $banner = Banner::where('status', 'Aktif')->get();
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.index', compact(
             'banner',
             'gambaran',
@@ -124,7 +123,7 @@ class ClientController extends Controller
     public function tentangkegiatan($id)
     {
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         $subprogram = Subprogram::findOrFail($id);
         $fotosubprogram = FotoSubprogram::where('id_subprogram', $id)->get();
         return view('client.tentangkegiatan', compact('contact', 'subprograms', 'subprogram', 'fotosubprogram'));
@@ -140,13 +139,14 @@ class ClientController extends Controller
 
         // 2. Ambil daftar tahun unik dari model
         $years = RencanaAksi_6_tahun::selectRaw("DISTINCT TRIM(tahun) as tahun")
-            ->where('id_subprogram', $id) // Pastikan ini nama kolom yang benar
+            ->where('id_subprogram', $id)
+            ->where('delete_at', '0')
             ->whereNotNull('tahun')
             ->orderBy('tahun', 'desc')
             ->pluck('tahun');
 
         // 3. Bangun query dasar
-        $rencanaAksiQuery = RencanaAksi_6_tahun::where('id_subprogram', $id); // <-- PERBAIKI DI SINI
+        $rencanaAksiQuery = RencanaAksi_6_tahun::where('id_subprogram', $id)->where('delete_at', '0');
 
         // 4. Tambahkan filter tahun jika ada tahun yang dipilih
         if ($selectedYear) {
@@ -159,119 +159,64 @@ class ClientController extends Controller
         // Variabel lain yang dibutuhkan view
         $contact = Kontak::all();
         $subprogram = Subprogram::findOrFail($id);
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
 
         return view('client.rencanaaksi', compact('contact', 'subprograms', 'subprogram', 'rencanaAksi', 'years', 'selectedYear'));
     }
     public function rencanakegiatan(Request $request, $id)
-{
-    // 1. Ambil input tahun dari request
-    $selectedYear = $request->input('tahun');
-    if ($selectedYear == 'semua') {
-        $selectedYear = null;
+    {
+        // 1. Ambil input tahun dari request
+        $selectedYear = $request->input('tahun');
+        if ($selectedYear == 'semua') {
+            $selectedYear = null;
+        }
+
+        // 2. Ambil daftar tahun unik untuk dropdown
+        $years = RencanaKerja::selectRaw("DISTINCT TRIM(tahun) as tahun")
+            ->where('id_subprogram', $id)
+             ->where('delete_at', '0')
+            ->where('status', 'valid')
+            ->whereNotNull('tahun')
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+        // 3. Bangun query dasar dengan filter wajib (subprogram dan status)
+        $rencanaKegiatanQuery = RencanaKerja::where('id_subprogram', $id) // Pastikan 'id_subprogram' adalah nama kolom yang benar
+            ->where('status', 'valid')->where('delete_at', '0');
+
+        // 4. Tambahkan filter tahun jika ada tahun yang dipilih
+        if ($selectedYear) {
+            $rencanaKegiatanQuery->whereRaw("TRIM(tahun) = ?", [$selectedYear]);
+        }
+
+        // 5. Eksekusi query yang sudah lengkap dengan semua filter
+        $rencanaKegiatan = $rencanaKegiatanQuery->orderBy('tahun', 'desc')->paginate(10);
+
+        // Ambil data lain yang dibutuhkan oleh view
+        $subprograms = Subprogram::where('delete_at', '0')->get();
+        $subprogram = Subprogram::findOrFail($id);
+        $opd = Opd::all();
+        $contact = Kontak::all();
+
+        // 6. Kirim semua data ke view
+        return view('client.rencanakegiatan', compact('contact', 'subprograms', 'rencanaKegiatan', 'subprogram', 'opd', 'years', 'selectedYear'));
     }
-
-    // 2. Ambil daftar tahun unik untuk dropdown
-    $years = RencanaKerja::selectRaw("DISTINCT TRIM(tahun) as tahun")
-        ->where('id_subprogram', $id) // Pastikan 'id_subprogram' adalah nama kolom yang benar
-        ->where('status', 'valid')
-        ->whereNotNull('tahun')
-        ->orderBy('tahun', 'desc')
-        ->pluck('tahun');
-
-    // 3. Bangun query dasar dengan filter wajib (subprogram dan status)
-    $rencanaKegiatanQuery = RencanaKerja::where('id_subprogram', $id) // Pastikan 'id_subprogram' adalah nama kolom yang benar
-                                         ->where('status', 'valid');
-
-    // 4. Tambahkan filter tahun jika ada tahun yang dipilih
-    if ($selectedYear) {
-        $rencanaKegiatanQuery->whereRaw("TRIM(tahun) = ?", [$selectedYear]);
-    }
-
-    // 5. Eksekusi query yang sudah lengkap dengan semua filter
-    $rencanaKegiatan = $rencanaKegiatanQuery->orderBy('tahun', 'desc')->paginate(10);
-
-    // Ambil data lain yang dibutuhkan oleh view
-    $subprograms = Subprogram::all();
-    $subprogram = Subprogram::findOrFail($id);
-    $opd = Opd::all();
-    $contact = Kontak::all();
-    
-    // 6. Kirim semua data ke view
-    return view('client.rencanakegiatan', compact('contact', 'subprograms', 'rencanaKegiatan', 'subprogram', 'opd', 'years', 'selectedYear'));
-}
     public function progreskegiatan($id)
     {
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         $subprogram = Subprogram::findOrFail($id);
         $progres = ProgresKerja::where('id_subprogram', $id)->where('status', 'valid')->get();
 
         return view('client.progreskegiatan', compact('contact', 'subprograms', 'subprogram', 'progres'));
     }
 
-    // public function monev(Request $request, $id)
-    // {
-    //     $contact = Kontak::all();
-    //     $subprograms = Subprogram::all();
-    //     $subprogram = Subprogram::findOrFail($id);
-
-    //     // Ambil semua tahun dari kolom tanggal untuk dropdown
-    //     $years = Monev::selectRaw('YEAR(tanggal) as year')
-    //         ->distinct()
-    //         ->orderBy('year', 'desc')
-    //         ->pluck('year');
-
-    //     $query = Monev::with(['rencanaKerja', 'opd'])
-    //         ->where('id_subprogram', $id)
-    //         ->where('status', 'valid');
-
-    //     // Filter Tahun
-    //     if ($request->filled('tahun')) {
-    //         $query->whereYear('tanggal', $request->tahun);
-    //     }
-
-    //     // Filter Triwulan (sama persis dengan admin)
-    //     if ($request->filled('triwulan')) {
-    //         switch ($request->triwulan) {
-    //             case 1: // Jan - Mar
-    //                 $query->whereMonth('tanggal', '>=', 1)
-    //                     ->whereMonth('tanggal', '<=', 3);
-    //                 break;
-    //             case 2: // Apr - Jun
-    //                 $query->whereMonth('tanggal', '>=', 4)
-    //                     ->whereMonth('tanggal', '<=', 6);
-    //                 break;
-    //             case 3: // Jul - Sep
-    //                 $query->whereMonth('tanggal', '>=', 7)
-    //                     ->whereMonth('tanggal', '<=', 9);
-    //                 break;
-    //             case 4: // Okt - Des
-    //                 $query->whereMonth('tanggal', '>=', 10)
-    //                     ->whereMonth('tanggal', '<=', 12);
-    //                 break;
-    //         }
-    //     }
-
-    //     $monevs = $query->orderBy('tanggal', 'asc')->get();
-
-    //     // Kelompokkan per triwulan untuk ditampilkan
-    //     $triwulan = [
-    //         1 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 1 && \Carbon\Carbon::parse($item->tanggal)->month <= 3),
-    //         2 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 4 && \Carbon\Carbon::parse($item->tanggal)->month <= 6),
-    //         3 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 7 && \Carbon\Carbon::parse($item->tanggal)->month <= 9),
-    //         4 => $monevs->filter(fn($item) => \Carbon\Carbon::parse($item->tanggal)->month >= 10 && \Carbon\Carbon::parse($item->tanggal)->month <= 12),
-    //     ];
-
-    //     return view('client.monev', compact('contact', 'subprograms', 'subprogram', 'monevs', 'triwulan', 'years'));
-    // }
-
 
 
     public function petasebarankegiatan($id)
     {
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         $subprogram = Subprogram::findOrFail($id);
 
         $maps = Map::whereHas('progres', function ($q) use ($id) {
@@ -290,7 +235,7 @@ class ClientController extends Controller
         $progres = ProgresKerja::with('fotoProgres', 'maps', 'subprogram')
             ->findOrFail($id);
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         $photoCount = $progres->fotoProgres->count();
         return view('client.progreskegiatandetail', compact(
             'contact',
@@ -303,7 +248,7 @@ class ClientController extends Controller
     public function profilkawasan()
     {
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
 
         // Ambil kecamatan yang ada di tabel potensi
         $kecamatanIds = Potensi::distinct('id_kecamatan')->pluck('id_kecamatan');
@@ -336,7 +281,7 @@ class ClientController extends Controller
     public function searchPotensi(Request $request)
     {
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
 
         // Ambil kecamatan yg sudah ada potensi
         $kecamatanIds = Potensi::distinct('id_kecamatan')->pluck('id_kecamatan');
@@ -364,7 +309,7 @@ class ClientController extends Controller
         $desaId = $request->query('desa');
 
         $contact = Kontak::all();
-        $subprograms = Subprogram::all(); // ini tetap semua (statis)
+        $subprograms = Subprogram::where('delete_at', '0')->get(); // ini tetap semua (statis)
 
         // filter potensi berdasarkan kecamatan & desa
         $potensis = Potensi::query()
@@ -383,7 +328,7 @@ class ClientController extends Controller
 
         // Data tambahan
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
 
         // Kirim ke view
         return view('client.profilkawasandetail', compact('profilkawasanDetail', 'contact', 'subprograms'));
@@ -393,37 +338,37 @@ class ClientController extends Controller
     {
         $regulasi = Regulasi::orderBy('tanggal', 'desc')->where('status', 'Aktif')->get();
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.regulasi', compact('contact', 'subprograms', 'regulasi'));
     }
     public function detailregulasi($id)
     {
         $item = Regulasi::where('status', 'Aktif')->findOrFail($id);
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.detailregulasi', compact('contact', 'subprograms', 'item'));
     }
 
     public function detailluasperhutanan()
     {
-        $kth = Kth::paginate(10);
+        $kth = Kth::where('delete_at', '0')->paginate(10);
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.detailluasperhutanan', compact('contact', 'subprograms', 'kth'));
     }
     public function detailkth_kups()
     {
 
-        $kthKups = Kth::paginate(10);
+        $kthKups = Kth::where('delete_at', '0')->paginate(10);
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.detailkth_kups', compact('contact', 'subprograms', 'kthKups'));
     }
     public function detailkups()
     {
         $Kups = Kups::paginate(10);
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.detailkups', compact('contact', 'subprograms', 'Kups'));
     }
 
@@ -450,7 +395,7 @@ class ClientController extends Controller
         $kups = $kupsQuery->orderBy('tahun', 'desc')->paginate(10);
 
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
 
         return view('client.detailekonomi', compact('contact', 'subprograms', 'kups', 'years', 'selectedYear'));
     }
@@ -461,14 +406,14 @@ class ClientController extends Controller
     public function detailinformasi($id)
     {
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         $info = Informasi::findOrFail($id);
         return view('client.detailinformasi', compact('contact', 'subprograms', 'info'));
     }
     public function detailvideo()
     {
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.detailvideo', compact('contact', 'subprograms'));
     }
 
@@ -484,19 +429,17 @@ class ClientController extends Controller
         $subpotensiKehutanan = SubpotensiKehutanan::findOrFail($id);
         $potensiKehutanan = PotensiKehutanan::where('id_subpotensi', $id)->get();
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.daftarpotensi', compact('contact', 'subprograms', 'subpotensiKehutanan', 'potensiKehutanan'));
     }
     public function detailpotensi($id)
     {
         $detailpotensiKehutanan = PotensiKehutanan::findOrFail($id);
         $contact = Kontak::all();
-        $subprograms = Subprogram::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.detailpotensi', compact('contact', 'subprograms', 'detailpotensiKehutanan'));
     }
 
-
-    // detail card index
 
 
 
@@ -509,43 +452,4 @@ class ClientController extends Controller
 
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

@@ -289,7 +289,7 @@ class MonevController extends Controller
 
         $monev = $query->orderBy('tanggal', 'desc')->get();
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
+        $pdf = Pdf::loadView(
             'admin.MonitoringEvaluasi.export',
             compact('monev', 'tahun', 'triwulan')
         )->setPaper('a4', 'landscape');
