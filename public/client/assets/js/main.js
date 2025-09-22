@@ -309,7 +309,7 @@
  */
 // Cek dulu apakah kita ada di halaman utama
 if (document.body.classList.contains('index-page')) {
-    
+
     const sections = document.querySelectorAll("section[id]");
     if (sections.length > 0) {
         const navLinks = document.querySelectorAll("#navmenu a");
