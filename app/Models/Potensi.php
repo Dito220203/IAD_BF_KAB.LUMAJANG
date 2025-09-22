@@ -10,7 +10,7 @@ class Potensi extends Model
 {
     use HasFactory;
     protected $table = 'potensis';
-    protected $fillable = ['id_pengguna', 'id_desa', 'id_kecamatan', 'judul', 'gambar', 'tanggal', 'uraian'];
+    protected $fillable = ['id_pengguna','id_subpotensi', 'id_desa', 'id_kecamatan', 'judul', 'gambar', 'tanggal', 'uraian'];
 
     public function penggunas()
     {
@@ -23,5 +23,9 @@ class Potensi extends Model
     public function desa()
     {
         return $this->belongsTo(Desa::class, 'id_desa', 'id');
+    }
+    public function SubpotensiKehutanan()
+    {
+        return $this->belongsTo(SubpotensiKehutanan::class, 'id_subpotensi', 'id');
     }
 }

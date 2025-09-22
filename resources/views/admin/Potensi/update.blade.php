@@ -3,12 +3,12 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Edit Profil Kawasan IAD Perhutanan Sosial</h1>
+            <h1>Potensi Potensi</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">Beranda</a></li>
-                    <li class="breadcrumb-item">Profil Kawasan IAD Perhutanan Sosial</li>
-                    <li class="breadcrumb-item active">Edit</li>
+                    <li class="breadcrumb-item">Potensi</li>
+                    <li class="breadcrumb-item active">Edit Potensi</li>
                 </ol>
             </nav>
         </div>
@@ -24,6 +24,21 @@
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">Subpotensi</label>
+                                        <div class="col-sm-10">
+                                            <select name="id_subpotensi" class="form-select" required>
+                                                <option value="">Pilih Subpotensi</option>
+                                                @foreach ($subpotensi as $sub)
+                                                    <option value="{{ $sub->id }}"
+                                                        {{ $sub->id == $potensi->id_subpotensi ? 'selected' : '' }}>
+                                                        {{ $sub->sub_potensi }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
 
                                     {{-- Judul --}}
                                     <div class="row mb-3">

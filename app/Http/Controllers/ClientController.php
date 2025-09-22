@@ -70,7 +70,7 @@ class ClientController extends Controller
 
         $produkKups = ProdukKups::all();
         $subpotensis = SubpotensiKehutanan::where('delete_at', '0')->get();
-        $counts = PotensiKehutanan::select('id_subpotensi', DB::raw('COUNT(*) as total'))
+        $counts = Potensi::select('id_subpotensi', DB::raw('COUNT(*) as total'))
             ->groupBy('id_subpotensi')
             ->pluck('total', 'id_subpotensi');
 
@@ -427,14 +427,14 @@ class ClientController extends Controller
     public function daftarpotensi($id)
     {
         $subpotensiKehutanan = SubpotensiKehutanan::findOrFail($id);
-        $potensiKehutanan = PotensiKehutanan::where('id_subpotensi', $id)->get();
+        $potensiKehutanan = Potensi::where('id_subpotensi', $id)->get();
         $contact = Kontak::all();
         $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.daftarpotensi', compact('contact', 'subprograms', 'subpotensiKehutanan', 'potensiKehutanan'));
     }
     public function detailpotensi($id)
     {
-        $detailpotensiKehutanan = PotensiKehutanan::findOrFail($id);
+        $detailpotensiKehutanan = Potensi::findOrFail($id);
         $contact = Kontak::all();
         $subprograms = Subprogram::where('delete_at', '0')->get();
         return view('client.detailpotensi', compact('contact', 'subprograms', 'detailpotensiKehutanan'));

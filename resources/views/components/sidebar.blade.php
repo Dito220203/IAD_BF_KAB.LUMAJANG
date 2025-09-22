@@ -1,22 +1,30 @@
-<!-- ======= Sidebar ======= -->
-{{-- <aside id="sidebar" class="sidebar">
 
-    <ul class="sidebar-nav" id="sidebar-nav">
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar d-flex flex-column">
+
+    <ul class="sidebar-nav flex-grow-1" id="sidebar-nav">
 
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('dashboard') ? '' : 'collapsed' }}" href="{{ route('dashboard') }}">
                 <i class="bi bi-grid"></i>
                 <span>Beranda</span>
             </a>
-        </li>
-
+        </li><!-- End Dashboard Nav -->
 
         @if (auth()->guard('pengguna')->user()->level == 'Admin')
+            {{-- Menu khusus Admin --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('informasi*') ? '' : 'collapsed' }}"
                     href="{{ route('informasi') }}">
                     <i class="bi bi-question-circle"></i>
                     <span>Informasi</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('rencana6tahun*') ? '' : 'collapsed' }}"
+                    href="{{ route('rencana6tahun') }}">
+                    <i class="bi bi-journal-check"></i>
+                    <span>Rencana Aksi</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -39,86 +47,63 @@
                     <span>Progres Kerja</span>
                 </a>
             </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="modal"
-                    data-bs-target="#modalGantiPassword">
-                    <i class="bi bi-key"></i>
-                    <span>Ganti Password</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('logout') }}">
-                    <i class="ri-logout-box-line"></i>
-                    <span>Logout</span>
-                </a>
-            </li>
         @elseif (auth()->guard('pengguna')->user()->level == 'Super Admin')
             {{-- Manajemen Konten --}}
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('banner*', 'gambaran*', 'informasi*', 'video*') ? '' : 'collapsed' }}"
                     data-bs-target="#tables-conten" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-gem"></i>
                     <span>Manajemen Konten</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-
                 <ul id="tables-conten"
                     class="nav-content collapse {{ request()->routeIs('banner*', 'gambaran*', 'informasi*', 'video*') ? 'show' : '' }}"
                     data-bs-parent="#sidebar-nav">
-
                     <li>
                         <a class="{{ request()->routeIs('banner*') ? 'active' : '' }}" href="{{ route('banner') }}">
-                            <i class="ri-image-fill"></i>
+                           <i class="bi bi-circle"></i>
                             <span>Banner</span>
                         </a>
                     </li>
-
                     <li>
                         <a class="{{ request()->routeIs('gambaran*') ? 'active' : '' }}"
                             href="{{ route('gambaran') }}">
-                            <i class="bi bi-graph-up"></i>
+                            <i class="bi bi-circle"></i>
                             <span>Gambaran Umum</span>
                         </a>
                     </li>
-
                     <li>
                         <a class="{{ request()->routeIs('informasi*') ? 'active' : '' }}"
                             href="{{ route('informasi') }}">
-                            <i class="bi bi-question-circle"></i>
+                            <i class="bi bi-circle"></i>
                             <span>Informasi</span>
                         </a>
                     </li>
-
                     <li>
                         <a class="{{ request()->routeIs('video*') ? 'active' : '' }}" href="{{ route('video') }}">
-                            <i class="fa-solid fa-video"></i>
+                            <i class="bi bi-circle"></i>
                             <span>Video</span>
                         </a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
 
-
-
-            {{-- <li class="nav-item">
+            {{-- Informasi Kehutanan --}}
+            <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-layout-text-window-reverse"></i>
-                    <span>Informasi IAD Kehutanan Sosial</span>
+                    <span>Informasi IAD Perhutanan Sosial</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-
                 <ul id="tables-nav"
-                    class="nav-content collapse {{ request()->routeIs('kth*') || request()->routeIs('kups*') || request()->routeIs('SubpotensiKehutanan*') || request()->routeIs('produkKups*') ? 'show' : '' }}"
+                    class="nav-content collapse {{ request()->routeIs('kth*') || request()->routeIs('kups*') || request()->routeIs('SubpotensiKehutanan*') || request()->routeIs('potensi*') || request()->routeIs('produkKups*') ? 'show' : '' }}"
                     data-bs-parent="#sidebar-nav">
-
                     <li>
                         <a href="{{ route('kth') }}" class="{{ request()->routeIs('kth') ? 'active' : '' }}">
                             <i class="bi bi-circle"></i>
                             <span>Kth</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="{{ route('kups') }}" class="{{ request()->routeIs('kups') ? 'active' : '' }}">
                             <i class="bi bi-circle"></i>
@@ -132,19 +117,22 @@
                             <span>Produk Kups</span>
                         </a>
                     </li>
-
-
                     <li>
                         <a href="{{ route('SubpotensiKehutanan') }}"
                             class="{{ request()->routeIs('SubpotensiKehutanan*') ? 'active' : '' }}">
                             <i class="bi bi-circle"></i>
-                            <span>Potensi IAD Perhutanan Sosial</span>
+                            <span>SubPotensi</span>
                         </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('potensi*') ? 'active' : '' }}"
+                            href="{{ route('potensi') }}">
+                            <i class="bi bi-circle"></i>
+                            <span>Potensi</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
-
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('subprogram*') ? '' : 'collapsed' }}"
@@ -167,11 +155,9 @@
                     <span>Rencana Kerja</span>
                 </a>
             </li>
-
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('monev*') ? '' : 'collapsed' }}" href="{{ route('monev') }}">
                     <i class="bi bi-clipboard-check"></i>
-
                     <span>Monitoring Evaluasi</span>
                 </a>
             </li>
@@ -184,21 +170,12 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('potensi*') ? '' : 'collapsed' }}"
-                    href="{{ route('potensi') }}">
-                    <i class="bi bi-bar-chart-line"></i>
-                    <span>Potensi Profil Kawasan IAD</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('regulasi*') ? '' : 'collapsed' }}"
                     href="{{ route('regulasi') }}">
                     <i class="bi bi-file-earmark-text"></i>
                     <span>Regulasi</span>
                 </a>
             </li>
-
             <li class="nav-heading">Pages</li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('pengguna*') ? '' : 'collapsed' }}"
@@ -220,220 +197,9 @@
                     <span>Kontak</span>
                 </a>
             </li>
-
-
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('aktivitas*') ? '' : 'collapsed' }}"
                     href="{{ route('aktivitas') }}">
-                    <i class="bi bi-journal-text"></i>
-                    <span>Log Aktivitas</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="modal"
-                    data-bs-target="#modalGantiPassword">
-                    <i class="bi bi-key"></i>
-                    <span>Ganti Password</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('logout') }}">
-                    <i class="ri-logout-box-line"></i>
-                    <span>Logout</span>
-                </a>
-            </li>
-        @endif
-
-    </ul>
-</aside> --}}
-
-
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar d-flex flex-column">
-
-    <ul class="sidebar-nav flex-grow-1" id="sidebar-nav">
-
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('dashboard') ? '' : 'collapsed' }}" href="{{ route('dashboard') }}">
-                <i class="bi bi-grid"></i>
-                <span>Beranda</span>
-            </a>
-        </li><!-- End Dashboard Nav -->
-
-        @if (auth()->guard('pengguna')->user()->level == 'Admin')
-            {{-- Menu khusus Admin --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('informasi*') ? '' : 'collapsed' }}" href="{{ route('informasi') }}">
-                    <i class="bi bi-question-circle"></i>
-                    <span>Informasi</span>
-                </a>
-            </li>
-             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('rencana6tahun*') ? '' : 'collapsed' }}" href="{{ route('rencana6tahun') }}">
-                    <i class="bi bi-journal-check"></i>
-                    <span>Rencana Aksi</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('rencanakerja*') ? '' : 'collapsed' }}" href="{{ route('rencanakerja') }}">
-                    <i class="bi bi-journal-check"></i>
-                    <span>Rencana Kerja</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('monev*') ? '' : 'collapsed' }}" href="{{ route('monev') }}">
-                    <i class="bi bi-clipboard-check"></i>
-                    <span>Monitoring Evaluasi</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('progres*') ? '' : 'collapsed' }}" href="{{ route('progres') }}">
-                    <i class="bi bi-card-list"></i>
-                    <span>Progres Kerja</span>
-                </a>
-            </li>
-
-        @elseif (auth()->guard('pengguna')->user()->level == 'Super Admin')
-            {{-- Manajemen Konten --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('banner*', 'gambaran*', 'informasi*', 'video*') ? '' : 'collapsed' }}"
-                   data-bs-target="#tables-conten" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-gem"></i>
-                    <span>Manajemen Konten</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="tables-conten"
-                    class="nav-content collapse {{ request()->routeIs('banner*', 'gambaran*', 'informasi*', 'video*') ? 'show' : '' }}"
-                    data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a class="{{ request()->routeIs('banner*') ? 'active' : '' }}" href="{{ route('banner') }}">
-                            <i class="ri-image-fill"></i>
-                            <span>Banner</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="{{ request()->routeIs('gambaran*') ? 'active' : '' }}" href="{{ route('gambaran') }}">
-                            <i class="bi bi-graph-up"></i>
-                            <span>Gambaran Umum</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="{{ request()->routeIs('informasi*') ? 'active' : '' }}" href="{{ route('informasi') }}">
-                            <i class="bi bi-question-circle"></i>
-                            <span>Informasi</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="{{ request()->routeIs('video*') ? 'active' : '' }}" href="{{ route('video') }}">
-                            <i class="fa-solid fa-video"></i>
-                            <span>Video</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            {{-- Informasi Kehutanan --}}
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-layout-text-window-reverse"></i>
-                    <span>Informasi IAD Kehutanan Sosial</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="tables-nav"
-                    class="nav-content collapse {{ request()->routeIs('kth*') || request()->routeIs('kups*') || request()->routeIs('SubpotensiKehutanan*') || request()->routeIs('produkKups*') ? 'show' : '' }}"
-                    data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="{{ route('kth') }}" class="{{ request()->routeIs('kth') ? 'active' : '' }}">
-                            <i class="bi bi-circle"></i>
-                            <span>Kth</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('kups') }}" class="{{ request()->routeIs('kups') ? 'active' : '' }}">
-                            <i class="bi bi-circle"></i>
-                            <span>Kups</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('produkKups') }}" class="{{ request()->routeIs('produkKups') ? 'active' : '' }}">
-                            <i class="bi bi-circle"></i>
-                            <span>Produk Kups</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('SubpotensiKehutanan') }}" class="{{ request()->routeIs('SubpotensiKehutanan*') ? 'active' : '' }}">
-                            <i class="bi bi-circle"></i>
-                            <span>Potensi IAD Perhutanan Sosial</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('subprogram*') ? '' : 'collapsed' }}" href="{{ route('subprogram') }}">
-                    <i class="fa-solid fa-folder-tree"></i>
-                    <span>Sub Program</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('rencana6tahun*') ? '' : 'collapsed' }}" href="{{ route('rencana6tahun') }}">
-                    <i class="bi bi-journal-check"></i>
-                    <span>Rencana Aksi</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('rencanakerja*') ? '' : 'collapsed' }}" href="{{ route('rencanakerja') }}">
-                    <i class="bi bi-journal-check"></i>
-                    <span>Rencana Kerja</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('monev*') ? '' : 'collapsed' }}" href="{{ route('monev') }}">
-                    <i class="bi bi-clipboard-check"></i>
-                    <span>Monitoring Evaluasi</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('progres*') ? '' : 'collapsed' }}" href="{{ route('progres') }}">
-                    <i class="bi bi-card-list"></i>
-                    <span>Progres Kerja</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('potensi*') ? '' : 'collapsed' }}" href="{{ route('potensi') }}">
-                    <i class="bi bi-bar-chart-line"></i>
-                    <span>Profil Kawasan IAD</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('regulasi*') ? '' : 'collapsed' }}" href="{{ route('regulasi') }}">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <span>Regulasi</span>
-                </a>
-            </li>
-            <li class="nav-heading">Pages</li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('pengguna*') ? '' : 'collapsed' }}" href="{{ route('pengguna') }}">
-                    <i class="bi bi-person"></i>
-                    <span>Pengguna</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('opd*') ? '' : 'collapsed' }}" href="{{ route('opd') }}">
-                    <i class="fa-solid fa-house-user"></i>
-                    <span>OPD</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('kontak*') ? '' : 'collapsed' }}" href="{{ route('kontak') }}">
-                    <i class="bi bi-envelope"></i>
-                    <span>Kontak</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('aktivitas*') ? '' : 'collapsed' }}" href="{{ route('aktivitas') }}">
                     <i class="bi bi-journal-text"></i>
                     <span>Log Aktivitas</span>
                 </a>
@@ -446,7 +212,8 @@
     <div class="mt-auto">
         <ul class="sidebar-nav">
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="modal" data-bs-target="#modalGantiPassword">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="modal"
+                    data-bs-target="#modalGantiPassword">
                     <i class="bi bi-key"></i>
                     <span>Ganti Password</span>
                 </a>

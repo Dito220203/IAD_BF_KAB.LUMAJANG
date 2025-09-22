@@ -15,8 +15,8 @@ class SubpotensiKehutanan extends Model
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
     }
-    public function PotensiKehutanan()
+    public function potensis()
     {
-        return $this->hasMany(PotensiKehutanan::class, 'id_subpotensi', 'id');
+        return $this->hasMany(Potensi::class, 'id_subpotensi', 'id');
     }
 }
