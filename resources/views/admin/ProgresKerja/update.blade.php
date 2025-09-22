@@ -79,6 +79,15 @@
             .hidden-input {
                 display: none;
             }
+
+              .upload-item .remove-btn {
+                position: absolute;
+                color: red;
+                cursor: pointer;
+                font-weight: bold;
+                 right: 40px;
+
+            }
         </style>
 
         <section class="section">

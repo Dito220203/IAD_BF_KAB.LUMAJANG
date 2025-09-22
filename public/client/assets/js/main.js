@@ -276,9 +276,9 @@
 
                 let parent = navmenuLink.parentNode;
 
-                // Jika link yang diklik adalah link dropdown
+                // Jika link yang diklik adalah link INDUK dari dropdown
                 if (parent.classList.contains("dropdown")) {
-                    e.preventDefault(); // <-- Perintah WAJIB untuk mencegah reload
+                    e.preventDefault(); // <-- Ini Mencegah Reload
 
                     // Buka/tutup submenu
                     parent.classList.toggle("active");
@@ -287,26 +287,12 @@
                         submenu.classList.toggle("dropdown-active");
                     }
                 } 
-                // Jika link yang diklik adalah link biasa (bukan dropdown)
+                // Jika yang diklik adalah link BIASA (bukan dropdown)
                 else {
                     mobileNavToogle(); // Langsung tutup menu navigasi
                 }
+              
             });
-        });
-    }
-
-    /**
-     * PENCARIAN PROFIL KAWASAN (Tombol Cari di Navbar)
-     */
-    if (typeof $ !== "undefined") {
-        $(".profil-search-btn").on("click", function () {
-            let kecamatan = $("#kecamatan").val();
-            let desa = $("#desa").val();
-            if (kecamatan && desa) {
-                window.location.href = `/profil?kecamatan=${kecamatan}&desa=${desa}`;
-            } else {
-                alert("Silakan pilih Kecamatan dan Desa terlebih dahulu!");
-            }
         });
     }
     /**

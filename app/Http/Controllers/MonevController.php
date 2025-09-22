@@ -53,21 +53,23 @@ class MonevController extends Controller
         }
 
         // Filter Tahun
-        if ($request->filled('tahun')) {
-            $query->whereYear('tanggal', $request->tahun);
-        }
-
-        $monev = $query->orderBy('tanggal', 'desc')->paginate(10)->withQueryString();
-
-        // Untuk dropdown tahun (ambil dari kolom tanggal, bukan tahun)
-        $tahun_list = Monev::selectRaw('YEAR(tanggal) as tahun')
-            ->distinct()
-            ->orderBy('tahun', 'desc')
-            ->pluck('tahun');
-
-
-        return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
+    if ($request->filled('tahun')) {
+        $query->whereYear('tanggal', $request->tahun);
     }
+
+    $monev = $query->orderBy('tanggal', 'desc')->paginate(10)->withQueryString();
+
+    // Dropdown tahun juga harus menyesuaikan level user
+    $tahunQuery = Monev::selectRaw('YEAR(tanggal) as tahun')->distinct();
+
+    if ($user->level !== 'Super Admin') {
+        $tahunQuery->where('id_pengguna', $user->id);
+    }
+
+    $tahun_list = $tahunQuery->orderBy('tahun', 'desc')->pluck('tahun');
+
+    return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
+}
 
 
 

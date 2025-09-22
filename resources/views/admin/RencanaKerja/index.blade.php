@@ -73,7 +73,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($rencana as $data)
-                                            <tr>
+                                            <tr id="row-{{ $data->id }}">
                                                 <td class="text-center">{{ $rencana->firstItem() + $loop->index }}</td>
                                                 <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                 <td>{{ $data->rencana_aksi}}</td>

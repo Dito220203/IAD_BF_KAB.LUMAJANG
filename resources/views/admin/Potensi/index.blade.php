@@ -2,11 +2,11 @@
 @section('content')
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Tabel Profil Kawasan IAD Perhutanan Sosial</h1>
+            <h1>Tabel Potensi</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">Beranda</a></li>
-                    <li class="breadcrumb-item active">Profil Kawasan IAD Perhutanan Sosial</li>
+                    <li class="breadcrumb-item active">Potensi</li>
                 </ol>
             </nav>
         </div>
@@ -47,6 +47,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Sub Potensi</th>
                                             <th>Nama Potensi</th>
                                             <th>Lokasi</th>
                                             <th data-type="date" data-format="YYYY/DD/MM">Tanggal Dibuat</th>
@@ -57,6 +58,7 @@
                                         @foreach ($potensi as $data)
                                             <tr>
                                                 <td>{{ $potensi->firstItem() + $loop->index }}</td>
+                                                <td>{{ $data->SubpotensiKehutanan->sub_potensi ?? '-' }}</td>
                                                 <td>{{ $data->judul }}</td>
                                                 <td> Desa/Kelurahan: {{ $data->desa->name ?? '-' }},
                                                     Kecamatan: {{ $data->kecamatan->name ?? '-' }}

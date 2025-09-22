@@ -6,6 +6,7 @@ use App\Helpers\LogHelper;
 use App\Models\Kecamatan;
 use App\Models\Desa;
 use App\Models\Potensi;
+use App\Models\SubpotensiKehutanan;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,7 @@ class PotensiController extends Controller
 
     public function index()
     {
+
         $potensi = Potensi::paginate(10);
         return view('admin.Potensi.index', compact('potensi'));
     }
@@ -29,8 +31,9 @@ class PotensiController extends Controller
      */
     public function create()
     {
+        $subpotensi = SubpotensiKehutanan::where('delete_at', '0')->get();
         $kecamatan = Kecamatan::all(); // ambil semua data
-        return view('admin.Potensi.create', compact('kecamatan'));
+        return view('admin.Potensi.create', compact('kecamatan', 'subpotensi'));
     }
 
     public function getDesa($code)
@@ -63,6 +66,7 @@ class PotensiController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'id_subpotensi' => 'required|exists:subpotensi_kehutanans,id',
             'judul'     => 'required',
             'kecamatan' => 'required|exists:kecamatans,id',
             'desa'      => 'required|exists:desas,id',
@@ -82,6 +86,7 @@ class PotensiController extends Controller
 
         Potensi::create([
             'id_pengguna' => Auth::guard('pengguna')->id(),
+            'id_subpotensi' => $validatedData['id_subpotensi'],
             'judul'       => $validatedData['judul'],
             'id_kecamatan' => $validatedData['kecamatan'], // simpan ID
             'id_desa'     => $validatedData['desa'],      // simpan ID
@@ -111,6 +116,7 @@ class PotensiController extends Controller
     public function edit($id)
     {
         $potensi = Potensi::findOrFail($id);
+        $subpotensi = SubpotensiKehutanan::where('delete_at', '0')->get();
         $kecamatan = Kecamatan::all();
 
         // Ambil kode kecamatan dari potensi
@@ -118,8 +124,7 @@ class PotensiController extends Controller
 
         // Ambil desa sesuai kode kecamatan
         $desa = $kodeKecamatan ? Desa::where('district_code', $kodeKecamatan)->get() : collect();
-
-        return view('admin.Potensi.update', compact('potensi', 'kecamatan', 'desa'));
+        return view('admin.Potensi.update', compact('potensi', 'kecamatan', 'desa', 'subpotensi'));
     }
 
 
@@ -132,6 +137,7 @@ class PotensiController extends Controller
         $potensi = Potensi::findOrFail($id);
 
         $validatedData = $request->validate([
+            'id_subpotensi' => 'required|exists:subpotensi_kehutanans,id',
             'judul'     => 'required',
             'kecamatan' => 'required|exists:kecamatans,id',
             'desa'      => 'required|exists:desas,id',
@@ -153,6 +159,7 @@ class PotensiController extends Controller
 
         // Update data hanya dengan ID, sesuai kolom di DB
         $potensi->update([
+            'id_subpotensi' => $validatedData['id_subpotensi'],
             'judul'         => $validatedData['judul'],
             'id_kecamatan'  => $validatedData['kecamatan'],
             'id_desa'       => $validatedData['desa'],

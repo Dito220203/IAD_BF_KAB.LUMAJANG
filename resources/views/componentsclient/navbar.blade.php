@@ -3,7 +3,7 @@
 
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-        <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto">
+        <a href="" class="logo d-flex align-items-center me-auto">
             <img src="{{ asset('client/assets/img/logo-kabupaten.png') }}" alt="">
         </a>
 
@@ -128,10 +128,10 @@
             </ul>
         </nav>
 
-        <a href="{{ url('/') }}" class="logo logo-right d-flex align-items-center">
+        <div class="logo logo-right d-flex align-items-center">
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             <img src="{{ asset('client/assets/img/iad.png') }}" alt="">
-        </a>
+        </div>
 
     </div>
 </header>

@@ -118,7 +118,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($monev as $data)
-                                            <tr>
+                                            <tr id="row-{{ $data->id }}">
                                                 <td class="text-center">{{ $monev->firstItem() + $loop->index }}</td>
                                                 <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                 <td>{{ $data->rencanakerja->rencana_aksi ?? '-' }}</td>

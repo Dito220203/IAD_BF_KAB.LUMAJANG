@@ -55,7 +55,7 @@
                                      </thead>
                                      <tbody>
                                          @foreach ($progres as $data)
-                                             <tr>
+                                             <tr id="row-{{ $data->id }}">
                                                  <td>{{ $progres->firstItem() + $loop->index }}</td>
                                                  <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
 
