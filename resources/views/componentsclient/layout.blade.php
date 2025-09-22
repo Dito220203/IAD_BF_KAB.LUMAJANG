@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>iad_bf_kabupaten_lumajang</title>
-    <script>document.documentElement.style.opacity = '0';</script> /* modifikasi */
+    <script>document.documentElement.style.opacity = '0';</script> 
     <meta name="description" content="">
     <meta name="keywords" content="">
 
@@ -205,6 +205,33 @@
     @stack('scripts')
 
 
+    {{-- ↓↓↓ TAMBAHKAN SCRIPT BARU DI SINI ↓↓↓ --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Cek dulu apakah kita ada di halaman utama
+            if (document.body.classList.contains('index-page')) {
+                const sections = document.querySelectorAll("section[id]");
+                if (sections.length > 0) {
+                    const navLinks = document.querySelectorAll("#navmenu a");
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                navLinks.forEach((link) => link.classList.remove("active"));
+                                const id = entry.target.getAttribute("id");
+                                const activeLink = document.querySelector(`#navmenu a[href*="#${id}"]`);
+                                if (activeLink) {
+                                    activeLink.classList.add("active");
+                                }
+                            }
+                        });
+                    }, { threshold: 0.7 });
+                    sections.forEach((section) => {
+                        observer.observe(section);
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
