@@ -846,7 +846,18 @@ h6 {
   background: var(--background-color);
   box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.1);
 }
+/* modifikasi */
 
+.navmenu .dropdown.active > a {
+    color: color-mix(in srgb, var(--nav-color) 10%, rgb(0, 0, 0) 90%) !important;
+}
+
+.navmenu .dropdown.active > a::before {
+    visibility: visible !important;
+    width: 100% !important;
+    background-color: var(--nav-hover-color) !important;
+}
+/* modifikasi */
 /*--------------------------------------------------------------
 # Global Footer
 --------------------------------------------------------------*/
@@ -1046,6 +1057,7 @@ h6 {
       max-width: 1200px;
       margin: 20px auto;
     }
+    /* modifikasi */
     .chart-box {
       background: white;
       padding: 15px;
@@ -1054,7 +1066,11 @@ h6 {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      max-width: 6000px; /* Batasi lebar maksimalnya (Anda bisa sesuaikan angkanya) */
+      margin: 0 auto;
+      
     }
+    /* modifikasi */
     .canvas {
       width: 100% !important;
       height: auto !important;
@@ -1065,55 +1081,7 @@ h6 {
 }
 
 
-/*--------------------------------------------------------------
-# Preloader (VERSI FINAL)
---------------------------------------------------------------*/
-
-/* 1. Sembunyikan semua konten utama saat preloader aktif */
-body:not(.loaded) > *:not(#preloader) {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* 2. Style preloader agar menutupi layar (dari kode Anda) */
-#preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 999999;
-  overflow: hidden;
-  background: #fff; /* Pastikan ada warna latar */
-  transition: all 0.6s ease-out; /* Animasi fade-out */
-}
-
-/* 3. Aturan untuk menghilangkan preloader saat body.loaded */
-body.loaded #preloader {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* 4. Style spinner (dari kode Anda) */
-#preloader:before {
-  content: "";
-  position: fixed;
-  top: calc(50% - 30px);
-  left: calc(50% - 30px);
-  border: 6px solid #196b4a; /* Warna tema Anda */
-  border-top-color: transparent; /* Buat lebih kontras */
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  animation: preloader-spin 1.5s linear infinite;
-}
-
-/* 5. Animasi keyframes (dari kode Anda) */
-@keyframes preloader-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+/* preload pindah layout */
 
 /*--------------------------------------------------------------
 # Scroll Top Button
@@ -1682,6 +1650,15 @@ section,
   font-weight: 700;
   margin: 0;
   color: #333;
+}
+.chart-title-kups {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e9ecef; /* Garis pemisah tipis */
+  margin-bottom: 20px;
 }
 
 /*--------------------------------------------------------------

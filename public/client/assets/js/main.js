@@ -5,13 +5,22 @@
         /**
          * 1. PRELOADER (VERSI BARU & STABIL)
          */
-        const preloader = document.querySelector("#preloader");
+        /* modifikasi */
+        const preloader = document.getElementById("preloader");
+
+        // Tampilkan kembali halaman
+        document.documentElement.style.opacity = "1";
+
         if (preloader) {
+            // Tambahkan kelas 'loaded' untuk memicu transisi fade-out
             document.body.classList.add("loaded");
-            setTimeout(() => {
+
+            // Hapus elemen preloader SETELAH transisi benar-benar selesai
+            preloader.addEventListener("transitionend", () => {
                 preloader.remove();
-            }, 600);
+            });
         }
+        /* modifikasi */
 
         /**
          * 2. AOS, GLIGHTBOX, PURE COUNTER
@@ -107,27 +116,31 @@
             // ... (Seluruh logika slider informasi Anda yang sudah benar ada di sini)
         }
 
-      /**
-       * 6. SLIDER PRODUK (PING-PONG EFFECT)
-       */
-      const sliderWrapper = document.querySelector('.product-slider .slider-wrapper');
-      const slides = document.querySelectorAll('.product-slider .slide');
+        /**
+         * 6. SLIDER PRODUK (PING-PONG EFFECT)
+         */
+        const sliderWrapper = document.querySelector(
+            ".product-slider .slider-wrapper"
+        );
+        const slides = document.querySelectorAll(".product-slider .slide");
 
-      if (sliderWrapper && slides.length > 1) {
-          let currentIndex = 0;
-          let direction = 1; // 1 untuk maju, -1 untuk mundur
+        if (sliderWrapper && slides.length > 1) {
+            let currentIndex = 0;
+            let direction = 1; // 1 untuk maju, -1 untuk mundur
 
-          setInterval(() => {
-              // Pindahkan ke slide berikutnya sesuai arah
-              currentIndex += direction;
-              sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+            setInterval(() => {
+                // Pindahkan ke slide berikutnya sesuai arah
+                currentIndex += direction;
+                sliderWrapper.style.transform = `translateX(-${
+                    currentIndex * 100
+                }%)`;
 
-              // Jika sudah sampai di ujung (akhir atau awal), balik arah
-              if (currentIndex === slides.length - 1 || currentIndex === 0) {
-                  direction *= -1; // Balik arah (dari 1 menjadi -1, atau sebaliknya)
-              }
-          }, 5000); // Ganti slide setiap 5 detik
-      }
+                // Jika sudah sampai di ujung (akhir atau awal), balik arah
+                if (currentIndex === slides.length - 1 || currentIndex === 0) {
+                    direction *= -1; // Balik arah (dari 1 menjadi -1, atau sebaliknya)
+                }
+            }, 5000); // Ganti slide setiap 5 detik
+        }
         /**
          * 7. PROGRES & POTENSI LIST (PENCARIAN & LOAD MORE)
          */
@@ -262,7 +275,7 @@
                 let parent = navmenu.parentNode;
                 if (parent.classList.contains("dropdown")) {
                     e.preventDefault();
-                    parent.classList.toggle("active");
+                    // parent.classList.toggle("active");
                     let submenu = parent.querySelector("ul");
                     if (submenu) submenu.classList.toggle("dropdown-active");
                     return;
@@ -288,6 +301,41 @@
             }
         });
     }
+    /* modifikasi */
+    /**
+ * ===================================================================
+ * === NAVIGASI AKTIF SAAT SCROLL (VERSI PINTAR) ===
+ * ===================================================================
+ */
+// Cek dulu apakah kita ada di halaman utama
+if (document.body.classList.contains('index-page')) {
     
-    
+    const sections = document.querySelectorAll("section[id]");
+    if (sections.length > 0) {
+        const navLinks = document.querySelectorAll("#navmenu a");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach((link) => link.classList.remove("active"));
+
+                    const id = entry.target.getAttribute("id");
+                    const activeLink = document.querySelector(`#navmenu a[href*="#${id}"]`);
+
+                    if (activeLink) {
+                        activeLink.classList.add("active");
+                    }
+                }
+            });
+        }, {
+            threshold: 0.7,
+        });
+
+        sections.forEach((section) => {
+            observer.observe(section);
+        });
+    }
+
+} // <-- Kurung tutup dari 'if'
+/* modifikasi */
 })();

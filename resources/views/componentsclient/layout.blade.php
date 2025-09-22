@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>iad_bf_kabupaten_lumajang</title>
+    <script>document.documentElement.style.opacity = '0';</script> /* modifikasi */
     <meta name="description" content="">
     <meta name="keywords" content="">
 
@@ -29,6 +30,47 @@
 
 
     <style>
+
+        body:not(.loaded)>*:not(#preloader) {
+            opacity: 0;
+            visibility: hidden;
+        }
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            overflow: hidden;
+            background: #fff;
+            transition: all 0.6s ease-out;
+        }
+        body.loaded #preloader {
+            opacity: 0;
+            visibility: hidden;
+        }
+        #preloader:before {
+            content: "";
+            position: fixed;
+            top: calc(50% - 30px);
+            left: calc(50% - 30px);
+            border: 6px solid #196b4a;
+            /* Warna tema Anda */
+            border-top-color: transparent;
+            /* Buat lebih kontras */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: preloader-spin 1.5s linear infinite;
+        }
+        @keyframes preloader-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         .card-title {
             display: -webkit-box;
             -webkit-line-clamp: 4;
