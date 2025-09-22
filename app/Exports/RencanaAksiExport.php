@@ -20,25 +20,30 @@ class RencanaAksiExport implements FromCollection, WithHeadings, WithStyles, Wit
 {
     public function collection()
     {
-        return RencanaAksi_6_tahun::with(['subprogram', 'opd', 'penggunas'])->get()->map(function ($item) {
+        $query = RencanaAksi_6_tahun::with(['subprogram', 'opd', 'penggunas'])
+            ->where('delete_at', '0'); // ✅ filter data
+
+        $no = 1;
+        return $query->get()->map(function ($item) use (&$no) {
             return [
-                'ID'             => $item->id,
-                'Sub Program'    => $item->subprogram->subprogram ?? '-',
-                'Rencana Aksi'   => $item->rencana_aksi,
-                'Sub Kegiatan'   => $item->sub_kegiatan,
-                'Kegiatan'       => $item->kegiatan,
-                'Nama Program'   => $item->nama_program,
-                'Lokasi'         => $item->lokasi,
-                'Volume'         => $item->volume,
-                'Satuan'         => $item->satuan,
-                'Anggaran'       => $item->anggaran,
-                'Sumber Dana'    => $item->sumberdana,
-                'Tahun'          => $item->tahun,
+                'NO'               => $no++, // nomor urut otomatis
+                'Sub Program'      => $item->subprogram->subprogram ?? '-',
+                'Rencana Aksi'     => $item->rencana_aksi,
+                'Sub Kegiatan'     => $item->sub_kegiatan,
+                'Kegiatan'         => $item->kegiatan,
+                'Nama Program'     => $item->nama_program,
+                'Lokasi'           => $item->lokasi,
+                'Volume'           => $item->volume,
+                'Satuan'           => $item->satuan,
+                'Anggaran'         => $item->anggaran,
+                'Sumber Dana'      => $item->sumberdana,
+                'Tahun'            => $item->tahun,
                 'Perangkat Daerah' => $item->opd->nama ?? '-',
-                'Keterangan'     => $item->keterangan,
+                'Keterangan'       => $item->keterangan,
             ];
         });
     }
+
 
     public function startCell(): string
     {

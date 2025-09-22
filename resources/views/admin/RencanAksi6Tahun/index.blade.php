@@ -18,14 +18,17 @@
                         <div class="card-body">
                             <!-- Header tools -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-                                <div class="d-flex gap-2">
-                                    <a href="{{ route('rencanaAksi.create') }}" class="btn btn-primary">
-                                        + Tambah Rencana Aksi
-                                    </a>
-                                    <a href="{{ route('rencanaAksi.export.excel') }}" class="btn btn-success">
-                                        <i class="fa-solid fa-file-excel"></i> Export Excel
-                                    </a>
-                                </div>
+                                @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('rencanaAksi.create') }}" class="btn btn-primary">
+                                            + Tambah Rencana Aksi
+                                        </a>
+                                        <a href="{{ route('rencanaAksi.export.excel') }}" class="btn btn-success">
+                                            <i class="fa-solid fa-file-excel"></i> Export Excel
+                                        </a>
+                                    </div>
+                                @endif
+
 
                                 <div class="d-flex align-items-center gap-2">
                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
@@ -47,8 +50,7 @@
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="detail-table" id="TableRencanaAksi"
-                                    style="min-width: 1800px;">
+                                <table class="detail-table" id="TableRencanaAksi" style="min-width: 1800px;">
                                     <thead>
                                         <tr>
                                             <th style="width: 50px;">No</th>
@@ -65,7 +67,10 @@
                                             <th style="width: 150px;">Sumber Dana</th>
                                             <th style="width: 300px;">Perangkat Daerah</th>
                                             <th style="width: 300px;">Keterangan</th>
-                                            <th style="width: 120px;">Aksi</th>
+                                            @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                                <th style="width: 120px;">Aksi</th>
+                                            @endif
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -86,23 +91,26 @@
                                                 <td>{{ $data->opd->nama ?? '-' }}</td>
                                                 <td>{{ $data->keterangan ?? '-' }}</td>
                                                 <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="{{ route('rencanaAksi.edit', $data->id) }}"
-                                                            class="btn btn-primary btn-sm" title="Edit">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                        </a>
-                                                        <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('rencanaAksi.destroy', $data->id) }}"
-                                                            method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="confirmDelete('{{ $data->id }}')">
-                                                                <i class="fa-solid fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
+                                                    @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                                        <div class="d-flex justify-content-center gap-1">
+                                                            <a href="{{ route('rencanaAksi.edit', $data->id) }}"
+                                                                class="btn btn-primary btn-sm" title="Edit">
+                                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                            </a>
+                                                            <form id="formDelete-{{ $data->id }}"
+                                                                action="{{ route('rencanaAksi.destroy', $data->id) }}"
+                                                                method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="button" class="btn btn-danger btn-sm"
+                                                                    onclick="confirmDelete('{{ $data->id }}')">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    @endif
                                                 </td>
+
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -270,6 +270,12 @@
                     <span>Informasi</span>
                 </a>
             </li>
+             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('rencana6tahun*') ? '' : 'collapsed' }}" href="{{ route('rencana6tahun') }}">
+                    <i class="bi bi-journal-check"></i>
+                    <span>Rencana Aksi</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('rencanakerja*') ? '' : 'collapsed' }}" href="{{ route('rencanakerja') }}">
                     <i class="bi bi-journal-check"></i>
