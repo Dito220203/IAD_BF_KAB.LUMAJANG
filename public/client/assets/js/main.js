@@ -5,14 +5,22 @@
         /**
          * 1. PRELOADER (VERSI BARU & STABIL)
          */
-        const preloader = document.querySelector("#preloader");
+        /* modifikasi */
+        const preloader = document.getElementById("preloader");
+
+        // Tampilkan kembali halaman
+        document.documentElement.style.opacity = "1";
+
         if (preloader) {
+            // Tambahkan kelas 'loaded' untuk memicu transisi fade-out
             document.body.classList.add("loaded");
 
-            preloader.addEventListener("transitionend", function () {
+            // Hapus elemen preloader SETELAH transisi benar-benar selesai
+            preloader.addEventListener("transitionend", () => {
                 preloader.remove();
             });
         }
+        /* modifikasi */
 
         /**
          * 2. AOS, GLIGHTBOX, PURE COUNTER
@@ -267,7 +275,7 @@
                 let parent = navmenu.parentNode;
                 if (parent.classList.contains("dropdown")) {
                     e.preventDefault();
-                    parent.classList.toggle("active");
+                    // parent.classList.toggle("active");
                     let submenu = parent.querySelector("ul");
                     if (submenu) submenu.classList.toggle("dropdown-active");
                     return;
@@ -293,4 +301,41 @@
             }
         });
     }
+    /* modifikasi */
+    /**
+ * ===================================================================
+ * === NAVIGASI AKTIF SAAT SCROLL (VERSI PINTAR) ===
+ * ===================================================================
+ */
+// Cek dulu apakah kita ada di halaman utama
+if (document.body.classList.contains('index-page')) {
+    
+    const sections = document.querySelectorAll("section[id]");
+    if (sections.length > 0) {
+        const navLinks = document.querySelectorAll("#navmenu a");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach((link) => link.classList.remove("active"));
+
+                    const id = entry.target.getAttribute("id");
+                    const activeLink = document.querySelector(`#navmenu a[href*="#${id}"]`);
+
+                    if (activeLink) {
+                        activeLink.classList.add("active");
+                    }
+                }
+            });
+        }, {
+            threshold: 0.7,
+        });
+
+        sections.forEach((section) => {
+            observer.observe(section);
+        });
+    }
+
+} // <-- Kurung tutup dari 'if'
+/* modifikasi */
 })();

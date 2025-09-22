@@ -135,14 +135,15 @@
             <section id="chart_perhut" class="perhutanan">
                 <div class="chart-container" style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;"
                     data-aos="fade-up" data-aos-delay="250">
+                    /* modifikasi */
                     <div class="chart-box"
-                        style="flex: 1; min-width: 300px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        {{-- <canvas id="donutChart"></canvas> --}}
-                        {{-- Untuk Donut Chart --}}
+                        style="flex: 1; min-width: 300px; background: rgb(255, 255, 255); padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h3 class="chart-title-kups">Jumlah Kategori KUPS</h3>
                         <canvas id="donutChart" data-labels="{{ json_encode($labels) }}"
                             data-values="{{ json_encode($data) }}" data-colors="{{ json_encode($backgroundColor) }}">
                         </canvas>
                     </div>
+                    /* modifikasi */
                 </div>
             </section>
         </section>
@@ -359,6 +360,7 @@
                                 }]
                             },
                             options: {
+                                 aspectRatio: 1, /* modifikasi */
                                 responsive: true,
                                 maintainAspectRatio: false
                             }
@@ -592,7 +594,7 @@
                             }
                         }
                     }
-                    document.addEventListeners("click", closeAllSelect);
+                    document.addEventListener("click", closeAllSelect);
                 });
             </script>
         @endpush

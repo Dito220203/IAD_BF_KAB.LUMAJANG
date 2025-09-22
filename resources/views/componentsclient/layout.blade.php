@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>iad_bf_kabupaten_lumajang</title>
+    <script>document.documentElement.style.opacity = '0';</script> /* modifikasi */
     <meta name="description" content="">
     <meta name="keywords" content="">
 
@@ -29,35 +30,23 @@
 
 
     <style>
-        /*--------------------------------------------------------------
-# Preloader (VERSI FINAL)
---------------------------------------------------------------*/
 
-        /* 1. Sembunyikan semua konten utama saat preloader aktif */
         body:not(.loaded)>*:not(#preloader) {
             opacity: 0;
             visibility: hidden;
         }
-
-        /* 2. Style preloader agar menutupi layar (dari kode Anda) */
         #preloader {
             position: fixed;
             inset: 0;
             z-index: 999999;
             overflow: hidden;
             background: #fff;
-            /* Pastikan ada warna latar */
             transition: all 0.6s ease-out;
-            /* Animasi fade-out */
         }
-
-        /* 3. Aturan untuk menghilangkan preloader saat body.loaded */
         body.loaded #preloader {
             opacity: 0;
             visibility: hidden;
         }
-
-        /* 4. Style spinner (dari kode Anda) */
         #preloader:before {
             content: "";
             position: fixed;
@@ -72,8 +61,6 @@
             height: 60px;
             animation: preloader-spin 1.5s linear infinite;
         }
-
-        /* 5. Animasi keyframes (dari kode Anda) */
         @keyframes preloader-spin {
             0% {
                 transform: rotate(0deg);

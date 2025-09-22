@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Route;
 
 //client
 Route::get('/', [ClientController::class, 'index'])->name('client');
+
 // routes/web.php
 
 Route::get('/get-desa/client/{kecamatanId}', [ClientController::class, 'getDesaByKecamatan']);
