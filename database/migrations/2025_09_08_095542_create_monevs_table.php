@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
-              $table->foreignId('rencana_aksi')->references('id')->on('rencana_kerjas')->onDelete('cascade');
+            $table->foreignId('rencana_aksi')->references('id')->on('rencana_kerjas')->onDelete('cascade');
             $table->string('sub_kegiatan');
             $table->longText('kegiatan');
             $table->string('nama_program');

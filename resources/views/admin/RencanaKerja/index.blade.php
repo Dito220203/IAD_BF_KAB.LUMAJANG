@@ -26,16 +26,38 @@
                                         <i class="fa-solid fa-file-excel"></i> Export Excel
                                     </a>
                                 </div>
-                                <!-- Pencarian -->
-                                                                               <form method="GET" class="input-group w-auto mb-3">
-    <input type="text" name="search" class="form-control"
-           placeholder="Cari Data (program, kegiatan, OPD...)"
-           value="{{ request('search') }}">
-    <button class="btn btn-primary" type="submit">Cari</button>
-    @if(request('search'))
+                               {{-- resources/views/admin/RencanaKerja/index.blade.php --}}
+
+{{-- ... kode lainnya ... --}}
+
+{{-- UBAH FORM MENJADI SEPERTI INI --}}
+<form method="GET" class="d-flex flex-column flex-md-row gap-2">
+    {{-- TAMBAHKAN DROPDOWN FILTER TAHUN DI SINI --}}
+    <div class="input-group w-auto">
+        <select name="tahun" class="form-select" onchange="this.form.submit()">
+            <option value="">Semua Tahun</option>
+            @foreach ($daftarTahun as $thn)
+                <option value="{{ $thn }}" {{ $tahun == $thn ? 'selected' : '' }}>
+                    {{ $thn }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    {{-- Form pencarian yang sudah ada --}}
+    <div class="input-group w-auto">
+        <input type="text" name="search" class="form-control"
+               placeholder="Cari Data..." value="{{ request('search') }}">
+        <button class="btn btn-primary" type="submit">Cari</button>
+    </div>
+
+    {{-- Tombol Reset untuk membersihkan semua filter --}}
+    @if (request('search') || request('tahun'))
         <a href="{{ route('rencanakerja') }}" class="btn btn-secondary">Reset</a>
     @endif
 </form>
+
+{{-- ... sisa kode Anda ... --}}
                             </div>
 
 
@@ -67,7 +89,7 @@
                                             <tr id="row-{{ $data->id }}">
                                                 <td class="text-center">{{ $rencana->firstItem() + $loop->index }}</td>
                                                 <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
-                                                <td>{{ $data->rencana_aksi}}</td>
+                                                <td>{{ $data->rencana_aksi }}</td>
                                                 <td>{{ $data->sub_kegiatan }}</td>
                                                 <td>{{ $data->kegiatan }}</td>
                                                 <td>{{ $data->nama_program }}</td>

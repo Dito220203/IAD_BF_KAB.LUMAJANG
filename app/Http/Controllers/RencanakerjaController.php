@@ -16,32 +16,40 @@ use App\Models\Monev;
 
 class RencanakerjaController extends Controller
 {
-    public function index(Request $request)
+
+    // app/Http/Controllers/RencanakerjaController.php
+
+public function index(Request $request)
 {
     $user   = Auth::guard('pengguna')->user();
     $search = $request->input('search');
+    $tahun  = $request->input('tahun'); // <-- AMBIL INPUT TAHUN DARI REQUEST
+
+    // Ambil semua tahun unik dari database untuk dropdown filter
+    // distinct() untuk mengambil nilai unik & pluck() untuk mengambil satu kolom saja
+    $daftarTahun = RencanaKerja::query()
+        ->active() // Hanya dari data yang aktif
+        ->select('tahun')
+        ->distinct()
+        ->orderBy('tahun', 'desc') // Urutkan dari tahun terbaru
+        ->pluck('tahun');
 
     $query = RencanaKerja::with(['subprogram', 'opd'])
-        ->active(); // pakai scopeActive dari model
+        ->active();
 
-    // Kalau bukan super admin, filter data hanya milik user
     if ($user->level !== 'Super Admin') {
         $query->where('id_pengguna', $user->id);
     }
 
-    // Fitur pencarian
+    // TERAPKAN FILTER TAHUN JIKA ADA
+    if ($tahun) {
+        $query->where('tahun', $tahun);
+    }
+
     if ($search) {
         $query->where(function ($q) use ($search) {
             $q->where('rencana_aksi', 'like', "%{$search}%")
-              ->orWhere('nama_program', 'like', "%{$search}%")
-              ->orWhere('kegiatan', 'like', "%{$search}%")
-              ->orWhere('sub_kegiatan', 'like', "%{$search}%")
-              ->orWhere('lokasi', 'like', "%{$search}%")
-              ->orWhere('tahun', 'like', "%{$search}%")
-              ->orWhere('anggaran', 'like', "%{$search}%")
-              ->orWhere('volume', 'like', "%{$search}%")
-              ->orWhere('satuan', 'like', "%{$search}%")
-              ->orWhere('sumberdana', 'like', "%{$search}%")
+              // ... sisa query pencarian Anda tidak berubah ...
               ->orWhere('keterangan', 'like', "%{$search}%");
         })
         ->orWhereHas('opd', function ($q) use ($search) {
@@ -53,20 +61,55 @@ class RencanakerjaController extends Controller
     }
 
     $rencana = $query->paginate(10);
-    $rencana->appends($request->only('search'));
+    // Tambahkan 'tahun' agar pagination tetap mengingat filter tahun yang dipilih
+    $rencana->appends($request->only('search', 'tahun'));
 
-    return view('admin.RencanaKerja.index', compact('rencana', 'search'));
+    // KIRIM VARIABEL BARU KE VIEW
+    return view('admin.RencanaKerja.index', compact('rencana', 'search', 'daftarTahun', 'tahun'));
 }
+//     public function index(Request $request)
+// {
+//     $user   = Auth::guard('pengguna')->user();
+//     $search = $request->input('search');
 
-    // public function index()
-    // {
-    //     $user = Auth::guard('pengguna')->user();
-    //     $rencana = $user->level == 'Super Admin'
-    //         ? RencanaKerja::active()->paginate(10)
-    //         : RencanaKerja::active()->where('id_pengguna', $user->id)->paginate(10);
+//     $query = RencanaKerja::with(['subprogram', 'opd'])
+//         ->active(); // pakai scopeActive dari model
 
-    //     return view('admin.RencanaKerja.index', compact('rencana'));
-    // }
+//     // Kalau bukan super admin, filter data hanya milik user
+//     if ($user->level !== 'Super Admin') {
+//         $query->where('id_pengguna', $user->id);
+//     }
+
+//     // Fitur pencarian
+//     if ($search) {
+//         $query->where(function ($q) use ($search) {
+//             $q->where('rencana_aksi', 'like', "%{$search}%")
+//               ->orWhere('nama_program', 'like', "%{$search}%")
+//               ->orWhere('kegiatan', 'like', "%{$search}%")
+//               ->orWhere('sub_kegiatan', 'like', "%{$search}%")
+//               ->orWhere('lokasi', 'like', "%{$search}%")
+//               ->orWhere('tahun', 'like', "%{$search}%")
+//               ->orWhere('anggaran', 'like', "%{$search}%")
+//               ->orWhere('volume', 'like', "%{$search}%")
+//               ->orWhere('satuan', 'like', "%{$search}%")
+//               ->orWhere('sumberdana', 'like', "%{$search}%")
+//               ->orWhere('keterangan', 'like', "%{$search}%");
+//         })
+//         ->orWhereHas('opd', function ($q) use ($search) {
+//             $q->where('nama', 'like', "%{$search}%");
+//         })
+//         ->orWhereHas('subprogram', function ($q) use ($search) {
+//             $q->where('subprogram', 'like', "%{$search}%");
+//         });
+//     }
+
+//     $rencana = $query->paginate(10);
+//     $rencana->appends($request->only('search'));
+
+//     return view('admin.RencanaKerja.index', compact('rencana', 'search'));
+// }
+
+
 
     public function getRencanaAksi($id_subprogram)
     {
@@ -202,38 +245,77 @@ class RencanakerjaController extends Controller
 
     public function edit(string $id)
     {
+        // Pastikan hanya user yang berhak yang bisa mengedit
         $user = Auth::guard('pengguna')->user();
-
         $rencana = RencanaKerja::findOrFail($id);
-        $listTahun = RencanaAksi_6_tahun::where('delete_at', '0')->get();
+
+        // Jika bukan Super Admin, cek apakah data ini miliknya
+        if ($user->level !== 'Super Admin' && $rencana->id_pengguna !== $user->id) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit data ini.');
+        }
+
         $subprogram = Subprogram::where('delete_at', '0')->get();
         $opd = Opd::where('delete_at', '0')->get();
 
-        return view('admin.RencanaKerja.update', compact('rencana','listTahun', 'subprogram', 'opd'));
+        return view('admin.RencanaKerja.update', compact('rencana', 'subprogram', 'opd'));
     }
 
     public function update(Request $request, string $id)
     {
         $validate = $request->validate([
-            'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required',
-            'sub_kegiatan'   => 'required',
-            'kegiatan'       => 'required',
-            'nama_program'   => 'required',
-            'lokasi'         => 'required',
-            'volume' => 'required',
-            'satuan' => 'required',
-            'anggaran'       => 'required',
-            'sumberdana'       => 'required',
-            'tahun'          => 'required',
-            'id_opd'         => 'required|exists:opds,id',
-            'keterangan'     => 'required'
+            'id_subprogram' => 'required|exists:subprograms,id',
+            'rencanaAksi'   => 'required',
+            'sub_kegiatan'  => 'required',
+            'kegiatan'      => 'required',
+            'nama_program'  => 'required',
+            'tahun'         => 'required',
+            'volume'        => 'required',
+            'satuan'        => 'required',
+            'anggaran'      => 'required',
+            'sumberdana'    => 'required',
+            'lokasi'        => 'required',
+            'id_opd'        => 'required|exists:opds,id',
+            'keterangan'    => 'required'
         ]);
 
-        $rencana = RencanaKerja::findOrFail($id);
-        $rencana->update($validate);
+        // Bersihkan format 'Rp.' dan titik dari anggaran sebelum disimpan
+        $validate['anggaran'] = preg_replace('/[^\d]/', '', $validate['anggaran']);
 
-        LogHelper::add('Mengedit Data Rencana Kerja');
+        $rencana = RencanaKerja::findOrFail($id);
+
+        // Pastikan hanya user yang berhak yang bisa update
+        $user = Auth::guard('pengguna')->user();
+        if ($user->level !== 'Super Admin' && $rencana->id_pengguna !== $user->id) {
+            abort(403, 'Anda tidak memiliki akses untuk mengupdate data ini.');
+        }
+
+        // Ubah nama field 'rencanaAksi' menjadi 'rencana_aksi' sesuai kolom database
+        $updateData = $validate;
+        $updateData['rencana_aksi'] = $validate['rencanaAksi'];
+        unset($updateData['rencanaAksi']);
+
+        // Update data di tabel rencana kerja
+        $rencana->update($updateData);
+
+        // Cari dan update juga data di tabel monev yang terkait
+        $monev = Monev::where('rencana_aksi', $rencana->id)->first();
+        if ($monev) {
+            $monev->update([
+                'id_subprogram' => $rencana->id_subprogram,
+                'sub_kegiatan'  => $rencana->sub_kegiatan,
+                'kegiatan'      => $rencana->kegiatan,
+                'nama_program'  => $rencana->nama_program,
+                'lokasi'        => $rencana->lokasi,
+                'volume'        => $rencana->volume,
+                'satuan'        => $rencana->satuan,
+                'anggaran'      => $rencana->anggaran,
+                'sumberdana'    => $rencana->sumberdana,
+                'tahun'         => $rencana->tahun,
+                'id_opd'        => $rencana->id_opd,
+            ]);
+        }
+
+        LogHelper::add('Mengedit Data Rencana Kerja (ID: ' . $id . ') + otomatis update Monev');
 
         return redirect()->route('rencanakerja')
             ->with('success', 'Rencana Kerja berhasil diperbarui!');
