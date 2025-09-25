@@ -12,11 +12,29 @@ class GambaranUmumController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $gambaran = GambaranUmum::paginate(10);
-        return view('admin.GambaranUmum.index', compact('gambaran'));
+ public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = GambaranUmum::query();
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('uraian', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $gambaran = $query->paginate(10);
+    $gambaran->appends($request->only('search'));
+
+    return view('admin.GambaranUmum.index', compact('gambaran', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

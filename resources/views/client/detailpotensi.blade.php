@@ -14,7 +14,7 @@
                         {{ \Carbon\Carbon::parse($detailpotensiKehutanan->tanggal)->format('d F Y') }}
                 </span>
             </div>
-            <p><strong>Keterangan:</strong> {{ $detailpotensiKehutanan->keterangan }}</p>
+            <p><strong>Keterangan:</strong> {{ $detailpotensiKehutanan->uraian }}</p>
 
             <hr>
 

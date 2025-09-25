@@ -33,24 +33,31 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    
     public function index()
     {
         $currentYear = Carbon::now()->year;
 
         // Ambil data KUPS untuk tahun sekarang
-        $kupsData = Kups::with('kth') // <-- TAMBAHKAN BARIS INI
-            ->where('tahun', $currentYear)
+        $kupsData = Kups::with('kth')
+            ->whereRaw("TRIM(tahun) = ?", [$currentYear])
             ->get();
+
 
         // Format data untuk Highcharts
         $chartData = $kupsData->map(function ($item) {
+            // Buang Rp, titik, spasi, lalu ubah koma jadi titik (jika ada)
+            $pendapatan = str_replace(['Rp', 'Rp.', ' ', '.'], '', $item->pendapatan);
+            $pendapatan = str_replace(',', '.', $pendapatan);
+
             return [
                 'name' => $item->kups,
-                'y' => (float) $item->pendapatan,
-                'kth' => $item->kth->kth ?? 'KTH tidak diketahui' // Menambahkan nama KTH
-            ];;
+                'y' => (float) $pendapatan,
+                'kth' => $item->kth->kth ?? 'KTH tidak diketahui'
+            ];
         });
+
+
+
 
         // Ambil daftar tahun unik dari tabel KUPS untuk dropdown
         $years = Kups::select('tahun')
@@ -74,8 +81,9 @@ class ClientController extends Controller
         $jumlahKups = Kups::count();
         $jumlahKth = Kth::where('delete_at', '0')->count();
         $gambaran = GambaranUmum::where('status', 'Aktif')->get();
-        $informasi = Informasi::orderBy('tanggal', 'asc')->get();
-        $videos = Video::all();
+        $informasi = Informasi::orderBy('created_at', 'desc')->get();
+        $videos = Video::orderBy('created_at', 'desc')->get();
+
         $banner = Banner::where('status', 'Aktif')->get();
         $contact = Kontak::all();
         $subprograms = Subprogram::where('delete_at', '0')->get();
@@ -98,24 +106,33 @@ class ClientController extends Controller
         ));
     }
 
-    public function chartData($tahun)
-    {
-        // Gunakan with() untuk memuat relasi 'kth' secara efisien
-        $kupsData = Kups::with('kth')
-            ->where('tahun', $tahun)
-            ->get();
 
-        $chartData = $kupsData->map(function ($item) {
-            return [
-                'name' => $item->kups,
-                'y' => (float) $item->pendapatan,
-                // KUNCI PERBAIKAN: Cek dulu apakah relasi 'kth' ada
-                'kth' => $item->kth ? $item->kth->kth : 'KTH tidak diketahui'
-            ];
-        });
+// app/Http/Controllers/ClientController.php
 
-        return response()->json($chartData);
-    }
+public function chartData($tahun)
+{
+    // Gunakan with() untuk memuat relasi 'kth' secara efisien
+    // Gunakan whereRaw dengan TRIM agar konsisten dengan method index()
+    $kupsData = Kups::with('kth')
+        ->whereRaw("TRIM(tahun) = ?", [$tahun])
+        ->get();
+
+    $chartData = $kupsData->map(function ($item) {
+        // KUNCI PERBAIKAN: Tambahkan logika pembersihan string pendapatan di sini
+        // Sama persis seperti di method index() Anda
+        $pendapatan = str_replace(['Rp', 'Rp.', ' ', '.'], '', $item->pendapatan);
+        $pendapatan = str_replace(',', '.', $pendapatan);
+
+        return [
+            'name' => $item->kups,
+            'y' => (float) $pendapatan, // Gunakan variabel yang sudah dibersihkan
+            'kth' => $item->kth->kth ?? 'KTH tidak diketahui'
+        ];
+    });
+
+    return response()->json($chartData);
+}
+
 
     public function tentangkegiatan($id)
     {
@@ -171,7 +188,7 @@ class ClientController extends Controller
         // 2. Ambil daftar tahun unik untuk dropdown
         $years = RencanaKerja::selectRaw("DISTINCT TRIM(tahun) as tahun")
             ->where('id_subprogram', $id)
-             ->where('delete_at', '0')
+            ->where('delete_at', '0')
             ->where('status', 'valid')
             ->whereNotNull('tahun')
             ->orderBy('tahun', 'desc')
@@ -366,7 +383,7 @@ class ClientController extends Controller
         $Kups = Kups::paginate(10);
         $contact = Kontak::all();
         $subprograms = Subprogram::where('delete_at', '0')->get();
-        return view('client.detailkups', compact('contact', 'subprograms', 'Kups'));
+        return view('client.detailKups', compact('contact', 'subprograms', 'Kups'));
     }
 
 
@@ -445,8 +462,4 @@ class ClientController extends Controller
         $contact = Kontak::all();
         return view('about', compact('contact'));
     }
-
-
-
-
 }

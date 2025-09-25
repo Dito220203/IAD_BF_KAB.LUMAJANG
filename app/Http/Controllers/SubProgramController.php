@@ -14,12 +14,39 @@ class SubProgramController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $produk = FotoSubprogram::with('subprogram')->paginate(10, ['*'], 'produk_page');
-        $subprogram = Subprogram::where('delete_at', '0')->paginate(10, ['*'], 'subprogram_page');
-        return view('admin.Subprogram.index', compact('subprogram', 'produk'));
+    // public function index()
+    // {
+    //     $produk = FotoSubprogram::with('subprogram')->paginate(10, ['*'], 'produk_page');
+    //     $subprogram = Subprogram::where('delete_at', '0')->paginate(10, ['*'], 'subprogram_page');
+    //     return view('admin.Subprogram.index', compact('subprogram', 'produk'));
+    // }
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    // Query untuk Subprogram
+    $subprogramQuery = Subprogram::where('delete_at', '0');
+
+    if ($search) {
+        $subprogramQuery->where(function ($q) use ($search) {
+            $q->where('program', 'like', "%{$search}%")
+              ->orWhere('subprogram', 'like', "%{$search}%")
+              ->orWhere('uraian', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $subprogram = $subprogramQuery->paginate(10, ['*'], 'subprogram_page');
+    $subprogram->appends($request->only('search'));
+
+    // Query untuk FotoSubprogram (kalau mau ikut di-search bisa tambahin logika juga)
+    $produk = FotoSubprogram::with('subprogram')->paginate(10, ['*'], 'produk_page');
+
+    return view('admin.Subprogram.index', compact('subprogram', 'produk', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

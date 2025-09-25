@@ -95,9 +95,20 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Anggaran</label>
-                                        <input type="text" name="anggaran" value="{{ old('anggaran') }}"
+                                        <input type="text" name="anggaran" id="anggaran" value="{{ old('anggaran') }}"
                                             class="form-control" required>
                                     </div>
+                                     <script>
+                                        document.getElementById('anggaran').addEventListener('input', function(e) {
+                                            let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
+                                            if (value) {
+                                                value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                                                this.value = 'Rp. ' + value; // tetap tampil Rp. xx.xxx.xxx
+                                            } else {
+                                                this.value = '';
+                                            }
+                                        });
+                                    </script>
                                     <div class="col-md-6">
                                         <label class="form-label">Sumber Dana</label>
                                         <input type="text" name="sumberdana" value="{{ old('sumberdana') }}"

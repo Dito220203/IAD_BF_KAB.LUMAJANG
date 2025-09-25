@@ -6,9 +6,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Admin IAD BF Kabupaten Lumajang</title>
-
-    <meta content="" name="description">
+    <title>Admin IAD Perhutanan Sosial Kabupaten Lumajang</title>
+ <meta name="description" content="IAD Perhutanan Sosial Kabupaten Lumajang">
     <meta content="" name="keywords">
 
     <!-- Favicons -->

@@ -410,7 +410,7 @@
                                 },
                                 gridLineColor: '#E0E0E0',
                                 labels: {
-                                    format: 'Rp {value:,.0f}',
+                                    format: '{value:,.0f}', // tanpa Rp
                                     style: {
                                         fontSize: '12px',
                                         color: '#666'
@@ -428,7 +428,8 @@
                             },
                             tooltip: {
                                 headerFormat: '<b>{point.key}</b><br>',
-                                pointFormat: 'KTH: <b>{point.options.kth}</b><br><span style="color:{point.color}">●</span> {series.name}: <b>Rp {point.y:,.0f}</b>',
+                                pointFormat: 'KTH: <b>{point.options.kth}</b><br>' +
+                                    '<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.0f}</b>', // tanpa Rp
                                 backgroundColor: 'rgba(255, 255, 255, 0.95)',
                                 borderColor: '#DDD',
                                 borderRadius: 8,
@@ -457,6 +458,7 @@
                                 }
                             }
                         });
+
 
                         function updateChartData() {
                             const selectedYear = tahunSelect.value;

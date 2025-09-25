@@ -34,32 +34,51 @@
                                     <i class="bi bi-journal-check"></i>
                                     <div>
                                         <h4>
-                                            <a href="{{ route('rencanakerja') }}#row-{{ $item->id }}">
-                                                Rencana Kerja Baru
-                                            </a>
-                                        </h4>
+    @php
+    $perPage = 10;
+    $position = \App\Models\RencanaKerja::where('delete_at', '0')
+        ->where('id', '<=', $item->id)
+        ->count();
+
+    $page = ceil($position / $perPage);
+@endphp
+
+<a href="{{ route('rencanakerja', ['page' => $page]) }}#row-{{ $item->id }}">
+    Rencana Kerja Baru
+</a>
+                           </h4>
                                         <p>{{ $item->judul }}</p>
                                         <p>{{ $item->created_at->diffForHumans() }}</p>
                                     </div>
                                 @elseif($item instanceof \App\Models\ProgresKerja)
                                     <i class="bi bi-card-list"></i>
                                     <div>
-                                        <h4>
-                                            <a href="{{ route('progres') }}#row-{{ $item->id }}">
-                                                Progres Kerja Baru
-                                            </a>
-                                        </h4>
+                                         <h4>
+                    @php
+                        $perPage = 10;
+                        $position = \App\Models\ProgresKerja::where('id', '<=', $item->id)->count();
+                        $page = ceil($position / $perPage);
+                    @endphp
+                    <a href="{{ route('progres', ['page' => $page]) }}#row-{{ $item->id }}">
+                        Progres Kerja Baru
+                    </a>
+                </h4>
                                         <p>{{ $item->judul }}</p>
                                         <p>{{ $item->created_at->diffForHumans() }}</p>
                                     </div>
                                 @elseif($item instanceof \App\Models\Monev)
                                     <i class="bi bi-clipboard-check"></i>
                                     <div>
-                                        <h4>
-                                            <a href="{{ route('monev') }}#row-{{ $item->id }}">
-                                                Monitoring & Evaluasi
-                                            </a>
-                                        </h4>
+                                       <h4>
+                    @php
+                        $perPage = 10;
+                        $position = \App\Models\Monev::where('id', '<=', $item->id)->count();
+                        $page = ceil($position / $perPage);
+                    @endphp
+                    <a href="{{ route('monev', ['page' => $page]) }}#row-{{ $item->id }}">
+                        Monitoring & Evaluasi
+                    </a>
+                </h4>
                                         <p>{{ $item->keterangan }}</p>
                                         <p>{{ $item->created_at->diffForHumans() }}</p>
                                     </div>

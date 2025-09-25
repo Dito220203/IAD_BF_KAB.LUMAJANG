@@ -81,8 +81,8 @@
 
                                         <td>{{ $data->tahun }}</td>
 
-                                        <td>Rp
-                                            {{ number_format($data->pendapatan, 0, ',', '.') }}</td>
+                                        <td>
+                                            {{$data->pendapatan}}</td>
 
                                     </tr>
 
@@ -117,7 +117,9 @@
                             <div class="pagination-sm">
 
 
+                           
                                 {{ $kups->appends(['tahun' => $selectedYear])->onEachSide(1)->links('vendor.pagination.buttons-only') }}
+
 
                             </div>
 

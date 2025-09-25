@@ -18,12 +18,51 @@ class ProgreskerjaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $user = Auth::guard('pengguna')->user();
-        $user->level == 'Super Admin' ? $progres = ProgresKerja::paginate(10) : $progres = ProgresKerja::where('id_pengguna', $user->id)->paginate(10);
-        return view('admin.ProgresKerja.index', compact('progres'));
+    // public function index()
+    // {
+    //     $user = Auth::guard('pengguna')->user();
+    //     $user->level == 'Super Admin' ? $progres = ProgresKerja::paginate(10) : $progres = ProgresKerja::where('id_pengguna', $user->id)->paginate(10);
+    //     return view('admin.ProgresKerja.index', compact('progres'));
+    // }
+
+    public function index(Request $request)
+{
+    $user   = Auth::guard('pengguna')->user();
+    $search = $request->input('search');
+
+    // Query dasar
+    $query = ProgresKerja::with(['subprogram', 'penggunas']);
+
+    // Kalau bukan super admin, filter data hanya milik user
+    if ($user->level !== 'Super Admin') {
+        $query->where('id_pengguna', $user->id);
     }
+
+    // Fitur pencarian
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('tahun', 'like', "%{$search}%")
+              ->orWhere('sumber_dana', 'like', "%{$search}%")
+              ->orWhere('jumlah_anggaran', 'like', "%{$search}%")
+              ->orWhere('penerima', 'like', "%{$search}%")
+              ->orWhere('uraian', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%");
+        })
+        ->orWhereHas('subprogram', function ($q) use ($search) {
+            $q->where('subprogram', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
+    }
+
+    $progres = $query->paginate(10);
+    $progres->appends($request->only('search'));
+
+    return view('admin.ProgresKerja.index', compact('progres', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -45,7 +84,7 @@ class ProgreskerjaController extends Controller
             'judul'            => 'required|string|max:255',
             'tahun'            => 'required|digits:4',
             'sumber_dana'      => 'required|string|max:255',
-            'jumlah_anggaran'  => 'required|numeric',
+            'jumlah_anggaran'  => 'required|string',
             'penerima'         => 'required|string|max:255',
             'uraian'           => 'required|string',
             'latitude'         => 'nullable|numeric',
@@ -156,7 +195,7 @@ class ProgreskerjaController extends Controller
         'judul'           => 'required|string|max:255',
         'tahun'           => 'required|digits:4',
         'sumber_dana'     => 'required|string|max:255',
-        'jumlah_anggaran' => 'required|numeric',
+        'jumlah_anggaran' => 'required|string',
         'penerima'        => 'required|string|max:255',
         'uraian'          => 'required|string',
         'status'          => 'nullable|string',

@@ -12,13 +12,13 @@
 
                 <span class="tanggal">
                     <i class="fas fa-calendar-alt"></i>
-                    {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y H:i') }}
+                    {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
                 </span>
 
                 <hr>
 
                 @if ($item->file)
-                    {{-- Viewer PDF --}}
+                    {{-- Viewer PDF Responsif --}}
                     <div style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
                         @if ($item->file)
                             @if (app()->isLocal())
@@ -44,6 +44,7 @@
                 <hr>
             </div>
         </section>
+
         <div class="text-center mt-4">
             <a href="{{ route('client.regulasi') }}" class="btn-footer-back">
                 ← Kembali

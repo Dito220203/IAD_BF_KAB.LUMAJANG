@@ -79,8 +79,7 @@
             .hidden-input {
                 display: none;
             }
-
-              .upload-item .remove-btn {
+                .upload-item .remove-btn {
                 position: absolute;
                 color: red;
                 cursor: pointer;
@@ -145,13 +144,48 @@
 
                                 {{-- Jumlah Anggaran --}}
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="jumlah_anggaran"
-                                            value="{{ old('jumlah_anggaran', $progres->jumlah_anggaran) }}"
-                                            class="form-control">
-                                    </div>
-                                </div>
+    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
+    <div class="col-sm-10">
+        <input type="text" name="jumlah_anggaran" id="jumlah_anggaran_update"
+            value="{{ old('jumlah_anggaran', $progres->jumlah_anggaran) }}"
+            class="form-control">
+    </div>
+</div>
+
+<script>
+    const jumlahAnggaranUpdate = document.getElementById('jumlah_anggaran_update');
+    const form = document.querySelector('form');
+
+    // Format value awal saat halaman dibuka
+    if (jumlahAnggaranUpdate.value) {
+        let numeric = jumlahAnggaranUpdate.value.replace(/\D/g, '');
+        if (numeric) {
+            numeric = parseInt(numeric).toLocaleString('id-ID');
+            jumlahAnggaranUpdate.value = 'Rp. ' + numeric;
+        }
+    }
+
+    // Format saat user mengetik
+    jumlahAnggaranUpdate.addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
+        if (value) {
+            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+            this.value = 'Rp. ' + value;
+        } else {
+            this.value = '';
+        }
+    });
+
+    // Tambahkan ,00 saat submit
+    form.addEventListener('submit', function() {
+        if (jumlahAnggaranUpdate.value) {
+            if (!jumlahAnggaranUpdate.value.includes(',00')) {
+                jumlahAnggaranUpdate.value = jumlahAnggaranUpdate.value + ',00';
+            }
+        }
+    });
+</script>
+
 
                                 {{-- Penerima --}}
                                 <div class="row mb-3">

@@ -14,11 +14,28 @@ class SubpotensiKehutananController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $subpotensi = SubpotensiKehutanan::where('delete_at', '0')->paginate(10);
-        return view('admin.subpotensiKehutanan.index', compact('subpotensi'));
+   public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = SubpotensiKehutanan::where('delete_at', '0');
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('sub_potensi', 'like', "%{$search}%")
+              ->orWhere('keterangan', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $subpotensi = $query->paginate(10);
+    $subpotensi->appends($request->only('search'));
+
+    return view('admin.subpotensiKehutanan.index', compact('subpotensi', 'search'));
+}
+
 
     /**
      * Store a newly created resource in storage.

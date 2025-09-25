@@ -13,18 +13,36 @@ class InformasiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $user = Auth::guard('pengguna')->user();
+  public function index(Request $request)
+{
+    $user   = Auth::guard('pengguna')->user();
+    $search = $request->input('search');
 
-        if ($user->level == 'Super Admin') {
-            $informasi = Informasi::paginate(10);
-        } else {
-            $informasi = Informasi::where('id_pengguna', $user->id)->paginate(10);
-        }
-
-        return view('admin.Informasi.index', compact('informasi'));
+    if ($user->level == 'Super Admin') {
+        $query = Informasi::query();
+    } else {
+        $query = Informasi::where('id_pengguna', $user->id);
     }
+
+    // fitur pencarian
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('tanggal', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%")
+              ->orWhere('isi', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
+    }
+
+    $informasi = $query->paginate(10);
+    $informasi->appends($request->only('search'));
+
+    return view('admin.Informasi.index', compact('informasi', 'search'));
+}
+
 
 
     /**

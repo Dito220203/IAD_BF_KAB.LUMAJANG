@@ -40,7 +40,6 @@
                                     <th>Lokasi</th>
                                     <th>Volume</th>
                                     <th>Satuan</th>
-                                    <th>Anggaran</th>
                                     <th>Sumber Dana</th>
                                     <th>Tahun Pelaksanaan</th>
                                     <th>Perangkat Daerah</th>
@@ -52,14 +51,13 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $rk->subprogram->subprogram ?? '-' }}</td>
-                                        <td>{{ $rk->rencana_aksi }}</td>
-                                        <td>{{ $rk->sub_kegiatan }}</td>
-                                        <td>{{ $rk->kegiatan }}</td>
-                                        <td>{{ $rk->nama_program }}</td>
-                                        <td>{{ $rk->lokasi }}</td>
+                                        <td style="text-align: left;">{{ $rk->rencana_aksi }}</td>
+                                        <td style="text-align: left;">{{ $rk->sub_kegiatan }}</td>
+                                        <td style="text-align: left;">{{ $rk->kegiatan }}</td>
+                                        <td style="text-align: left;">{{ $rk->nama_program }}</td>
+                                        <td style="text-align: left;">{{ $rk->lokasi }}</td>
                                         <td>{{ $rk->volume }}</td>
                                         <td>{{ $rk->satuan }}</td>
-                                        <td>{{ $rk->anggaran }}</td>
                                         <td>{{ $rk->sumberdana }}</td>
                                         <td>{{ $rk->tahun }}</td>
                                         <td>{{ $rk->opd->nama ?? '-' }}</td>

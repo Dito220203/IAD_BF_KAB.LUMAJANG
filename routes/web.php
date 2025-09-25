@@ -31,7 +31,6 @@ use Illuminate\Support\Facades\Route;
 
 //client
 Route::get('/', [ClientController::class, 'index'])->name('client');
-
 // routes/web.php
 
 Route::get('/get-desa/client/{kecamatanId}', [ClientController::class, 'getDesaByKecamatan']);
@@ -70,8 +69,8 @@ Route::get('/detail-video', [ClientController::class, 'detailvideo'])->name('cli
 Route::get('/daftar-potensi/{id}', [ClientController::class, 'daftarpotensi'])->name('client.daftarpotensi');
 Route::get('/detail-potensi/{id}', [ClientController::class, 'detailpotensi'])
     ->name('client.detailpotensi');
+// Route::get('/kups/chart-data/{tahun}', [ClientController::class, 'chartData']);
 Route::get('/kups/chart-data/{tahun}', [ClientController::class, 'chartData']);
-
 Route::get('/footer', [ClientController::class, 'footer'])->name('client.footer');
 
 

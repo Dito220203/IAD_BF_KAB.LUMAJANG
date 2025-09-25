@@ -13,11 +13,29 @@ class RegulasiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $regulasi = Regulasi::paginate(10);
-        return view('admin.Regulasi.index', compact('regulasi'));
+ public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = Regulasi::query();
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('tanggal', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $regulasi = $query->paginate(10);
+    $regulasi->appends($request->only('search'));
+
+    return view('admin.Regulasi.index', compact('regulasi', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

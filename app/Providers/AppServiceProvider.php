@@ -21,22 +21,24 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot()
-    {
-        View::composer('componentsclient.navbar', function ($view) {
-            // Ambil kecamatan yang ada di potensi
-            $kecamatanIds = Potensi::distinct('id_kecamatan')->pluck('id_kecamatan');
-            $kecamatan = Kecamatan::whereIn('id', $kecamatanIds)->get();
+   public function boot()
+{
+    // ❌ Hapus baris path.public
 
-            // Ambil potensi terakhir / tertentu untuk default desa
-            $potensi = Potensi::latest()->first(); // Bisa ganti kriteria sesuai kebutuhan
+    View::composer('componentsclient.navbar', function ($view) {
+        $kecamatanIds = Potensi::distinct('id_kecamatan')->pluck('id_kecamatan');
+        $kecamatan = Kecamatan::whereIn('id', $kecamatanIds)->get();
 
-            $view->with([
-                'kecamatan' => $kecamatan,
-                'selectedKecamatan' => $potensi->id_kecamatan ?? null,
-                'selectedDesa' => $potensi->id_desa ?? null,
-            ]);
-        });
-        Paginator::useBootstrapFive();
-    }
+        $potensi = Potensi::latest()->first();
+
+        $view->with([
+            'kecamatan' => $kecamatan,
+            'selectedKecamatan' => $potensi->id_kecamatan ?? null,
+            'selectedDesa' => $potensi->id_desa ?? null,
+        ]);
+    });
+
+    Paginator::useBootstrapFive();
+}
+
 }

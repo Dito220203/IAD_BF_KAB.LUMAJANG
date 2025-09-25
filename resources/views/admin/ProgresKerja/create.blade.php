@@ -159,14 +159,28 @@
                                     </div>
                                 </div>
 
-                                {{-- Jumlah Anggaran --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="jumlah_anggaran" class="form-control"
-                                            value="{{ old('jumlah_anggaran') }}">
-                                    </div>
-                                </div>
+                               {{-- Jumlah Anggaran --}}
+<div class="row mb-3">
+    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
+    <div class="col-sm-10">
+        <input type="text" name="jumlah_anggaran" id="jumlah_anggaran" 
+               class="form-control" value="{{ old('jumlah_anggaran') }}">
+    </div>
+</div>
+
+<script>
+    document.getElementById('jumlah_anggaran').addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
+        if (value) {
+            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+            this.value = 'Rp. ' + value; // tampil Rp. xx.xxx.xxx
+        } else {
+            this.value = '';
+        }
+    });
+</script>
+
+                                
 
                                 {{-- Penerima --}}
                                 <div class="row mb-3">

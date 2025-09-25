@@ -13,11 +13,28 @@ class BannerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $banner = Banner::paginate(10);
-        return view('admin.banner.index', compact('banner'));
+   public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = Banner::query();
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $banner = $query->paginate(10);
+    $banner->appends($request->only('search'));
+
+    return view('admin.banner.index', compact('banner', 'search'));
+}
+
 
 
     /**

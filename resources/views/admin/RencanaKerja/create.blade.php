@@ -75,17 +75,17 @@
                                             readonly>
                                         <input type="hidden" name="nama_program" id="nama_program_hidden">
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Tahun</label>
-                                        <select name="tahun" id="tahun" class="form-select" required>
-                                            <option value="">Pilih</option>
-                                            @foreach ($rencanaAksi as $data)
-                                                <option value="{{ $data->tahun }}">{{ $data->tahun }}</option>
-                                            @endforeach
-                                        </select>
-                                        {{-- <input type="text" id="tahun_display" class="form-control bg-light" readonly>
-                                        <input type="hidden" name="tahun" id="tahun_hidden"> --}}
-                                    </div>
+                                  <div class="col-md-6">
+    <label class="form-label">Tahun</label>
+    <select name="tahun" id="tahun" class="form-select" required>
+        <option value="">-- Pilih Tahun --</option>
+       @for ($year = 2000; $year <= date('Y') + 5; $year++)
+    <option value="{{ $year }}">{{ $year }}</option>
+@endfor
+
+    </select>
+</div>
+
                                 </div>
 
                                 <!-- Volume & Satuan -->
@@ -104,9 +104,20 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Anggaran</label>
-                                        <input type="text" name="anggaran" value="{{ old('anggaran') }}"
+                                        <input type="text" name="anggaran" id="anggaran" value="{{ old('anggaran') }}"
                                             class="form-control" required>
                                     </div>
+                                    <script>
+                                        document.getElementById('anggaran').addEventListener('input', function(e) {
+                                            let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
+                                            if (value) {
+                                                value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                                                this.value = 'Rp. ' + value; // tetap tampil Rp. xx.xxx.xxx
+                                            } else {
+                                                this.value = '';
+                                            }
+                                        });
+                                    </script>
                                     <div class="col-md-6">
                                         <label class="form-label">Sumber Dana</label>
                                         <input type="text" name="sumberdana" value="{{ old('sumberdana') }}"

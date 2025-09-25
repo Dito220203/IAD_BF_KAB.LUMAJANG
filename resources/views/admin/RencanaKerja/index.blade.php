@@ -18,7 +18,7 @@
                         <div class="card-body">
                             <!-- Header tools -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-                                <div class="d-flex gap-2">
+                                <div class="gap-2">
                                     <a href="{{ route('rencana.create') }}" class="btn btn-primary">
                                         + Tambah Rencana
                                     </a>
@@ -26,25 +26,16 @@
                                         <i class="fa-solid fa-file-excel"></i> Export Excel
                                     </a>
                                 </div>
-
-                                <!-- Select entries -->
-                                <div class="d-flex align-items-center gap-2">
-                                    <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"
-                                        data-target="TableRencanaAksi">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                    <span>data</span>
-                                </div>
-
                                 <!-- Pencarian -->
-                                <div class="input-group w-auto">
-                                    <input type="text" class="form-control searchInput" data-target="TableRencanaAksi"
-                                        placeholder="Cari Data...">
-                                </div>
+                                                                               <form method="GET" class="input-group w-auto mb-3">
+    <input type="text" name="search" class="form-control"
+           placeholder="Cari Data (program, kegiatan, OPD...)"
+           value="{{ request('search') }}">
+    <button class="btn btn-primary" type="submit">Cari</button>
+    @if(request('search'))
+        <a href="{{ route('rencanakerja') }}" class="btn btn-secondary">Reset</a>
+    @endif
+</form>
                             </div>
 
 

@@ -12,39 +12,48 @@
         </div>
 
         <section class="section">
-            <div class="row">
+         <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <!-- Header tools -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
+                                <div class="gap-2">
+                                <!-- Left side buttons - Only for Super Admin -->
                                 @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
-                                    <div class="d-flex gap-2">
+                                    <div class="d-flex flex-column flex-sm-row gap-2">
                                         <a href="{{ route('rencanaAksi.create') }}" class="btn btn-primary">
-                                            + Tambah Rencana Aksi
+                                            <i class="fa-solid fa-plus me-1"></i>
+                                            Tambah Rencana Aksi
                                         </a>
                                         <a href="{{ route('rencanaAksi.export.excel') }}" class="btn btn-success">
-                                            <i class="fa-solid fa-file-excel"></i> Export Excel
+                                            <i class="fa-solid fa-file-excel me-1"></i>
+                                            Export Excel
                                         </a>
                                     </div>
                                 @endif
-
-
-                                <div class="d-flex align-items-center gap-2">
-                                    <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"
-                                        data-target="TableRencanaAksi">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                    <span>data</span>
-                                </div>
-
-                                <div class="input-group w-auto">
-                                    <input type="text" class="form-control searchInput" data-target="TableRencanaAksi"
-                                        placeholder="Cari Data...">
+                                 </div>
+                                
+                                <!-- Right side search -->
+                                <div class="search-container" style="min-width: 300px;">
+                                    <form method="GET" class="d-flex gap-3">
+                                        <div class="input-group">
+                                            <input type="text" 
+                                                   name="search" 
+                                                   class="form-control"
+                                                   placeholder="Cari program, kegiatan, OPD..."
+                                                   value="{{ request('search') }}"
+                                                   style="min-width: 250px;">
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="fa-solid fa-search"></i>
+                                            </button>
+                                        </div>
+                                        @if(request('search'))
+                                            <a href="{{ route('rencana6tahun') }}" class="btn btn-outline-secondary">
+                                                <i class="fa-solid fa-times"></i>
+                                            </a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 
@@ -74,6 +83,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         @foreach ($rencanaAksi as $data)
                                             <tr>
                                                 <td class="text-center">{{ $rencanaAksi->firstItem() + $loop->index }}</td>
@@ -128,3 +138,5 @@
         </section>
     </main>
 @endsection
+
+

@@ -95,9 +95,32 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Anggaran</label>
-                            <input type="text" name="anggaran" class="form-control"
+                            <input type="text" name="anggaran" id="anggaran" class="form-control"
                                 value="{{ old('anggaran', $monev->anggaran) }}" required>
                         </div>
+                          <script>
+                                        const anggaranInput = document.getElementById('anggaran');
+
+                                        // Format value awal saat page load
+                                        if (anggaranInput.value) {
+                                            let numeric = anggaranInput.value.replace(/\D/g, '');
+                                            if (numeric) {
+                                                numeric = parseInt(numeric).toLocaleString('id-ID');
+                                                anggaranInput.value = 'Rp. ' + numeric;
+                                            }
+                                        }
+
+                                        // Format saat user mengetik
+                                        anggaranInput.addEventListener('input', function() {
+                                            let value = this.value.replace(/\D/g, ''); // hapus non-digit
+                                            if (value) {
+                                                value = parseInt(value).toLocaleString('id-ID'); // ribuan
+                                                this.value = 'Rp. ' + value;
+                                            } else {
+                                                this.value = '';
+                                            }
+                                        });
+                                    </script>
                         <div class="col-md-6">
                             <label class="form-label">Sumber Dana</label>
                             <input type="text" name="sumberdana" class="form-control"

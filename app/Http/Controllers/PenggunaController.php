@@ -15,11 +15,29 @@ class PenggunaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $pengguna = Pengguna::paginate(10);
-        return view ('admin.Pengguna.index', compact('pengguna'));
+   public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = Pengguna::with('opd'); // ikut load OPD biar lebih efisien
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%")
+              ->orWhere('username', 'like', "%{$search}%")
+              ->orWhere('level', 'like', "%{$search}%");
+        })
+        ->orWhereHas('opd', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $pengguna = $query->paginate(10);
+    $pengguna->appends($request->only('search'));
+
+    return view('admin.Pengguna.index', compact('pengguna', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

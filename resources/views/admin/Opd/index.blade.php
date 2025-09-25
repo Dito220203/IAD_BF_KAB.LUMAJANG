@@ -58,23 +58,16 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div class="d-flex align-items-center ">
-                                    <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto entriesSelect"
-                                        data-target="TableOpd">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                    <span>data</span>
-                                </div>
-
-                                <div class="input-group w-auto">
-                                    <input type="text" class="form-control searchInput" data-target="TableOpd"
-                                        placeholder="Cari Data...">
+                              <div class="col-12 col-lg-auto">
+     <form method="GET" class="input-group w-auto">
+        <input type="text" name="search" class="form-control"
+               placeholder="Cari Data"
+               value="{{ request('search') }}">
+        <button class="btn btn-primary" type="submit">Cari</button>
+        @if(request('search'))
+            <a href="{{ route('opd') }}" class="btn btn-secondary">Reset</a>
+        @endif
+    </form>
                                 </div>
                             </div>
 
@@ -95,8 +88,8 @@
                                                 <td>{{ $opd->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->nama }}</td>
                                                 <td> {{ $data->status }}</td>
-                                                <td class="text-center align-middle">
-                                                    <div class="d-flex justify-content-center gap-1">
+                                                <td>
+                                                    <div>
                                                         <button type="button" class="btn btn-primary btn-sm"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#Modalupdateopd{{ $data->id }}">

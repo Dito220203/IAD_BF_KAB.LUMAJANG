@@ -18,31 +18,31 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class RencanaAksiExport implements FromCollection, WithHeadings, WithStyles, WithTitle, ShouldAutoSize, WithCustomStartCell, WithColumnWidths
 {
-    public function collection()
-    {
-        $query = RencanaAksi_6_tahun::with(['subprogram', 'opd', 'penggunas'])
-            ->where('delete_at', '0'); // ✅ filter data
+   public function collection()
+{
+    $query = RencanaAksi_6_tahun::with(['subprogram', 'opd', 'penggunas'])
+        ->where('delete_at', '0'); // ✅ filter data
 
-        $no = 1;
-        return $query->get()->map(function ($item) use (&$no) {
-            return [
-                'NO'               => $no++, // nomor urut otomatis
-                'Sub Program'      => $item->subprogram->subprogram ?? '-',
-                'Rencana Aksi'     => $item->rencana_aksi,
-                'Sub Kegiatan'     => $item->sub_kegiatan,
-                'Kegiatan'         => $item->kegiatan,
-                'Nama Program'     => $item->nama_program,
-                'Lokasi'           => $item->lokasi,
-                'Volume'           => $item->volume,
-                'Satuan'           => $item->satuan,
-                'Anggaran'         => $item->anggaran,
-                'Sumber Dana'      => $item->sumberdana,
-                'Tahun'            => $item->tahun,
-                'Perangkat Daerah' => $item->opd->nama ?? '-',
-                'Keterangan'       => $item->keterangan,
-            ];
-        });
-    }
+    $no = 1;
+    return $query->get()->map(function ($item) use (&$no) {
+        return [
+            'NO'               => $no++, // nomor urut otomatis
+            'Sub Program'      => $item->subprogram->subprogram ?? '-',
+            'Rencana Aksi'     => $item->rencana_aksi,
+            'Sub Kegiatan'     => $item->sub_kegiatan,
+            'Kegiatan'         => $item->kegiatan,
+            'Nama Program'     => $item->nama_program,
+            'Lokasi'           => $item->lokasi,
+            'Volume'           => $item->volume,
+            'Satuan'           => $item->satuan,
+            'Anggaran'         => $item->anggaran,
+            'Sumber Dana'      => $item->sumberdana,
+            'Tahun'            => $item->tahun,
+            'Perangkat Daerah' => $item->opd->nama ?? '-',
+            'Keterangan'       => $item->keterangan,
+        ];
+    });
+}
 
 
     public function startCell(): string
