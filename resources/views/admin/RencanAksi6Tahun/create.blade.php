@@ -81,14 +81,12 @@
                                     </div>
                                 </div>
 
-                             <div class="row mb-3">
-                                     <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
                                         <label class="form-label">Anggaran</label>
                                         <input type="text" name="anggaran" id="anggaran" value="{{ old('anggaran') }}"
                                             class="form-control" required>
                                     </div>
-
-
                                     <script>
                                         document.getElementById('anggaran').addEventListener('input', function(e) {
                                             let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
@@ -103,9 +101,74 @@
 
                                     <div class="col-md-6">
                                         <label class="form-label">Sumber Dana</label>
-                                        <input type="text" name="sumberdana" value="{{ old('sumberdana') }}"
-                                            class="form-control" required>
+
+                                        <!-- Dropdown (tanpa name) -->
+                                        <select id="sumberdana_select" class="form-control" required>
+                                            <option value="">-- Pilih Sumber Dana --</option>
+                                            <option value="APBN" {{ old('sumberdana') == 'APBN' ? 'selected' : '' }}>APBN
+                                            </option>
+                                            <option value="DAK" {{ old('sumberdana') == 'DAK' ? 'selected' : '' }}>DAK
+                                            </option>
+                                            <option value="APBD Kab"
+                                                {{ old('sumberdana') == 'APBD Kab' ? 'selected' : '' }}>APBD Kab</option>
+                                            <option value="APBD Prov"
+                                                {{ old('sumberdana') == 'APBD Prov' ? 'selected' : '' }}>APBD Prov</option>
+                                            <option value="BK Prov" {{ old('sumberdana') == 'BK Prov' ? 'selected' : '' }}>
+                                                BK Prov</option>
+                                            <option value="DBHCHT" {{ old('sumberdana') == 'DBHCHT' ? 'selected' : '' }}>
+                                                DBHCHT</option>
+                                            <option value="Lainnya"
+                                                {{ !in_array(old('sumberdana'), ['APBN', 'DAK', 'APBD Kab', 'APBD Prov', 'BK Prov', 'DBHCHT']) && old('sumberdana') ? 'selected' : '' }}>
+                                                Lainnya</option>
+                                        </select>
+
+                                        <!-- Input manual -->
+                                        <input type="text" id="sumberdana_lainnya"
+                                            value="{{ !in_array(old('sumberdana'), ['APBN', 'DAK', 'APBD Kab', 'APBD Prov', 'BK Prov', 'DBHCHT']) ? old('sumberdana') : '' }}"
+                                            class="form-control mt-2" placeholder="Masukkan sumber dana lainnya"
+                                            style="display: none;">
+
+                                        <!-- Hidden input (final yang dikirim ke DB) -->
+                                        <input type="hidden" name="sumberdana" id="sumberdana_hidden"
+                                            value="{{ old('sumberdana') }}">
                                     </div>
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            const dropdown = document.getElementById("sumberdana_select");
+                                            const inputLainnya = document.getElementById("sumberdana_lainnya");
+                                            const hidden = document.getElementById("sumberdana_hidden");
+                                            const form = dropdown.closest("form");
+
+                                            function toggleInput() {
+                                                if (dropdown.value === "Lainnya") {
+                                                    inputLainnya.style.display = "block";
+                                                    inputLainnya.required = true;
+                                                } else {
+                                                    inputLainnya.style.display = "none";
+                                                    inputLainnya.required = false;
+                                                    inputLainnya.value = "";
+                                                }
+                                            }
+
+                                            dropdown.addEventListener("change", toggleInput);
+
+                                            // cek pas reload halaman
+                                            toggleInput();
+
+                                            // sebelum submit: tentukan value final
+                                            form.addEventListener("submit", function() {
+                                                if (dropdown.value === "Lainnya" && inputLainnya.value.trim() !== "") {
+                                                    hidden.value = inputLainnya.value.trim();
+                                                } else {
+                                                    hidden.value = dropdown.value;
+                                                }
+                                            });
+                                        });
+                                    </script>
+
+
+
                                 </div>
 
                                 <div class="row mb-3">
@@ -124,12 +187,12 @@
                                         </select>
                                     </div>
 
-                                   
-                                        <!-- Keterangan -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Keterangan</label>
-                                            <textarea name="keterangan" class="form-control" rows="3">{{ old('keterangan') }}</textarea>
-                                        </div>
+
+                                    <!-- Keterangan -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Keterangan</label>
+                                        <textarea name="keterangan" class="form-control" rows="3" required>{{ old('keterangan') }}</textarea>
+                                    </div>
 
 
                                     <div class="d-flex justify-content-end gap-2 mt-4">

@@ -119,14 +119,82 @@
                                                 this.value = '';
                                             }
                                         });
-
-                                       
                                     </script>
                                     <div class="col-md-6">
                                         <label class="form-label">Sumber Dana</label>
-                                        <input type="text" name="sumberdana" class="form-control"
-                                            value="{{ old('sumberdana', $rencanaAksi->sumberdana) }}" required>
+
+                                        <!-- Dropdown (tanpa name) -->
+                                        <select id="sumberdana_select" class="form-control" required>
+                                            <option value="">-- Pilih Sumber Dana --</option>
+                                            <option value="APBN"
+                                                {{ old('sumberdana', $rencanaAksi->sumberdana) == 'APBN' ? 'selected' : '' }}>
+                                                APBN</option>
+                                            <option value="DAK"
+                                                {{ old('sumberdana', $rencanaAksi->sumberdana) == 'DAK' ? 'selected' : '' }}>
+                                                DAK</option>
+                                            <option value="APBD Kab"
+                                                {{ old('sumberdana', $rencanaAksi->sumberdana) == 'APBD Kab' ? 'selected' : '' }}>
+                                                APBD Kab</option>
+                                            <option value="APBD Prov"
+                                                {{ old('sumberdana', $rencanaAksi->sumberdana) == 'APBD Prov' ? 'selected' : '' }}>
+                                                APBD Prov</option>
+                                            <option value="BK Prov"
+                                                {{ old('sumberdana', $rencanaAksi->sumberdana) == 'BK Prov' ? 'selected' : '' }}>
+                                                BK Prov</option>
+                                            <option value="DBHCHT"
+                                                {{ old('sumberdana', $rencanaAksi->sumberdana) == 'DBHCHT' ? 'selected' : '' }}>
+                                                DBHCHT</option>
+                                            <option value="Lainnya"
+                                                {{ !in_array(old('sumberdana', $rencanaAksi->sumberdana), ['APBN', 'DAK', 'APBD Kab', 'APBD Prov', 'BK Prov', 'DBHCHT']) && old('sumberdana', $rencanaAksi->sumberdana) ? 'selected' : '' }}>
+                                                Lainnya
+                                            </option>
+                                        </select>
+
+                                        <!-- Input manual -->
+                                        <input type="text" id="sumberdana_lainnya"
+                                            value="{{ !in_array(old('sumberdana', $rencanaAksi->sumberdana), ['APBN', 'DAK', 'APBD Kab', 'APBD Prov', 'BK Prov', 'DBHCHT']) ? old('sumberdana', $rencanaAksi->sumberdana) : '' }}"
+                                            class="form-control mt-2" placeholder="Masukkan sumber dana lainnya"
+                                            style="display: none;">
+
+                                        <!-- Hidden input (final yang dikirim ke DB) -->
+                                        <input type="hidden" name="sumberdana" id="sumberdana_hidden"
+                                            value="{{ old('sumberdana', $rencanaAksi->sumberdana) }}">
                                     </div>
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            const dropdown = document.getElementById("sumberdana_select");
+                                            const inputLainnya = document.getElementById("sumberdana_lainnya");
+                                            const hidden = document.getElementById("sumberdana_hidden");
+                                            const form = dropdown.closest("form");
+
+                                            function toggleInput() {
+                                                if (dropdown.value === "Lainnya") {
+                                                    inputLainnya.style.display = "block";
+                                                    inputLainnya.required = true;
+                                                } else {
+                                                    inputLainnya.style.display = "none";
+                                                    inputLainnya.required = false;
+                                                    inputLainnya.value = "";
+                                                }
+                                            }
+
+                                            dropdown.addEventListener("change", toggleInput);
+
+                                            // cek pas reload halaman
+                                            toggleInput();
+
+                                            // sebelum submit: tentukan value final
+                                            form.addEventListener("submit", function() {
+                                                if (dropdown.value === "Lainnya" && inputLainnya.value.trim() !== "") {
+                                                    hidden.value = inputLainnya.value.trim();
+                                                } else {
+                                                    hidden.value = dropdown.value;
+                                                }
+                                            });
+                                        });
+                                    </script>
+
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
@@ -135,18 +203,18 @@
                                             value="{{ old('tahun', $rencanaAksi->tahun) }}" required>
                                     </div>
 
-                                        <div class="col-md-6">
-                                            <label class="form-label">Perangkat Daerah</label>
-                                            <select name="id_opd" class="form-select" required>
-                                                <option value="">-- Pilih OPD --</option>
-                                                @foreach ($opds as $item)
-                                                    <option value="{{ $item->id }}"
-                                                        {{ $item->id == $rencanaAksi->id_opd ? 'selected' : '' }}>
-                                                        {{ $item->nama }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Perangkat Daerah</label>
+                                        <select name="id_opd" class="form-select" required>
+                                            <option value="">-- Pilih OPD --</option>
+                                            @foreach ($opds as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ $item->id == $rencanaAksi->id_opd ? 'selected' : '' }}>
+                                                    {{ $item->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <!-- Keterangan -->
