@@ -6,20 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**     * Run the migrations.
+    /**
+     * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('potensis', function (Blueprint $table) {
+        Schema::create('potensi_kehutanans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->foreignId('id_subpotensi')->references('id')->on('subpotensi_kehutanans')->onDelete('cascade');
             $table->string('judul');
-            $table->foreignId('id_kecamatan')->references('id')->on('kecamatans')->onDelete('cascade');
-            $table->foreignId('id_desa')->references('id')->on('desas')->onDelete('cascade');
             $table->string('gambar');
-            $table->string('tanggal');
-            $table->longText('uraian');
+            $table->longText('keterangan');
             $table->timestamps();
         });
     }
@@ -29,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('potensis');
+        Schema::dropIfExists('potensi_kehutanans');
+
     }
 };

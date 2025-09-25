@@ -13,12 +13,36 @@ class KupsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $kups = Kups::paginate(5);
-        $kth = Kth::where('delete_at', '0')->get();
-        return view('admin.Kups.index', compact('kups', 'kth'));
+   public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = Kups::query();
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('kups', 'like', "%{$search}%")
+              ->orWhere('kategori', 'like', "%{$search}%")
+              ->orWhere('tahun', 'like', "%{$search}%")
+              ->orWhere('pendapatan', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        })
+        ->orWhereHas('kth', function ($q) use ($search) {
+            $q->where('kth', 'like', "%{$search}%")
+              ->orWhere('kecamatan', 'like', "%{$search}%")
+              ->orWhere('desa', 'like', "%{$search}%");
+        });
     }
+
+    $kups = $query->paginate(5);
+    $kups->appends($request->only('search'));
+
+    $kth = Kth::where('delete_at', '0')->get();
+
+    return view('admin.Kups.index', compact('kups', 'kth', 'search'));
+}
 
     /**
      * Show the form for creating a new resource.

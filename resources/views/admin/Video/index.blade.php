@@ -67,27 +67,17 @@
                     <div class="card">
                         <div class="card-body" id="tabelVideo">
                             <h5 class="card-title">Daftar Video</h5>
-
-                            <!-- Entries & Search -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-
-                                <!-- Entries -->
-                                <div class="d-flex align-items-center gap-2">
-                                    <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select id="entries" class="form-select form-select-sm w-auto" data-target="TableVideo">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                    <span>data</span>
-                                </div>
-
                                 <!-- Search -->
-                                <div class="input-group w-auto">
-                                    <span class="input-group-text"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control searchInput" data-target="TableVideo" placeholder="Cari Video...">
-                                </div>
+                               <form method="GET" class="d-flex align-items-center">
+        <input type="text" name="search" class="form-control"
+               placeholder="Cari Data"
+               value="{{ request('search') }}">
+        <button class="btn btn-primary" type="submit">Cari</button>
+        @if(request('search'))
+            <a href="{{ route('gambaran') }}" class="btn btn-secondary">Reset</a>
+        @endif
+    </form>
                             </div>
 
                             <!-- Table -->
@@ -146,3 +136,25 @@
         </section>
     </main>
 @endsection
+@push('scripts')
+    @if (session('video_add_success'))
+        <script>
+            // 1. Tampilkan notifikasi sukses menggunakan SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: "{{ session('video_add_success') }}",
+                confirmButtonColor: '#3085d6',
+            });
+
+            // 2. Lakukan scroll ke tabel secara manual dengan JavaScript
+            // Ini menggantikan fungsi #tabelVideo yang kita hapus
+            document.addEventListener('DOMContentLoaded', function() {
+                const tabelVideoElement = document.getElementById('tabelVideo');
+                if (tabelVideoElement) {
+                    tabelVideoElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        </script>
+    @endif
+@endpush

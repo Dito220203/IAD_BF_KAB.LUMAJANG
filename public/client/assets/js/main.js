@@ -5,7 +5,7 @@
         /**
          * 1. PRELOADER (VERSI BARU & STABIL)
          */
-        /* modifikasi */
+
         const preloader = document.getElementById("preloader");
 
         // Tampilkan kembali halaman
@@ -20,7 +20,6 @@
                 preloader.remove();
             });
         }
-        /* modifikasi */
 
         /**
          * 2. AOS, GLIGHTBOX, PURE COUNTER
@@ -257,85 +256,83 @@
     }
 
     /**
-     * NAVIGASI MOBILE (Toggle & Dropdown)
+     * NAVIGASI MOBILE (Toggle & Dropdown) - VERSI FINAL STABIL
      */
     const mobileNavToggleBtn = document.querySelector(".mobile-nav-toggle");
     if (mobileNavToggleBtn) {
         const mobileNavToogle = () => {
-            document
-                .querySelector("body")
-                .classList.toggle("mobile-nav-active");
+            document.querySelector("body").classList.toggle("mobile-nav-active");
             mobileNavToggleBtn.classList.toggle("bi-list");
             mobileNavToggleBtn.classList.toggle("bi-x");
         };
         mobileNavToggleBtn.addEventListener("click", mobileNavToogle);
 
-        document.querySelectorAll("#navmenu a").forEach((navmenu) => {
-            navmenu.addEventListener("click", (e) => {
-                let parent = navmenu.parentNode;
-                if (parent.classList.contains("dropdown")) {
-                    e.preventDefault();
-                    // parent.classList.toggle("active");
-                    let submenu = parent.querySelector("ul");
-                    if (submenu) submenu.classList.toggle("dropdown-active");
+        document.querySelectorAll("#navmenu a").forEach((navmenuLink) => {
+            navmenuLink.addEventListener("click", (e) => {
+                // Hanya jalankan logika ini jika menu mobile sedang aktif
+                if (!document.querySelector(".mobile-nav-active")) {
                     return;
                 }
-                if (document.querySelector(".mobile-nav-active")) {
-                    mobileNavToogle();
-                }
-            });
-        });
-    }
 
-    /**
-     * PENCARIAN PROFIL KAWASAN (Tombol Cari di Navbar)
-     */
-    if (typeof $ !== "undefined") {
-        $(".profil-search-btn").on("click", function () {
-            let kecamatan = $("#kecamatan").val();
-            let desa = $("#desa").val();
-            if (kecamatan && desa) {
-                window.location.href = `/profil?kecamatan=${kecamatan}&desa=${desa}`;
-            } else {
-                alert("Silakan pilih Kecamatan dan Desa terlebih dahulu!");
-            }
-        });
-    }
-    /* modifikasi */
-    /**
- * ===================================================================
- * === NAVIGASI AKTIF SAAT SCROLL (VERSI PINTAR) ===
- * ===================================================================
- */
-// Cek dulu apakah kita ada di halaman utama
-if (document.body.classList.contains('index-page')) {
+                let parent = navmenuLink.parentNode;
 
-    const sections = document.querySelectorAll("section[id]");
-    if (sections.length > 0) {
-        const navLinks = document.querySelectorAll("#navmenu a");
+                // Jika link yang diklik adalah link INDUK dari dropdown
+                if (parent.classList.contains("dropdown")) {
+                    e.preventDefault(); // <-- Ini Mencegah Reload
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    navLinks.forEach((link) => link.classList.remove("active"));
-
-                    const id = entry.target.getAttribute("id");
-                    const activeLink = document.querySelector(`#navmenu a[href*="#${id}"]`);
-
-                    if (activeLink) {
-                        activeLink.classList.add("active");
+                    // Buka/tutup submenu
+                    parent.classList.toggle("active");
+                    let submenu = parent.querySelector("ul");
+                    if (submenu) {
+                        submenu.classList.toggle("dropdown-active");
                     }
                 }
-            });
-        }, {
-            threshold: 0.7,
-        });
+                // Jika yang diklik adalah link BIASA (bukan dropdown)
+                else {
+                    mobileNavToogle(); // Langsung tutup menu navigasi
+                }
 
-        sections.forEach((section) => {
-            observer.observe(section);
+            });
         });
     }
+    /**
+     * ===================================================================
+     * === NAVIGASI AKTIF SAAT SCROLL (VERSI PINTAR) ===
+     * ===================================================================
+     */
+    // Cek dulu apakah kita ada di halaman utama
+    if (document.body.classList.contains("index-page")) {
+        const sections = document.querySelectorAll("section[id]");
+        if (sections.length > 0) {
+            const navLinks = document.querySelectorAll("#navmenu a");
 
-} // <-- Kurung tutup dari 'if'
-/* modifikasi */
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            navLinks.forEach((link) =>
+                                link.classList.remove("active")
+                            );
+
+                            const id = entry.target.getAttribute("id");
+                            const activeLink = document.querySelector(
+                                `#navmenu a[href*="#${id}"]`
+                            );
+
+                            if (activeLink) {
+                                activeLink.classList.add("active");
+                            }
+                        }
+                    });
+                },
+                {
+                    threshold: 0.7,
+                }
+            );
+
+            sections.forEach((section) => {
+                observer.observe(section);
+            });
+        }
+    } // <-- Kurung tutup dari 'if'
 })();

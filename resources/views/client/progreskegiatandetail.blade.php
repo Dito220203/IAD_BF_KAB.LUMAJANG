@@ -10,9 +10,9 @@
             <div class="detail-card">
                 <h3>{{ $progres->judul }}</h3>
                 <p><strong>Tanggal:</strong>
-                    {{ \Carbon\Carbon::parse($progres->created_at)->translatedFormat('d F Y H:i') }}</p>
+                    {{ \Carbon\Carbon::parse($progres->created_at)->translatedFormat('d F Y') }}</p>
                 <p><strong>Sumber Anggaran:</strong> {{ $progres->sumber_dana }}</p>
-                <p><strong>Jumlah Anggaran:</strong> Rp {{ $progres->jumlah_anggaran }}</p>
+                <p><strong>Jumlah Anggaran:</strong> {{ $progres->jumlah_anggaran }}</p>
                 <p><strong>Penerima:</strong> {{ $progres->penerima }}</p>
 
                 <hr>

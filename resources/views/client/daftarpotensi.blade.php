@@ -16,7 +16,6 @@
                     </div>
                 </div>
 
-                <!-- Daftar Regulasi -->
                 <div class="col-lg-9 col-md-8 col-12">
                     <div class="progres-wrapper">
                         <h4 class="progres-title">Daftar Potensi IAD</h4>

@@ -19,57 +19,132 @@ class MonevController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $user = Auth::guard('pengguna')->user();
-        $query = Monev::query();
+//       public function index(Request $request)
+//     {
+//         $user = Auth::guard('pengguna')->user();
+//         $query = Monev::query();
 
-        if ($user->level !== 'Super Admin') {
-            $query->where('id_pengguna', $user->id);
+//         if ($user->level !== 'Super Admin') {
+//             $query->where('id_pengguna', $user->id);
+//         }
+
+//         // Filter Triwulan
+//         if ($request->filled('triwulan')) {
+//             $triwulan = $request->triwulan;
+
+//             switch ($triwulan) {
+//                 case 1: // Jan - Mar
+//                     $query->whereMonth('tanggal', '>=', 1)
+//                         ->whereMonth('tanggal', '<=', 3);
+//                     break;
+//                 case 2: // Apr - Jun
+//                     $query->whereMonth('tanggal', '>=', 4)
+//                         ->whereMonth('tanggal', '<=', 6);
+//                     break;
+//                 case 3: // Jul - Sep
+//                     $query->whereMonth('tanggal', '>=', 7)
+//                         ->whereMonth('tanggal', '<=', 9);
+//                     break;
+//                 case 4: // Okt - Des
+//                     $query->whereMonth('tanggal', '>=', 10)
+//                         ->whereMonth('tanggal', '<=', 12);
+//                     break;
+//             }
+//         }
+
+//         // Filter Tahun
+//     if ($request->filled('tahun')) {
+//         $query->whereYear('tanggal', $request->tahun);
+//     }
+
+//     $monev = $query->orderBy('tanggal', 'desc')->paginate(10)->withQueryString();
+
+//     // Dropdown tahun juga harus menyesuaikan level user
+//     $tahunQuery = Monev::selectRaw('YEAR(tanggal) as tahun')->distinct();
+
+//     if ($user->level !== 'Super Admin') {
+//         $tahunQuery->where('id_pengguna', $user->id);
+//     }
+
+//     $tahun_list = $tahunQuery->orderBy('tahun', 'desc')->pluck('tahun');
+
+//     return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
+// }
+public function index(Request $request)
+{
+    $user = Auth::guard('pengguna')->user();
+    $query = Monev::query();
+
+    if ($user->level !== 'Super Admin') {
+        $query->where('id_pengguna', $user->id);
+    }
+
+    // Filter Triwulan
+    if ($request->filled('triwulan')) {
+        $triwulan = $request->triwulan;
+        switch ($triwulan) {
+            case 1: // Jan - Mar
+                $query->whereMonth('tanggal', '>=', 1)
+                      ->whereMonth('tanggal', '<=', 3);
+                break;
+            case 2: // Apr - Jun
+                $query->whereMonth('tanggal', '>=', 4)
+                      ->whereMonth('tanggal', '<=', 6);
+                break;
+            case 3: // Jul - Sep
+                $query->whereMonth('tanggal', '>=', 7)
+                      ->whereMonth('tanggal', '<=', 9);
+                break;
+            case 4: // Okt - Des
+                $query->whereMonth('tanggal', '>=', 10)
+                      ->whereMonth('tanggal', '<=', 12);
+                break;
         }
+    }
 
-        // Filter Triwulan
-        if ($request->filled('triwulan')) {
-            $triwulan = $request->triwulan;
-
-            switch ($triwulan) {
-                case 1: // Jan - Mar
-                    $query->whereMonth('tanggal', '>=', 1)
-                        ->whereMonth('tanggal', '<=', 3);
-                    break;
-                case 2: // Apr - Jun
-                    $query->whereMonth('tanggal', '>=', 4)
-                        ->whereMonth('tanggal', '<=', 6);
-                    break;
-                case 3: // Jul - Sep
-                    $query->whereMonth('tanggal', '>=', 7)
-                        ->whereMonth('tanggal', '<=', 9);
-                    break;
-                case 4: // Okt - Des
-                    $query->whereMonth('tanggal', '>=', 10)
-                        ->whereMonth('tanggal', '<=', 12);
-                    break;
-            }
-        }
-
-        // Filter Tahun
+    // Filter Tahun
     if ($request->filled('tahun')) {
         $query->whereYear('tanggal', $request->tahun);
     }
 
+    // Fitur Pencarian
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('rencana_aksi', 'like', "%{$search}%")
+              ->orWhere('nama_program', 'like', "%{$search}%")
+              ->orWhere('kegiatan', 'like', "%{$search}%")
+              ->orWhere('sub_kegiatan', 'like', "%{$search}%")
+              ->orWhere('lokasi', 'like', "%{$search}%")
+              ->orWhere('tahun', 'like', "%{$search}%")
+              ->orWhere('anggaran', 'like', "%{$search}%")
+              ->orWhere('volume', 'like', "%{$search}%")
+              ->orWhere('satuan', 'like', "%{$search}%")
+              ->orWhere('sumberdana', 'like', "%{$search}%")
+              ->orWhere('keterangan', 'like', "%{$search}%");
+        })
+        ->orWhereHas('opd', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        })
+        ->orWhereHas('subprogram', function ($q) use ($search) {
+            $q->where('subprogram', 'like', "%{$search}%");
+        });
+    }
+
+    // Baru eksekusi query
     $monev = $query->orderBy('tanggal', 'desc')->paginate(10)->withQueryString();
 
-    // Dropdown tahun juga harus menyesuaikan level user
+    // Dropdown tahun
     $tahunQuery = Monev::selectRaw('YEAR(tanggal) as tahun')->distinct();
-
     if ($user->level !== 'Super Admin') {
         $tahunQuery->where('id_pengguna', $user->id);
     }
-
     $tahun_list = $tahunQuery->orderBy('tahun', 'desc')->pluck('tahun');
 
     return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
 }
+
+
 
 
 
@@ -291,7 +366,7 @@ class MonevController extends Controller
 
         $monev = $query->orderBy('tanggal', 'desc')->get();
 
-        $pdf = Pdf::loadView(
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
             'admin.MonitoringEvaluasi.export',
             compact('monev', 'tahun', 'triwulan')
         )->setPaper('a4', 'landscape');

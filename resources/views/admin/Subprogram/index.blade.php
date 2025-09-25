@@ -12,14 +12,13 @@
         </div>
 
         <section class="section">
-            <div class="row">
-                <!-- Kolom Sub Program -->
+             <div class="row">
                 <div class="col-lg-6">
-                    <div class="card">
+
+                    <div class="card ">
                         <div class="card-body">
-                            <div class="mb-3 mt-3">
-                                <h5 class="card-title">Tabel Sub Program</h5>
-                                <!-- Tombol Tambah Sub Program -->
+                            <!-- Header control: Tambah, Search, Tampilkan Data -->
+                            <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                 <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
                                     data-bs-target="#modalSubProgram">
                                     + Tambah Sub Program
@@ -67,20 +66,18 @@
 
                             <!-- Filter & Search -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <label class="form-label mb-0">Tampilkan</label>
-                                    <select class="form-select form-select-sm w-auto entriesSelect"
-                                        data-target="TableSubprogram">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                    <span>data</span>
-                                </div>
-                                <div class="input-group w-auto">
-                                    <input type="text" class="form-control searchInput" data-target="TableSubprogram"
-                                        placeholder="Cari Data...">
+                                
+                                <div class="col-12 col-lg-auto">
+                                                <!-- Pencarian -->
+                                                <form method="GET" class="input-group w-auto mb-2">
+        <input type="text" name="search" class="form-control"
+               placeholder="Cari Data"
+               value="{{ request('search') }}">
+        <button class="btn btn-primary" type="submit">Cari</button>
+        @if(request('search'))
+            <a href="{{ route('subprogram') }}" class="btn btn-secondary">Reset</a>
+        @endif
+    </form>
                                 </div>
                             </div>
 
@@ -274,20 +271,12 @@
 
                                 <!-- Filter & Search Produk -->
                                 <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <label class="form-label mb-0">Tampilkan</label>
-                                        <select class="form-select form-select-sm w-auto entriesSelect"
-                                            data-target="TableProduk">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                        <span>data</span>
-                                    </div>
-                                    <div class="input-group w-auto">
+                                   <div class="input-group w-100">
+                                
                                         <input type="text" class="form-control searchInput" data-target="TableProduk"
                                             placeholder="Cari Data...">
+                                  
+                                </div>
                                     </div>
                                 </div>
 

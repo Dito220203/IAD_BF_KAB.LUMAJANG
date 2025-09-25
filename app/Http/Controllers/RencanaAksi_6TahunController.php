@@ -17,11 +17,48 @@ class RencanaAksi_6TahunController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $rencanaAksi = RencanaAksi_6_tahun::where('delete_at', '0')->paginate(10);
-        return view('admin.RencanAksi6Tahun.index', compact('rencanaAksi'));
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = RencanaAksi_6_tahun::with(['subprogram', 'opd'])
+        ->where('delete_at', '0');
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('rencana_aksi', 'like', "%{$search}%")
+              ->orWhere('nama_program', 'like', "%{$search}%")
+              ->orWhere('kegiatan', 'like', "%{$search}%")
+              ->orWhere('sub_kegiatan', 'like', "%{$search}%")
+              ->orWhere('lokasi', 'like', "%{$search}%")
+              ->orWhere('tahun', 'like', "%{$search}%")
+              ->orWhere('volume', 'like', "%{$search}%")
+              ->orWhere('satuan', 'like', "%{$search}%")
+              ->orWhere('anggaran', 'like', "%{$search}%")
+              ->orWhere('sumberdana', 'like', "%{$search}%")
+              ->orWhere('keterangan', 'like', "%{$search}%");
+        })
+        ->orWhereHas('opd', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        })
+        ->orWhereHas('subprogram', function ($q) use ($search) {
+            $q->where('subprogram', 'like', "%{$search}%");
+        });
     }
+
+    $rencanaAksi = $query->paginate(10);
+    $rencanaAksi->appends($request->only('search'));
+
+    return view('admin.RencanAksi6Tahun.index', compact('rencanaAksi', 'search'));
+}
+
+
+    // public function index()
+    // {
+    //     $rencanaAksi = RencanaAksi_6_tahun::where('delete_at', '0')->paginate(10);
+    //     return view('admin.RencanAksi6Tahun.index', compact('rencanaAksi'));
+    // }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -75,8 +112,7 @@ class RencanaAksi_6TahunController extends Controller
             'keterangan'        => $validate['keterangan'],
         ]);
         LogHelper::add('Menambah Data Rencana Aksi');
-
-        return redirect()->route('rencana6tahun')
+   return redirect()->route('rencana6tahun')
             ->with('success', 'Rencana Aksi berhasil ditambahkan!');
     }
 
@@ -138,7 +174,7 @@ class RencanaAksi_6TahunController extends Controller
             'keterangan'       => $validate['keterangan'],
         ]);
         LogHelper::add('Mengedit Data Rencana Aksi');
-        return redirect()->route('rencana6tahun')
+  return redirect()->route('rencana6tahun')
             ->with('success', 'Rencana Aksi berhasil diperbarui!');
     }
 

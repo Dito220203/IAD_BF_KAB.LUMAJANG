@@ -19,12 +19,38 @@ class PotensiController extends Controller
      */
 
 
-    public function index()
-    {
+    public function index(Request $request)
+{
+    $search = $request->input('search');
 
-        $potensi = Potensi::paginate(10);
-        return view('admin.Potensi.index', compact('potensi'));
+    $query = Potensi::query();
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('uraian', 'like', "%{$search}%")
+              ->orWhere('tanggal', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        })
+        ->orWhereHas('kecamatan', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        })
+        ->orWhereHas('desa', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        })
+        ->orWhereHas('SubpotensiKehutanan', function ($q) use ($search) {
+            $q->where('sub_potensi', 'like', "%{$search}%");
+        });
     }
+
+    $potensi = $query->paginate(10);
+    $potensi->appends($request->only('search'));
+
+    return view('admin.Potensi.index', compact('potensi', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

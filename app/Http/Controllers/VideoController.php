@@ -12,11 +12,28 @@ class VideoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $video = Video::paginate(10);
-        return view('admin.Video.index', compact('video'));
+   public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = Video::query();
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('judul', 'like', "%{$search}%")
+              ->orWhere('link', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $video = $query->paginate(10);
+    $video->appends($request->only('search'));
+
+    return view('admin.Video.index', compact('video', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -42,8 +59,8 @@ class VideoController extends Controller
             'link' => $valiadate['link'],
         ]);
          LogHelper::add('Menambah data Video');
-        return redirect()->to(route('video') . '#tabelVideo')
-            ->with('success', 'Data berhasil disimpan!');
+     return redirect()->route('video')
+            ->with('video_add_success', 'Data berhasil disimpan!');
     }
 
     /**
@@ -80,8 +97,8 @@ class VideoController extends Controller
             'link' => $request->input('e_link'),
         ]);
         LogHelper::add('Mengubah data Video');
-        return redirect()->to(route('video') . '#tabelVideo')
-            ->with('success', 'Data berhasil di Update');
+       return redirect()->route('video')
+            ->with('video_add_success', 'Data berhasil di Update');
     }
 
     /**

@@ -18,21 +18,16 @@
                         <div class="card-body">
                             <!-- Header control: Tambah, Search, Tampilkan Data -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-
-                                <div class="d-flex align-items-center ">
-                                    <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                    <select class="form-select form-select-sm w-auto entriesSelect" data-target="TableLog">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                    <span>data</span>
-                                </div>
-
-                                <div class="input-group w-auto">
-                                   <input type="text" class="form-control searchInput" data-target="TableLog"
-                                        placeholder="Cari Data...">
+<div class="col-12 col-lg-auto">
+     <form method="GET" class="input-group w-auto">
+        <input type="text" name="search" class="form-control"
+               placeholder="Cari Data"
+               value="{{ request('search') }}">
+        <button class="btn btn-primary" type="submit">Cari</button>
+        @if(request('search'))
+            <a href="{{ route('aktivitas') }}" class="btn btn-secondary">Reset</a>
+        @endif
+    </form>
                                 </div>
                             </div>
 

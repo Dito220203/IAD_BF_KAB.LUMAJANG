@@ -16,15 +16,57 @@ use App\Models\Monev;
 
 class RencanakerjaController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::guard('pengguna')->user();
-        $rencana = $user->level == 'Super Admin'
-            ? RencanaKerja::active()->paginate(10)
-            : RencanaKerja::active()->where('id_pengguna', $user->id)->paginate(10);
+    public function index(Request $request)
+{
+    $user   = Auth::guard('pengguna')->user();
+    $search = $request->input('search');
 
-        return view('admin.RencanaKerja.index', compact('rencana'));
+    $query = RencanaKerja::with(['subprogram', 'opd'])
+        ->active(); // pakai scopeActive dari model
+
+    // Kalau bukan super admin, filter data hanya milik user
+    if ($user->level !== 'Super Admin') {
+        $query->where('id_pengguna', $user->id);
     }
+
+    // Fitur pencarian
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('rencana_aksi', 'like', "%{$search}%")
+              ->orWhere('nama_program', 'like', "%{$search}%")
+              ->orWhere('kegiatan', 'like', "%{$search}%")
+              ->orWhere('sub_kegiatan', 'like', "%{$search}%")
+              ->orWhere('lokasi', 'like', "%{$search}%")
+              ->orWhere('tahun', 'like', "%{$search}%")
+              ->orWhere('anggaran', 'like', "%{$search}%")
+              ->orWhere('volume', 'like', "%{$search}%")
+              ->orWhere('satuan', 'like', "%{$search}%")
+              ->orWhere('sumberdana', 'like', "%{$search}%")
+              ->orWhere('keterangan', 'like', "%{$search}%");
+        })
+        ->orWhereHas('opd', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        })
+        ->orWhereHas('subprogram', function ($q) use ($search) {
+            $q->where('subprogram', 'like', "%{$search}%");
+        });
+    }
+
+    $rencana = $query->paginate(10);
+    $rencana->appends($request->only('search'));
+
+    return view('admin.RencanaKerja.index', compact('rencana', 'search'));
+}
+
+    // public function index()
+    // {
+    //     $user = Auth::guard('pengguna')->user();
+    //     $rencana = $user->level == 'Super Admin'
+    //         ? RencanaKerja::active()->paginate(10)
+    //         : RencanaKerja::active()->where('id_pengguna', $user->id)->paginate(10);
+
+    //     return view('admin.RencanaKerja.index', compact('rencana'));
+    // }
 
     public function getRencanaAksi($id_subprogram)
     {
@@ -123,9 +165,9 @@ class RencanakerjaController extends Controller
 
         LogHelper::add('Menambah Data Rencana Kerja + otomatis ke Monev');
 
-        return redirect()->route('rencanakerja')
+      return redirect()->route('rencanakerja')
             ->with('success', 'Rencana Kerja berhasil ditambahkan!');
-    }
+}
 
 
 

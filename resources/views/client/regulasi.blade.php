@@ -29,7 +29,7 @@
                                     <div class="progres-meta">
                                         <span class="tanggal">
                                             <i class="fas fa-calendar-alt"></i>
-                                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y H:i') }}
+                                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
                                         </span>
                                     </div>
                                     <div class="progres-body">

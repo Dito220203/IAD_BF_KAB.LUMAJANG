@@ -12,11 +12,30 @@ class KthController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $kth = Kth::where('delete_at', '0')->paginate(5);
-        return view('admin.Kth.index', compact('kth'));
+   public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = Kth::where('delete_at', '0');
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('kth', 'like', "%{$search}%")
+              ->orWhere('luas', 'like', "%{$search}%")
+              ->orWhere('kecamatan', 'like', "%{$search}%")
+              ->orWhere('desa', 'like', "%{$search}%");
+        })
+        ->orWhereHas('penggunas', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $kth = $query->paginate(5);
+    $kth->appends($request->only('search'));
+
+    return view('admin.Kth.index', compact('kth', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

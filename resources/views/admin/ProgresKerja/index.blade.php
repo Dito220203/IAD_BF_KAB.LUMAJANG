@@ -11,31 +11,25 @@
              </nav>
          </div>
          <section class="section">
-             <div class="row">
-                 <div class="col-lg-12">
-
-                     <div class="card">
-                         <div class="card-body">
-                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Header tools -->
+                          <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                  <a href="{{ route('progrescreate') }}" class="btn btn-primary">
                                      + Tambah Progres
                                  </a>
-
-                                 <div class="d-flex align-items-center gap-2">
-                                     <label for="entries" class="form-label mb-0">Tampilkan</label>
-                                     <select id="entries" class="form-select form-select-sm w-auto entriesSelect" data-target="TableProgres">
-                                         <option value="10">10</option>
-                                         <option value="25">25</option>
-                                         <option value="50">50</option>
-                                         <option value="100">100</option>
-                                     </select>
-                                     <span>data</span>
-                                 </div>
-
-                                 <div class="input-group w-auto">
-                                     <input type="text" class="form-control searchInput" data-target="TableProgres"
-                                        placeholder="Cari Data...">
-                                 </div>
+                                                                       <form method="GET" class="input-group w-auto mb-1">
+    <input type="text" name="search" class="form-control"
+           placeholder="Cari Data"
+           value="{{ request('search') }}">
+    <button class="btn btn-primary" type="submit">Cari</button>
+    @if(request('search'))
+        <a href="{{ route('progres') }}" class="btn btn-secondary">Reset</a>
+    @endif
+</form>
+                              
                              </div>
 
                              <!-- Table -->

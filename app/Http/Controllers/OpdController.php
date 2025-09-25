@@ -12,11 +12,23 @@ class OpdController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $opd = Opd::where('delete_at', '0')->paginate(10);
-        return view('admin.Opd.index', compact('opd'));
+public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = Opd::where('delete_at', '0');
+
+    if ($search) {
+        $query->where('nama', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%");
     }
+
+    $opd = $query->paginate(10);
+    $opd->appends($request->only('search'));
+
+    return view('admin.Opd.index', compact('opd', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

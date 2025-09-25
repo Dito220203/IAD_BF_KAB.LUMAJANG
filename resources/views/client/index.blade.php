@@ -135,14 +135,14 @@
             <section id="chart_perhut" class="perhutanan">
                 <div class="chart-container" style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;"
                     data-aos="fade-up" data-aos-delay="250">
-                    <div class="chart-box"
-                        style="flex: 1; min-width: 300px; background: rgb(255, 255, 255); padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div class="chart-kups">
                         <h3 class="chart-title-kups">Jumlah Kategori KUPS</h3>
-                        <canvas id="donutChart" data-labels="{{ json_encode($labels) }}"
-                            data-values="{{ json_encode($data) }}" data-colors="{{ json_encode($backgroundColor) }}">
-                        </canvas>
+                        <div class="chart-box" style="flex: 1;">
+                            <canvas id="donutChart" data-labels="{{ json_encode($labels) }}"
+                                data-values="{{ json_encode($data) }}" data-colors="{{ json_encode($backgroundColor) }}">
+                            </canvas>
+                        </div>
                     </div>
-
                 </div>
             </section>
         </section>
@@ -155,26 +155,28 @@
                 </div>
 
                 <div class="kups-wrapper">
-                    <div class="kups-slider">
-                        @foreach ($subpotensis as $subpotensi)
-                            <div class="kups-card-item">
-                                <a href="{{ route('client.daftarpotensi', ['id' => $subpotensi->id]) }}">
-                                    <div class="stats-card">
-                                        <div class="stats-icon">
-                                            @if (!empty($subpotensi->icon))
-                                                <i class="{{ $subpotensi->icon }}"></i>
-                                            @else
-                                                <i class="fas fa-seedling"></i>
-                                            @endif
+                    <div class="kups-mobile-wrapper">
+                        <div class="kups-slider">
+                            @foreach ($subpotensis as $subpotensi)
+                                <div class="kups-card-item">
+                                    <a href="{{ route('client.daftarpotensi', ['id' => $subpotensi->id]) }}">
+                                        <div class="stats-card">
+                                            <div class="stats-icon">
+                                                @if (!empty($subpotensi->icon))
+                                                    <i class="{{ $subpotensi->icon }}"></i>
+                                                @else
+                                                    <i class="fas fa-seedling"></i>
+                                                @endif
+                                            </div>
+                                            <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
+                                            <span class="stats-number purecounter" data-purecounter-start="0"
+                                                data-purecounter-end="{{ $counts[$subpotensi->id] ?? 0 }}"
+                                                data-purecounter-duration="1"></span>
                                         </div>
-                                        <p class="stats-label">{{ strtoupper($subpotensi->sub_potensi) }}</p>
-                                        <span class="stats-number purecounter" data-purecounter-start="0"
-                                            data-purecounter-end="{{ $counts[$subpotensi->id] ?? 0 }}"
-                                            data-purecounter-duration="1"></span>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                     <div class="kups-pagination" id="kupsPagination"></div>
                 </div>
@@ -359,7 +361,8 @@
                                 }]
                             },
                             options: {
-                                 aspectRatio: 1, /* modifikasi */
+                                aspectRatio: 1,
+                                /* modifikasi */
                                 responsive: true,
                                 maintainAspectRatio: false
                             }
@@ -408,7 +411,7 @@
                                 },
                                 gridLineColor: '#E0E0E0',
                                 labels: {
-                                    format: 'Rp {value:,.0f}',
+                                    format: '{value:,.0f}', // tanpa Rp
                                     style: {
                                         fontSize: '12px',
                                         color: '#666'
@@ -426,7 +429,8 @@
                             },
                             tooltip: {
                                 headerFormat: '<b>{point.key}</b><br>',
-                                pointFormat: 'KTH: <b>{point.options.kth}</b><br><span style="color:{point.color}">●</span> {series.name}: <b>Rp {point.y:,.0f}</b>',
+                                pointFormat: 'KTH: <b>{point.options.kth}</b><br>' +
+                                    '<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.0f}</b>', // tanpa Rp
                                 backgroundColor: 'rgba(255, 255, 255, 0.95)',
                                 borderColor: '#DDD',
                                 borderRadius: 8,
@@ -455,6 +459,7 @@
                                 }
                             }
                         });
+
 
                         function updateChartData() {
                             const selectedYear = tahunSelect.value;

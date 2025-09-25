@@ -13,11 +13,28 @@ class ProdukKupsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $produkKups = ProdukKups::paginate(10);
-        return view('admin.ProdukKups.index', compact('produkKups'));
+   public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = ProdukKups::query();
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%")
+              ->orWhere('keterangan', 'like', "%{$search}%");
+        })
+        ->orWhereHas('pengguna', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%");
+        });
     }
+
+    $produkKups = $query->paginate(10);
+    $produkKups->appends($request->only('search'));
+
+    return view('admin.ProdukKups.index', compact('produkKups', 'search'));
+}
+
 
     /**
      * Show the form for creating a new resource.

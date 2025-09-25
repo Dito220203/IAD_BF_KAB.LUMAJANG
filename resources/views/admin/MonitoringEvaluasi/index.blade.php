@@ -72,11 +72,16 @@
                                         <div class="col-12 col-md-4">
                                             <label class="form-label small mb-1">Pencarian</label>
                                             <div class="input-group">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-search"></i>
-                                                </span>
-                                                <input type="text" class="form-control searchInput"
-                                                    data-target="TableMonev" placeholder="Cari monitoring evaluasi...">
+                                                                   <!-- Pencarian -->
+                                                                               <form method="GET" class="input-group w-auto mb-3">
+    <input type="text" name="search" class="form-control"
+           placeholder="Cari Data (program, kegiatan, OPD...)"
+           value="{{ request('search') }}">
+    <button class="btn btn-primary" type="submit">Cari</button>
+    @if(request('search'))
+        <a href="{{ route('monev') }}" class="btn btn-secondary">Reset</a>
+    @endif
+</form>
                                             </div>
                                         </div>
                                     </form>
@@ -108,8 +113,8 @@
                                             <th class="text-center">Status</th>
                                             <th class="text-center">Input RKA</th>
                                             <th class="text-center">Realisasi</th>
-                                            <th class="text-center">Tanggal</th>
-                                            <th class="text-center kolom-keterangan">Keterangan</th>
+                                            <th class="text-center">Tanggal Monev</th>
+                                            <th class="text-center">Keterangan</th>
                                             @if ($adaPesan)
                                                 <th class="text-center">Catatan</th>
                                             @endif

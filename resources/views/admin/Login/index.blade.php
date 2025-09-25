@@ -109,7 +109,7 @@
                             </div>
 
                             <div class="credits">
-                                &copy; 2025 <strong>IAD Kehutanan Lumajang</strong>
+                                &copy; 2025 <strong>IAD Perhutanan Sosial Lumajang</strong>
                             </div>
 
                         </div>
