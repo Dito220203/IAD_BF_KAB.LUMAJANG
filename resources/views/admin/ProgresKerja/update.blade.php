@@ -13,7 +13,6 @@
             </nav>
         </div>
 
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin="" />
 
         <style>
             #map {
@@ -79,12 +78,13 @@
             .hidden-input {
                 display: none;
             }
-                .upload-item .remove-btn {
+
+            .upload-item .remove-btn {
                 position: absolute;
                 color: red;
                 cursor: pointer;
                 font-weight: bold;
-                 right: 40px;
+                right: 40px;
 
             }
         </style>
@@ -115,15 +115,6 @@
                                     </div>
                                 </div>
 
-                                {{-- Judul --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Judul Progres</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="judul" value="{{ old('judul', $progres->judul) }}"
-                                            class="form-control" required>
-                                    </div>
-                                </div>
-
                                 {{-- Tahun --}}
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Tahun</label>
@@ -133,68 +124,78 @@
                                     </div>
                                 </div>
 
-                                {{-- Sumber Dana --}}
+                                {{-- Judul --}}
                                 <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Nama Kegiatan</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="judul" value="{{ old('judul', $progres->judul) }}"
+                                            class="form-control" required>
+                                    </div>
+                                </div>
+
+                                
+                                {{-- Sumber Dana --}}
+                                {{-- <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Sumber Dana</label>
                                     <div class="col-sm-10">
                                         <input type="text" name="sumber_dana"
                                             value="{{ old('sumber_dana', $progres->sumber_dana) }}" class="form-control">
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 {{-- Jumlah Anggaran --}}
-                                <div class="row mb-3">
-    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
-    <div class="col-sm-10">
-        <input type="text" name="jumlah_anggaran" id="jumlah_anggaran_update"
-            value="{{ old('jumlah_anggaran', $progres->jumlah_anggaran) }}"
-            class="form-control">
-    </div>
-</div>
+                                {{-- <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="jumlah_anggaran" id="jumlah_anggaran_update"
+                                            value="{{ old('jumlah_anggaran', $progres->jumlah_anggaran) }}"
+                                            class="form-control">
+                                    </div>
+                                </div>
 
-<script>
-    const jumlahAnggaranUpdate = document.getElementById('jumlah_anggaran_update');
-    const form = document.querySelector('form');
+                                <script>
+                                    const jumlahAnggaranUpdate = document.getElementById('jumlah_anggaran_update');
+                                    const form = document.querySelector('form');
 
-    // Format value awal saat halaman dibuka
-    if (jumlahAnggaranUpdate.value) {
-        let numeric = jumlahAnggaranUpdate.value.replace(/\D/g, '');
-        if (numeric) {
-            numeric = parseInt(numeric).toLocaleString('id-ID');
-            jumlahAnggaranUpdate.value = 'Rp. ' + numeric;
-        }
-    }
+                                    // Format value awal saat halaman dibuka
+                                    if (jumlahAnggaranUpdate.value) {
+                                        let numeric = jumlahAnggaranUpdate.value.replace(/\D/g, '');
+                                        if (numeric) {
+                                            numeric = parseInt(numeric).toLocaleString('id-ID');
+                                            jumlahAnggaranUpdate.value = 'Rp. ' + numeric;
+                                        }
+                                    }
 
-    // Format saat user mengetik
-    jumlahAnggaranUpdate.addEventListener('input', function() {
-        let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
-        if (value) {
-            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
-            this.value = 'Rp. ' + value;
-        } else {
-            this.value = '';
-        }
-    });
+                                    // Format saat user mengetik
+                                    jumlahAnggaranUpdate.addEventListener('input', function() {
+                                        let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
+                                        if (value) {
+                                            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                                            this.value = 'Rp. ' + value;
+                                        } else {
+                                            this.value = '';
+                                        }
+                                    });
 
-    // Tambahkan ,00 saat submit
-    form.addEventListener('submit', function() {
-        if (jumlahAnggaranUpdate.value) {
-            if (!jumlahAnggaranUpdate.value.includes(',00')) {
-                jumlahAnggaranUpdate.value = jumlahAnggaranUpdate.value + ',00';
-            }
-        }
-    });
-</script>
+                                    // Tambahkan ,00 saat submit
+                                    form.addEventListener('submit', function() {
+                                        if (jumlahAnggaranUpdate.value) {
+                                            if (!jumlahAnggaranUpdate.value.includes(',00')) {
+                                                jumlahAnggaranUpdate.value = jumlahAnggaranUpdate.value + ',00';
+                                            }
+                                        }
+                                    });
+                                </script> --}}
 
 
                                 {{-- Penerima --}}
-                                <div class="row mb-3">
+                                {{-- <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Penerima</label>
                                     <div class="col-sm-10">
                                         <input type="text" name="penerima"
                                             value="{{ old('penerima', $progres->penerima) }}" class="form-control">
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 {{-- Uraian --}}
                                 <div class="row mb-3">
@@ -259,125 +260,134 @@
             </div>
         </section>
 
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
 
-        <script>
-            // =================== FOTO ===================
-            let fileList = [];
 
-            function handleFiles(files) {
-                for (let file of files) {
-                    if (file.size > 2 * 1024 * 1024) {
-                        alert('Maks 2MB');
-                        continue;
-                    }
-                    if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
-                        alert('Format JPG/PNG');
-                        continue;
-                    }
-                    fileList.push(file);
+    </main>
+@endsection
+@push('scripts')
+    <script>
+        // =================== FOTO ===================
+        let fileList = [];
+
+        function handleFiles(files) {
+            for (let file of files) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Maks 2MB');
+                    continue;
                 }
-                renderFileList();
+                if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+                    alert('Format JPG/PNG');
+                    continue;
+                }
+                fileList.push(file);
             }
+            renderFileList();
+        }
 
-            function renderFileList() {
-                const uploadList = document.getElementById('uploadList');
-                uploadList.innerHTML = '';
+        function renderFileList() {
+            const uploadList = document.getElementById('uploadList');
+            uploadList.innerHTML = '';
 
-                // Foto lama
-                document.querySelectorAll('.old-file-item').forEach(el => uploadList.appendChild(el));
+            // Foto lama
+            document.querySelectorAll('.old-file-item').forEach(el => uploadList.appendChild(el));
 
-                // Foto baru
-                fileList.forEach((file, index) => {
-                    const reader = new FileReader();
-                    reader.onload = e => {
-                        const item = document.createElement('div');
-                        item.classList.add('upload-item');
-                        item.innerHTML = `
+            // Foto baru
+            fileList.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const item = document.createElement('div');
+                    item.classList.add('upload-item');
+                    item.innerHTML = `
                         <img src="${e.target.result}">
                         <span>${file.name} (${(file.size/1024).toFixed(1)} KB)</span>
                         <span class="remove-btn" onclick="removeFile(${index})">&times;</span>
                     `;
-                        uploadList.appendChild(item);
-                    }
-                    reader.readAsDataURL(file);
-                });
-
-                const dt = new DataTransfer();
-                fileList.forEach(f => dt.items.add(f));
-                document.getElementById('fileInput').files = dt.files;
-            }
-
-            function removeFile(index) {
-                fileList.splice(index, 1);
-                renderFileList();
-            }
-
-            function removeOldFile(id, el) {
-                el.parentElement.remove();
-                document.querySelector(`input[value="${id}"]`).remove();
-            }
-
-            // Drag & drop
-            const uploadBox = document.querySelector('.upload-box');
-            uploadBox.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadBox.style.background = '#e6ffe6';
-            });
-            uploadBox.addEventListener('dragleave', () => {
-                uploadBox.style.background = '#f9fdf9';
-            });
-            uploadBox.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadBox.style.background = '#f9fdf9';
-                handleFiles(e.dataTransfer.files);
-            });
-
-            // =================== MAP ===================
-            var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors',
-                maxZoom: 18
-            }).addTo(mymap);
-
-            let markers = [];
-
-            var oldCoordinates = @json($progres->maps);
-            if (oldCoordinates.length > 0) {
-                let first = oldCoordinates[0];
-                markers[0] = L.marker([first.latitude, first.longitude], {
-                    draggable: true
-                }).addTo(mymap);
-                mymap.setView([first.latitude, first.longitude], 15);
-                markers[0].on('dragend', function(e) {
-                    const pos = e.target.getLatLng();
-                    document.querySelector('input[name="latitude"]').value = pos.lat;
-                    document.querySelector('input[name="longitude"]').value = pos.lng;
-                });
-            }
-
-            function onMapClick(e) {
-                if (markers.length > 0) {
-                    mymap.removeLayer(markers[0]);
-                    document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
-                    markers = [];
+                    uploadList.appendChild(item);
                 }
-                let marker = L.marker(e.latlng, {
-                    draggable: true
-                }).addTo(mymap);
-                markers.push(marker);
-                document.querySelector('.coordinates-container').innerHTML = `
+                reader.readAsDataURL(file);
+            });
+
+            const dt = new DataTransfer();
+            fileList.forEach(f => dt.items.add(f));
+            document.getElementById('fileInput').files = dt.files;
+        }
+
+        function removeFile(index) {
+            fileList.splice(index, 1);
+            renderFileList();
+        }
+
+        function removeOldFile(id, el) {
+            el.parentElement.remove();
+            document.querySelector(`input[value="${id}"]`).remove();
+        }
+
+        // Drag & drop
+        const uploadBox = document.querySelector('.upload-box');
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.style.background = '#e6ffe6';
+        });
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.style.background = '#f9fdf9';
+        });
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.style.background = '#f9fdf9';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        delete L.Icon.Default.prototype._getIconUrl;
+
+        L.Icon.Default.mergeOptions({
+            iconRetinaUrl: "{{ asset('assets/vendor/leaflet/images/marker-icon-2x.png') }}",
+            iconUrl: "{{ asset('assets/vendor/leaflet/images/marker-icon.png') }}",
+            shadowUrl: "{{ asset('assets/vendor/leaflet/images/marker-shadow.png') }}"
+        });
+
+        // =================== MAP ===================
+        var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 18
+        }).addTo(mymap);
+
+        let markers = [];
+
+        var oldCoordinates = @json($progres->maps);
+        if (oldCoordinates.length > 0) {
+            let first = oldCoordinates[0];
+            markers[0] = L.marker([first.latitude, first.longitude], {
+                draggable: true
+            }).addTo(mymap);
+            mymap.setView([first.latitude, first.longitude], 15);
+            markers[0].on('dragend', function(e) {
+                const pos = e.target.getLatLng();
+                document.querySelector('input[name="latitude"]').value = pos.lat;
+                document.querySelector('input[name="longitude"]').value = pos.lng;
+            });
+        }
+
+        function onMapClick(e) {
+            if (markers.length > 0) {
+                mymap.removeLayer(markers[0]);
+                document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
+                markers = [];
+            }
+            let marker = L.marker(e.latlng, {
+                draggable: true
+            }).addTo(mymap);
+            markers.push(marker);
+            document.querySelector('.coordinates-container').innerHTML = `
                 <input type="hidden" name="longitude" value="${e.latlng.lng}">
                 <input type="hidden" name="latitude" value="${e.latlng.lat}">
             `;
-                marker.on('dragend', function(event) {
-                    let pos = event.target.getLatLng();
-                    document.querySelector('input[name="latitude"]').value = pos.lat;
-                    document.querySelector('input[name="longitude"]').value = pos.lng;
-                });
-            }
-            mymap.on('click', onMapClick);
-        </script>
-
-    </main>
-@endsection
+            marker.on('dragend', function(event) {
+                let pos = event.target.getLatLng();
+                document.querySelector('input[name="latitude"]').value = pos.lat;
+                document.querySelector('input[name="longitude"]').value = pos.lng;
+            });
+        }
+        mymap.on('click', onMapClick);
+    </script>
+@endpush

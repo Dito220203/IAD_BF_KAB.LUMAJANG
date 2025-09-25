@@ -43,9 +43,9 @@ class ProgreskerjaController extends Controller
         $query->where(function ($q) use ($search) {
             $q->where('judul', 'like', "%{$search}%")
               ->orWhere('tahun', 'like', "%{$search}%")
-              ->orWhere('sumber_dana', 'like', "%{$search}%")
-              ->orWhere('jumlah_anggaran', 'like', "%{$search}%")
-              ->orWhere('penerima', 'like', "%{$search}%")
+            //   ->orWhere('sumber_dana', 'like', "%{$search}%")
+            //   ->orWhere('jumlah_anggaran', 'like', "%{$search}%")
+            //   ->orWhere('penerima', 'like', "%{$search}%")
               ->orWhere('uraian', 'like', "%{$search}%")
               ->orWhere('status', 'like', "%{$search}%");
         })
@@ -83,9 +83,9 @@ class ProgreskerjaController extends Controller
             'subprogram'       => 'required|exists:subprograms,id',
             'judul'            => 'required|string|max:255',
             'tahun'            => 'required|digits:4',
-            'sumber_dana'      => 'required|string|max:255',
-            'jumlah_anggaran'  => 'required|string',
-            'penerima'         => 'required|string|max:255',
+            // 'sumber_dana'      => 'required|string|max:255',
+            // 'jumlah_anggaran'  => 'required|string',
+            // 'penerima'         => 'required|string|max:255',
             'uraian'           => 'required|string',
             'latitude'         => 'nullable|numeric',
             'longitude'        => 'nullable|numeric',
@@ -100,9 +100,9 @@ class ProgreskerjaController extends Controller
             'id_pengguna'       => Auth::guard('pengguna')->id(),
             'judul'             => $validatedData['judul'],
             'tahun'             => $validatedData['tahun'],
-            'sumber_dana'       => $validatedData['sumber_dana'],
-            'jumlah_anggaran'   => $validatedData['jumlah_anggaran'],
-            'penerima'          => $validatedData['penerima'],
+            // 'sumber_dana'       => $validatedData['sumber_dana'],
+            // 'jumlah_anggaran'   => $validatedData['jumlah_anggaran'],
+            // 'penerima'          => $validatedData['penerima'],
             'uraian'            => $validatedData['uraian'],
             'status'            => 'Belum Validasi',
         ]);
@@ -194,9 +194,9 @@ class ProgreskerjaController extends Controller
         'subprogram'      => 'required|exists:subprograms,id',
         'judul'           => 'required|string|max:255',
         'tahun'           => 'required|digits:4',
-        'sumber_dana'     => 'required|string|max:255',
-        'jumlah_anggaran' => 'required|string',
-        'penerima'        => 'required|string|max:255',
+        // 'sumber_dana'     => 'required|string|max:255',
+        // 'jumlah_anggaran' => 'required|string',
+        // 'penerima'        => 'required|string|max:255',
         'uraian'          => 'required|string',
         'status'          => 'nullable|string',
         'latitude'        => 'nullable|numeric',
@@ -210,9 +210,9 @@ class ProgreskerjaController extends Controller
         'id_subprogram'   => $validatedData['subprogram'],
         'judul'           => $validatedData['judul'],
         'tahun'           => $validatedData['tahun'],
-        'sumber_dana'     => $validatedData['sumber_dana'],
-        'jumlah_anggaran' => $validatedData['jumlah_anggaran'],
-        'penerima'        => $validatedData['penerima'],
+        // 'sumber_dana'     => $validatedData['sumber_dana'],
+        // 'jumlah_anggaran' => $validatedData['jumlah_anggaran'],
+        // 'penerima'        => $validatedData['penerima'],
         'uraian'          => $validatedData['uraian'],
         'status'          => $request->input('status', 'Belum Validasi'),
     ]);

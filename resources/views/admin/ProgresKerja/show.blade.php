@@ -13,7 +13,6 @@
             </nav>
         </div>
 
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin="" />
 
         <style>
             #map {
@@ -47,14 +46,6 @@
                                     </div>
                                 </div>
 
-                                {{-- Judul Informasi --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Judul Progres</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" value="{{ $progres->judul }}" class="form-control" disabled>
-                                    </div>
-                                </div>
-
                                 {{-- Tahun --}}
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Tahun</label>
@@ -63,32 +54,41 @@
                                     </div>
                                 </div>
 
-                                {{-- Sumber Dana --}}
+                                {{-- Judul Informasi --}}
                                 <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Nama Kegiatan</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" value="{{ $progres->judul }}" class="form-control" disabled>
+                                    </div>
+                                </div>
+
+                                
+                                {{-- Sumber Dana --}}
+                                {{-- <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Sumber Dana</label>
                                     <div class="col-sm-10">
                                         <input type="text" value="{{ $progres->sumber_dana }}" class="form-control"
                                             disabled>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 {{-- Jumlah Anggaran --}}
-                                <div class="row mb-3">
+                                {{-- <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
                                     <div class="col-sm-10">
                                         <input type="text" value="{{ $progres->jumlah_anggaran }}" class="form-control"
                                             disabled>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 {{-- Penerima --}}
-                                <div class="row mb-3">
+                                {{-- <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Penerima</label>
                                     <div class="col-sm-10">
                                         <input type="text" value="{{ $progres->penerima }}" class="form-control"
                                             disabled>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 {{-- Uraian --}}
                                 <div class="row mb-3">
@@ -152,9 +152,17 @@
 
         <div id="map" style="height: 400px;"></div>
 
-        {{-- Leaflet JS --}}
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
+
+    @endsection
+    @push('scripts')
         <script>
+            delete L.Icon.Default.prototype._getIconUrl;
+
+            L.Icon.Default.mergeOptions({
+                iconRetinaUrl: "{{ asset('assets/vendor/leaflet/images/marker-icon-2x.png') }}",
+                iconUrl: "{{ asset('assets/vendor/leaflet/images/marker-icon.png') }}",
+                shadowUrl: "{{ asset('assets/vendor/leaflet/images/marker-shadow.png') }}"
+            });
             var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -180,4 +188,4 @@
                 mymap.setView([firstMap.latitude, firstMap.longitude], 15);
             @endif
         </script>
-    @endsection
+    @endpush

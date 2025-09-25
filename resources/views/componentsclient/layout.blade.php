@@ -23,6 +23,7 @@
 
     {{-- <link href="{{ asset('client/assets/vendor/fontawesome5/css/all.min.css') }}"></link> --}}
     <link href="{{ asset('client/assets/vendor/fontawesome5/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
     <link href="{{ asset('client/assets/vendor/leaflet/leaflet.css') }}" rel="stylesheet">
     </link>

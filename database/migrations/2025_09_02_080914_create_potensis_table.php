@@ -13,6 +13,7 @@ return new class extends Migration
         Schema::create('potensis', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
+            $table->foreignId('id_subpotensi')->references('id')->on('subpotensi_kehutanans')->onDelete('cascade');
             $table->string('judul');
             $table->foreignId('id_kecamatan')->references('id')->on('kecamatans')->onDelete('cascade');
             $table->foreignId('id_desa')->references('id')->on('desas')->onDelete('cascade');

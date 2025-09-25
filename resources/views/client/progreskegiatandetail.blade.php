@@ -9,11 +9,11 @@
         <section id="detail-kegiatan" class="container">
             <div class="detail-card">
                 <h3>{{ $progres->judul }}</h3>
-                <p><strong>Tanggal:</strong>
-                    {{ \Carbon\Carbon::parse($progres->created_at)->translatedFormat('d F Y') }}</p>
-                <p><strong>Sumber Anggaran:</strong> {{ $progres->sumber_dana }}</p>
-                <p><strong>Jumlah Anggaran:</strong> {{ $progres->jumlah_anggaran }}</p>
-                <p><strong>Penerima:</strong> {{ $progres->penerima }}</p>
+                {{-- <p><strong>Tanggal:</strong> --}}
+                    {{-- {{ \Carbon\Carbon::parse($progres->created_at)->translatedFormat('d F Y') }}</p> --}}
+                <p><strong>Tahun Pelaksanaan:</strong> {{ $progres->tahun }}</p>
+                {{-- <p><strong>Nama Kegiatan:</strong> {{ $progres->jumlah_anggaran }}</p> --}}
+                <p><strong>Uraian:</strong> {{ $progres->uraian }}</p>
 
                 <hr>
                 {{-- @php
@@ -39,11 +39,80 @@
                 <hr>
 
                 <h4>Peta Lokasi</h4>
-                <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+                {{-- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> --}}
 
                 <div id="map" style="height: 400px;"></div>
-                <script>
-                    var map = L.map('map').setView([0, 0], 5); 
+                
+            </div>
+            {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> --}}
+            {{-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></> --}}
+
+
+        </section>
+        <div class="text-center mt-4">
+            <a href="{{ route('client.progreskegiatan', $progres->subprogram) }}" class="btn-footer-back">
+                ← Kembali ke Daftar
+            </a>
+        </div>
+    </section>
+@endsection
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const gallery = document.querySelector(".mySwiper");
+
+            if (gallery) {
+                const slideCount = gallery.querySelectorAll(".swiper-slide").length;
+
+                // FINAL: Slider hanya aktif jika gambar 4 atau lebih
+                if (slideCount > 3) {
+
+                    var swiper = new Swiper(".mySwiper", {
+                        effect: "slide",
+                        loop: true,
+                        grabCursor: true,
+                        speed: 900,
+
+                        // KUNCI: Membuat slide aktif selalu di tengah
+                        centeredSlides: true,
+
+                        slidesPerView: 1.5, // Tampilkan 1 slide penuh dan sedikit slide sampingnya di mobile
+                        spaceBetween: 20,
+
+                        breakpoints: {
+                            // Tampilan untuk desktop
+                            1024: {
+                                slidesPerView: 3, // Tampilkan 3 slide
+                                spaceBetween: 30,
+                            }
+                        },
+
+                        autoplay: {
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        },
+
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+                        },
+
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                    });
+                }
+            }
+        });
+        delete L.Icon.Default.prototype._getIconUrl;
+
+        L.Icon.Default.mergeOptions({
+            iconRetinaUrl: "{{ asset('assets/vendor/leaflet/images/marker-icon-2x.png') }}",
+            iconUrl: "{{ asset('assets/vendor/leaflet/images/marker-icon.png') }}",
+            shadowUrl: "{{ asset('assets/vendor/leaflet/images/marker-shadow.png') }}"
+        });
+        var map = L.map('map').setView([0, 0], 5);
 
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; OpenStreetMap contributors'
@@ -56,68 +125,5 @@
                     @if ($progres->maps->count())
                         map.setView([{{ $progres->maps->first()->latitude }}, {{ $progres->maps->first()->longitude }}], 5);
                     @endif
-                </script>
-            </div>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    const gallery = document.querySelector(".mySwiper");
-
-                    if (gallery) {
-                        const slideCount = gallery.querySelectorAll(".swiper-slide").length;
-
-                        // FINAL: Slider hanya aktif jika gambar 4 atau lebih
-                        if (slideCount > 3) {
-
-                            var swiper = new Swiper(".mySwiper", {
-                                effect: "slide",
-                                loop: true,
-                                grabCursor: true,
-                                speed: 900,
-
-                                // KUNCI: Membuat slide aktif selalu di tengah
-                                centeredSlides: true,
-
-                                slidesPerView: 1.5, // Tampilkan 1 slide penuh dan sedikit slide sampingnya di mobile
-                                spaceBetween: 20,
-
-                                breakpoints: {
-                                    // Tampilan untuk desktop
-                                    1024: {
-                                        slidesPerView: 3, // Tampilkan 3 slide
-                                        spaceBetween: 30,
-                                    }
-                                },
-
-                                autoplay: {
-                                    delay: 3000,
-                                    disableOnInteraction: false,
-                                },
-
-                                pagination: {
-                                    el: '.swiper-pagination',
-                                    clickable: true,
-                                },
-
-                                navigation: {
-                                    nextEl: '.swiper-button-next',
-                                    prevEl: '.swiper-button-prev',
-                                },
-                            });
-                        }
-                    }
-                });
-            </script>
-        </section>
-        <div class="text-center mt-4">
-            <a href="{{ route('client.progreskegiatan', $progres->subprogram) }}" class="btn-footer-back">
-                ← Kembali ke Daftar
-            </a>
-        </div>
-    </section>
-@endsection
-
-
-
+    </script>
+@endpush

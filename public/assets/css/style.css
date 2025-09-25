@@ -1148,6 +1148,30 @@ h6 {
     width: 50%;
     min-width: 600px;
 }
+/* WADAH UTAMA BARU */
+.table-container {
+    position: relative; /* Diperlukan untuk beberapa styling lanjutan jika ada */
+}
+
+/* WADAH SCROLLBAR ATAS */
+.top-scrollbar-container {
+    overflow-x: auto;
+    overflow-y: hidden; /* Sembunyikan scrollbar vertikal yang mungkin muncul */
+    height: 12px; /* Sesuaikan dengan tinggi scrollbar bawah Anda */
+    margin-bottom: 10px; /* Beri sedikit jarak ke tabel */
+}
+
+/* KONTEN PALSU DI DALAM SCROLLBAR ATAS */
+.top-scrollbar-content {
+    height: 3px; /* Cukup 1px karena hanya butuh lebarnya */
+}
+
+/* PENYESUAIAN KECIL PADA CSS LAMA ANDA */
+/* Pastikan scrollbar bawah juga punya tinggi yang sama */
+.table-responsive::-webkit-scrollbar {
+    width: 8px;   /* Atur juga scrollbar vertikal jika perlu */
+    height: 8px;  /* SAMAKAN TINGGINYA dengan .top-scrollbar-container */
+}
 
 /*--------------------------------------------------------------
 # F.A.Q Page
@@ -1331,4 +1355,8 @@ h6 {
   text-align: center;
   font-size: 13px;
   color: #012970;
+}
+
+#map {
+    z-index: 0;
 }

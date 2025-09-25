@@ -18,7 +18,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
 
     <!-- Google Fonts -->
     <link href="{{ asset('assets/css/googlefonts.css') }}" rel="stylesheet">
@@ -34,16 +33,12 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
    <!-- Font Awesome CDN -->
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"> --}}
-    {{-- <link href="{{ asset('assets/vendor/fontawesome/all.min.css') }}" rel="stylesheet"> --}}
    <link href="{{ asset('assets/vendor/fontawesome/css/all.min.css') }}" rel="stylesheet">
+   
+   <!-- PETA -->
+   <link href="{{ asset('assets/vendor/leaflet/leaflet.css') }}" rel="stylesheet">
+   {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin="" /> --}}
     
-   {{-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> --}}
-
-    <!-- Head -->
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"> --}}
-    {{-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> --}}
-
     <link href="{{ asset('assets/vendor/quil1.3.6/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/quil1.3.6/quill.snow.css') }}" rel="stylesheet">
 
@@ -122,8 +117,8 @@
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
-
     <!-- Vendor JS Files -->
+   <script src="{{ asset('assets/vendor/leaflet/leaflet.js') }}"></script>
     <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/chart.js/chart.umd.js') }}"></script>

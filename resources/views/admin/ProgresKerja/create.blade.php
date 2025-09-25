@@ -13,8 +13,6 @@
             </nav>
         </div><!-- End Page Title -->
 
-        {{-- Leaflet CSS --}}
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin="" />
 
         <style>
             #map {
@@ -86,7 +84,7 @@
                 color: red;
                 cursor: pointer;
                 font-weight: bold;
-                 right: 10px;
+                right: 10px;
 
             }
 
@@ -124,78 +122,78 @@
                                     </div>
                                 </div>
 
+                                {{-- Tahun --}}
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label" >Tahun</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="tahun"
+                                        class="form-control @error('tahun') is-invalid @enderror"
+                                        value="{{ old('tahun') }}" required placeholder="Masukan Tahun Kegiatan">
+                                        @error('tahun')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 {{-- Judul --}}
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Judul Progres</label>
+                                    <label class="col-sm-2 col-form-label">Nama Kegiatan</label>
                                     <div class="col-sm-10">
                                         <input type="text" name="judul"
                                             class="form-control @error('judul') is-invalid @enderror"
-                                            value="{{ old('judul') }}" required>
+                                            value="{{ old('judul') }}" required placeholder="Masukan Nama Kegiatan">
                                         @error('judul')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
-
-                                {{-- Tahun --}}
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Tahun</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="tahun"
-                                            class="form-control @error('tahun') is-invalid @enderror"
-                                            value="{{ old('tahun') }}" required>
-                                        @error('tahun')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-
+                                
                                 {{-- Sumber Dana --}}
-                                <div class="row mb-3">
+                                {{-- <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Sumber Dana</label>
                                     <div class="col-sm-10">
                                         <input type="text" name="sumber_dana" class="form-control"
                                             value="{{ old('sumber_dana') }}">
                                     </div>
+                                </div> --}}
+
+                                {{-- Jumlah Anggaran --}}
+                                {{-- <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="jumlah_anggaran" id="jumlah_anggaran"
+                                            class="form-control" value="{{ old('jumlah_anggaran') }}">
+                                    </div>
                                 </div>
 
-                               {{-- Jumlah Anggaran --}}
-<div class="row mb-3">
-    <label class="col-sm-2 col-form-label">Jumlah Anggaran</label>
-    <div class="col-sm-10">
-        <input type="text" name="jumlah_anggaran" id="jumlah_anggaran" 
-               class="form-control" value="{{ old('jumlah_anggaran') }}">
-    </div>
-</div>
+                                <script>
+                                    document.getElementById('jumlah_anggaran').addEventListener('input', function(e) {
+                                        let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
+                                        if (value) {
+                                            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                                            this.value = 'Rp. ' + value; // tampil Rp. xx.xxx.xxx
+                                        } else {
+                                            this.value = '';
+                                        }
+                                    });
+                                </script> --}}
 
-<script>
-    document.getElementById('jumlah_anggaran').addEventListener('input', function(e) {
-        let value = this.value.replace(/\D/g, ''); // hapus semua non-digit
-        if (value) {
-            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
-            this.value = 'Rp. ' + value; // tampil Rp. xx.xxx.xxx
-        } else {
-            this.value = '';
-        }
-    });
-</script>
 
-                                
 
                                 {{-- Penerima --}}
-                                <div class="row mb-3">
+                                {{-- <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Penerima</label>
                                     <div class="col-sm-10">
                                         <input type="text" name="penerima" class="form-control"
                                             value="{{ old('penerima') }}">
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 {{-- Uraian --}}
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Uraian</label>
                                     <div class="col-sm-10">
-                                        <textarea name="uraian" class="form-control" rows="3">{{ old('uraian') }}</textarea>
+                                        <textarea name="uraian" class="form-control" rows="3" placeholder="Masukan Uraian Kegiatan Sampai Penerima Kegiatan">{{ old('uraian') }}</textarea>
                                     </div>
                                 </div>
 
@@ -241,116 +239,117 @@
             </div>
         </section>
 
-        {{-- Leaflet JS --}}
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" crossorigin=""></script>
 
-        <script>
-            // ================== UPLOAD FOTO (Drag & Drop + Preview + Hapus) ==================
-            let fileList = [];
+    </main>
+@endsection
+@push('scripts')
+    <script>
+        
+        // ================== UPLOAD FOTO (Drag & Drop + Preview + Hapus) ==================
+        let fileList = [];
 
-            function handleFiles(files) {
-                for (let file of files) {
-                    if (file.size > 2 * 1024 * 1024) {
-                        alert("Ukuran foto maksimal 2MB!");
-                        continue;
-                    }
-                    if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
-                        alert("Format harus JPG atau PNG!");
-                        continue;
-                    }
-                    fileList.push(file);
+        function handleFiles(files) {
+            for (let file of files) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert("Ukuran foto maksimal 2MB!");
+                    continue;
                 }
-                renderFileList();
+                if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+                    alert("Format harus JPG atau PNG!");
+                    continue;
+                }
+                fileList.push(file);
             }
+            renderFileList();
+        }
 
-            function renderFileList() {
-                const uploadList = document.getElementById("uploadList");
-                uploadList.innerHTML = "";
+        function renderFileList() {
+            const uploadList = document.getElementById("uploadList");
+            uploadList.innerHTML = "";
 
-                fileList.forEach((file, index) => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const item = document.createElement("div");
-                        item.classList.add("upload-item");
-                        item.innerHTML = `
+            fileList.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const item = document.createElement("div");
+                    item.classList.add("upload-item");
+                    item.innerHTML = `
                             <img src="${e.target.result}">
                             <span>${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
                             <span class="remove-btn" onclick="removeFile(${index})">&times;</span>
                         `;
-                        uploadList.appendChild(item);
-                    }
-                    reader.readAsDataURL(file);
-                });
-
-                // Sinkronkan ke input hidden supaya tetap terkirim ke backend
-                const dt = new DataTransfer();
-                fileList.forEach(file => dt.items.add(file));
-                document.getElementById("fileInput").files = dt.files;
-            }
-
-            function removeFile(index) {
-                fileList.splice(index, 1);
-                renderFileList();
-            }
-
-            // Drag & Drop support
-            const uploadBox = document.querySelector('.upload-box');
-            uploadBox.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadBox.style.background = '#e6ffe6';
-            });
-
-            uploadBox.addEventListener('dragleave', () => {
-                uploadBox.style.background = '#f9fdf9';
-            });
-
-            uploadBox.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadBox.style.background = '#f9fdf9';
-                handleFiles(e.dataTransfer.files);
-            });
-
-            // ================== LEAFLET MAP ==================
-            var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors',
-                maxZoom: 18
-            }).addTo(mymap);
-
-            mymap.dragging.enable();
-            mymap.scrollWheelZoom.enable();
-            mymap.doubleClickZoom.enable();
-            mymap.boxZoom.enable();
-            mymap.keyboard.enable();
-
-            var markers = [];
-
-            function onMapClick(e) {
-                if (markers.length > 0) {
-                    mymap.removeLayer(markers[0]);
-                    document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
-                    markers = [];
+                    uploadList.appendChild(item);
                 }
+                reader.readAsDataURL(file);
+            });
 
-                let marker = L.marker(e.latlng, {
-                    draggable: true
-                }).addTo(mymap);
-                markers.push(marker);
+            // Sinkronkan ke input hidden supaya tetap terkirim ke backend
+            const dt = new DataTransfer();
+            fileList.forEach(file => dt.items.add(file));
+            document.getElementById("fileInput").files = dt.files;
+        }
 
-                let html = `
+        function removeFile(index) {
+            fileList.splice(index, 1);
+            renderFileList();
+        }
+
+        // Drag & Drop support
+        const uploadBox = document.querySelector('.upload-box');
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.style.background = '#e6ffe6';
+        });
+
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.style.background = '#f9fdf9';
+        });
+
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.style.background = '#f9fdf9';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // ================== LEAFLET MAP ==================
+        var mymap = L.map('map').setView([-8.13439, 113.22208], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 18
+        }).addTo(mymap);
+
+        mymap.dragging.enable();
+        mymap.scrollWheelZoom.enable();
+        mymap.doubleClickZoom.enable();
+        mymap.boxZoom.enable();
+        mymap.keyboard.enable();
+
+        var markers = [];
+
+        function onMapClick(e) {
+            if (markers.length > 0) {
+                mymap.removeLayer(markers[0]);
+                document.querySelectorAll('.coordinates-container input').forEach(el => el.remove());
+                markers = [];
+            }
+
+            let marker = L.marker(e.latlng, {
+                draggable: true
+            }).addTo(mymap);
+            markers.push(marker);
+
+            let html = `
                     <input type="hidden" id="longitude" name="longitude" value="${e.latlng.lng}">
                     <input type="hidden" id="latitude" name="latitude" value="${e.latlng.lat}">
                 `;
-                document.querySelector('.coordinates-container').insertAdjacentHTML('beforeend', html);
+            document.querySelector('.coordinates-container').insertAdjacentHTML('beforeend', html);
 
-                marker.on('dragend', function(event) {
-                    let pos = event.target.getLatLng();
-                    document.getElementById("latitude").value = pos.lat;
-                    document.getElementById("longitude").value = pos.lng;
-                });
-            }
+            marker.on('dragend', function(event) {
+                let pos = event.target.getLatLng();
+                document.getElementById("latitude").value = pos.lat;
+                document.getElementById("longitude").value = pos.lng;
+            });
+        }
 
-            mymap.on('click', onMapClick);
-        </script>
-    </main>
-@endsection
+        mymap.on('click', onMapClick);
+    </script>
+@endpush

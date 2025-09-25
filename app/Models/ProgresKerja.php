@@ -10,7 +10,7 @@ class ProgresKerja extends Model
 {
     use HasFactory;
     protected $table = 'progres_kerjas';
-    protected $fillable = ['id_subprogram', 'id_pengguna', 'judul', 'tahun', 'sumber_dana', 'jumlah_anggaran', 'penerima', 'uraian', 'status'];
+    protected $fillable = ['id_subprogram', 'id_pengguna', 'judul', 'tahun', 'uraian', 'status'];
 
     public function maps()
     {

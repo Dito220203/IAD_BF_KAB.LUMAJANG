@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->string('judul');
             $table->string('tahun');
-            $table->string('sumber_dana');
-            $table->string('jumlah_anggaran');
-            $table->string('penerima');
+            // $table->string('sumber_dana');
+            // $table->string('jumlah_anggaran');
+            // $table->string('penerima');
             $table->longText('uraian');
             $table->string('status');
             $table->timestamps();

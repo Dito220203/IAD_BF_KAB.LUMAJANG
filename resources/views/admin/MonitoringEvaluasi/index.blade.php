@@ -72,224 +72,228 @@
                                         <div class="col-12 col-md-4">
                                             <label class="form-label small mb-1">Pencarian</label>
                                             <div class="input-group">
-                                                                   <!-- Pencarian -->
-                                                                               <form method="GET" class="input-group w-auto mb-3">
-    <input type="text" name="search" class="form-control"
-           placeholder="Cari Data (program, kegiatan, OPD...)"
-           value="{{ request('search') }}">
-    <button class="btn btn-primary" type="submit">Cari</button>
-    @if(request('search'))
-        <a href="{{ route('monev') }}" class="btn btn-secondary">Reset</a>
-    @endif
-</form>
+                                                <!-- Pencarian -->
+                                                <form method="GET" class="input-group w-auto mb-3">
+                                                    <input type="text" name="search" class="form-control"
+                                                        placeholder="Cari Data (program, kegiatan, OPD...)"
+                                                        value="{{ request('search') }}">
+                                                    <button class="btn btn-primary" type="submit">Cari</button>
+                                                    @if (request('search'))
+                                                        <a href="{{ route('monev') }}" class="btn btn-secondary">Reset</a>
+                                                    @endif
+                                                </form>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                            <!-- Table -->
-                            <div class="table-responsive">
-                                <table class="detail-table" id="TableMonev" style="min-width: 2000px;">
-                                    @php
-                                        $adaPesan = $monev->contains(function ($item) {
-                                            return !empty($item->pesan);
-                                        });
-                                    @endphp
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th class="text-center">Sub Program</th>
-                                            <th class="text-center">Rencana Aksi/Aktivitas</th>
-                                            <th class="text-center">Sub Kegiatan</th>
-                                            <th class="text-center">Kegiatan</th>
-                                            <th class="text-center">Nama Program</th>
-                                            <th class="text-center">Lokasi</th>
-                                            <th class="text-center">Volume</th>
-                                            <th class="text-center">Satuan</th>
-                                            <th class="text-center">Anggaran</th>
-                                            <th class="text-center">Sumber Dana</th>
-                                            <th class="text-center">Tahun</th>
-                                            <th class="text-center">Perangkat Daerah</th>
-                                            <th class="text-center">Status</th>
-                                            <th class="text-center">Input RKA</th>
-                                            <th class="text-center">Realisasi</th>
-                                            <th class="text-center">Tanggal Monev</th>
-                                            <th class="text-center">Keterangan</th>
-                                            @if ($adaPesan)
-                                                <th class="text-center">Catatan</th>
-                                            @endif
-                                            <th class="text-center">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($monev as $data)
-                                            <tr id="row-{{ $data->id }}">
-                                                <td class="text-center">{{ $monev->firstItem() + $loop->index }}</td>
-                                                <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
-                                                <td>{{ $data->rencanakerja->rencana_aksi ?? '-' }}</td>
-                                                <td>{{ $data->sub_kegiatan }}</td>
-                                                <td>{{ $data->kegiatan }}</td>
-                                                <td>{{ $data->nama_program }}</td>
-                                                <td class="text-center">{{ $data->lokasi }}</td>
-                                                <td class="text-center">{{ $data->volume }}</td>
-                                                <td class="text-center">{{ $data->satuan }}</td>
-                                                <td class="text-center">{{ $data->anggaran }}</td>
-                                                <td class="text-center">{{ $data->sumberdana }}</td>
-                                                <td class="text-center">{{ $data->tahun }}</td>
-                                                <td class="text-center" class="text-center">{{ $data->opd->nama ?? '-' }}
-                                                </td>
-
-
-                                                <td class="text-center">
-                                                    @if ($data->status === 'Valid')
-                                                        <span class="badge bg-success">{{ $data->status }}</span>
-                                                    @else
-                                                        <span class="badge bg-secondary">{{ $data->status }}</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($data->rka === 'sudah')
-                                                        <span class="badge bg-success">{{ $data->rka }}</span>
-                                                    @else
-                                                        <span class="badge bg-danger">{{ $data->rka }}</span>
-                                                    @endif
-                                                </td>
-
-                                                <td class="text-center">{{ $data->realisasi }}</td>
-                                                <td class="text-center">{{ $data->tanggal }}</td>
-                                                <td>{{ $data->keterangan }}</td>
+                            <div class="table-container">
+                                <div class="top-scrollbar-container">
+                                    <div class="top-scrollbar-content"></div>
+                                </div>
+                                <!-- Table -->
+                                <div class="table-responsive">
+                                    <table class="detail-table" id="TableMonev" style="min-width: 2000px;">
+                                        @php
+                                            $adaPesan = $monev->contains(function ($item) {
+                                                return !empty($item->pesan);
+                                            });
+                                        @endphp
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th class="text-center">Sub Program</th>
+                                                <th class="text-center">Rencana Aksi/Aktivitas</th>
+                                                <th class="text-center">Sub Kegiatan</th>
+                                                <th class="text-center">Kegiatan</th>
+                                                <th class="text-center">Nama Program</th>
+                                                <th class="text-center">Lokasi</th>
+                                                <th class="text-center">Volume</th>
+                                                <th class="text-center">Satuan</th>
+                                                <th class="text-center">Anggaran</th>
+                                                <th class="text-center">Sumber Dana</th>
+                                                <th class="text-center">Tahun</th>
+                                                <th class="text-center">Perangkat Daerah</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center">Input RKA</th>
+                                                <th class="text-center">Realisasi</th>
+                                                <th class="text-center">Tanggal Monev</th>
+                                                <th class="text-center">Keterangan</th>
                                                 @if ($adaPesan)
-                                                    <td>{{ $data->pesan }}</td>
+                                                    <th class="text-center">Catatan</th>
                                                 @endif
-
-                                                <td class="text-center align-middle">
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <form id="form-lanjut-{{ $data->id }}"
-                                                            action="{{ route('monev.lanjut', $data->id) }}"
-                                                            method="POST" style="display:inline;">
-                                                            @csrf
-                                                            <button type="button"
-                                                                class="btn btn-secondary btn-sm btn-lanjut"
-                                                                data-id="{{ $data->id }}">
-                                                                Lanjut
-                                                            </button>
-                                                        </form>
-
-
-                                                        <form action="{{ route('monev.edit', $data->id) }}"
-                                                            method="GET">
-                                                            <button class="btn btn-primary btn-sm">
-                                                               Edit/Lengkapi
-                                                            </button>
-                                                        </form>
-
-                                                        @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
-
-
-
-                                                            <button
-                                                                class="btn btn-sm {{ $data->status == 'Valid' ? 'btn-warning' : 'btn-success' }}"
-                                                                onclick="updateStatus('{{ $data->id }}', '{{ $data->status }}')">
-                                                                @if ($data->status == 'Valid')
-                                                                    Batalkan
-                                                                @else
-                                                                    Validasi
-                                                                @endif
-                                                            </button>
-
-                                                            <form id="form-status-{{ $data->id }}"
-                                                                action="{{ route('monev.validasi', $data->id) }}"
-                                                                method="POST" style="display:none;">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <input type="hidden" name="status" value="">
-                                                            </form>
-                                                             <button type="button" class="btn btn-info btn-sm"
-                                                                data-bs-toggle="modal" data-bs-target="#modalPesan"
-                                                                data-id="{{ $data->id }}"
-                                                                data-pesan="{{ $data->pesan ?? '' }}">
-                                                                <i class="fa-solid fa-envelope"></i>
-                                                            </button>
-                                                        @endif
-
-
-
-                                                        {{-- Tombol Delete --}}
-                                                        <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('monev.delete', $data->id) }}"
-                                                            method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="confirmDelete('{{ $data->id }}')">
-                                                                <i class="fa-solid fa-trash"></i>
-                                                            </button>
-                                                        </form>
-
-                                                    </div>
-                                                </td>
+                                                <th class="text-center">Aksi</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <!-- Modal Pesan (satu saja, di luar foreach) -->
-                                <div class="modal fade" id="modalPesan" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <form id="formPesan" method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <input type="hidden" name="id_monev" id="idMonev">
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($monev as $data)
+                                                <tr id="row-{{ $data->id }}">
+                                                    <td class="text-center">{{ $monev->firstItem() + $loop->index }}</td>
+                                                    <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
+                                                    <td>{{ $data->rencanakerja->rencana_aksi ?? '-' }}</td>
+                                                    <td>{{ $data->sub_kegiatan }}</td>
+                                                    <td>{{ $data->kegiatan }}</td>
+                                                    <td>{{ $data->nama_program }}</td>
+                                                    <td class="text-center">{{ $data->lokasi }}</td>
+                                                    <td class="text-center">{{ $data->volume }}</td>
+                                                    <td class="text-center">{{ $data->satuan }}</td>
+                                                    <td class="text-center">{{ $data->anggaran }}</td>
+                                                    <td class="text-center">{{ $data->sumberdana }}</td>
+                                                    <td class="text-center">{{ $data->tahun }}</td>
+                                                    <td class="text-center" class="text-center">
+                                                        {{ $data->opd->nama ?? '-' }}
+                                                    </td>
 
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Kirim Catatan ke Admin Perangkat Daerah</h5>
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal"></button>
-                                                </div>
 
-                                                <div class="modal-body">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Catatan</label>
-                                                        <textarea name="pesan" id="inputPesan" class="form-control" rows="4"></textarea>
+                                                    <td class="text-center">
+                                                        @if ($data->status === 'Valid')
+                                                            <span class="badge bg-success">{{ $data->status }}</span>
+                                                        @else
+                                                            <span class="badge bg-secondary">{{ $data->status }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if ($data->rka === 'sudah')
+                                                            <span class="badge bg-success">{{ $data->rka }}</span>
+                                                        @else
+                                                            <span class="badge bg-danger">{{ $data->rka }}</span>
+                                                        @endif
+                                                    </td>
+
+                                                    <td class="text-center">{{ $data->realisasi }}</td>
+                                                    <td class="text-center">{{ $data->tanggal }}</td>
+                                                    <td>{{ $data->keterangan }}</td>
+                                                    @if ($adaPesan)
+                                                        <td>{{ $data->pesan }}</td>
+                                                    @endif
+
+                                                    <td class="text-center align-middle">
+                                                        <div class="d-flex justify-content-center gap-1">
+                                                            <form id="form-lanjut-{{ $data->id }}"
+                                                                action="{{ route('monev.lanjut', $data->id) }}"
+                                                                method="POST" style="display:inline;">
+                                                                @csrf
+                                                                <button type="button"
+                                                                    class="btn btn-secondary btn-sm btn-lanjut"
+                                                                    data-id="{{ $data->id }}">
+                                                                    Lanjut
+                                                                </button>
+                                                            </form>
+
+
+                                                            <form action="{{ route('monev.edit', $data->id) }}"
+                                                                method="GET">
+                                                                <button class="btn btn-primary btn-sm">
+                                                                    Edit/Lengkapi
+                                                                </button>
+                                                            </form>
+
+                                                            @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
+                                                                <button
+                                                                    class="btn btn-sm {{ $data->status == 'Valid' ? 'btn-warning' : 'btn-success' }}"
+                                                                    onclick="updateStatus('{{ $data->id }}', '{{ $data->status }}')">
+                                                                    @if ($data->status == 'Valid')
+                                                                        Batalkan
+                                                                    @else
+                                                                        Validasi
+                                                                    @endif
+                                                                </button>
+
+                                                                <form id="form-status-{{ $data->id }}"
+                                                                    action="{{ route('monev.validasi', $data->id) }}"
+                                                                    method="POST" style="display:none;">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <input type="hidden" name="status" value="">
+                                                                </form>
+                                                                <button type="button" class="btn btn-info btn-sm"
+                                                                    data-bs-toggle="modal" data-bs-target="#modalPesan"
+                                                                    data-id="{{ $data->id }}"
+                                                                    data-pesan="{{ $data->pesan ?? '' }}">
+                                                                    <i class="fa-solid fa-envelope"></i>
+                                                                </button>
+                                                            @endif
+
+
+
+                                                            {{-- Tombol Delete --}}
+                                                            <form id="formDelete-{{ $data->id }}"
+                                                                action="{{ route('monev.delete', $data->id) }}"
+                                                                method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="button" class="btn btn-danger btn-sm"
+                                                                    onclick="confirmDelete('{{ $data->id }}')">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </form>
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <!-- Modal Pesan (satu saja, di luar foreach) -->
+                                    <div class="modal fade" id="modalPesan" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <form id="formPesan" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="id_monev" id="idMonev">
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Kirim Catatan ke Admin Perangkat Daerah
+                                                        </h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal"></button>
                                                     </div>
-                                                </div>
 
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Batal</button>
-                                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                                </div>
-                                            </form>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Catatan</label>
+                                                            <textarea name="pesan" id="inputPesan" class="form-control" rows="4"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", function() {
-                                        var modalPesan = document.getElementById('modalPesan');
-                                        modalPesan.addEventListener('show.bs.modal', function(event) {
-                                            var button = event.relatedTarget;
-                                            var idMonev = button.getAttribute('data-id');
-                                            var pesan = button.getAttribute('data-pesan') || '';
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            var modalPesan = document.getElementById('modalPesan');
+                                            modalPesan.addEventListener('show.bs.modal', function(event) {
+                                                var button = event.relatedTarget;
+                                                var idMonev = button.getAttribute('data-id');
+                                                var pesan = button.getAttribute('data-pesan') || '';
 
-                                            // isi hidden input
-                                            modalPesan.querySelector('#idMonev').value = idMonev;
+                                                // isi hidden input
+                                                modalPesan.querySelector('#idMonev').value = idMonev;
 
-                                            // isi textarea dengan pesan lama (kalau ada)
-                                            modalPesan.querySelector('#inputPesan').value = pesan;
+                                                // isi textarea dengan pesan lama (kalau ada)
+                                                modalPesan.querySelector('#inputPesan').value = pesan;
 
-                                            // set action form ke route updatePesan
-                                            var form = modalPesan.querySelector('#formPesan');
-                                            form.action = "/monev/" + idMonev + "/pesan";
+                                                // set action form ke route updatePesan
+                                                var form = modalPesan.querySelector('#formPesan');
+                                                form.action = "/monev/" + idMonev + "/pesan";
+                                            });
                                         });
-                                    });
-                                </script>
+                                    </script>
 
+
+                                </div>
+                                <div class="mt-3">
+                                    {{ $monev->links('vendor.pagination.bootstrap-5') }}
+                                </div>
 
                             </div>
-                            <div class="mt-3">
-                                {{ $monev->links('vendor.pagination.bootstrap-5') }}
-                            </div>
-
                             <!-- End Table -->
                         </div>
                     </div>
@@ -331,6 +335,57 @@
                 });
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cari semua kontainer tabel di halaman
+            const allTableContainers = document.querySelectorAll('.table-container');
+
+            allTableContainers.forEach(container => {
+                const topScrollbar = container.querySelector('.top-scrollbar-container');
+                const topScrollbarContent = container.querySelector('.top-scrollbar-content');
+                const tableWrapper = container.querySelector('.table-responsive');
+                const table = container.querySelector('.detail-table');
+
+                // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
+                if (!topScrollbar || !tableWrapper || !table) {
+                    return;
+                }
+
+                let isSyncing = false;
+
+                // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
+                //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
+                function updateTopScrollbarWidth() {
+                    if (table.scrollWidth > tableWrapper.clientWidth) {
+                        topScrollbarContent.style.width = table.scrollWidth + 'px';
+                        topScrollbar.style.display = 'block'; // Tampilkan jika perlu
+                    } else {
+                        topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
+                    }
+                }
+
+                // 2. Sinkronkan scroll dari atas ke bawah
+                topScrollbar.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    tableWrapper.scrollLeft = topScrollbar.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // 3. Sinkronkan scroll dari bawah ke atas
+                tableWrapper.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    topScrollbar.scrollLeft = tableWrapper.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // Panggil pertama kali saat halaman dimuat
+                updateTopScrollbarWidth();
+
+                // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
+                window.addEventListener('resize', updateTopScrollbarWidth);
+            });
+        });
     </script>
 @endsection
-

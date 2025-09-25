@@ -22,5 +22,13 @@ class PenggunaSeeder extends Seeder
             'level' => 'Super Admin',       // jika ada kolom level
             'id_opd' => $opd1->id,   // atau sesuai kebutuhan
         ]);
+        $opd2 = Opd::first();
+        Pengguna::create([
+            'nama' => 'Mohammad Farhan Syaikowi',
+            'username' => 'fasy',
+            'password' => bcrypt('123'),
+            'level' => 'Admin',       // jika ada kolom level
+            'id_opd' => $opd2->id,   // atau sesuai kebutuhan
+        ]);
     }
 }

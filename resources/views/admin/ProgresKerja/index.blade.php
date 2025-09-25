@@ -11,25 +11,24 @@
              </nav>
          </div>
          <section class="section">
-        <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <!-- Header tools -->
-                          <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
+             <div class="row">
+                 <div class="col-lg-12">
+                     <div class="card">
+                         <div class="card-body">
+                             <!-- Header tools -->
+                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                  <a href="{{ route('progrescreate') }}" class="btn btn-primary">
                                      + Tambah Progres
                                  </a>
-                                                                       <form method="GET" class="input-group w-auto mb-1">
-    <input type="text" name="search" class="form-control"
-           placeholder="Cari Data"
-           value="{{ request('search') }}">
-    <button class="btn btn-primary" type="submit">Cari</button>
-    @if(request('search'))
-        <a href="{{ route('progres') }}" class="btn btn-secondary">Reset</a>
-    @endif
-</form>
-                              
+                                 <form method="GET" class="input-group w-auto mb-1">
+                                     <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                         value="{{ request('search') }}">
+                                     <button class="btn btn-primary" type="submit">Cari</button>
+                                     @if (request('search'))
+                                         <a href="{{ route('progres') }}" class="btn btn-secondary">Reset</a>
+                                     @endif
+                                 </form>
+
                              </div>
 
                              <!-- Table -->
@@ -71,7 +70,7 @@
                                                                  @if ($data->status == 'Valid')
                                                                      Batalkan Validasi
                                                                  @else
-                                                                      Validasi
+                                                                     Validasi
                                                                  @endif
                                                              </button>
 
@@ -117,9 +116,9 @@
                                  <!-- End Table with stripped rows -->
 
                              </div>
-                              <div class="mt-3">
-                                {{ $progres->links('vendor.pagination.bootstrap-5') }}
-                            </div>
+                             <div class="mt-3">
+                                 {{ $progres->links('vendor.pagination.bootstrap-5') }}
+                             </div>
                          </div>
 
                      </div>
