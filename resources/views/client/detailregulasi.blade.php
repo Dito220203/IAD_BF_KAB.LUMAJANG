@@ -20,15 +20,22 @@
                 @if ($item->file)
                     {{-- Viewer PDF Responsif --}}
                     <div style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
-                        <object data="{{ asset('storage/regulasi/' . $item->file) }}" 
-                                type="application/pdf" 
-                                width="100%" 
-                                height="100%" 
-                                style="min-height:80vh">
-                            <p>Browser Anda tidak mendukung preview PDF. 
-                               <a href="{{ asset('storage/regulasi/' . $item->file) }}" target="_blank">Klik di sini untuk download PDF</a>.
-                            </p>
-                        </object>
+                        @if ($item->file)
+                            @if (app()->isLocal())
+                                {{-- KONDISI 1: Jika website berjalan di localhost --}}
+
+                                <iframe src="{{ asset(Storage::url('regulasi/' . $item->file)) }}" width="100%"
+                                    height="700"></iframe>
+                            @else
+                                {{-- KONDISI 2: Jika website sudah di-hosting --}}
+                                <iframe
+                                    src="https://docs.google.com/gview?url={{ asset('storage/regulasi/' . $item->file) }}&embedded=true"
+                                    width="100%" height="700"></iframe>
+                            @endif
+                        @else
+                            <p><em>Tidak ada file regulasi.</em></p>
+                        @endif
+
                     </div>
                 @else
                     <p><em>Tidak ada file regulasi.</em></p>

@@ -33,7 +33,7 @@
         <section id="perhut" class="perhutanan">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="global-title">
-                    <h2>IAD PERHUTANAN SOSIAL KABUPATEN LUMAJANG</h2>
+                    <h2>IAD PERHUTANAN</h2>
                 </div>
                 <div class="perhut-cards" data-aos="fade-down" data-aos-delay="200" id="PerhutCards">
                     <div class="row gy-4">
@@ -362,7 +362,6 @@
                             },
                             options: {
                                 aspectRatio: 1,
-                                /* modifikasi */
                                 responsive: true,
                                 maintainAspectRatio: false
                             }

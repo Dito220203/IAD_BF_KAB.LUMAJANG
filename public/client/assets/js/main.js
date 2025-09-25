@@ -110,10 +110,10 @@
         /**
          * 5. SLIDER INFORMASI (dengan pagination)
          */
-        const cardsContainer = document.querySelector(".informasi-cards");
-        if (cardsContainer) {
-            // ... (Seluruh logika slider informasi Anda yang sudah benar ada di sini)
-        }
+        // const cardsContainer = document.querySelector(".informasi-cards");
+        // if (cardsContainer) {
+        // }
+
 
         /**
          * 6. SLIDER PRODUK (PING-PONG EFFECT)
@@ -261,7 +261,9 @@
     const mobileNavToggleBtn = document.querySelector(".mobile-nav-toggle");
     if (mobileNavToggleBtn) {
         const mobileNavToogle = () => {
-            document.querySelector("body").classList.toggle("mobile-nav-active");
+            document
+                .querySelector("body")
+                .classList.toggle("mobile-nav-active");
             mobileNavToggleBtn.classList.toggle("bi-list");
             mobileNavToggleBtn.classList.toggle("bi-x");
         };
@@ -291,7 +293,6 @@
                 else {
                     mobileNavToogle(); // Langsung tutup menu navigasi
                 }
-
             });
         });
     }

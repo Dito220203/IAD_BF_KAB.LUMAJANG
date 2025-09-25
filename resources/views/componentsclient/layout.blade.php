@@ -4,22 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>IAD Perhutanan Sosial Kabupaten Lumajang</title>
-    <script>document.documentElement.style.opacity = '0';</script>
-    <meta name="description" content="IAD Perhutanan Sosial Kabupaten Lumajang">
-
+    <title>iad_bf_kabupaten_lumajang</title>
+    <script>
+        document.documentElement.style.opacity = '0';
+    </script>
+    <meta name="description" content="">
     <meta name="keywords" content="">
 
 
     <link href="{{ asset('client/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-      <link href="{{ asset('client/assets/css/main.css?v=1.1') }}" rel="stylesheet">
+    <link href="{{ asset('client/assets/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/aos/aos.css') }}" rel="stylesheet">
-    <link href="{{ asset('client/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-
-        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
 
@@ -36,6 +33,7 @@
             opacity: 0;
             visibility: hidden;
         }
+
         #preloader {
             position: fixed;
             inset: 0;
@@ -44,10 +42,12 @@
             background: #fff;
             transition: all 0.6s ease-out;
         }
+
         body.loaded #preloader {
             opacity: 0;
             visibility: hidden;
         }
+
         #preloader:before {
             content: "";
             position: fixed;
@@ -62,6 +62,7 @@
             height: 60px;
             animation: preloader-spin 1.5s linear infinite;
         }
+
         @keyframes preloader-spin {
             0% {
                 transform: rotate(0deg);
@@ -153,7 +154,11 @@
 
             <div class="footer-right">
                 <h4>Lokasi Kami</h4>
-               <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.6827081172446!2d113.22204627476988!3d-8.133748791896071!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd66788df5ac777%3A0x450462d4a3dc7616!2sBadan%20Perencanaan%20Pembangunan%20Daerah%20(BAPPEDA)%20Kabupaten%20Lumajang!5e0!3m2!1sid!2sid!4v1758613406822!5m2!1sid!2sid" width="800" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.6827081172446!2d113.22204627476988!3d-8.133748791896071!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd66788df5ac777%3A0x450462d4a3dc7616!2sBadan%20Perencanaan%20Pembangunan%20Daerah%20(BAPPEDA)%20Kabupaten%20Lumajang!5e0!3m2!1sid!2sid!4v1758613406822!5m2!1sid!2sid"
+                    width="800" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+
             </div>
         </div>
         @foreach ($contact as $kontak)
@@ -216,13 +221,16 @@
                             if (entry.isIntersecting) {
                                 navLinks.forEach((link) => link.classList.remove("active"));
                                 const id = entry.target.getAttribute("id");
-                                const activeLink = document.querySelector(`#navmenu a[href*="#${id}"]`);
+                                const activeLink = document.querySelector(
+                                    `#navmenu a[href*="#${id}"]`);
                                 if (activeLink) {
                                     activeLink.classList.add("active");
                                 }
                             }
                         });
-                    }, { threshold: 0.7 });
+                    }, {
+                        threshold: 0.7
+                    });
                     sections.forEach((section) => {
                         observer.observe(section);
                     });
