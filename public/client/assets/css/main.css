@@ -877,21 +877,21 @@ h6 {
 
 .footer-left {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex: 1 1 60%;
   min-width: 280px;
 }
 
 .footer-logo {
-  width: 100px;
-  margin-right: 20px;
+  width: 210px;
+  margin-right: 25px;
 }
 
 .footer-text h2 {
   margin: 0 0 10px 0;
   font-weight: bold;
   color: #fff;
-  font-size: 24px;
+  font-size: 32px;
 }
 
 .footer-text p {
@@ -1046,37 +1046,45 @@ h6 {
       margin: 0;
       padding: 0;
     }
-    .chart-container {
-      display: flex;
-      gap: 20px;
+    
+ 
+.chart-kups {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    margin-top: 50px;
+    width: 70%;
 
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 1200px;
-      margin: 20px auto;
-    }
-    /* modifikasi */
-    .chart-box {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      max-width: 6000px; /* Batasi lebar maksimalnya (Anda bisa sesuaikan angkanya) */
-      margin: 0 auto;
-      
-    }
-    /* modifikasi */
+}
+
+/* 2. Atur agar Judul Berada di Tengah */
+.chart-title-kups {
+    text-align: center;
+    margin-bottom: 20px; /* Beri jarak antara judul dan chart */
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* 3. Buat Area Chart Selalu Persegi (Kunci Utama) */
+.chart-box {
+    width: 100%;             /* Tetap 100% agar responsif di HP */
+    max-width: 400px;        /* ✨ TAMBAHKAN: Ini ukuran maksimal chart Anda */
+    margin: 0 auto;          /* ✨ TAMBAHKAN: Ini akan memposisikan chart di tengah wrapper */
+    aspect-ratio: 1 / 1;     /* KUNCI: Paksa tingginya agar sama dengan lebarnya */
+    padding: 0 !important;   /* Hapus padding bawaan jika ada */
+}
+
+#donutChart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+    
     .canvas {
       width: 100% !important;
       height: auto !important;
     }
-    .chart-box canvas {
-    width: 100% !important;
-    height: 300px !important;
-}
 
 
 /* preload pindah layout */
@@ -1565,32 +1573,37 @@ section,
 --------------------------------------------------------------*/
 .kups-wrapper {
   position: relative;
-  padding-bottom: 40px;
-  max-width: 930px; /* BATASI LEBAR SLIDER DI DESKTOP */
+  padding-bottom: 70px; 
+  max-width: 980px; 
   margin: 0 auto;
+  box-sizing: border-box;
 }
 .kups-slider {
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  gap: 20px;
-  padding: 20px 0;
-  margin: -20px 0;
+  gap: 35px;
+  margin: 0;
+  padding: 40px 20px 40px 20px; 
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
 .kups-slider::-webkit-scrollbar {
   display: none;
 }
+
 .kups-card-item {
   flex: 0 0 290px;
 }
+
 .kups-pagination {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: -30;
+  bottom: 25px; 
   display: flex;
   gap: 8px;
 }
@@ -1611,14 +1624,27 @@ section,
     flex: 0 0 calc(50% - 10px);
   }
 }
+
 @media (max-width: 767px) {
-  .kups-card-item {
-    flex: 0 0 85%;
-    scroll-snap-align: center;
+  /* Aturan untuk wrapper baru di mobile */
+  .kups-mobile-wrapper {
+    /* Atur padding di sini untuk jarak dari tepi layar */
+    padding: 0;
   }
+  
   .kups-slider {
-    padding-left: 7.5%;
-    padding-right: 7.5%;
+    padding: 40px 40px;
+    /* Hapus semua padding di sini karena sudah diatur di wrapper */
+    gap: 45px;
+  }
+  
+  .kups-card-item {
+    /* Atur lebar kartu agar mengambil 100% dari slider,
+       yang sudah terbatasi oleh padding wrapper */
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin: 0;
+    scroll-snap-align: center;
   }
 }
 
@@ -1856,10 +1882,12 @@ section,
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  gap: 20px; /* dipakai JS untuk hitung lebar */
+  gap: 30px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  justify-content: flex-start; /* biar scroll akurat */
+  justify-content: flex-start;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .informasi-cards::-webkit-scrollbar {
   display: none;
@@ -1872,7 +1900,7 @@ section,
   height: 510px;
   background: white;
   border-radius: 0 32px 0 32px;
-  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1); */
   cursor: pointer;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   display: flex;
@@ -1992,22 +2020,32 @@ section,
   transform: scale(1.2);
 }
 
-/* Responsif */
-@media (max-width: 1024px) {
-  .informasi-card {
-    flex: 0 0 calc(50% - 20px);
-    max-width: calc(50% - 20px);
-  }
-}
-@media (max-width: 768px) {
-  .informasi-card {
-    flex: 0 0 90%;
-    max-width: 90%;
-    margin: 0 auto;
-    scroll-snap-align: center;
-  }
-}
 
+
+
+@media (max-width: 768px) {
+    /* Modifikasi wrapper untuk membatasi lebar di mobile */
+    .informasi-wrapper {
+        width: 100%;
+        max-width: 510px; /* Atur lebar maksimum untuk tampilan HP */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .informasi-cards {
+       padding-left: 0;
+        padding-right: 0;
+        gap: 25px;
+        scroll-snap-type: x mandatory;
+      }
+      
+      .informasi-card {
+        scroll-snap-align: center;
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin: 0; /* Hapus margin otomatis */
+    }
+}
 
 /* ======================================================= */
 /* ===== SLIDER FINAL (SUPER SIMPLE & SMOOTH) ====== */
@@ -2129,41 +2167,35 @@ section,
 /*--------------------------------------------------------------
 # Video Section - SOLUSI FINAL GABUNGAN
 --------------------------------------------------------------*/
-
-/* Pengaturan dasar wrapper untuk menengahkan */
 .video-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Container utama untuk scrolling ("jendela") */
 .video-cards {
   display: flex;
   gap: 35px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  width: 100%; /* Lebar penuh agar bisa diatur max-width */
-
-  /* Pengaturan untuk DESKTOP: Lebar pas 2 kartu */
-  max-width: 830px; /* (2 x 380px kartu) + 70px gap */
-  justify-content: flex-start; /* Mulai dari kiri di desktop */
+  width: 100%; max-width: 830px; 
+  justify-content: flex-start; 
+  padding-left: 20px; 
+  padding-right: 20px;
 }
 .video-cards::-webkit-scrollbar {
   display: none;
 }
 
-/* Pengaturan untuk setiap kartu video */
 .video-card {
   position: relative;
   display: flex;
-  flex: 0 0 380px; /* Ukuran kartu tetap di desktop */
+  flex: 0 0 380px; 
   height: 350px;
   border-radius: 15px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
   cursor: pointer;
 }
 
@@ -2251,6 +2283,36 @@ section,
   transform: scale(1.4);
 }
 
+/* --------------------------------------------------------------
+# RESPONSIVE KHUSUS VIDEO
+--------------------------------------------------------------*/
+@media (max-width: 768px) {
+  .video-wrapper {
+    /* Gunakan max-width dan margin agar wrapper di tengah */
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    /* Hapus padding, biarkan kartu mengatur posisinya */
+    padding: 0;
+  }
+  
+  .video-cards {
+     scroll-snap-type: x mandatory;
+    gap: 30px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  .video-card {
+    /* Atur lebar kartu menjadi 100% dari kontainer cards */
+    flex: 0 0 100%;
+    max-width: 100%;
+    
+    scroll-snap-align: center;
+    
+  }
+}
 
 /* ================================================== */
 /* STYLE GLOBAL UNTUK SEMUA SLIDER
@@ -2287,31 +2349,6 @@ section,
 
 
 
-/*--------------------------------------------------------------
-# RESPONSIVE KHUSUS VIDEO
---------------------------------------------------------------*/
-@media (max-width: 767px) {
-  /* Hapus max-width agar container full-width */
-  .video-cards {
-    max-width: none;
-
-    /* Aktifkan scroll snap untuk efek carousel */
-    scroll-snap-type: x mandatory;
-
-    /* Padding kiri & kanan agar kartu pertama/terakhir bisa pas di tengah */
-    padding: 0 5%;
-
-    /* Jarak antar kartu */
-    gap: 15px;
-  }
-
-  /* Atur lebar dan posisi snap setiap kartu */
-  .video-card {
-    flex: 0 0 90%; /* Lebar kartu 90% dari layar */
-    height: 320px;
-    scroll-snap-align: center; /* Tiap kartu akan berhenti di tengah */
-  }
-}
 
 
 

@@ -29,6 +29,24 @@ class VideoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     $valiadate = $request->validate([
+    //         'judul' => 'required',
+    //         'link' => 'required',
+    //     ]);
+
+    //     Video::create([
+    //         'id_pengguna' => Auth::guard('pengguna')->id(),
+    //         'judul' => $valiadate['judul'],
+    //         'link' => $valiadate['link'],
+    //     ]);
+    //      LogHelper::add('Menambah data Video');
+    //     return redirect()->to(route('video') . '#tabelVideo')
+    //         ->with('success', 'Data berhasil disimpan!');
+    // }
+    // File: app/Http/Controllers/VideoController.php
+
     public function store(Request $request)
     {
         $valiadate = $request->validate([
@@ -41,9 +59,10 @@ class VideoController extends Controller
             'judul' => $valiadate['judul'],
             'link' => $valiadate['link'],
         ]);
-         LogHelper::add('Menambah data Video');
-        return redirect()->to(route('video') . '#tabelVideo')
-            ->with('success', 'Data berhasil disimpan!');
+
+        LogHelper::add('Menambah data Video');
+        return redirect()->route('video')
+            ->with('video_add_success', 'Data berhasil disimpan!');
     }
 
     /**
@@ -80,10 +99,9 @@ class VideoController extends Controller
             'link' => $request->input('e_link'),
         ]);
         LogHelper::add('Mengubah data Video');
-        return redirect()->to(route('video') . '#tabelVideo')
-            ->with('success', 'Data berhasil di Update');
+        return redirect()->route('video')
+            ->with('video_add_success', 'Data berhasil di update');
     }
-
     /**
      * Remove the specified resource from storage.
      */

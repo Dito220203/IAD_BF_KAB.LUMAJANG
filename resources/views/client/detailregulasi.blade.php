@@ -29,7 +29,7 @@
                             @else
                                 {{-- KONDISI 2: Jika website sudah di-hosting --}}
                                 <iframe
-                                    src="https://docs.google.com/gview?url={{ url(Storage::url('regulasi/' . $item->file)) }}&embedded=true"
+                                    src="https://docs.google.com/gview?url={{ asset('storage/regulasi/' . $item->file) }}&embedded=true"
                                     width="100%" height="700"></iframe>
                             @endif
                         @else

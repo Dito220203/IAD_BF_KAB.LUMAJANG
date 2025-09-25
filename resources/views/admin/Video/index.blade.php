@@ -146,3 +146,25 @@
         </section>
     </main>
 @endsection
+@push('scripts')
+    @if (session('video_add_success'))
+        <script>
+            // 1. Tampilkan notifikasi sukses menggunakan SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: "{{ session('video_add_success') }}",
+                confirmButtonColor: '#3085d6',
+            });
+
+            // 2. Lakukan scroll ke tabel secara manual dengan JavaScript
+            // Ini menggantikan fungsi #tabelVideo yang kita hapus
+            document.addEventListener('DOMContentLoaded', function() {
+                const tabelVideoElement = document.getElementById('tabelVideo');
+                if (tabelVideoElement) {
+                    tabelVideoElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        </script>
+    @endif
+@endpush

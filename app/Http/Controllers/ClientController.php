@@ -12,10 +12,8 @@ use App\Models\Kontak;
 use App\Models\Kth;
 use App\Models\Kups;
 use App\Models\Map;
-use App\Models\Monev;
 use App\Models\Opd;
 use App\Models\Potensi;
-use App\Models\PotensiKehutanan;
 use App\Models\ProdukKups;
 use App\Models\ProgresKerja;
 use App\Models\Regulasi;
@@ -27,8 +25,6 @@ use App\Models\Video;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PHPUnit\Framework\MockObject\ReturnValueGenerator;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClientController extends Controller
 {
