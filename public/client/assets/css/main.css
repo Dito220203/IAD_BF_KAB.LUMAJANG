@@ -876,22 +876,22 @@ h6 {
 }
 
 .footer-left {
-  display: flex;
-  align-items: center;
-  flex: 1 1 60%;
-  min-width: 280px;
+    display: flex;
+    align-items: center;
+    flex: 1 1 60%;
+    min-width: 280px;
 }
 
 .footer-logo {
-  width: 210px;
-  margin-right: 25px;
+    width: 210px;
+    margin-right: 25px;
 }
 
 .footer-text h2 {
-  margin: 0 0 10px 0;
-  font-weight: bold;
-  color: #fff;
-  font-size: 32px;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+    color: #fff;
+    font-size: 32px;
 }
 
 .footer-text p {
@@ -1047,8 +1047,7 @@ h6 {
       padding: 0;
     }
 
-
-.chart-kups {
+   .chart-kups {
     background-color: #ffffff;
     border-radius: 16px;
     padding: 25px;
@@ -1065,22 +1064,26 @@ h6 {
     font-size: 22px;
     font-weight: 700;
 }
-
-/* 3. Buat Area Chart Selalu Persegi (Kunci Utama) */
-.chart-box {
-    width: 100%;             /* Tetap 100% agar responsif di HP */
-    max-width: 400px;        /* ✨ TAMBAHKAN: Ini ukuran maksimal chart Anda */
-    margin: 0 auto;          /* ✨ TAMBAHKAN: Ini akan memposisikan chart di tengah wrapper */
-    aspect-ratio: 1 / 1;     /* KUNCI: Paksa tingginya agar sama dengan lebarnya */
-    padding: 0 !important;   /* Hapus padding bawaan jika ada */
-}
-
-#donutChart {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-
+    
+         /* 3. Buat Area Chart Selalu Persegi (Kunci Utama) */
+         .chart-box {
+           width: 100%;
+           /* Tetap 100% agar responsif di HP */
+           max-width: 400px;
+           /* ✨ TAMBAHKAN: Ini ukuran maksimal chart Anda */
+           margin: 0 auto;
+           /* ✨ TAMBAHKAN: Ini akan memposisikan chart di tengah wrapper */
+           aspect-ratio: 1 / 1;
+           /* KUNCI: Paksa tingginya agar sama dengan lebarnya */
+           padding: 0 !important;
+           /* Hapus padding bawaan jika ada */
+         }
+    
+         #donutChart {
+           width: 100% !important;
+           height: 100% !important;
+         }
+    
     .canvas {
       width: 100% !important;
       height: auto !important;
@@ -1573,8 +1576,8 @@ section,
 --------------------------------------------------------------*/
 .kups-wrapper {
   position: relative;
-  padding-bottom: 70px;
-  max-width: 980px;
+  padding-bottom: 70px; 
+  max-width: 980px; 
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -1585,7 +1588,7 @@ section,
   scroll-snap-type: x mandatory;
   gap: 35px;
   margin: 0;
-  padding: 40px 20px 40px 20px;
+  padding: 40px 20px 40px 20px; 
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -1603,7 +1606,7 @@ section,
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 25px;
+  bottom: 25px; 
   display: flex;
   gap: 8px;
 }
@@ -1631,13 +1634,13 @@ section,
     /* Atur padding di sini untuk jarak dari tepi layar */
     padding: 0;
   }
-
+  
   .kups-slider {
     padding: 40px 40px;
     /* Hapus semua padding di sini karena sudah diatur di wrapper */
     gap: 45px;
   }
-
+  
   .kups-card-item {
     /* Atur lebar kartu agar mengambil 100% dari slider,
        yang sudah terbatasi oleh padding wrapper */
@@ -1878,16 +1881,16 @@ section,
 
 /* Cards container */
 .informasi-cards {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  gap: 30px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  justify-content: flex-start;
-  padding-left: 20px;
-  padding-right: 20px;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    gap: 30px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .informasi-cards::-webkit-scrollbar {
@@ -1896,18 +1899,19 @@ section,
 
 /* Card */
 .informasi-card {
-  flex: 0 0 calc(25% - 20px); /* default 4 card per row */
-  max-width: calc(25% - 20px);
-  height: 510px;
-  background: white;
-  border-radius: 0 32px 0 32px;
-  /* box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1); */
-  cursor: pointer;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  will-change: transform;
-  overflow: hidden;
+    flex: 0 0 calc(25% - 20px);
+    /* default 4 card per row */
+    max-width: calc(25% - 20px);
+    height: 510px;
+    background: white;
+    border-radius: 0 32px 0 32px;
+    /* box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1); */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+    overflow: hidden;
 }
 
 .informasi-card:hover {
@@ -2036,6 +2040,10 @@ section,
 }
 
 
+
+
+@media (max-width: 768px) {
+
     /* Modifikasi wrapper untuk membatasi lebar di mobile */
     .informasi-wrapper {
         width: 100%;
@@ -2058,31 +2066,6 @@ section,
         max-width: 100%;
         margin: 0;
         /* Hapus margin otomatis */
-    }
-}
-
-
-@media (max-width: 768px) {
-    /* Modifikasi wrapper untuk membatasi lebar di mobile */
-    .informasi-wrapper {
-        width: 100%;
-        max-width: 510px; /* Atur lebar maksimum untuk tampilan HP */
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .informasi-cards {
-       padding-left: 0;
-        padding-right: 0;
-        gap: 25px;
-        scroll-snap-type: x mandatory;
-      }
-
-      .informasi-card {
-        scroll-snap-align: center;
-        flex: 0 0 100%;
-        max-width: 100%;
-        margin: 0; /* Hapus margin otomatis */
     }
 }
 
@@ -2237,15 +2220,16 @@ section,
 }
 
 .video-cards {
-  display: flex;
-  gap: 35px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  width: 100%; max-width: 830px;
-  justify-content: flex-start;
-  padding-left: 20px;
-  padding-right: 20px;
+    display: flex;
+    gap: 35px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    width: 100%;
+    max-width: 830px;
+    justify-content: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .video-cards::-webkit-scrollbar {
@@ -2253,14 +2237,14 @@ section,
 }
 
 .video-card {
-  position: relative;
-  display: flex;
-  flex: 0 0 380px;
-  height: 350px;
-  border-radius: 15px;
-  overflow: hidden;
-  background: #fff;
-  cursor: pointer;
+    position: relative;
+    display: flex;
+    flex: 0 0 380px;
+    height: 350px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+    cursor: pointer;
 }
 
 /* Gambar */
@@ -2397,36 +2381,6 @@ section,
     }
 }
 
-/* --------------------------------------------------------------
-# RESPONSIVE KHUSUS VIDEO
---------------------------------------------------------------*/
-@media (max-width: 768px) {
-  .video-wrapper {
-    /* Gunakan max-width dan margin agar wrapper di tengah */
-    max-width: 350px;
-    margin-left: auto;
-    margin-right: auto;
-
-    /* Hapus padding, biarkan kartu mengatur posisinya */
-    padding: 0;
-  }
-
-  .video-cards {
-     scroll-snap-type: x mandatory;
-    gap: 30px;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .video-card {
-    /* Atur lebar kartu menjadi 100% dari kontainer cards */
-    flex: 0 0 100%;
-    max-width: 100%;
-
-    scroll-snap-align: center;
-
-  }
-}
 
 /* ================================================== */
 /* STYLE GLOBAL UNTUK SEMUA SLIDER
@@ -2460,11 +2414,6 @@ section,
   background-color: #196b4a; /* Warna hijau tema Anda */
   transform: scale(1.5);
 }
-
-
-
-
-
 
 
 
