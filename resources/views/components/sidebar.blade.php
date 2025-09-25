@@ -204,13 +204,14 @@
                     <span>Log Aktivitas</span>
                 </a>
             </li>
-        @endif
+        @endif 
     </ul>
 
 
     <!-- Bagian bawah sidebar -->
     <div class="mt-auto">
         <ul class="sidebar-nav">
+            @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="modal"
                     data-bs-target="#modalGantiPassword">
@@ -218,6 +219,7 @@
                     <span>Ganti Password</span>
                 </a>
             </li>
+            @endif 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('logout') }}">
                     <i class="ri-logout-box-line"></i>
