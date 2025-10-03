@@ -27,6 +27,7 @@ class RencanaKerja extends Model
         'id_opd',
         'status',
         'keterangan',
+        'input',
         'delete_at'
     ];
 

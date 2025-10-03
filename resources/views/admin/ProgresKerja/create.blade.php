@@ -147,7 +147,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                
+
                                 {{-- Sumber Dana --}}
                                 {{-- <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">Sumber Dana</label>
@@ -244,7 +244,7 @@
 @endsection
 @push('scripts')
     <script>
-        
+
         // ================== UPLOAD FOTO (Drag & Drop + Preview + Hapus) ==================
         let fileList = [];
 

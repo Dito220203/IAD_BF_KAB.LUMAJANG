@@ -28,7 +28,7 @@
                         </form>
                     </div>
                     <div class="table-wrapper">
-                        <table class="detail-table">
+                        <table class="detail-table" style="min-width: 1500px;">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -61,7 +61,7 @@
                                         <td>{{ $rk->sumberdana }}</td>
                                         <td>{{ $rk->tahun }}</td>
                                         <td>{{ $rk->opd->nama ?? '-' }}</td>
-                                        <td class="kolom-keterangan">{{ $rk->keterangan }}</td>
+                                        <td>{{ $rk->keterangan }}</td>
                                     </tr>
                                 @empty
                                     <tr>

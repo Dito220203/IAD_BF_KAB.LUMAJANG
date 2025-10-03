@@ -40,12 +40,6 @@
             text-transform: uppercase;
         }
 
-        .header-section h2 {
-            font-size: 12px;
-            color: #666;
-            margin: 0;
-        }
-
         .info-section {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -117,37 +111,26 @@
             line-height: 1.2;
         }
 
-        /* Optimized column widths untuk landscape A4 */
-        .col-no { width: 2%; min-width: 15px; }
-        .col-subprogram { width: 6%; min-width: 40px; }
-        .col-rencana { width: 12%; min-width: 80px; }
-        .col-sub-kegiatan { width: 10%; min-width: 70px; }
-        .col-kegiatan { width: 8%; min-width: 60px; }
-        .col-program { width: 10%; min-width: 70px; }
-        .col-lokasi { width: 5%; min-width: 35px; }
-        .col-volume { width: 3%; min-width: 25px; }
-        .col-satuan { width: 4%; min-width: 30px; }
-        .col-anggaran { width: 7%; min-width: 50px; }
-        .col-sumber { width: 5%; min-width: 40px; }
-        .col-tahun { width: 3%; min-width: 25px; }
-        .col-opd { width: 8%; min-width: 55px; }
-        .col-realisasi { width: 6%; min-width: 45px; }
-        .col-rka { width: 3%; min-width: 25px; }
-        .col-status { width: 4%; min-width: 30px; }
-        .col-tanggal { width: 5%; min-width: 35px; }
-        .col-pesan { width: 7%; min-width: 50px; }
-        .col-keterangan { width: 8%; min-width: 55px; }
+        .text-center {
+            text-align: center;
+        }
 
-        .text-center { text-align: center; }
-        .text-left { text-align: left; }
-        .text-right { text-align: right; }
+        .text-left {
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
 
         .status-badge {
-            padding: 1px 4px;
-            border-radius: 2px;
+            display: inline-block;
+            padding: 2px 5px;
+            border-radius: 3px;
             font-weight: bold;
             font-size: 6px;
             text-transform: uppercase;
+            margin-bottom: 2px;
         }
 
         .status-valid {
@@ -185,60 +168,23 @@
             padding-top: 8px;
         }
 
-        /* Text handling untuk konten panjang */
         .long-text {
             font-size: 6px;
             line-height: 1.1;
             word-break: break-word;
-            hyphens: auto;
-        }
-
-        .truncate-text {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Print optimizations */
-        @media print {
-            body {
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
-            }
-
-            .page-break {
-                page-break-before: always;
-            }
         }
     </style>
 </head>
 
 <body>
     <div class="header-section">
-        <h1>Monitoring dan Evaluasi IAD Perhutanan Sosial </h1>
-        {{-- <h2>Sistem Informasi Perencanaan Daerah</h2> --}}
+        <h1>Monitoring dan Evaluasi IAD Perhutanan Sosial</h1>
     </div>
 
     <div class="info-section">
         <div class="info-row">
             <span class="info-label">Periode Tahun:</span>
             <span class="info-value">{{ $tahun ?? 'Semua Tahun' }}</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">Triwulan:</span>
-            <span class="info-value">
-                @if($triwulan)
-                    Triwulan {{ $triwulan }}
-                    @switch($triwulan)
-                        @case(1) (Jan-Mar) @break
-                        @case(2) (Apr-Jun) @break
-                        @case(3) (Jul-Sep) @break
-                        @case(4) (Okt-Des) @break
-                    @endswitch
-                @else
-                    Semua Triwulan
-                @endif
-            </span>
         </div>
         <div class="info-row">
             <span class="info-label">Total Data:</span>
@@ -254,73 +200,169 @@
         <table>
             <thead>
                 <tr>
-                    <th class="col-no">No</th>
-                    <th class="col-subprogram">Sub Program</th>
-                    <th class="col-rencana">Rencana Aksi</th>
-                    <th class="col-sub-kegiatan">Sub Kegiatan</th>
-                    <th class="col-kegiatan">Kegiatan</th>
-                    <th class="col-program">Program</th>
-                    <th class="col-lokasi">Lokasi</th>
-                    <th class="col-volume">Vol</th>
-                    <th class="col-satuan">Satuan</th>
-                    <th class="col-anggaran">Anggaran</th>
-                    <th class="col-sumber">Sumber Dana</th>
-                    <th class="col-tahun">Tahun</th>
-                    <th class="col-opd">Perangkat Daerah</th>
-                    <th class="col-realisasi">Realisasi</th>
-                    <th class="col-rka">RKA</th>
-                    <th class="col-status">Status</th>
-                    <th class="col-tanggal">Tanggal</th>
-                    <th class="col-pesan">Catatan</th>
-                    <th class="col-keterangan">Ket</th>
+                    <th style="width: 2%;">No</th>
+                    <th style="width: 6%;">Sub Program</th>
+                    <th style="width: 8%;">Rencana Aksi</th>
+                    <th style="width: 8%;">Sub Kegiatan</th>
+                    <th style="width: 8%;">Kegiatan</th>
+                    <th style="width: 8%;">Program</th>
+                    <th style="width: 5%;">Lokasi</th>
+                    <th style="width: 2%;">Vol</th>
+                    <th style="width: 3%;">Satuan</th>
+                    <th style="width: 4%;">Anggaran</th>
+                    <th style="width: 4%;">Sumber Dana</th>
+                    <th style="width: 3%;">Tahun</th>
+                    <th style="width: 6%;">Perangkat Daerah</th>
+                    <th style="width: 7%;">Dokumen Anggaran</th>
+                    <th style="width: 7%;">Realisasi</th>
+                    <th style="width: 6%;">Vol Target</th>
+                    <th style="width: 4%;">Status</th>
+                    <th style="width: 4%;">Catatan</th>
+                    <th style="width: 4%;">Ket</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($monev as $i => $row)
                     <tr>
+                        {{-- No --}}
                         <td class="text-center">{{ $i + 1 }}</td>
+
+                        {{-- Kolom Data Utama --}}
                         <td class="text-left long-text">{{ $row->subprogram->subprogram ?? '-' }}</td>
-                        <td class="text-left long-text">{{ Str::limit($row->rencanakerja->rencana_aksi ?? '-' ) }}</td>
-                        <td class="text-left long-text">{{ Str::limit($row->sub_kegiatan, 80) }}</td>
-                        <td class="text-left long-text">{{ Str::limit($row->kegiatan, 70) }}</td>
-                        <td class="text-left long-text">{{ Str::limit($row->nama_program, 80) }}</td>
+                        <td class="text-left long-text">{{ $row->rencanakerja->rencana_aksi ?? '-' }}</td>
+                        <td class="text-left long-text">{{ $row->sub_kegiatan }}</td>
+                        <td class="text-left long-text">{{ $row->kegiatan }}</td>
+                        <td class="text-left long-text">{{ $row->nama_program }}</td>
                         <td class="text-center">{{ $row->lokasi }}</td>
-                         <td class="text-center">{{ $row->volume}}</td>
+                        <td class="text-center">{{ $row->volume }}</td>
                         <td class="text-center">{{ $row->satuan }}</td>
+                        {{-- Anggaran (dengan logika multi-baris & format Rupiah) --}}
+                        {{-- ANGGARAN (dengan garis pemisah) --}}
                         <td class="text-center">
-                           {{$row->anggaran}}
+                            @php $anggarans = explode('; ', $row->anggaran); @endphp
+                            @foreach ($anggarans as $anggaran)
+                                {{-- Bungkus setiap item dengan div untuk styling --}}
+                                <div
+                                    style="padding: 4px 2px; @if (!$loop->last) border-bottom: 1px solid #dee2e6; @endif">
+                                    @if (is_numeric($anggaran))
+                                        {{ 'Rp ' . number_format((float) $anggaran, 0, ',', '.') }}
+                                    @else
+                                        {{ $anggaran ?: '-' }}
+                                    @endif
+                                </div>
+                            @endforeach
                         </td>
-                        <td class="text-center">{{ Str::limit($row->sumberdana, 20) }}</td>
+
+                        {{-- SUMBER DANA (dengan garis pemisah) --}}
+                        <td class="text-center">
+                            @php $sumberdanas = explode('; ', $row->sumberdana); @endphp
+                            @foreach ($sumberdanas as $sumber)
+                                {{-- Bungkus setiap item dengan div untuk styling --}}
+                                <div
+                                    style="padding: 4px 2px; @if (!$loop->last) border-bottom: 1px solid #dee2e6; @endif">
+                                    {{ $sumber ?: '-' }}
+                                </div>
+                            @endforeach
+                        </td>
+
+                        {{-- Tahun --}}
                         <td class="text-center">{{ $row->tahun }}</td>
-                        <td class="text-left long-text">{{ Str::limit($row->opd->nama ?? '-', 60) }}</td>
-                        <td class="text-left long-text">{{ Str::limit($row->realisasi ?? '-', 50) }}</td>
+
+                        {{-- Perangkat Daerah --}}
+                        <td class="text-center">{{ $row->opd->nama ?? '-' }}</td>
+
+                        {{-- RKA / Dokumen Anggaran (menggunakan style PDF) --}}
                         <td class="text-center">
-                            {{$row->rka}}
-                        </td>
-                        <td class="text-center">
-                           {{$row->status}}
-                        </td>
-                        <td class="text-center">
-                            @if($row->tanggal)
-                                {{ date('d/m/y', strtotime($row->tanggal)) }}
+                            @if (is_array($row->dokumen_anggaran) && !empty(array_filter($row->dokumen_anggaran)))
+                                @foreach ($row->dokumen_anggaran ?? [] as $status)
+                                    @if ($status)
+                                        <span
+                                            class="status-badge {{ str_contains($status, 'ADA') ? 'rka-sudah' : 'rka-belum' }}">{{ $status }}</span><br>
+                                    @endif
+                                @endforeach
                             @else
-                                -
+                                <span class="status-badge rka-belum">Belum</span>
                             @endif
                         </td>
-                        <td class="text-left long-text">
-                            @if($row->pesan)
-                                {{ Str::limit($row->pesan, 60) }}
+
+                        {{-- REALISASI (dengan jarak nilai yang lebih dekat) --}}
+                        <td class="text-left">
+                            @if (is_array($row->realisasi) && !empty(array_filter($row->realisasi)))
+                                @php $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV']; @endphp
+
+                                <table style="border: none; width: 100%; font-size: 7px;">
+                                    @foreach ($row->realisasi as $triwulan => $nilai)
+                                        @if ($nilai)
+                                            <tr style="background-color: transparent !important;">
+                                                <td
+                                                    style="border: none; padding: 1px; width: 35%; vertical-align: middle;">
+                                                    TW {{ $romanMap[$triwulan] ?? $triwulan }}
+                                                </td>
+                                                <td
+                                                    style="border: none; padding: 1px; width: 5%; vertical-align: middle;">
+                                                    :</td>
+                                                <td
+                                                    style="border: none; padding: 1px; text-align: left; font-weight: bold; vertical-align: middle; padding-left: 5px;">
+                                                    {{ $nilai }}
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </table>
                             @else
-                                -
+                                <span style="display: block; text-align: center;">-</span>
                             @endif
                         </td>
-                        <td class="text-left long-text">
-                            @if($row->keterangan)
-                                {{ Str::limit($row->keterangan, 60) }}
+
+                        {{-- VOL TARGET (dengan perataan titik dua yang presisi) --}}
+                        <td class="text-left">
+                            @if (is_array($row->volumeTarget) && !empty(array_filter($row->volumeTarget)))
+                                @php $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV']; @endphp
+
+                                <table style="border: none; width: 100%; font-size: 7px;">
+                                    @foreach ($row->volumeTarget as $triwulan => $nilai)
+                                        @if ($nilai)
+                                            <tr style="background-color: transparent !important;">
+                                                {{-- Kolom 1: Untuk Label (rata kiri) --}}
+                                                <td
+                                                    style="border: none; padding: 1px; width: 35%; vertical-align: middle; text-align: left;">
+                                                    TW {{ $romanMap[$triwulan] ?? $triwulan }}
+                                                </td>
+
+                                                {{-- Kolom 2: Khusus untuk Titik Dua (rata tengah) --}}
+                                                <td
+                                                    style="border: none; padding: 1px; width: 5%; vertical-align: middle; text-align: center;">
+                                                    :
+                                                </td>
+
+                                                {{-- Kolom 3: Untuk Nilai (rata tengah) --}}
+                                                <td
+                                                    style="border: none; padding: 1px; vertical-align: middle; font-weight: bold; text-align: center;">
+                                                    {{ $nilai }}
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </table>
                             @else
-                                -
+                                <span style="display: block; text-align: center;">-</span>
                             @endif
                         </td>
+
+
+
+                        {{-- Status (menggunakan style PDF) --}}
+                        <td class="text-center">
+                            @if ($row->status == 'Valid')
+                                <span class="status-badge status-valid">Valid</span>
+                            @else
+                                <span class="status-badge status-pending">Pending</span>
+                            @endif
+                        </td>
+
+                        {{-- Catatan (Pesan) & Keterangan (Uraian) --}}
+                        <td class="text-center">{{ $row->pesan ?? '-' }}</td>
+                        <td class="text-center">{{ $row->uraian ?? '-' }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -329,8 +371,8 @@
 
     <div class="footer">
         <strong>Total Program:</strong> {{ count($monev) }} |
-        <strong>Dicetak:</strong> {{ date('d F Y, H:i:s') }} WIB |
-        <strong>Halaman:</strong> 1
+        <strong>Dicetak pada:</strong> {{ date('d F Y, H:i:s') }} WIB |
+        Halaman 1
     </div>
 </body>
 

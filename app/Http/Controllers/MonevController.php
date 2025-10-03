@@ -3,58 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\LogHelper;
+use App\Models\FotoProgres;
 use App\Models\Monev;
 use App\Models\Notifikasi;
 use App\Models\Opd;
 use App\Models\Pengguna;
 use App\Models\Pesan;
+use App\Models\ProgresKerja;
 use App\Models\RencanaKerja;
 use App\Models\Subprogram;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf; // pastikan sudah install barryvdh/laravel-dompdf
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MonevController extends Controller
 {
-
     public function index(Request $request)
     {
         $user = Auth::guard('pengguna')->user();
         $query = Monev::query();
 
+        // ✅ Load relasi
+        $query->with(['opd', 'subprogram', 'fotoProgres']);
+
+        // ✅ Ambil daftar tahun
+        $tahuns = Monev::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+
+        // ✅ Batasi berdasarkan user (kecuali Super Admin)
         if ($user->level !== 'Super Admin') {
             $query->where('id_pengguna', $user->id);
         }
 
-        // Filter Triwulan
-        if ($request->filled('triwulan')) {
-            $triwulan = $request->triwulan;
-            switch ($triwulan) {
-                case 1: // Jan - Mar
-                    $query->whereMonth('tanggal', '>=', 1)
-                        ->whereMonth('tanggal', '<=', 3);
-                    break;
-                case 2: // Apr - Jun
-                    $query->whereMonth('tanggal', '>=', 4)
-                        ->whereMonth('tanggal', '<=', 6);
-                    break;
-                case 3: // Jul - Sep
-                    $query->whereMonth('tanggal', '>=', 7)
-                        ->whereMonth('tanggal', '<=', 9);
-                    break;
-                case 4: // Okt - Des
-                    $query->whereMonth('tanggal', '>=', 10)
-                        ->whereMonth('tanggal', '<=', 12);
-                    break;
-            }
-        }
-
-        // Filter Tahun
+        // ✅ Filter Tahun
         if ($request->filled('tahun')) {
-            $query->whereYear('tanggal', $request->tahun);
+            $query->where('tahun', $request->tahun);
         }
 
-        // Fitur Pencarian
+        // ✅ Filter Search (dibungkus supaya tidak merusak filter tahun)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -63,32 +50,24 @@ class MonevController extends Controller
                     ->orWhere('kegiatan', 'like', "%{$search}%")
                     ->orWhere('sub_kegiatan', 'like', "%{$search}%")
                     ->orWhere('lokasi', 'like', "%{$search}%")
-                    ->orWhere('tahun', 'like', "%{$search}%")
                     ->orWhere('anggaran', 'like', "%{$search}%")
                     ->orWhere('volume', 'like', "%{$search}%")
                     ->orWhere('satuan', 'like', "%{$search}%")
                     ->orWhere('sumberdana', 'like', "%{$search}%")
-                    ->orWhere('keterangan', 'like', "%{$search}%");
-            })
-                ->orWhereHas('opd', function ($q) use ($search) {
-                    $q->where('nama', 'like', "%{$search}%");
-                })
-                ->orWhereHas('subprogram', function ($q) use ($search) {
-                    $q->where('subprogram', 'like', "%{$search}%");
-                });
+                    ->orWhere('uraian', 'like', "%{$search}%")
+                    ->orWhereHas('opd', function ($q) use ($search) {
+                        $q->where('nama', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('subprogram', function ($q) use ($search) {
+                        $q->where('subprogram', 'like', "%{$search}%");
+                    });
+            });
         }
 
-        // Baru eksekusi query
-        $monev = $query->orderBy('tanggal', 'desc')->paginate(10)->withQueryString();
+        // ✅ Pagination (DIUBAH DARI latest() MENJADI oldest())
+        $monev = $query->oldest()->paginate(10)->appends($request->query());
 
-        // Dropdown tahun
-        $tahunQuery = Monev::selectRaw('YEAR(tanggal) as tahun')->distinct();
-        if ($user->level !== 'Super Admin') {
-            $tahunQuery->where('id_pengguna', $user->id);
-        }
-        $tahun_list = $tahunQuery->orderBy('tahun', 'desc')->pluck('tahun');
-
-        return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahun_list'));
+        return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahuns'));
     }
 
 
@@ -156,52 +135,106 @@ class MonevController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // MonevController.php
+
     public function store(Request $request)
     {
-        // $user = Auth::guard('pengguna')->user();
+        $validatedData = $request->validate([
+            'id_subprogram' => 'required|exists:subprograms,id',
+            'rencanaAksi'   => 'required|exists:rencana_kerjas,id',
+            'sub_kegiatan'  => 'required',
+            'kegiatan'      => 'required',
+            'nama_program'  => 'required',
+            'tahun'         => 'required',
+            'volume'        => 'required',
+            'satuan'        => 'required',
+            'anggaran'     => 'required|array',
+            'anggaran.*'   => 'required|string',
+            'sumberdana'   => 'required|array',
+            'sumberdana.*' => 'required|string',
+            'lokasi'        => 'required',
+            'id_opd'        => 'required|exists:opds,id',
+            'uraian'    => 'required',
+            'tw'            => 'nullable|array',
+            'realisasi'     => 'nullable|array',
+            'volumeTarget'  => 'nullable|array',
 
-        $validate = $request->validate([
-            'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required|exists:rencana_kerjas,id',
-            'sub_kegiatan'   => 'required',
-            'kegiatan'       => 'required',
-            'nama_program' => 'required',
-            'tahun'          => 'required',
-            'volume' => 'required',
-            'satuan' => 'required',
-            'anggaran'       => 'required',
-            'sumberdana' => 'required',
-            'lokasi'         => 'required|string',
-            'id_opd'         => 'required|exists:opds,id',
-            'rka' => 'nullable|string',
-            'realisasi' => 'nullable|string',
-            'tanggal' => 'nullable|date',
-            'keterangan' => 'nullable|string',
+        ]);
+        $anggaranString = implode('; ', $validatedData['anggaran']);
+        $sumberdanaString = implode('; ', $validatedData['sumberdana']);
+
+
+        $monev = Monev::create([
+            'id_pengguna'    => Auth::guard('pengguna')->id(),
+            'id_subprogram'  => $validatedData['id_subprogram'],
+            'rencana_aksi'   => $validatedData['rencanaAksi'],
+            'sub_kegiatan'   => $validatedData['sub_kegiatan'],
+            'kegiatan'       => $validatedData['kegiatan'],
+            'nama_program'   => $validatedData['nama_program'],
+            'tahun'          => $validatedData['tahun'],
+            'volume'         => $validatedData['volume'],
+            'satuan'         => $validatedData['satuan'],
+            'anggaran'      => $anggaranString,
+            'sumberdana'    => $sumberdanaString,
+            'lokasi'         => $validatedData['lokasi'],
+            'id_opd'         => $validatedData['id_opd'],
+            'uraian'     => $validatedData['uraian'],
+
+            // Simpan data array
+            'realisasi'        => $validatedData['realisasi'] ?? null,
+            'dokumen_anggaran' => $validatedData['tw'] ?? null,
+            'volumeTarget'     => $validatedData['volumeTarget'] ?? null,
+        ]);
+
+        ProgresKerja::create([
+            'id_pengguna' => $monev->id_pengguna,
+            'id_monev'    => $monev->id,
 
         ]);
 
-        Monev::create([
-            'id_pengguna'      => Auth::guard('pengguna')->id(),
-            'id_subprogram'    => $validate['id_subprogram'],
-            'rencana_aksi'  => $validate['rencanaAksi'],
-            'sub_kegiatan'     => $validate['sub_kegiatan'],
-            'kegiatan'         => $validate['kegiatan'],
-            'nama_program'  => $validate['nama_program'],
-            'lokasi'           => $validate['lokasi'],
-            'volume' => $validate['volume'],
-            'satuan' => $validate['satuan'],
-            'anggaran'         => $validate['anggaran'],
-            'sumberdana' => $validate['sumberdana'],
-            'tahun'            => $validate['tahun'],
-            'id_opd'           => $validate['id_opd'],
-            'status'           => 'Belum divalidasi',
-            'rka'       => $validate['rka'],
-            'realisasi'       => $validate['realisasi'],
-            'tanggal'       => $validate['tanggal'],
-            'keterangan'       => $validate['keterangan'],
+
+        return redirect()->route('monev')->with('success', 'Data Monitoring Evaluasi berhasil disimpan.');
+    }
+
+
+    public function storeFoto(Request $request)
+    {
+        $validatedData = $request->validate([
+            'monev_id'  => 'required|exists:monevs,id',
+            'foto.*'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'deskripsi' => 'nullable|string|max:255', // Diubah dari array menjadi string
+        ], [
+            'foto.*.max' => 'Setiap foto maksimal berukuran 2MB.',
         ]);
-        LogHelper::add('Menambah data Monev');
-        return redirect()->route('monev')->with('success', 'Data Berhasil Ditambahkan');
+
+        // Hapus foto lama jika ada (logika dari sebelumnya)
+        $existingFotos = FotoProgres::where('id_monev', $validatedData['monev_id'])->get();
+        if ($existingFotos->isNotEmpty()) {
+            foreach ($existingFotos as $foto) {
+                Storage::disk('public')->delete($foto->foto);
+                $foto->delete();
+            }
+        }
+
+        if ($request->hasFile('foto')) {
+            foreach ($request->file('foto') as $index => $file) {
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension    = $file->getClientOriginalExtension();
+                $safeName     = Str::slug($originalName);
+                $uniqueName   = $safeName . '-' . uniqid() . '.' . $extension;
+                $path         = $file->storeAs('foto_progres', $uniqueName, 'public');
+
+                FotoProgres::create([
+                    'id_monev'    => $validatedData['monev_id'],
+                    'id_pengguna' => Auth::guard('pengguna')->id(),
+                    'foto'        => $path,
+                    // Gunakan deskripsi tunggal untuk semua foto
+                    'deskripsi'   => $validatedData['deskripsi'] ?? null,
+                ]);
+            }
+        }
+
+        return redirect()->route('monev')->with('success', 'Foto dokumentasi berhasil diperbarui.');
     }
 
     public function updatePesan(Request $request, $id)
@@ -216,29 +249,6 @@ class MonevController extends Controller
 
         return redirect()->route('monev')->with('success', 'Pesan berhasil disimpan');
     }
-
-    public function lanjut($id)
-    {
-        $monev = Monev::findOrFail($id);
-
-        $newMonev = $monev->replicate(['rka', 'realisai', 'tanggal', 'keterangan', 'pesan']);
-
-        // Set field yang perlu direset
-        $newMonev->rka = null;
-        $newMonev->realisasi = null;
-        $newMonev->tanggal = null;
-        $newMonev->keterangan = null;
-        $newMonev->pesan = null;
-        $newMonev->status = 'Belum divalidasi'; // reset status
-
-        $newMonev->save();
-
-        LogHelper::add("Menduplikat data Monev dari ID {$monev->id} ke ID {$newMonev->id}");
-
-        return redirect()->route('monev')->with('success', 'Data berhasil diduplikat ke Monev selanjutnya');
-    }
-
-
 
 
     public function validasi(string $id)
@@ -308,10 +318,10 @@ class MonevController extends Controller
 
         // Filter Tahun (juga pakai kolom tanggal)
         if ($tahun) {
-            $query->whereYear('tanggal', $tahun);
+            $query->whereYear('tahun', $tahun);
         }
 
-        $monev = $query->orderBy('tanggal', 'desc')->get();
+        $monev = $query->orderBy('created_at', 'desc')->get();
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
             'admin.MonitoringEvaluasi.export',
@@ -321,11 +331,6 @@ class MonevController extends Controller
         return $pdf->download('laporan_monev.pdf');
     }
 
-
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -350,6 +355,8 @@ class MonevController extends Controller
         }
 
         $opd = Opd::where('delete_at', '0')->get();
+        $monev->anggaran = explode('; ', $monev->anggaran);
+        $monev->sumberdana = explode('; ', $monev->sumberdana);
 
         return view('admin.MonitoringEvaluasi.update', compact('monev', 'subprogram', 'rencana', 'opd'));
     }
@@ -358,34 +365,71 @@ class MonevController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, string $id)
     {
-        // $user = Auth::guard('pengguna')->user();
-        $validate = $request->validate([
-            'id_subprogram'  => 'required|exists:subprograms,id',
-            'rencanaAksi' => 'required|exists:rencana_kerjas,id',
-            'sub_kegiatan'   => 'required|string',
-            'kegiatan'       => 'required|string',
-            'nama_program'   => 'required|string',
-            'lokasi'         => 'required|string',
-            'volume' => 'required',
-            'satuan' => 'required',
-            'anggaran'       => 'required',
-            'sumberdana'       => 'required',
-            'tahun'          => 'required',
-            'id_opd'         => 'required|exists:opds,id',
-            'rka' => 'nullable|string',
-            'realisasi' => 'nullable|string',
-            'tanggal' => 'nullable|date',
-            'pesan' => 'nullable|string|max:255',
-            'keterangan' => 'nullable|string'
+        // 1. Temukan data yang akan diupdate
+        $monev = Monev::findOrFail($id);
+
+        // 2. Validasi semua input dari request
+        $validatedData = $request->validate([
+            'id_subprogram' => 'required|exists:subprograms,id',
+            'rencanaAksi'   => 'required|exists:rencana_kerjas,id',
+            'sub_kegiatan'  => 'required|string',
+            'kegiatan'      => 'required|string',
+            'nama_program'  => 'required|string',
+            'tahun'         => 'required|string',
+            'volume'        => 'required|string',
+            'satuan'        => 'required|string',
+            'anggaran'     => 'required|array',
+            'anggaran.*'   => 'required|string',
+            'sumberdana'   => 'required|array',
+            'sumberdana.*' => 'required|string',
+            'lokasi'        => 'required|string',
+            'id_opd'        => 'required|exists:opds,id',
+            'uraian'    => 'required|string',
+
+            // Validasi untuk data triwulan sebagai array
+            'tw'            => 'nullable|array',
+            'realisasi'     => 'nullable|array',
+            'volumeTarget'  => 'nullable|array',
         ]);
 
-        $monev = Monev::findOrFail($id);
-        $monev->update($validate);
-        LogHelper::add('Mengupdate data Monev');
-        return redirect()->route('monev')->with('success', 'Data Berhasil Diupdate');
+        $anggaranString = implode('; ', $validatedData['anggaran']);
+        $sumberdanaString = implode('; ', $validatedData['sumberdana']);
+
+        // 3. Siapkan data untuk diupdate dengan memetakan nama field
+        $updateData = [
+            'id_subprogram'    => $validatedData['id_subprogram'],
+            'rencana_aksi'     => $validatedData['rencanaAksi'], // Peta 'rencanaAksi' ke 'rencana_aksi'
+            'sub_kegiatan'     => $validatedData['sub_kegiatan'],
+            'kegiatan'         => $validatedData['kegiatan'],
+            'nama_program'     => $validatedData['nama_program'],
+            'tahun'            => $validatedData['tahun'],
+            'volume'           => $validatedData['volume'],
+            'satuan'           => $validatedData['satuan'],
+            'anggaran'      => $anggaranString,
+            'sumberdana'    => $sumberdanaString,
+            'lokasi'           => $validatedData['lokasi'],
+            'id_opd'           => $validatedData['id_opd'],
+            'uraian'       => $validatedData['uraian'],
+
+            // Peta nama input ke nama kolom database untuk data array
+            'dokumen_anggaran' => $validatedData['tw'] ?? [],
+            'realisasi'        => $validatedData['realisasi'] ?? [],
+            'volumeTarget'     => $validatedData['volumeTarget'] ?? [],
+        ];
+
+        // 4. Lakukan update pada data
+        $monev->update($updateData);
+
+        // 5. Tambahkan log dan redirect dengan pesan sukses
+        LogHelper::add('Mengupdate data Monev dengan');
+        return redirect()->route('monev')->with('success', 'Data Monitoring Evaluasi berhasil diperbarui.');
     }
+
 
 
 
@@ -394,8 +438,19 @@ class MonevController extends Controller
      */
     public function destroy(string $id)
     {
-        Monev::where('id', $id)->delete();
-        LogHelper::add('Menghapus data Monev');
+        $monev = Monev::with('fotoProgres')->findOrFail($id);
+
+        // 3. Looping untuk menghapus setiap file foto dari storage
+        if ($monev->fotoProgres->isNotEmpty()) {
+            foreach ($monev->fotoProgres as $foto) {
+                // Hapus file dari folder 'public/foto_progres'
+                Storage::disk('public')->delete($foto->foto);
+            }
+        }
+
+        $monev->delete();
+
+        LogHelper::add('Menghapus data Monev beserta foto terkait');
         return redirect()->route('monev')->with('success', 'Data Berhasil Dihapus');
     }
 }

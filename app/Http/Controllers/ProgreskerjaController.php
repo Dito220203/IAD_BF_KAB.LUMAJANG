@@ -15,53 +15,46 @@ use Illuminate\Support\Facades\Storage;
 
 class ProgreskerjaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index()
-    // {
-    //     $user = Auth::guard('pengguna')->user();
-    //     $user->level == 'Super Admin' ? $progres = ProgresKerja::paginate(10) : $progres = ProgresKerja::where('id_pengguna', $user->id)->paginate(10);
-    //     return view('admin.ProgresKerja.index', compact('progres'));
-    // }
 
     public function index(Request $request)
-{
-    $user   = Auth::guard('pengguna')->user();
-    $search = $request->input('search');
+    {
+        $user   = Auth::guard('pengguna')->user();
+        $search = $request->input('search');
 
-    // Query dasar
-    $query = ProgresKerja::with(['subprogram', 'penggunas']);
+        // PERBAIKAN 1: Muat relasi 'subprogram' secara langsung
+        $query = ProgresKerja::with(['penggunas', 'subprogram', 'monev.rencanaAksi', 'monev.fotoProgres']);
 
-    // Kalau bukan super admin, filter data hanya milik user
-    if ($user->level !== 'Super Admin') {
-        $query->where('id_pengguna', $user->id);
+        if ($user->level !== 'Super Admin') {
+            $query->where('id_pengguna', $user->id);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->orWhereHas('penggunas', function ($pengguna) use ($search) {
+                    $pengguna->where('nama', 'like', "%{$search}%");
+                })
+                    ->orWhereHas('subprogram', function ($sub) use ($search) {
+                        $sub->where('subprogram', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('monev', function ($monev) use ($search) {
+                        $monev->where('nama_program', 'like', "%{$search}%")
+                            ->orWhere('tahun', 'like', "%{$search}%")
+
+                            ->orWhereHas('fotoProgres', function ($foto) use ($search) {
+                                $foto->where('deskripsi', 'like', "%{$search}%");
+                            });
+                    });
+            });
+        }
+
+
+
+        $progres = $query->latest()->paginate(10);
+        $progres->appends($request->only('search'));
+
+        return view('admin.ProgresKerja.index', compact('progres', 'search'));
     }
 
-    // Fitur pencarian
-    if ($search) {
-        $query->where(function ($q) use ($search) {
-            $q->where('judul', 'like', "%{$search}%")
-              ->orWhere('tahun', 'like', "%{$search}%")
-            //   ->orWhere('sumber_dana', 'like', "%{$search}%")
-            //   ->orWhere('jumlah_anggaran', 'like', "%{$search}%")
-            //   ->orWhere('penerima', 'like', "%{$search}%")
-              ->orWhere('uraian', 'like', "%{$search}%")
-              ->orWhere('status', 'like', "%{$search}%");
-        })
-        ->orWhereHas('subprogram', function ($q) use ($search) {
-            $q->where('subprogram', 'like', "%{$search}%");
-        })
-        ->orWhereHas('penggunas', function ($q) use ($search) {
-            $q->where('nama', 'like', "%{$search}%");
-        });
-    }
-
-    $progres = $query->paginate(10);
-    $progres->appends($request->only('search'));
-
-    return view('admin.ProgresKerja.index', compact('progres', 'search'));
-}
 
 
     /**
@@ -83,9 +76,7 @@ class ProgreskerjaController extends Controller
             'subprogram'       => 'required|exists:subprograms,id',
             'judul'            => 'required|string|max:255',
             'tahun'            => 'required|digits:4',
-            // 'sumber_dana'      => 'required|string|max:255',
-            // 'jumlah_anggaran'  => 'required|string',
-            // 'penerima'         => 'required|string|max:255',
+
             'uraian'           => 'required|string',
             'latitude'         => 'nullable|numeric',
             'longitude'        => 'nullable|numeric',
@@ -188,74 +179,72 @@ class ProgreskerjaController extends Controller
     /**
      * Update the specified resource in storage.
      */
- public function update(Request $request, string $id)
-{
-    $validatedData = $request->validate([
-        'subprogram'      => 'required|exists:subprograms,id',
-        'judul'           => 'required|string|max:255',
-        'tahun'           => 'required|digits:4',
-        // 'sumber_dana'     => 'required|string|max:255',
-        // 'jumlah_anggaran' => 'required|string',
-        // 'penerima'        => 'required|string|max:255',
-        'uraian'          => 'required|string',
-        'status'          => 'nullable|string',
-        'latitude'        => 'nullable|numeric',
-        'longitude'       => 'nullable|numeric',
-        'foto.*'          => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
-        'foto_lama.*'     => 'nullable|exists:foto_progres,id',
-    ]);
+    // public function update(Request $request, string $id)
+    // {
+    //     $validatedData = $request->validate([
+    //         'subprogram'      => 'required|exists:subprograms,id',
+    //         'judul'           => 'required|string|max:255',
+    //         'tahun'           => 'required|digits:4',
 
-    $progres = ProgresKerja::findOrFail($id);
-    $progres->update([
-        'id_subprogram'   => $validatedData['subprogram'],
-        'judul'           => $validatedData['judul'],
-        'tahun'           => $validatedData['tahun'],
-        // 'sumber_dana'     => $validatedData['sumber_dana'],
-        // 'jumlah_anggaran' => $validatedData['jumlah_anggaran'],
-        // 'penerima'        => $validatedData['penerima'],
-        'uraian'          => $validatedData['uraian'],
-        'status'          => $request->input('status', 'Belum Validasi'),
-    ]);
+    //         'uraian'          => 'required|string',
+    //         'status'          => 'nullable|string',
+    //         'latitude'        => 'nullable|numeric',
+    //         'longitude'       => 'nullable|numeric',
+    //         'foto.*'          => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+    //         'foto_lama.*'     => 'nullable|exists:foto_progres,id',
+    //     ]);
 
-    // Update Map
-    $progres->maps()->delete();
-    if($request->filled(['latitude','longitude'])){
-        Map::create([
-            'id_progres'  => $progres->id,
-            'id_pengguna' => $progres->id_pengguna,
-            'latitude'    => $request->latitude,
-            'longitude'   => $request->longitude,
-        ]);
-    }
+    //     $progres = ProgresKerja::findOrFail($id);
+    //     $progres->update([
+    //         'id_subprogram'   => $validatedData['subprogram'],
+    //         'judul'           => $validatedData['judul'],
+    //         'tahun'           => $validatedData['tahun'],
+    //         // 'sumber_dana'     => $validatedData['sumber_dana'],
+    //         // 'jumlah_anggaran' => $validatedData['jumlah_anggaran'],
+    //         // 'penerima'        => $validatedData['penerima'],
+    //         'uraian'          => $validatedData['uraian'],
+    //         'status'          => $request->input('status', 'Belum Validasi'),
+    //     ]);
 
-    // Hapus foto lama yang tidak dikirim
-    $fotoLamaIds = $request->input('foto_lama', []);
-    foreach($progres->fotoProgres as $foto){
-        if(!in_array($foto->id, $fotoLamaIds)){
-            if(Storage::disk('public')->exists('foto_progres/'.$foto->foto)){
-                Storage::disk('public')->delete('foto_progres/'.$foto->foto);
-            }
-            $foto->delete();
-        }
-    }
+    //     // Update Map
+    //     $progres->maps()->delete();
+    //     if ($request->filled(['latitude', 'longitude'])) {
+    //         Map::create([
+    //             'id_progres'  => $progres->id,
+    //             'id_pengguna' => $progres->id_pengguna,
+    //             'latitude'    => $request->latitude,
+    //             'longitude'   => $request->longitude,
+    //         ]);
+    //     }
 
-    // Simpan foto baru
-    if($request->hasFile('foto')){
-        foreach($request->file('foto') as $file){
-            $namaFile = time().'_'.$file->getClientOriginalName();
-            $file->storeAs('foto_progres',$namaFile,'public');
+    //     // Hapus foto lama yang tidak dikirim
+    //     $fotoLamaIds = $request->input('foto_lama', []);
+    //     foreach ($progres->fotoProgres as $foto) {
+    //         if (!in_array($foto->id, $fotoLamaIds)) {
+    //             if (Storage::disk('public')->exists('foto_progres/' . $foto->foto)) {
+    //                 Storage::disk('public')->delete('foto_progres/' . $foto->foto);
+    //             }
+    //             $foto->delete();
+    //         }
+    //     }
 
-            FotoProgres::create([
-                'id_progres'  => $progres->id,
-                'id_pengguna' => $progres->id_pengguna,
-                'foto'        => $namaFile,
-            ]);
-        }
-    }
+    //     // Simpan foto baru
+    //     if ($request->hasFile('foto')) {
+    //         foreach ($request->file('foto') as $file) {
+    //             $namaFile = time() . '_' . $file->getClientOriginalName();
+    //             $file->storeAs('foto_progres', $namaFile, 'public');
 
-    LogHelper::add('Memperbarui data Progres Kerja');
-    return redirect()->route('progres')->with('success','Data berhasil diperbarui');
-}
+    //             FotoProgres::create([
+    //                 'id_progres'  => $progres->id,
+    //                 'id_pengguna' => $progres->id_pengguna,
+    //                 'foto'        => $namaFile,
+    //             ]);
+    //         }
+    //     }
+
+    //     LogHelper::add('Memperbarui data Progres Kerja');
+    //     return redirect()->route('progres')->with('success', 'Data berhasil diperbarui');
+    // }
 
 
 

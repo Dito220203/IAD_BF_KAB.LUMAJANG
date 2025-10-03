@@ -7,38 +7,39 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\RencanaKerja;
 use App\Models\ProgresKerja;
 use App\Models\Monev;
-use App\Models\Pesan;
 
 class ViewServiceProvider extends ServiceProvider
 {
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
     public function boot()
     {
-        // Share $notifikasi ke view components.navbar
-        View::composer('components.navbar', function ($view) {
-            $rencana = RencanaKerja::where('status', '!=', 'Valid')
-                ->latest()
-                ->take(5)
-                ->get();
+        // Composer ini akan berjalan untuk view navbar dan layout utama
+        // Pastikan nama layout utama Anda benar (contoh: 'layouts.app' atau 'layouts.admin')
+        View::composer(['components.navbar', 'layouts.main'], function ($view) {
 
-            $progres = ProgresKerja::where('status', '!=', 'Valid')
-                ->latest()
-                ->take(5)
-                ->get();
+            // 1. Ambil SEMUA notifikasi yang statusnya bukan 'Valid'
+            $rencana_all = RencanaKerja::where('status', '!=', 'Valid')->latest()->get();
+            $progres_all = ProgresKerja::where('status', '!=', 'Valid')->latest()->get();
+            $monev_all = Monev::where('status', '!=', 'Valid')->latest()->get();
 
-            $monev = Monev::where('status', '!=', 'Valid')
-                ->latest()
-                ->take(5)
-                ->get();
+            // 2. Gabungkan semua notifikasi menjadi satu koleksi dan urutkan berdasarkan yang terbaru
+            $all_notifications = $rencana_all
+                ->concat($progres_all)
+                ->concat($monev_all)
+                ->sortByDesc('created_at');
 
-            $notifikasi = $rencana
-                ->concat($progres)
-                ->concat($monev)
-                ->sortByDesc('created_at')
-                ->take(5);
+            // 3. Ambil 5 notifikasi teratas dari koleksi gabungan untuk ditampilkan di dropdown
+            $notifikasi_dropdown = $all_notifications->take(5);
 
-
-
-            $view->with('notifikasi', $notifikasi);
+            // 4. Kirim kedua variabel ke view
+            // '$notifikasi' untuk dropdown
+            $view->with('notifikasi', $notifikasi_dropdown);
+            // '$all_notifications' untuk modal "Lihat Semua"
+            $view->with('all_notifications', $all_notifications);
         });
     }
 }

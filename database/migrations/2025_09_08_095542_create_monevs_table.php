@@ -28,12 +28,12 @@ return new class extends Migration
             $table->unsignedBigInteger('id_opd')->nullable();
             $table->foreign('id_opd')->references('id')->on('opds')->onDelete('set null');
 
-            $table->string('rka')->nullable();
-            $table->date('tanggal')->nullable();
+            $table->json('dokumen_anggaran')->nullable();
+            $table->json('realisasi')->nullable();
+            $table->json('volumeTarget')->nullable();
             $table->string('pesan')->nullable();
             $table->string('status')->default('tidak valid');
-            $table->string('realisasi')->nullable();
-            $table->longText('keterangan')->nullable();
+            $table->longText('uraian')->nullable();
             $table->timestamps();
         });
     }

@@ -1,5 +1,27 @@
 @extends('components.layout')
 @section('content')
+    <style>
+        .multi-item {
+            padding: 0 !important;
+            margin: 0 !important;
+            vertical-align: top;
+        }
+
+        .multi-item>div {
+            padding: 8px 12px;
+            white-space: normal;
+        }
+
+        .multi-item>div:not(:last-child) {
+            /* GANTI WARNA DI SINI */
+            border-bottom: 1px solid #cccccc;
+        }
+
+        .highlight-manual {
+            background-color: #fff3cd !important;
+            /* kuning */
+        }
+    </style>
     <main id="main" class="main">
         <div class="pagetitle">
             <h1>Tabel Rencana Kerja</h1>
@@ -19,66 +41,70 @@
                             <!-- Header tools -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                 <div class="gap-2">
-                                    <a href="{{ route('rencana.create') }}" class="btn btn-primary">
-                                        + Tambah Rencana
-                                    </a>
-                                    <a href="{{ route('rencana.export.excel') }}" class="btn btn-success">
-                                        <i class="fa-solid fa-file-excel"></i> Export Excel
-                                    </a>
+                                    <div class="d-flex flex-column flex-sm-row gap-2">
+                                        <a href="{{ route('rencana.create') }}" class="btn btn-primary">
+                                            + Tambah Rencana
+                                        </a>
+
+                                        <a href="{{ route('rencana.export.excel') }}" class="btn btn-success">
+                                            <i class="fa-solid fa-file-excel"></i> Export Excel
+                                        </a>
+                                    </div>
                                 </div>
-                               {{-- resources/views/admin/RencanaKerja/index.blade.php --}}
 
-{{-- ... kode lainnya ... --}}
+                                {{-- UBAH FORM MENJADI SEPERTI INI --}}
+                                <form method="GET" class="d-flex flex-column flex-md-row gap-2">
+                                    {{-- TAMBAHKAN DROPDOWN FILTER TAHUN DI SINI --}}
+                                    <div class="input-group w-auto">
+                                        <label class="input-group-text" for="tahun-filter">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </label>
+                                        <select name="tahun" class="form-select" onchange="this.form.submit()">
+                                            <option value="">Semua Tahun</option>
+                                            @foreach ($daftarTahun as $thn)
+                                                <option value="{{ $thn }}" {{ $tahun == $thn ? 'selected' : '' }}>
+                                                    {{ $thn }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-{{-- UBAH FORM MENJADI SEPERTI INI --}}
-<form method="GET" class="d-flex flex-column flex-md-row gap-2">
-    {{-- TAMBAHKAN DROPDOWN FILTER TAHUN DI SINI --}}
-    <div class="input-group w-auto">
-        <select name="tahun" class="form-select" onchange="this.form.submit()">
-            <option value="">Semua Tahun</option>
-            @foreach ($daftarTahun as $thn)
-                <option value="{{ $thn }}" {{ $tahun == $thn ? 'selected' : '' }}>
-                    {{ $thn }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+                                    {{-- Form pencarian yang sudah ada --}}
+                                    <div class="input-group w-auto">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data..."
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                    </div>
 
-    {{-- Form pencarian yang sudah ada --}}
-    <div class="input-group w-auto">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data..." value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-    </div>
+                                    {{-- Tombol Reset untuk membersihkan semua filter --}}
+                                    @if (request('search') || request('tahun'))
+                                        <a href="{{ route('rencanakerja') }}" class="btn btn-secondary"> <i
+                                                class="fas fa-sync-alt"></i></a>
+                                    @endif
+                                </form>
 
-    {{-- Tombol Reset untuk membersihkan semua filter --}}
-    @if (request('search') || request('tahun'))
-        <a href="{{ route('rencanakerja') }}" class="btn btn-secondary">Reset</a>
-    @endif
-</form>
-
-{{-- ... sisa kode Anda ... --}}
+                                {{-- ... sisa kode Anda ... --}}
                             </div>
 
 
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table class="detail-table" id="TableRencanaAksi" style="min-width: 1800px;">
+                                <table class="detail-table" id="TableRencanaAksi" style="min-width: 2500px;">
                                     <thead>
                                         <tr>
                                             <th class="text-center" style="width: 50px;">No</th>
                                             <th class="text-center" style="width: 200px;">Sub Program</th>
-                                            <th class="text-center" style="width: 250px;">Rencana Aksi/Aktivitas</th>
+                                            <th class="text-center" style="width: 300px;">Rencana Aksi/Aktivitas</th>
                                             <th class="text-center" style="width: 350px;">Sub Kegiatan</th>
                                             <th class="text-center" style="width: 250px;">Kegiatan</th>
                                             <th class="text-center" style="width: 300px;">Nama Program</th>
                                             <th class="text-center" style="width: 200px;">Lokasi</th>
                                             <th class="text-center" style="width: 100px;">Volume</th>
                                             <th class="text-center" style="width: 100px;">Satuan</th>
-                                            <th class="text-center" style="width: 150px;">Anggaran</th>
-                                            <th class="text-center" style="width: 200px;">Sumber Dana</th>
                                             <th class="text-center" style="width: 100px;">Tahun</th>
                                             <th class="text-center" style="width: 200px;">Perangkat Daerah</th>
+                                            <th class="text-center" style="width: 150px;">Anggaran</th>
+                                            <th class="text-center" style="width: 200px;">Sumber Dana</th>
                                             <th class="text-center" style="width: 100px;">Status</th>
                                             <th class="text-center" style="width: 300px;">Keterangan</th>
                                             <th class="text-center" style="width: 120px;">Aksi</th>
@@ -86,7 +112,9 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($rencana as $data)
-                                            <tr id="row-{{ $data->id }}">
+                                            <tr id="row-{{ $data->id }}"
+                                                class="{{ $data->input === 'manual' ? 'highlight-manual' : '' }}">
+
                                                 <td class="text-center">{{ $rencana->firstItem() + $loop->index }}</td>
                                                 <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                 <td>{{ $data->rencana_aksi }}</td>
@@ -96,10 +124,39 @@
                                                 <td>{{ $data->lokasi }}</td>
                                                 <td class="text-center">{{ $data->volume }}</td>
                                                 <td class="text-center">{{ $data->satuan }}</td>
-                                                <td class="text-center">{{ $data->anggaran }}</td>
-                                                <td class="text-center">{{ $data->sumberdana }}</td>
                                                 <td class="text-center">{{ $data->tahun }}</td>
                                                 <td class="text-center">{{ $data->opd->nama ?? '-' }}</td>
+                                                @php
+                                                    $anggarans = explode('; ', $data->anggaran);
+                                                    $sumberdanas = explode('; ', $data->sumberdana);
+                                                @endphp
+
+                                                {{-- Cek untuk Kolom Anggaran --}}
+                                                @if (count($anggarans) > 1)
+                                                    {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
+                                                    <td class="multi-item align-middle">
+                                                        @foreach ($anggarans as $anggaran)
+                                                            <div>{{ $anggaran ?: '-' }}</div>
+                                                        @endforeach
+                                                    </td>
+                                                @else
+                                                    {{-- Jika data hanya satu, tampilkan seperti biasa --}}
+                                                    <td class="align-middle">{{ $data->anggaran ?: '-' }}</td>
+                                                @endif
+
+                                                {{-- Cek untuk Kolom Sumber Dana --}}
+                                                @if (count($sumberdanas) > 1)
+                                                    {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
+                                                    <td class="multi-item align-middle">
+                                                        @foreach ($sumberdanas as $sumber)
+                                                            <div>{{ $sumber ?: '-' }}</div>
+                                                        @endforeach
+                                                    </td>
+                                                @else
+                                                    {{-- Jika data hanya satu, tampilkan seperti biasa --}}
+                                                    <td class="align-middle">{{ $data->sumberdana ?: '-' }}</td>
+                                                @endif
+
                                                 <td class="text-center">
                                                     @if ($data->status === 'Valid')
                                                         <span class="badge bg-success">{{ $data->status }}</span>

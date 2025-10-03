@@ -27,7 +27,8 @@ return new class extends Migration
             $table->string('sumberdana');
             $table->string('tahun');
             $table->string('status')->default('tidak valid');
-            $table->longText('keterangan');
+            $table->longText('keterangan')->nullable();
+            $table->string('input')->nullable();
             $table->enum('delete_at', ['0', '1'])->default('0')->nullable();
             $table->timestamps();
         });

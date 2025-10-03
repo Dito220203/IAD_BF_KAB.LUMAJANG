@@ -88,24 +88,21 @@
                                             }
                                         }
 
-                        
-                                      // Format saat user mengetik
-pendapatanUpdateInput.addEventListener('input', function() {
-    let raw = this.value;
 
-    // Kalau hanya angka → diformat
-    if (/^\d+$/.test(raw.replace(/\./g, ''))) {
-        let value = raw.replace(/\D/g, ''); // ambil angka
-        if (value) {
-            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
-            this.value = 'Rp. ' + value;
-        }
-    } 
-    // Kalau teks → biarkan apa adanya
-});
+                                        // Format saat user mengetik
+                                        pendapatanUpdateInput.addEventListener('input', function() {
+                                            let raw = this.value;
 
-
-                               
+                                            // Kalau hanya angka → diformat
+                                            if (/^\d+$/.test(raw.replace(/\./g, ''))) {
+                                                let value = raw.replace(/\D/g, ''); // ambil angka
+                                                if (value) {
+                                                    value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                                                    this.value = 'Rp. ' + value;
+                                                }
+                                            }
+                                            // Kalau teks → biarkan apa adanya
+                                        });
                                     </script>
 
                                     <button type="submit" class="btn btn-primary w-100">Update</button>
@@ -155,21 +152,19 @@ pendapatanUpdateInput.addEventListener('input', function() {
                                         const form = document.querySelector('form');
 
                                         // Format saat user mengetik
-                                      pendapatanCreateInput.addEventListener('input', function() {
-    let raw = this.value;
+                                        pendapatanCreateInput.addEventListener('input', function() {
+                                            let raw = this.value;
 
-    // Kalau isinya angka → diformat Rp
-    if (/^\d+$/.test(raw.replace(/\./g, ''))) {
-        let value = raw.replace(/\D/g, ''); // ambil angka saja
-        if (value) {
-            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
-            this.value = 'Rp. ' + value;
-        }
-    } 
-    // Kalau teks → biarkan apa adanya (tidak diformat)
-});
-
-                                       
+                                            // Kalau isinya angka → diformat Rp
+                                            if (/^\d+$/.test(raw.replace(/\./g, ''))) {
+                                                let value = raw.replace(/\D/g, ''); // ambil angka saja
+                                                if (value) {
+                                                    value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                                                    this.value = 'Rp. ' + value;
+                                                }
+                                            }
+                                            // Kalau teks → biarkan apa adanya (tidak diformat)
+                                        });
                                     </script>
 
                                     <button type="submit" class="btn btn-success w-100">Simpan</button>
@@ -188,17 +183,16 @@ pendapatanUpdateInput.addEventListener('input', function() {
 
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                 <!-- Search -->
-                               <div class="col-12 col-lg-auto">
-                                                <!-- Pencarian -->
-                                                <form method="GET" class="input-group w-auto mb-3">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('kups') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                <div class="col-12 col-lg-auto">
+                                    <!-- Pencarian -->
+                                    <form method="GET" class="input-group w-auto mb-3">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('kups') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 

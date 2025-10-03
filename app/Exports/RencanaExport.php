@@ -11,9 +11,6 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTitle, ShouldAutoSize, WithCustomStartCell, WithColumnWidths
 {
@@ -28,30 +25,52 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
     {
         $query = RencanaKerja::with(['subprogram', 'opd', 'pengguna'])->where('delete_at', '0');
 
-        // Jika bukan super admin → filter by id_pengguna
         if ($this->user->level !== 'Super Admin') {
             $query->where('id_pengguna', $this->user->id);
         }
+
+        $rencanaKerjas = $query->get();
+        $rows = collect();
         $no = 1;
-        return $query->get()->map(function ($item) use (&$no) {
-            return [
-                'NO'              => $no++, // nomor berurutan
-                'Sub Program'     => $item->subprogram->subprogram ?? '-',
-                'Rencana Aksi'    => $item->rencana_aksi,
-                'Sub Kegiatan'    => $item->sub_kegiatan,
-                'Kegiatan'        => $item->kegiatan,
-                'Nama Program'    => $item->nama_program,
-                'Lokasi'          => $item->lokasi,
-                'Volume'          => $item->volume,
-                'Satuan'          => $item->satuan,
-                'Anggaran'        => $item->anggaran,
-                'Sumber Dana'     => $item->sumberdana,
-                'Tahun'           => $item->tahun,
-                'Perangkat Daerah' => $item->opd->nama ?? '-',
-                'Status'          => $item->status,
-                'Keterangan'      => $item->keterangan,
-            ];
-        });
+
+        foreach ($rencanaKerjas as $item) {
+            $anggarans = $item->anggaran ? explode('; ', $item->anggaran) : ['-'];
+            $sumberdanas = $item->sumberdana ? explode('; ', $item->sumberdana) : ['-'];
+            $maxRows = max(count($anggarans), count($sumberdanas));
+
+            for ($i = 0; $i < $maxRows; $i++) {
+                if ($i === 0) {
+                    $rows->push([
+                        'NO'               => $no,
+                        'Sub Program'      => $item->subprogram->subprogram ?? '-',
+                        'Rencana Aksi'     => $item->rencana_aksi,
+                        'Sub Kegiatan'     => $item->sub_kegiatan,
+                        'Kegiatan'         => $item->kegiatan,
+                        'Nama Program'     => $item->nama_program,
+                        'Lokasi'           => $item->lokasi,
+                        'Volume'           => $item->volume,
+                        'Satuan'           => $item->satuan,
+                        'Anggaran'         => $anggarans[$i] ?? '-',
+                        'Sumber Dana'      => $sumberdanas[$i] ?? '-',
+                        'Tahun'            => $item->tahun,
+                        'Perangkat Daerah' => $item->opd->nama ?? '-',
+                        'Status'           => $item->status,
+                        'Keterangan'       => $item->keterangan,
+                    ]);
+                } else {
+                    $rows->push([
+                        'NO' => '', 'Sub Program' => '', 'Rencana Aksi' => '', 'Sub Kegiatan' => '',
+                        'Kegiatan' => '', 'Nama Program' => '', 'Lokasi' => '', 'Volume' => '', 'Satuan' => '',
+                        'Anggaran'         => $anggarans[$i] ?? '-',
+                        'Sumber Dana'      => $sumberdanas[$i] ?? '-',
+                        'Tahun' => '', 'Perangkat Daerah' => '', 'Status' => '', 'Keterangan' => '',
+                    ]);
+                }
+            }
+            $no++;
+        }
+
+        return $rows;
     }
 
     public function startCell(): string
@@ -62,77 +81,79 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
     public function headings(): array
     {
         return [
-            'NO',
-            'Sub Program',
-            'Rencana Aksi',
-            'Sub Kegiatan',
-            'Kegiatan',
-            'Nama Program',
-            'Lokasi',
-            'Volume',
-            'Satuan',
-            'Anggaran',
-            'Sumber Dana',
-            'Tahun',
-            'Perangkat Daerah',
-            'Status',
-            'Keterangan',
+            'NO', 'Sub Program', 'Rencana Aksi', 'Sub Kegiatan', 'Kegiatan', 'Nama Program',
+            'Lokasi', 'Volume', 'Satuan', 'Anggaran', 'Sumber Dana', 'Tahun',
+            'Perangkat Daerah', 'Status', 'Keterangan',
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        // Judul
         $sheet->mergeCells('A1:O1');
         $sheet->setCellValue('A1', 'Rencana Kegiatan IAD Perhutanan Sosial');
+        $sheet->getRowDimension(1)->setRowHeight(30);
 
-        $lastColumn = $sheet->getHighestColumn();
-        $lastRow    = $sheet->getHighestRow();
+        $collection = $this->collection();
+        $rowCount = count($collection);
+        $lastRow = $rowCount > 0 ? (3 + $rowCount) : 3;
+        $lastColumn = 'O';
 
-        // Header abu-abu baris 3
-        $headerRange = "A3:{$lastColumn}3";
-        $sheet->getStyle($headerRange)->applyFromArray([
-            'font' => [
-                'bold' => true,
-                'size' => 11,
+        $sheet->getStyle("A3:{$lastColumn}{$lastRow}")->applyFromArray([
+            'borders' => [
+                'allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
             ],
             'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical'   => Alignment::VERTICAL_CENTER,
-                'wrapText'   => true,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
             ],
-            'fill' => [
-                'fillType'   => Fill::FILL_SOLID,
-                'startColor' => ['argb' => 'FFD3D3D3'],
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                ],
-            ],
+        ]);
+
+        $headerRange = "A3:{$lastColumn}3";
+        $sheet->getStyle($headerRange)->applyFromArray([
+            'font' => ['bold' => true, 'size' => 11, 'color' => ['argb' => 'FFFFFFFF']],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+            'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'startColor' => ['argb' => 'FF4F81BD']],
         ]);
         $sheet->getRowDimension(3)->setRowHeight(28);
 
-        // Isi data: row 4 sampai terakhir
-        for ($row = 4; $row <= $lastRow; $row++) {
-            $sheet->getRowDimension($row)->setRowHeight(60);
+        $sheet->getStyle('A1')->applyFromArray([
+            'font' => ['bold' => true, 'size' => 16],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+        ]);
+
+        if ($rowCount > 0) {
+            // =============================================================
+            // PERBAIKAN: Menggunakan sintaks range yang benar "A4:A{$lastRow}"
+            // =============================================================
+            $leftAlignedColumns = ['B', 'C', 'D', 'E', 'F'];
+            foreach ($leftAlignedColumns as $column) {
+                $sheet->getStyle("{$column}4:{$column}{$lastRow}")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            }
+            $centerAlignedColumns = ['A', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
+            foreach ($centerAlignedColumns as $column) {
+                $sheet->getStyle("{$column}4:{$column}{$lastRow}")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            }
+
+            // LOGIKA MERGE SEL
+            $currentRow = 4;
+            foreach ($collection as $index => $row) {
+                if (!empty($row['NO'])) {
+                    $mergeCount = 0;
+                    for ($j = $index + 1; $j < $rowCount; $j++) {
+                        if (empty($collection[$j]['NO'])) $mergeCount++;
+                        else break;
+                    }
+                    if ($mergeCount > 0) {
+                        $endRow = $currentRow + $mergeCount;
+                        $columnsToMerge = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O'];
+                        foreach ($columnsToMerge as $column) {
+                            $sheet->mergeCells("{$column}{$currentRow}:{$column}{$endRow}");
+                        }
+                    }
+                }
+                $currentRow++;
+            }
         }
-
-        // Supaya teks panjang tidak tenggelam
-        $sheet->getStyle("A1:{$lastColumn}{$lastRow}")
-            ->getAlignment()
-            ->setWrapText(true)
-            ->setVertical(Alignment::VERTICAL_CENTER);
-
-        return [
-            1 => [
-                'font' => ['bold' => true, 'size' => 16],
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                    'vertical'   => Alignment::VERTICAL_CENTER,
-                ],
-            ],
-        ];
     }
 
     public function title(): string
@@ -143,21 +164,9 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
     public function columnWidths(): array
     {
         return [
-            'A' => 5,   // No
-            'B' => 20,  // Sub Program
-            'C' => 20,  // Rencana Aksi
-            'D' => 30,  // Sub Kegiatan
-            'E' => 20,  // Kegiatan
-            'F' => 25,  // Nama Program
-            'G' => 20,  // Lokasi
-            'H' => 10,  // Volume
-            'I' => 10,  // Satuan
-            'J' => 15,  // Anggaran
-            'K' => 15,  // Sumber Dana
-            'L' => 10,  // Tahun
-            'M' => 20,  // Perangkat Daerah
-            'N' => 15,  // Status
-            'O' => 20,  // Keterangan
+            'A' => 5,   'B' => 25,  'C' => 30,  'D' => 30,  'E' => 25,
+            'F' => 30,  'G' => 20,  'H' => 10,  'I' => 10,  'J' => 20,
+            'K' => 20,  'L' => 10,  'M' => 25,  'N' => 15,  'O' => 30,
         ];
     }
 }

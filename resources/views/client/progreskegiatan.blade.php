@@ -24,19 +24,19 @@
                             @forelse ($progres as $item)
                                 <div class="progres-item">
                                     <div class="progres-header">
-                                        <h6>{{ strtoupper($item->judul) }}</h6>
+                                        <h6>{{ strtoupper($item->monev->nama_program ?? '-') }}</h6>
                                     </div>
                                     <div class="progres-meta">
-                                        <span class="tahun">{{ $item->tahun }}</span>
+                                        <span class="tahun">{{ $item->monev->tahun ?? '-'  }}</span>
                                         <span class="tanggal">
                                             <i class="fas fa-calendar-alt"></i>
                                             {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
                                         </span>
                                     </div>
                                     <div class="progres-body">
-                                        <p>Sumber Anggaran : {{ $item->sumber_dana }}</p>
-                                        <p>Jumlah Anggaran : {{ $item->jumlah_anggaran }}</p>
-                                        <p>Penerima : {{ $item->penerima }}</p>
+                                        <p>Sumber Anggaran : {{ $item->monev->sumberdana ?? '-'  }}</p>
+                                        <p>Jumlah Anggaran : {{ $item->monev->anggaran ?? '-'  }}</p>
+                                        {{-- <p>Penerima : {{ $item->penerima }}</p> --}}
                                     </div>
                                     <div class="progres-footer">
                                         <form action="{{ route('client.progreskegiatandetail', $item->id) }}" method="GET">
