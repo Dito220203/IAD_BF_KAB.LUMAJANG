@@ -36,9 +36,14 @@
                                         <p>Deskripsi : {{ $item->uraian }}</p>
                                     </div>
                                     <div class="progres-footer">
-                                        <a href="{{ route('profilkawasan.detail', $item->id) }}">
+                                        {{-- <a href="{{ route('profilkawasan.detail', $item->id) }}">
                                             <button class="btn-lihat">Lihat</button>
+                                        </a> --}}
+                                        <a
+                                            href="{{ route('profilkawasan.detail', ['id' => $item->id, 'from' => request()->fullUrl()]) }}">
+                                           <button class="btn-lihat">Lihat</button>
                                         </a>
+
 
                                     </div>
 

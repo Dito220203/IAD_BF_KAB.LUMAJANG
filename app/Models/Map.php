@@ -10,19 +10,23 @@ class Map extends Model
     use HasFactory;
     protected $table = 'maps'; // pastikan sama dengan nama tabel di database
     protected $fillable = [
-        'id_progres',
+        'id_monev',
         'id_pengguna',
         'latitude',
         'longitude',
     ];
 
-    public function progres()
+     public function fotoProgres()
     {
-        return $this->belongsTo(ProgresKerja::class, 'id_progres', 'id');
+        return $this->belongsTo(Monev::class, 'id_monev','id');
     }
     public function penggunas()
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
+    }
+     public function monev()
+    {
+        return $this->belongsTo(Monev::class, 'id_monev');
     }
 
 }

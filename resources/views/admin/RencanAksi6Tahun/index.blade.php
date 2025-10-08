@@ -1,5 +1,25 @@
 @extends('components.layout')
+
 @section('content')
+    {{-- CSS untuk membuat garis pemisah di dalam sel tabel --}}
+    <style>
+        .multi-item {
+            padding: 0 !important;
+            margin: 0 !important;
+            vertical-align: top;
+        }
+
+        .multi-item>div {
+            padding: 8px 12px;
+            white-space: normal;
+        }
+
+        .multi-item>div:not(:last-child) {
+            /* GANTI WARNA DI SINI */
+            border-bottom: 1px solid #cccccc;
+        }
+    </style>
+
     <main id="main" class="main">
         <div class="pagetitle">
             <h1>Tabel Rencana Aksi</h1>
@@ -16,17 +36,17 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <!-- Header tools -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                 <div class="gap-2">
-                                    <!-- Left side buttons - Only for Super Admin -->
                                     @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
                                         <div class="d-flex flex-column flex-sm-row gap-2">
                                             <a href="{{ route('rencanaAksi.create') }}" class="btn btn-primary">
                                                 <i class="fa-solid fa-plus me-1"></i>
                                                 Tambah Rencana Aksi
                                             </a>
-                                            <a href="{{ route('rencanaAksi.export.excel') }}" class="btn btn-success">
+                                            {{-- BARU --}}
+                                            <a href="{{ route('rencanaAksi.export.excel', request()->query()) }}"
+                                                class="btn btn-success">
                                                 <i class="fa-solid fa-file-excel me-1"></i>
                                                 Export Excel
                                             </a>
@@ -34,73 +54,132 @@
                                     @endif
                                 </div>
 
-                                <!-- Right side search -->
-                                <div class="search-container" style="min-width: 300px;">
-                                    <form method="GET" class="d-flex gap-3">
-                                        <div class="input-group">
-                                            <input type="text" name="search" class="form-control"
-                                                placeholder="Cari program, kegiatan, OPD..." value="{{ request('search') }}"
-                                                style="min-width: 250px;">
-                                            <button class="btn btn-primary" type="submit">
-                                                <i class="fa-solid fa-search"></i>
-                                            </button>
-                                        </div>
-                                        @if (request('search'))
-                                            <a href="{{ route('rencana6tahun') }}" class="btn btn-outline-secondary">
-                                                <i class="fa-solid fa-times"></i>
-                                            </a>
-                                        @endif
-                                    </form>
-                                </div>
-                            </div>
 
-                            <!-- Table -->
+                                <form id="filter-form" method="GET" class="d-flex flex-column flex-md-row gap-2">
+                                    <div class="input-group w-auto">
+                                        <label class="input-group-text" for="tahun-filter">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </label>
+                                        {{-- TAMBAHKAN ID DI SINI --}}
+                                        <select name="tahun" id="tahun-filter" class="form-select" style="width: 150px;">
+                                            <option value="">Semua Tahun</option>
+                                            @foreach ($tahuns as $tahun)
+                                                <option value="{{ $tahun }}"
+                                                    {{ request('tahun') == $tahun ? 'selected' : '' }}>
+                                                    {{ $tahun }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group w-auto">
+                                        <input type="text" name="search" class="form-control"
+                                            placeholder="Cari program, kegiatan, OPD..." value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fa-solid fa-search"></i>
+                                        </button>
+                                    </div>
+
+                                    @if (request('search') || request('tahun'))
+                                        <a href="{{ route('rencana6tahun') }}" class="btn btn-secondary">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </a>
+                                    @endif
+                                </form>
+                                @push('scripts')
+                                    <script>
+                                        $(document).ready(function() {
+                                            // "Dengarkan" setiap ada perubahan pada dropdown tahun
+                                            $('#tahun-filter').on('change', function() {
+                                                // Jika ada perubahan, langsung submit form-nya secara otomatis
+                                                $('#filter-form').submit();
+                                            });
+                                        });
+                                    </script>
+                                @endpush
+
+                            </div>
                             <div class="table-container">
                                 <div class="top-scrollbar-container">
                                     <div class="top-scrollbar-content"></div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="detail-table" id="TableRencanaAksi" style="min-width: 1800px;">
+                                    <table class="detail-table" id="TableRencanaAksi" style="min-width: 2500px;">
                                         <thead>
                                             <tr>
                                                 <th style="width: 50px;">No</th>
                                                 <th style="width: 200px;">Sub Program</th>
                                                 <th style="width: 300px;">Rencana Aksi / Aktivitas</th>
-                                                <th style="width: 250px;">Nama Program</th>
-                                                <th style="width: 300px;">Kegiatan</th>
-                                                <th style="width: 300px;">Sub Kegiatan</th>
-                                                <th style="width: 100px;">Tahun</th>
+                                                <th style="width: 350px;">Sub Kegiatan</th>
+                                                <th style="width: 250px;">Kegiatan</th>
+                                                <th style="width: 300px;">Nama Program</th>
                                                 <th style="width: 150px;">Lokasi</th>
                                                 <th style="width: 100px;">Volume</th>
                                                 <th style="width: 100px;">Satuan</th>
+                                                <th style="width: 100px;">Tahun</th>
+                                                <th style="width: 300px;">Perangkat Daerah</th>
                                                 <th style="width: 150px;">Anggaran</th>
                                                 <th style="width: 150px;">Sumber Dana</th>
-                                                <th style="width: 300px;">Perangkat Daerah</th>
                                                 <th style="width: 300px;">Keterangan</th>
                                                 @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
                                                     <th style="width: 120px;">Aksi</th>
                                                 @endif
-
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                             @foreach ($rencanaAksi as $data)
                                                 <tr>
                                                     <td class="text-center">{{ $rencanaAksi->firstItem() + $loop->index }}
                                                     </td>
                                                     <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
                                                     <td>{{ $data->rencana_aksi }}</td>
-                                                    <td>{{ $data->nama_program }}</td>
-                                                    <td>{{ $data->kegiatan }}</td>
                                                     <td>{{ $data->sub_kegiatan }}</td>
-                                                    <td>{{ $data->tahun }}</td>
+                                                    <td>{{ $data->kegiatan }}</td>
+                                                    <td>{{ $data->nama_program }}</td>
                                                     <td>{{ $data->lokasi }}</td>
                                                     <td>{{ $data->volume }}</td>
                                                     <td>{{ $data->satuan }}</td>
-                                                    <td>{{ $data->anggaran }}</td>
-                                                    <td>{{ $data->sumberdana }}</td>
+                                                    <td>{{ $data->tahun }}</td>
                                                     <td>{{ $data->opd->nama ?? '-' }}</td>
+
+                                                    {{-- ================================================================ --}}
+                                                    {{-- AWAL LOGIKA BARU UNTUK TAMPILAN SEMPURNA --}}
+                                                    {{-- ================================================================ --}}
+                                                    @php
+                                                        $anggarans = explode('; ', $data->anggaran);
+                                                        $sumberdanas = explode('; ', $data->sumberdana);
+                                                    @endphp
+
+                                                    {{-- Cek untuk Kolom Anggaran --}}
+                                                    @if (count($anggarans) > 1)
+                                                        {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
+                                                        <td class="multi-item align-middle">
+                                                            @foreach ($anggarans as $anggaran)
+                                                                <div>{{ $anggaran ?: '-' }}</div>
+                                                            @endforeach
+                                                        </td>
+                                                    @else
+                                                        {{-- Jika data hanya satu, tampilkan seperti biasa --}}
+                                                        <td class="align-middle">{{ $data->anggaran ?: '-' }}</td>
+                                                    @endif
+
+                                                    {{-- Cek untuk Kolom Sumber Dana --}}
+                                                    @if (count($sumberdanas) > 1)
+                                                        {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
+                                                        <td class="multi-item align-middle">
+                                                            @foreach ($sumberdanas as $sumber)
+                                                                <div>{{ $sumber ?: '-' }}</div>
+                                                            @endforeach
+                                                        </td>
+                                                    @else
+                                                        {{-- Jika data hanya satu, tampilkan seperti biasa --}}
+                                                        <td class="align-middle">{{ $data->sumberdana ?: '-' }}</td>
+                                                    @endif
+                                                    {{-- ================================================================ --}}
+                                                    {{-- AKHIR LOGIKA BARU --}}
+                                                    {{-- ================================================================ --}}
+
+
                                                     <td>{{ $data->keterangan ?? '-' }}</td>
                                                     <td>
                                                         @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
@@ -122,14 +201,12 @@
                                                             </div>
                                                         @endif
                                                     </td>
-
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
 
-                                <!-- Pagination -->
                                 <div class="mt-3">
                                     {{ $rencanaAksi->links('vendor.pagination.bootstrap-5') }}
                                 </div>
@@ -141,59 +218,59 @@
         </section>
     </main>
 @endsection
- @push('scripts')
-     <script>
-         document.addEventListener('DOMContentLoaded', function() {
-             // Cari semua kontainer tabel di halaman
-             const allTableContainers = document.querySelectorAll('.table-container');
+@push('scripts')
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+            // Cari semua kontainer tabel di halaman
+            const allTableContainers = document.querySelectorAll('.table-container');
 
-             allTableContainers.forEach(container => {
-                 const topScrollbar = container.querySelector('.top-scrollbar-container');
-                 const topScrollbarContent = container.querySelector('.top-scrollbar-content');
-                 const tableWrapper = container.querySelector('.table-responsive');
-                 const table = container.querySelector('.detail-table');
+            allTableContainers.forEach(container => {
+                const topScrollbar = container.querySelector('.top-scrollbar-container');
+                const topScrollbarContent = container.querySelector('.top-scrollbar-content');
+                const tableWrapper = container.querySelector('.table-responsive');
+                const table = container.querySelector('.detail-table');
 
-                 // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
-                 if (!topScrollbar || !tableWrapper || !table) {
-                     return;
-                 }
+                // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
+                if (!topScrollbar || !tableWrapper || !table) {
+                    return;
+                }
 
-                 let isSyncing = false;
+                let isSyncing = false;
 
-                 // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
-                 //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
-                 function updateTopScrollbarWidth() {
-                     if (table.scrollWidth > tableWrapper.clientWidth) {
-                         topScrollbarContent.style.width = table.scrollWidth + 'px';
-                         topScrollbar.style.display = 'block'; // Tampilkan jika perlu
-                     } else {
-                         topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
-                     }
-                 }
+                // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
+                //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
+                function updateTopScrollbarWidth() {
+                    if (table.scrollWidth > tableWrapper.clientWidth) {
+                        topScrollbarContent.style.width = table.scrollWidth + 'px';
+                        topScrollbar.style.display = 'block'; // Tampilkan jika perlu
+                    } else {
+                        topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
+                    }
+                }
 
-                 // 2. Sinkronkan scroll dari atas ke bawah
-                 topScrollbar.addEventListener('scroll', function() {
-                     if (isSyncing) return;
-                     isSyncing = true;
-                     tableWrapper.scrollLeft = topScrollbar.scrollLeft;
-                     isSyncing = false;
-                 });
+                // 2. Sinkronkan scroll dari atas ke bawah
+                topScrollbar.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    tableWrapper.scrollLeft = topScrollbar.scrollLeft;
+                    isSyncing = false;
+                });
 
-                 // 3. Sinkronkan scroll dari bawah ke atas
-                 tableWrapper.addEventListener('scroll', function() {
-                     if (isSyncing) return;
-                     isSyncing = true;
-                     topScrollbar.scrollLeft = tableWrapper.scrollLeft;
-                     isSyncing = false;
-                 });
+                // 3. Sinkronkan scroll dari bawah ke atas
+                tableWrapper.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    topScrollbar.scrollLeft = tableWrapper.scrollLeft;
+                    isSyncing = false;
+                });
 
-                 // Panggil pertama kali saat halaman dimuat
-                 updateTopScrollbarWidth();
+                // Panggil pertama kali saat halaman dimuat
+                updateTopScrollbarWidth();
 
-                 // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
-                 window.addEventListener('resize', updateTopScrollbarWidth);
-             });
-         });
-     </script>
- @endpush
+                // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
+                window.addEventListener('resize', updateTopScrollbarWidth);
+            });
+        });
+</script>  
+@endpush
 

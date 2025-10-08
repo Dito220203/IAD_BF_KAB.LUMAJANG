@@ -75,6 +75,35 @@
                                             value="{{ old('e_pendapatan', $kupsEdit->pendapatan) }}" required>
                                     </div>
 
+                                    <script>
+                                        const pendapatanUpdateInput = document.getElementById('e_pendapatan');
+                                        const form = document.querySelector('form');
+
+                                        // Format value awal saat halaman dibuka
+                                        if (pendapatanUpdateInput.value) {
+                                            let numeric = pendapatanUpdateInput.value.replace(/\D/g, '');
+                                            if (numeric) {
+                                                numeric = parseInt(numeric).toLocaleString('id-ID');
+                                                pendapatanUpdateInput.value = 'Rp. ' + numeric;
+                                            }
+                                        }
+
+
+                                        // Format saat user mengetik
+                                        pendapatanUpdateInput.addEventListener('input', function() {
+                                            let raw = this.value;
+
+                                            // Kalau hanya angka → diformat
+                                            if (/^\d+$/.test(raw.replace(/\./g, ''))) {
+                                                let value = raw.replace(/\D/g, ''); // ambil angka
+                                                if (value) {
+                                                    value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                                                    this.value = 'Rp. ' + value;
+                                                }
+                                            }
+                                            // Kalau teks → biarkan apa adanya
+                                        });
+                                    </script>
 
                                     <button type="submit" class="btn btn-primary w-100">Update</button>
                                     <a href="{{ route('kups') }}" class="btn btn-secondary w-100 mt-2">Batal</a>
@@ -117,8 +146,6 @@
                                         <input type="text" name="pendapatan" id="pendapatan" class="form-control"
                                             required>
                                     </div>
-
-
                                     <button type="submit" class="btn btn-success w-100">Simpan</button>
                                 </form>
                             @endif
@@ -152,54 +179,54 @@
                                 <div class="top-scrollbar-container">
                                     <div class="top-scrollbar-content"></div>
                                 </div>
-                            <div class="table-responsive">
-                                <table id="TableKUPS" class="detail-table">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>KTH</th>
-                                            <th>KUPS</th>
-                                            <th>Tahun</th>
-                                            <th>Kategori</th>
-                                            <th>Pendapatan</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($kups as $data)
+                                <div class="table-responsive">
+                                    <table id="TableKUPS" class="detail-table">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $kups->firstItem() + $loop->index }}</td>
-                                                <td>{{ $data->kth->kth ?? '-' }}</td>
-                                                <td>{{ $data->kups }}</td>
-                                                <td>{{ $data->tahun }}</td>
-                                                <td>{{ $data->kategori }}</td>
-                                                <td>{{ $data->pendapatan }}</td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="{{ route('kups.edit', $data->id) }}"
-                                                            class="btn btn-primary btn-sm">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                        </a>
-                                                        <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('kups.delete', $data->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="confirmDelete('{{ $data->id }}')">
-                                                                <i class="fa-solid fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
+                                                <th>No</th>
+                                                <th>KTH</th>
+                                                <th>KUPS</th>
+                                                <th>Tahun</th>
+                                                <th>Kategori</th>
+                                                <th>Pendapatan</th>
+                                                <th>Aksi</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="mt-3">
-                                {{ $kups->links('vendor.pagination.bootstrap-5') }}
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($kups as $data)
+                                                <tr>
+                                                    <td>{{ $kups->firstItem() + $loop->index }}</td>
+                                                    <td>{{ $data->kth->kth ?? '-' }}</td>
+                                                    <td>{{ $data->kups }}</td>
+                                                    <td>{{ $data->tahun }}</td>
+                                                    <td>{{ $data->kategori }}</td>
+                                                    <td>{{ $data->pendapatan }}</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-1">
+                                                            <a href="{{ route('kups.edit', $data->id) }}"
+                                                                class="btn btn-primary btn-sm">
+                                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                            </a>
+                                                            <form id="formDelete-{{ $data->id }}"
+                                                                action="{{ route('kups.delete', $data->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="button" class="btn btn-danger btn-sm"
+                                                                    onclick="confirmDelete('{{ $data->id }}')">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mt-3">
+                                    {{ $kups->links('vendor.pagination.bootstrap-5') }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -254,6 +281,24 @@
                 }
             }
         });
+    </script>
+    <script>
+        const pendapatanCreateInput = document.getElementById('pendapatan');
+        const form = document.querySelector('form');
 
+        // Format saat user mengetik
+        pendapatanCreateInput.addEventListener('input', function() {
+            let raw = this.value;
+
+            // Kalau isinya angka → diformat Rp
+            if (/^\d+$/.test(raw.replace(/\./g, ''))) {
+                let value = raw.replace(/\D/g, ''); // ambil angka saja
+                if (value) {
+                    value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                    this.value = 'Rp. ' + value;
+                }
+            }
+            // Kalau teks → biarkan apa adanya (tidak diformat)
+        });
     </script>
 @endpush

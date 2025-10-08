@@ -29,7 +29,7 @@ return new class extends Migration
             $table->foreignId('id_opd')
                 ->constrained('opds')
                 ->onDelete('cascade');
-            $table->longText('keterangan');
+            $table->longText('keterangan')->nullable();
             $table->enum('delete_at', ['0', '1'])->default('0')->nullable();
             $table->timestamps();
         });

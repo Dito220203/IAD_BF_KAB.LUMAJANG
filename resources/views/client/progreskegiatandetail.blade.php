@@ -1,7 +1,6 @@
 @extends('componentsclient.layout')
 @section('content')
     <section class="section_page ">
-
         <div class="global-title" data-aos="fade-up">
             <h2>Detail Progres Kegiatan</h2>
         </div>
@@ -10,10 +9,18 @@
             <div class="detail-card">
                 <h3>{{ $progres->judul }}</h3>
                 {{-- <p><strong>Tanggal:</strong> --}}
-                    {{-- {{ \Carbon\Carbon::parse($progres->created_at)->translatedFormat('d F Y') }}</p> --}}
-                <p><strong>Tahun Pelaksanaan:</strong> {{ $progres->tahun }}</p>
+                {{-- {{ \Carbon\Carbon::parse($progres->created_at)->translatedFormat('d F Y') }}</p> --}}
+                <p><strong>Tahun Pelaksanaan :</strong> {{ $progres->monev->tahun ?? '-' }}</p>
                 {{-- <p><strong>Nama Kegiatan:</strong> {{ $progres->jumlah_anggaran }}</p> --}}
-                <p><strong>Uraian:</strong> {{ $progres->uraian }}</p>
+                <p><strong>Uraian :</strong>
+                    @forelse($progres->fotoProgres as $foto)
+                        {{ $foto->deskripsi ?? '-' }}
+                    @empty
+                        Belum ada Uraian
+                    @endforelse
+                </p>
+
+
 
                 <hr>
                 {{-- @php
@@ -26,11 +33,11 @@
                     <div class="swiper-wrapper">
                         @forelse($progres->fotoProgres as $foto)
                             <div class="swiper-slide">
-                                <img src="{{ asset('storage/foto_progres/' . $foto->foto) }}" alt="Dokumentasi">
+                                <img src="{{ asset('storage/' . $foto->foto) }}">
                             </div>
                         @empty
                             <div class="swiper-slide">
-                                <img src="{{ asset('client/assets/img/default-video.jpg') }}" alt="Tidak ada dokumentasi">
+                               <img src="{{ asset('storage/' . $foto->foto) }}">
                             </div>
                         @endforelse
                     </div>
@@ -42,7 +49,7 @@
                 {{-- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> --}}
 
                 <div id="map" style="height: 400px;"></div>
-                
+
             </div>
             {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> --}}
             {{-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></> --}}
@@ -50,7 +57,7 @@
 
         </section>
         <div class="text-center mt-4">
-            <a href="{{ route('client.progreskegiatan', $progres->subprogram) }}" class="btn-footer-back">
+            <a href="{{ route('client.progreskegiatan', $progres->monev->id_subprogram) }}" class="btn-footer-back">
                 ← Kembali ke Daftar
             </a>
         </div>
@@ -114,16 +121,16 @@
         });
         var map = L.map('map').setView([0, 0], 5);
 
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors'
-                    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-                    @foreach ($progres->maps as $point)
-                        var marker = L.marker([{{ $point->latitude }}, {{ $point->longitude }}]).addTo(map);
-                    @endforeach
+        @foreach ($progres->maps as $point)
+            var marker = L.marker([{{ $point->latitude }}, {{ $point->longitude }}]).addTo(map);
+        @endforeach
 
-                    @if ($progres->maps->count())
-                        map.setView([{{ $progres->maps->first()->latitude }}, {{ $progres->maps->first()->longitude }}], 5);
-                    @endif
+        @if ($progres->maps->count())
+            map.setView([{{ $progres->maps->first()->latitude }}, {{ $progres->maps->first()->longitude }}], 5);
+        @endif
     </script>
 @endpush

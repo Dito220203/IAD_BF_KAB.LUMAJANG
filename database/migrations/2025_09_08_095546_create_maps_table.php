@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('maps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_progres')->references('id')->on('progres_kerjas')->onDelete('cascade');
+            $table->foreignId('id_monev')->references('id')->on('monevs')->onDelete('cascade');
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 11, 8);

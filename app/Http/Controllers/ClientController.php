@@ -107,31 +107,31 @@ class ClientController extends Controller
     }
 
 
-// app/Http/Controllers/ClientController.php
+    // app/Http/Controllers/ClientController.php
 
-public function chartData($tahun)
-{
-    // Gunakan with() untuk memuat relasi 'kth' secara efisien
-    // Gunakan whereRaw dengan TRIM agar konsisten dengan method index()
-    $kupsData = Kups::with('kth')
-        ->whereRaw("TRIM(tahun) = ?", [$tahun])
-        ->get();
+    public function chartData($tahun)
+    {
+        // Gunakan with() untuk memuat relasi 'kth' secara efisien
+        // Gunakan whereRaw dengan TRIM agar konsisten dengan method index()
+        $kupsData = Kups::with('kth')
+            ->whereRaw("TRIM(tahun) = ?", [$tahun])
+            ->get();
 
-    $chartData = $kupsData->map(function ($item) {
-        // KUNCI PERBAIKAN: Tambahkan logika pembersihan string pendapatan di sini
-        // Sama persis seperti di method index() Anda
-        $pendapatan = str_replace(['Rp', 'Rp.', ' ', '.'], '', $item->pendapatan);
-        $pendapatan = str_replace(',', '.', $pendapatan);
+        $chartData = $kupsData->map(function ($item) {
+            // KUNCI PERBAIKAN: Tambahkan logika pembersihan string pendapatan di sini
+            // Sama persis seperti di method index() Anda
+            $pendapatan = str_replace(['Rp', 'Rp.', ' ', '.'], '', $item->pendapatan);
+            $pendapatan = str_replace(',', '.', $pendapatan);
 
-        return [
-            'name' => $item->kups,
-            'y' => (float) $pendapatan, // Gunakan variabel yang sudah dibersihkan
-            'kth' => $item->kth->kth ?? 'KTH tidak diketahui'
-        ];
-    });
+            return [
+                'name' => $item->kups,
+                'y' => (float) $pendapatan, // Gunakan variabel yang sudah dibersihkan
+                'kth' => $item->kth->kth ?? 'KTH tidak diketahui'
+            ];
+        });
 
-    return response()->json($chartData);
-}
+        return response()->json($chartData);
+    }
 
 
     public function tentangkegiatan($id)
@@ -220,10 +220,16 @@ public function chartData($tahun)
         $contact = Kontak::all();
         $subprograms = Subprogram::where('delete_at', '0')->get();
         $subprogram = Subprogram::findOrFail($id);
-        $progres = ProgresKerja::where('id_subprogram', $id)->where('status', 'valid')->get();
+
+        $progres = ProgresKerja::whereHas('monev', function ($query) use ($id) {
+            $query->where('id_subprogram', $id);
+        })
+            ->where('status', 'valid')
+            ->get();
 
         return view('client.progreskegiatan', compact('contact', 'subprograms', 'subprogram', 'progres'));
     }
+
 
 
 
@@ -233,11 +239,11 @@ public function chartData($tahun)
         $subprograms = Subprogram::where('delete_at', '0')->get();
         $subprogram = Subprogram::findOrFail($id);
 
-        $maps = Map::whereHas('progres', function ($q) use ($id) {
+        $maps = Map::whereHas('monev', function ($q) use ($id) {
             $q->where('id_subprogram', $id)
                 ->where('status', 'valid');
         })
-            ->with('progres')
+            ->with('monev')
             ->get();
 
         return view('client.petasebarankegiatan', compact('contact', 'subprograms', 'subprogram', 'maps'));
@@ -246,11 +252,13 @@ public function chartData($tahun)
 
     public function progreskegiatandetail($id)
     {
-        $progres = ProgresKerja::with('fotoProgres', 'maps', 'subprogram')
+        $progres = ProgresKerja::with(['fotoProgres', 'maps', 'monev.subprogram'])
             ->findOrFail($id);
+
         $contact = Kontak::all();
         $subprograms = Subprogram::where('delete_at', '0')->get();
         $photoCount = $progres->fotoProgres->count();
+
         return view('client.progreskegiatandetail', compact(
             'contact',
             'subprograms',
@@ -258,6 +266,7 @@ public function chartData($tahun)
             'photoCount'
         ));
     }
+
 
     public function profilkawasan()
     {

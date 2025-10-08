@@ -53,8 +53,8 @@ class DasboardAdminController extends Controller
             'tahun',
             'id_opd',
             'realisasi',
-            'rka',
-            'tanggal'
+            'dokumen_anggaran',
+            'uraian' // pastikan 'uraian' ada di sini
         ];
 
         foreach ($requiredFields as $field) {

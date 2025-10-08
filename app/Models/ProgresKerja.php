@@ -10,25 +10,30 @@ class ProgresKerja extends Model
 {
     use HasFactory;
     protected $table = 'progres_kerjas';
-    protected $fillable = ['id_subprogram', 'id_pengguna', 'judul', 'tahun', 'uraian', 'status'];
+    protected $fillable = ['id_pengguna', 'id_monev'];
 
     public function maps()
     {
-        return $this->hasMany(Map::class, 'id_progres','id');
-    }
-    public function fotoProgres()
-    {
-        return $this->hasMany(FotoProgres::class, 'id_progres','id');
+        return $this->hasMany(Map::class, 'id_monev', 'id');
     }
 
     public function subprogram()
     {
-        return $this->belongsTo(Subprogram::class, 'id_subprogram', 'id');
+        return $this->belongsTo(Subprogram::class, 'id_monev');
+    }
+    public function fotoProgres()
+    {
+        return $this->hasMany(FotoProgres::class, 'id_monev', 'id');
+    }
+
+
+    public function monev()
+    {
+        return $this->belongsTo(Monev::class, 'id_monev', 'id');
     }
 
     public function penggunas()
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
     }
-
 }

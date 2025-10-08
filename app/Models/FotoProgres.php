@@ -9,15 +9,20 @@ class FotoProgres extends Model
 {
     use HasFactory;
     protected $table = 'foto_progres';
-    protected $fillable = ['id_progres','id_pengguna', 'foto'];
+    protected $fillable = ['id_monev', 'id_pengguna', 'foto', 'deskripsi'];
 
-      public function progres()
+    public function monev()
     {
-        return $this->belongsTo(ProgresKerja::class, 'id_progres','id');
+        return $this->belongsTo(Monev::class, 'id_monev', 'id');
     }
 
-      public function penggunas()
+    public function penggunas()
     {
         return $this->belongsTo(Pengguna::class, 'id_pengguna', 'id');
+    }
+
+    public function map()
+    {
+        return $this->hasMany(Map::class, 'id_monev', 'id');
     }
 }
