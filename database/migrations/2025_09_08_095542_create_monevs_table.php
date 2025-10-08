@@ -32,7 +32,7 @@ return new class extends Migration
             $table->json('realisasi')->nullable();
             $table->json('volumeTarget')->nullable();
             $table->string('pesan')->nullable();
-            $table->string('status')->default('tidak valid');
+            $table->string('status')->default('Belum divalidasi');
             $table->longText('uraian')->nullable();
             $table->timestamps();
         });

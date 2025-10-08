@@ -14,14 +14,29 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class RencanaAksiExport implements FromCollection, WithHeadings, WithStyles, WithTitle, ShouldAutoSize, WithCustomStartCell, WithColumnWidths
 {
+    protected $tahun; // ✅ 1. Tambahkan property untuk menampung tahun
+
+    // ✅ 2. Buat constructor untuk menerima variabel tahun dari controller
+    public function __construct($tahun)
+    {
+        $this->tahun = $tahun;
+    }
     /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
     {
-        $rencanaAksis = RencanaAksi_6_tahun::with(['subprogram', 'opd', 'penggunas'])
-            ->where('delete_at', '0')
-            ->get();
+        // Mulai query seperti biasa
+        $query = RencanaAksi_6_tahun::with(['subprogram', 'opd', 'penggunas'])
+            ->where('delete_at', '0');
+
+        // ✅ 3. Terapkan filter where jika variabel tahun tidak kosong
+        if ($this->tahun) {
+            $query->where('tahun', $this->tahun);
+        }
+
+        // Ambil data setelah query selesai
+        $rencanaAksis = $query->get();
 
         $rows = collect();
         $no = 1;

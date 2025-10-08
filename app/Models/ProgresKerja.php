@@ -27,7 +27,6 @@ class ProgresKerja extends Model
     }
 
 
-
     public function monev()
     {
         return $this->belongsTo(Monev::class, 'id_monev', 'id');

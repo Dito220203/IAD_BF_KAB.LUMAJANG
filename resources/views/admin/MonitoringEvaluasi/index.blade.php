@@ -18,6 +18,110 @@
             /* GANTI WARNA DI SINI */
             border-bottom: 1px solid #cccccc;
         }
+
+        /* Styling utama untuk drop zone */
+        .drop-zone {
+            border: 2px dashed #007bff;
+            /* Garis putus-putus dengan warna primer */
+            border-radius: 10px;
+            /* Sudut lebih tumpul */
+            padding: 30px;
+            text-align: center;
+            color: #6c757d;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            /* Animasi halus untuk semua perubahan */
+            background-color: #f8f9fa;
+        }
+
+        /* Efek saat mouse berada di atas drop zone */
+        .drop-zone:hover {
+            background-color: #e9ecef;
+            border-color: #0056b3;
+        }
+
+        /* Class ini ditambahkan via JavaScript saat file di-drag di atas zona */
+        .drop-zone--over {
+            border-style: solid;
+            /* Garis menjadi solid */
+            background-color: #d1e7fd;
+            /* Latar belakang biru muda */
+            border-color: #0056b3;
+        }
+
+        /* Styling untuk ikon */
+        .drop-zone-content .bi-cloud-arrow-up {
+            font-size: 3rem;
+            /* Ikon jauh lebih besar */
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        /* Styling untuk teks utama */
+        .drop-zone-content p strong {
+            font-size: 1.1rem;
+            color: #343a40;
+        }
+
+        /* Styling untuk container pratinjau */
+        #previewContainer {
+            display: flex;
+            /* Menggunakan flexbox agar rapi */
+            flex-wrap: wrap;
+            /* Gambar akan pindah ke baris baru jika tidak muat */
+            gap: 15px;
+            /* Jarak antar gambar */
+            margin-top: 20px;
+        }
+
+        /* Styling untuk setiap item pratinjau */
+        .preview-item {
+            position: relative;
+            /* Diperlukan untuk tombol hapus */
+            width: 120px;
+            height: 120px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            /* Memastikan gambar tidak keluar dari kotak */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling untuk gambar pratinjau */
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Gambar akan mengisi kotak tanpa distorsi */
+        }
+
+        /* Styling untuk tombol hapus pada pratinjau */
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            /* Membuatnya menjadi lingkaran */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0;
+            /* Sembunyikan secara default */
+            transition: opacity 0.2s ease;
+        }
+
+        /* Tampilkan tombol hapus saat mouse di atas gambar */
+        .preview-item:hover .remove-btn {
+            opacity: 1;
+        }
     </style>
     <main id="main" class="main">
         <div class="pagetitle">
@@ -35,14 +139,20 @@
                 <div class="col-lg-12">
                     <div class="card ">
                         <div class="card-body">
-                            <!-- Header control: Tambah, Search, Tampilkan Data -->
                             <div class="row g-3 align-items-center mb-3 mt-3">
                                 <div class="col-12 col-md-auto">
                                     <a href="{{ route('monev.create') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-plus me-2"></i>Tambah Data
                                     </a>
                                 </div>
-
+                                @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                    <div class="col-12 col-md-auto">
+                                        <a href="{{ route('monev.export.excel', request()->query()) }}"
+                                            class="btn btn-success w-100">
+                                            <i class="fa-solid fa-file-excel me-1"></i> Export Excel
+                                        </a>
+                                    </div>
+                                @endif
                                 <div class="col-12 col-md-auto">
                                     <a href="{{ route('monev.export', ['tahun' => request('tahun'), 'search' => request('search')]) }}"
                                         class="btn btn-danger w-100">
@@ -50,14 +160,12 @@
                                     </a>
                                 </div>
 
+                                {{-- Form Filter --}}
                                 <div class="col-12 col-md-auto ms-md-auto">
                                     <form id="filter-form" method="GET" class="d-flex flex-column flex-md-row gap-2">
-
-                                        {{-- Filter Tahun --}}
-                                        <div class="input-group  w-auto">
-                                            <label class="input-group-text" for="tahun-filter">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </label>
+                                        <div class="input-group w-auto">
+                                            <label class="input-group-text" for="tahun-filter"><i
+                                                    class="fas fa-calendar-alt"></i></label>
                                             <select name="tahun" id="tahun-filter" class="form-select">
                                                 <option value="">Semua Tahun</option>
                                                 @foreach ($tahuns as $tahun)
@@ -68,38 +176,18 @@
                                                 @endforeach
                                             </select>
                                         </div>
-
-                                        {{-- Search --}}
-                                        <div class="input-group  w-auto">
+                                        <div class="input-group w-auto">
                                             <input type="text" name="search" class="form-control"
                                                 placeholder="Cari data..." value="{{ request('search') }}">
-                                            <button class="btn btn-primary" type="submit">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-
-                                            {{-- Tombol Reset Filter --}}
+                                            <button class="btn btn-primary" type="submit"><i
+                                                    class="fas fa-search"></i></button>
                                             @if (request('search') || request('tahun'))
                                                 <a href="{{ route('monev') }}" class="btn btn-secondary"
-                                                    title="Reset Filter">
-                                                    <i class="fas fa-sync-alt"></i>
-                                                </a>
+                                                    title="Reset Filter"><i class="fas fa-sync-alt"></i></a>
                                             @endif
                                         </div>
                                     </form>
                                 </div>
-
-                                @push('scripts')
-                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                    <script>
-                                        $(document).ready(function() {
-                                            // Auto submit kalau tahun berubah
-                                            $('#tahun-filter').on('change', function() {
-                                                $('#filter-form').submit();
-                                            });
-                                        });
-                                    </script>
-                                @endpush
-
                             </div>
                             <div class="table-container">
                                 <div class="top-scrollbar-container">
@@ -274,76 +362,7 @@
                                                             Lihat Dokumentasi
                                                         </button>
                                                     </td>
-                                                    <!-- Modal Detail Dokumentasi -->
-                                                    <div class="modal fade" id="ModalDetailProduk{{ $data->id }}"
-                                                        tabindex="-1" aria-labelledby="DetailLabel{{ $data->id }}"
-                                                        aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header bg-info text-white">
-                                                                    <h5 class="modal-title"
-                                                                        id="DetailLabel{{ $data->id }}">
-                                                                        Dokumentasi Foto Progres
-                                                                    </h5>
-                                                                    <button type="button"
-                                                                        class="btn-close btn-close-white"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
 
-                                                                    @if ($data->fotoProgres->isNotEmpty())
-                                                                        {{-- Tampilkan Keterangan Umum di Atas --}}
-                                                                        <div class="mb-4">
-                                                                            <strong>Keterangan:</strong>
-                                                                            <p class="mt-1" style="font-size: 1.1em;">
-                                                                                {{-- Ambil deskripsi dari foto pertama, karena semuanya sama --}}
-                                                                                {{ $data->fotoProgres->first()->deskripsi ?: 'Tidak ada keterangan.' }}
-                                                                            </p>
-                                                                        </div>
-
-                                                                        <hr>
-
-                                                                        {{-- Galeri Foto-foto --}}
-                                                                        <div class="row">
-                                                                            @foreach ($data->fotoProgres as $foto)
-                                                                                <div class="col-lg-4 col-md-6 mb-4">
-                                                                                    <div class="card h-100 shadow-sm">
-                                                                                        <a href="{{ asset('storage/' . $foto->foto) }}"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            title="Lihat ukuran penuh">
-                                                                                            <img src="{{ asset('storage/' . $foto->foto) }}"
-                                                                                                class="card-img-top"
-                                                                                                alt="Foto Dokumentasi"
-                                                                                                style="height: 200px; object-fit: cover; cursor: pointer;">
-                                                                                        </a>
-                                                                                        <div
-                                                                                            class="card-footer text-center">
-                                                                                            <small class="text-muted">
-                                                                                                Diunggah:
-                                                                                                {{ $foto->created_at->format('d/m/Y H:i') }}
-                                                                                            </small>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            @endforeach
-                                                                        </div>
-                                                                    @else
-                                                                        {{-- Pesan jika tidak ada foto --}}
-                                                                        <div class="alert alert-warning text-center">
-                                                                            <i class="bi bi-exclamation-triangle-fill"></i>
-                                                                            Belum ada foto dokumentasi yang diunggah.
-                                                                        </div>
-                                                                    @endif
-
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Tutup</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
 
 
@@ -351,7 +370,7 @@
 
                                                     <td class="text-center align-middle">
                                                         <div class="d-flex justify-content-center gap-1">
-                                                            <button type="button" class="btn btn-info btn-sm btn-upload"
+                                                            <button type="button" class="btn btn-success btn-sm"
                                                                 data-bs-toggle="modal" data-bs-target="#uploadFotoModal"
                                                                 data-id="{{ $data->id }}">
                                                                 <i class="fas fa-camera"></i> Upload
@@ -485,32 +504,38 @@
                                 @csrf
                                 <input type="hidden" name="monev_id" id="monev_id_input">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="uploadFotoModalLabel">Upload Foto Dokumentasi</h5>
+                                    <h5 class="modal-title" id="uploadFotoModalLabel">Upload Foto Dokumentasi & Lokasi
+                                    </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-
                                 <div class="modal-body">
                                     <div id="dropZone" class="drop-zone mb-3">
                                         <div class="drop-zone-content">
-                                            <i class="bi bi-cloud-arrow-up" style="font-size: 1rem; color: #6c757d;"></i>
+                                            <i class="bi bi-cloud-arrow-up"></i>
                                             <p class="mb-1"><strong>Upload gambar progres</strong></p>
-                                            <p class="text-muted small">Drag & drop atau klik untuk pilih (JPG, PNG, Maks
-                                                2MB)</p>
+                                            <p class="text-muted small">Drag & drop atau klik (JPG, PNG, Maks 2MB)</p>
                                         </div>
                                         <input type="file" id="fileInput" name="foto[]" accept="image/*" multiple
                                             style="display: none;">
                                     </div>
 
-                                    <div id="previewContainer" class="mb-3"></div>
-
+                                    <div id="previewContainer" class="mb-3">
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="deskripsi_input" class="form-label">Uraian</label>
+                                        <textarea name="deskripsi" id="deskripsi_input" class="form-control" placeholder="Masukkan keterangan..."
+                                            rows="3"></textarea>
+                                    </div>
                                     <div class="form-group">
-                                        <label for="deskripsi_input" class="form-label">Keterangan Foto</label>
-                                        <textarea name="deskripsi" id="deskripsi_input" class="form-control"
-                                            placeholder="Masukkan keterangan untuk semua foto yang diunggah..." rows="3"></textarea>
+                                        <label class="form-label">Tandai Lokasi di Peta</label>
+                                        <div id="map"
+                                            style="height: 300px; width: 100%; border-radius: 8px; z-index: 0;">
+                                        </div>
+                                        <input type="hidden" name="latitude" id="latitude">
+                                        <input type="hidden" name="longitude" id="longitude">
                                     </div>
                                 </div>
-
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-success">Simpan</button>
                                     <button type="button" class="btn btn-secondary"
@@ -520,160 +545,247 @@
                         </div>
                     </div>
                 </div>
+                {{-- modal detail --}}
+                @foreach ($monev as $data)
+                    <div class="modal fade" id="ModalDetailProduk{{ $data->id }}" tabindex="-1"
+                        aria-labelledby="DetailLabel{{ $data->id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header bg-info text-white">
+                                    <h5 class="modal-title" id="DetailLabel{{ $data->id }}">Dokumentasi Foto & Peta
+                                        Lokasi
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    @if ($data->fotoProgres->isNotEmpty())
+                                        <div class="mb-3">
+                                            <strong>Keterangan:</strong>
+                                            <p class="mt-1" style="font-size: 1.1em;">
+                                                {{ $data->fotoProgres->first()->deskripsi ?: 'Tidak ada keterangan.' }}</p>
+                                        </div>
+                                        <strong>Galeri Foto:</strong>
+                                        <div class="row mt-2">
+                                            @foreach ($data->fotoProgres as $foto)
+                                                <div class="col-lg-4 col-md-6 mb-4">
+                                                    <a href="{{ asset('storage/' . $foto->foto) }}" target="_blank"
+                                                        title="Lihat ukuran penuh">
+                                                        <img src="{{ asset('storage/' . $foto->foto) }}"
+                                                            class="card-img-top" alt="Foto"
+                                                            style="height: 200px; object-fit: cover;">
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="alert alert-warning text-center"><i
+                                                class="bi bi-exclamation-triangle-fill"></i> Belum ada dokumentasi.</div>
+                                    @endif
+                                    <hr>
+                                    <div class="mb-4">
+                                        <strong>Lokasi di Peta:</strong>
+                                        @if ($data->map && $data->map->latitude && $data->map->longitude)
+                                            <div id="detailMap{{ $data->id }}" class="mt-2 detail-map-container"
+                                                style="height: 300px; width: 100%; border-radius: 8px; z-index: 0;"
+                                                data-latitude="{{ $data->map->latitude }}"
+                                                data-longitude="{{ $data->map->longitude }}">
+                                            </div>
+                                        @else
+                                            <div class="alert alert-light text-center mt-2">Lokasi belum ditandai.</div>
+                                        @endif
+                                    </div>
 
-                <style>
-                    .drop-zone {
-                        border: 2px dashed #ced4da;
-                        border-radius: 8px;
-                        padding: 40px 20px;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        background-color: #f8f9fa;
-                    }
 
-                    .drop-zone:hover,
-                    .drop-zone.drag-over {
-                        border-color: #0d6efd;
-                        background-color: #e7f1ff;
-                    }
-
-                    .drop-zone-content {
-                        pointer-events: none;
-                    }
-                </style>
-
-                @push('scripts')
-                    <script>
-                        $(document).ready(function() {
-                            const dropZone = document.getElementById('dropZone');
-                            const fileInput = document.getElementById('fileInput');
-                            const previewContainer = document.getElementById('previewContainer');
-                            const deskripsiInput = document.getElementById('deskripsi_input');
-                            let filesArray = [];
-
-                            // Event listener ketika modal akan ditampilkan untuk mengambil ID
-                            $('#uploadFotoModal').on('show.bs.modal', function(event) {
-                                var button = $(event.relatedTarget);
-                                var monevId = button.data('id');
-                                var modal = $(this);
-                                modal.find('#monev_id_input').val(monevId);
-                            });
-
-                            // Membersihkan form saat modal ditutup
-                            $('#uploadFotoModal').on('hidden.bs.modal', function() {
-                                filesArray = [];
-                                previewContainer.innerHTML = '';
-                                fileInput.value = '';
-                                deskripsiInput.value = ''; // Kosongkan juga textarea deskripsi
-                            });
-
-                            // Fungsi untuk trigger klik input file
-                            dropZone.addEventListener('click', () => {
-                                fileInput.click();
-                            });
-
-                            // Event listeners untuk Drag & Drop
-                            dropZone.addEventListener('dragover', (e) => {
-                                e.preventDefault();
-                                dropZone.classList.add('drag-over');
-                            });
-
-                            dropZone.addEventListener('dragleave', () => {
-                                dropZone.classList.remove('drag-over');
-                            });
-
-                            dropZone.addEventListener('drop', (e) => {
-                                e.preventDefault();
-                                dropZone.classList.remove('drag-over');
-                                const files = Array.from(e.dataTransfer.files);
-                                handleFiles(files);
-                            });
-
-                            // Event listener untuk perubahan input file
-                            fileInput.addEventListener('change', (e) => {
-                                const files = Array.from(e.target.files);
-                                handleFiles(files);
-                            });
-
-                            // Fungsi untuk memproses file yang dipilih
-                            function handleFiles(files) {
-                                files.forEach(file => {
-                                    if (!file.type.startsWith('image/')) {
-                                        alert('Hanya file gambar yang diperbolehkan');
-                                        return;
-                                    }
-                                    if (file.size > 2 * 1024 * 1024) { // 2MB
-                                        alert('Ukuran file maksimal 2MB');
-                                        return;
-                                    }
-                                    filesArray.push({
-                                        file: file,
-                                        id: Date.now() + Math.random() // ID unik sementara
-                                    });
-                                });
-                                renderPreviews();
-                            }
-
-                            // Fungsi untuk menampilkan preview gambar
-                            function renderPreviews() {
-                                previewContainer.innerHTML = '';
-
-                                // Mengatur style grid untuk preview
-                                previewContainer.style.display = 'grid';
-                                previewContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(100px, 1fr))';
-                                previewContainer.style.gap = '10px';
-
-                                filesArray.forEach((item, index) => {
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        const previewHTML = `
-                        <div class="preview-item-simple" data-id="${item.id}" style="position: relative;">
-                            <img src="${e.target.result}" alt="Preview" style="width: 100%; height: 100px; object-fit: cover; border-radius: 4px;">
-                            <button type="button"
-                                    class="btn btn-danger btn-sm"
-                                    onclick="removeFile('${item.id}')"
-                                    style="position: absolute; top: 5px; right: 5px; line-height: 1; padding: 2px 5px; border-radius: 50%;">
-                                &times;
-                            </button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
                         </div>
-                    `;
-                                        previewContainer.insertAdjacentHTML('beforeend', previewHTML);
-                                    };
-                                    reader.readAsDataURL(item.file);
-                                });
-                                updateFileInput();
-                            }
-
-                            // Fungsi untuk sinkronisasi array file dengan input file
-                            function updateFileInput() {
-                                const dataTransfer = new DataTransfer();
-                                filesArray.forEach(item => {
-                                    dataTransfer.items.add(item.file);
-                                });
-                                fileInput.files = dataTransfer.files;
-                            }
-
-                            // Fungsi untuk menghapus file dari preview
-                            window.removeFile = function(id) {
-                                filesArray = filesArray.filter(item => item.id != id);
-                                renderPreviews();
-                            };
-                        });
-                    </script>
-                @endpush
-
+                    </div>
+                @endforeach
 
         </section>
     </main>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var modalPesan = document.getElementById('modalPesan');
-            modalPesan.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var idMonev = button.getAttribute('data-id');
-                modalPesan.querySelector('#idMonev').value = idMonev;
+
+    @push('scripts')
+        {{-- Library JQuery (jika belum ada di layout utama) & Peta --}}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script>
+
+        {{-- Script untuk auto-submit filter tahun --}}
+        <script>
+            $(document).ready(function() {
+                $('#tahun-filter').on('change', function() {
+                    $('#filter-form').submit();
+                });
             });
-        });
-    </script>
+        </script>
+
+        {{-- Script untuk fungsionalitas MODAL UPLOAD --}}
+        <script>
+            $(document).ready(function() {
+                const dropZone = document.getElementById('dropZone');
+                const fileInput = document.getElementById('fileInput');
+                const previewContainer = document.getElementById('previewContainer');
+                const deskripsiInput = document.getElementById('deskripsi_input');
+                let filesArray = [];
+
+                let map;
+                let marker;
+                const defaultLat = -8.1689; // Ganti dengan koordinat default Anda
+                const defaultLng = 113.223;
+                const latInput = $('#latitude');
+                const lngInput = $('#longitude');
+
+                $('#uploadFotoModal').on('show.bs.modal', function(event) {
+                    var button = $(event.relatedTarget);
+                    var monevId = button.data('id');
+                    $(this).find('#monev_id_input').val(monevId);
+                });
+
+                $('#uploadFotoModal').on('shown.bs.modal', function() {
+                    if (!map) {
+                        map = L.map('map').setView([defaultLat, defaultLng], 13);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap'
+                        }).addTo(map);
+                        marker = L.marker([defaultLat, defaultLng], {
+                            draggable: true
+                        }).addTo(map);
+                        latInput.val(defaultLat);
+                        lngInput.val(defaultLng);
+
+                        const searchControl = new GeoSearch.GeoSearchControl({
+                            provider: new GeoSearch.OpenStreetMapProvider(),
+                            style: 'bar',
+                            autoClose: true,
+                            keepResult: true,
+                            searchLabel: 'Cari lokasi...'
+                        });
+                        map.addControl(searchControl);
+
+                        map.on('click', e => {
+                            marker.setLatLng(e.latlng);
+                            latInput.val(e.latlng.lat);
+                            lngInput.val(e.latlng.lng);
+                        });
+
+                        marker.on('dragend', e => {
+                            const pos = e.target.getLatLng();
+                            latInput.val(pos.lat);
+                            lngInput.val(pos.lng);
+                        });
+
+                        map.on('geosearch/showlocation', result => {
+                            const pos = L.latLng(result.location.y, result.location.x);
+                            marker.setLatLng(pos);
+                            latInput.val(result.location.y);
+                            lngInput.val(result.location.x);
+                        });
+                    }
+                    setTimeout(() => map.invalidateSize(), 10);
+                });
+
+                $('#uploadFotoModal').on('hidden.bs.modal', function() {
+                    filesArray = [];
+                    previewContainer.innerHTML = '';
+                    fileInput.value = '';
+                    deskripsiInput.value = '';
+
+                    if (marker) {
+                        const defaultLatLng = L.latLng(defaultLat, defaultLng);
+                        marker.setLatLng(defaultLatLng);
+                        map.setView(defaultLatLng, 13);
+                        latInput.val(defaultLat);
+                        lngInput.val(defaultLng);
+                    }
+                });
+
+                dropZone.addEventListener('click', () => fileInput.click());
+                dropZone.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    dropZone.classList.add('drag-over');
+                });
+                dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+                dropZone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    dropZone.classList.remove('drag-over');
+                    handleFiles(Array.from(e.dataTransfer.files));
+                });
+                fileInput.addEventListener('change', e => handleFiles(Array.from(e.target.files)));
+
+                function handleFiles(files) {
+                    files.forEach(file => {
+                        if (!file.type.startsWith('image/') || file.size > 2 * 1024 * 1024) {
+                            alert('Hanya file gambar (JPG, PNG) maks 2MB.');
+                            return;
+                        }
+                        filesArray.push({
+                            file: file,
+                            id: Date.now() + Math.random()
+                        });
+                    });
+                    renderPreviews();
+                }
+
+                function renderPreviews() {
+                    previewContainer.innerHTML = '';
+                    previewContainer.style.display = 'grid';
+                    previewContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(100px, 1fr))';
+                    previewContainer.style.gap = '10px';
+                    filesArray.forEach(item => {
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            previewContainer.insertAdjacentHTML('beforeend',
+                                `<div style="position: relative;"><img src="${e.target.result}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 4px;"><button type="button" class="btn btn-danger btn-sm" onclick="removeFile(${item.id})" style="position: absolute; top: 5px; right: 5px; line-height: 1; padding: 2px 5px; border-radius: 50%;">&times;</button></div>`
+                            );
+                        };
+                        reader.readAsDataURL(item.file);
+                    });
+                    updateFileInput();
+                }
+
+                function updateFileInput() {
+                    const dt = new DataTransfer();
+                    filesArray.forEach(item => dt.items.add(item.file));
+                    fileInput.files = dt.files;
+                }
+                window.removeFile = id => {
+                    filesArray = filesArray.filter(item => item.id != id);
+                    renderPreviews();
+                };
+            });
+        </script>
+
+        {{-- Script untuk fungsionalitas MODAL DETAIL --}}
+        <script>
+            document.addEventListener('shown.bs.modal', function(event) {
+                const modal = event.target;
+                const mapContainer = modal.querySelector('.detail-map-container');
+                if (!mapContainer || mapContainer._leaflet_id) return;
+
+                const lat = mapContainer.dataset.latitude;
+                const lng = mapContainer.dataset.longitude;
+                const mapId = mapContainer.id;
+
+                const detailMap = L.map(mapId, {
+                    center: [lat, lng],
+                    zoom: 15,
+                    scrollWheelZoom: false,
+                    dragging: false,
+                    zoomControl: true
+                });
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(detailMap);
+                L.marker([lat, lng]).addTo(detailMap);
+
+                setTimeout(() => detailMap.invalidateSize(), 200);
+            });
+        </script>
+    @endpush
 @endsection

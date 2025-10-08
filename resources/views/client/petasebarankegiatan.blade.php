@@ -1,35 +1,54 @@
 @extends('componentsclient.layout')
 @section('content')
-    <section class="section_page">
-        <div class="global-title" data-aos="fade-up">
-            <h2>Peta Sebaran {{ $subprogram->subprogram }}</h2>
-        </div>
-        <section id="peta-program" class="peta-section">
-            <div class="container">
-                <!-- Wrapper Peta -->
-                <div class="map-wrapper">
-                    <div id="programMap"></div>
-                </div>
+<section class="section_page">
+    <div class="global-title" data-aos="fade-up">
+        <h2>Peta Sebaran {{ $subprogram->subprogram }}</h2>
+    </div>
+    <section id="peta-program" class="peta-section">
+        <div class="container">
+            <div class="map-wrapper">
+                <div id="programMap"></div>
             </div>
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    var map = L.map('programMap').setView([-8.137, 113.226], 10);
+        </div>
 
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
-                    }).addTo(map);
+        <style>
+            #programMap {
+                height: 500px;
+                width: 100%;
+            }
+        </style>
 
-                    // Data dari Laravel
-                    var programs = @json($maps);
+      <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var map = L.map('programMap').setView([-8.137, 113.226], 10);
 
-                    programs.forEach(p => {
-                        L.marker([p.latitude, p.longitude]).addTo(map)
-                            .bindPopup(`<b>${p.progres?.nama_progres ?? 'Tanpa Nama'}</b><br>ID: ${p.id}`);
-                    });
-                });
-            </script>
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+        }).addTo(map);
 
-        </section>
+        // --- TAMBAHKAN KODE INI ---
+        // Perbaikan untuk path ikon yang rusak di Laravel
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+            iconRetinaUrl: '{{ asset('images/marker-icon-2x.png') }}',
+            iconUrl: '{{ asset('images/marker-icon.png') }}',
+            shadowUrl: '{{ asset('images/marker-shadow.png') }}',
+        });
+        // --- BATAS KODE TAMBAHAN ---
+
+        var programs = @json($maps);
+
+        programs.forEach(p => {
+            if (p.latitude && p.longitude) {
+                L.marker([p.latitude, p.longitude]).addTo(map)
+                    .bindPopup(`<b>${p.monev?.nama_progres ?? 'Tanpa Nama'}</b><br>ID: ${p.id}`);
+            } else {
+                console.warn("Data tidak punya koordinat:", p);
+            }
+        });
+    });
+</script>
     </section>
+</section>
 @endsection

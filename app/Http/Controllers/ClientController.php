@@ -239,11 +239,11 @@ class ClientController extends Controller
         $subprograms = Subprogram::where('delete_at', '0')->get();
         $subprogram = Subprogram::findOrFail($id);
 
-        $maps = Map::whereHas('progres', function ($q) use ($id) {
+        $maps = Map::whereHas('monev', function ($q) use ($id) {
             $q->where('id_subprogram', $id)
                 ->where('status', 'valid');
         })
-            ->with('progres')
+            ->with('monev')
             ->get();
 
         return view('client.petasebarankegiatan', compact('contact', 'subprograms', 'subprogram', 'maps'));

@@ -44,7 +44,9 @@
                                                 <i class="fa-solid fa-plus me-1"></i>
                                                 Tambah Rencana Aksi
                                             </a>
-                                            <a href="{{ route('rencanaAksi.export.excel') }}" class="btn btn-success">
+                                            {{-- BARU --}}
+                                            <a href="{{ route('rencanaAksi.export.excel', request()->query()) }}"
+                                                class="btn btn-success">
                                                 <i class="fa-solid fa-file-excel me-1"></i>
                                                 Export Excel
                                             </a>
@@ -79,8 +81,7 @@
                                     </div>
 
                                     @if (request('search') || request('tahun'))
-                                        <a href="{{ route('rencana6tahun') }}"
-                                            class="btn btn-secondary">
+                                        <a href="{{ route('rencana6tahun') }}" class="btn btn-secondary">
                                             <i class="fas fa-sync-alt"></i>
                                         </a>
                                     @endif

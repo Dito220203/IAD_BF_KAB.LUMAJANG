@@ -12,18 +12,19 @@
                 <hr>
                 <h4>Dokumentasi</h4>
                 <div class="produk">
-                            @if ($profilkawasanDetail->gambar)
-                                <img src="{{ asset('storage/' . $profilkawasanDetail->gambar) }}" alt="Gambar Potensi">
-                            @endif
+                    @if ($profilkawasanDetail->gambar)
+                        <img src="{{ asset('storage/' . $profilkawasanDetail->gambar) }}" alt="Gambar Potensi">
+                    @endif
                 </div>
                 <hr>
             </div>
         </section>
 
         <div class="text-center mt-4">
-            <a href="{{ route('client.Daftarprofilkawasan') }}" class="btn-footer-back">
+            <a href="{{ request()->get('from', route('client.Daftarprofilkawasan')) }}" class="btn-footer-back">
                 ← Kembali ke Daftar
             </a>
+
         </div>
 
         <!-- SwiperJS CSS & JS -->

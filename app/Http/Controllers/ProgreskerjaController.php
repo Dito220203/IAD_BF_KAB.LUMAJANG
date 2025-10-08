@@ -21,8 +21,7 @@ class ProgreskerjaController extends Controller
         $user   = Auth::guard('pengguna')->user();
         $search = $request->input('search');
 
-        // PERBAIKAN 1: Muat relasi 'subprogram' secara langsung
-        $query = ProgresKerja::with(['penggunas', 'subprogram', 'monev.rencanaAksi', 'monev.fotoProgres']);
+        $query = ProgresKerja::with(['penggunas', 'subprogram', 'monev.rencanakerja','monev.map']);
 
         if ($user->level !== 'Super Admin') {
             $query->where('id_pengguna', $user->id);
@@ -30,26 +29,25 @@ class ProgreskerjaController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->orWhereHas('penggunas', function ($pengguna) use ($search) {
-                    $pengguna->where('nama', 'like', "%{$search}%");
-                })
+                $q->orWhere('status', 'like', "%{$search}%")  // <-- Tambahan ini
+                    ->orWhereHas('penggunas', function ($pengguna) use ($search) {
+                        $pengguna->where('nama', 'like', "%{$search}%");
+                    })
                     ->orWhereHas('subprogram', function ($sub) use ($search) {
                         $sub->where('subprogram', 'like', "%{$search}%");
                     })
                     ->orWhereHas('monev', function ($monev) use ($search) {
                         $monev->where('nama_program', 'like', "%{$search}%")
-                            ->orWhere('tahun', 'like', "%{$search}%")
-
-                            ->orWhereHas('fotoProgres', function ($foto) use ($search) {
-                                $foto->where('deskripsi', 'like', "%{$search}%");
-                            });
+                            ->orWhere('tahun', 'like', "%{$search}%");
                     });
             });
         }
 
 
 
-        $progres = $query->latest()->paginate(10);
+
+
+        $progres = $query->paginate(10);
         $progres->appends($request->only('search'));
 
         return view('admin.ProgresKerja.index', compact('progres', 'search'));

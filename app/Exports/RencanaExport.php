@@ -15,10 +15,13 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTitle, ShouldAutoSize, WithCustomStartCell, WithColumnWidths
 {
     protected $user;
+    protected $tahun; // ✅ 1. Tambahkan property untuk tahun
 
-    public function __construct($user)
+    // ✅ 2. Modifikasi constructor untuk menerima tahun
+    public function __construct($user, $tahun)
     {
         $this->user = $user;
+        $this->tahun = $tahun;
     }
 
     public function collection()
@@ -29,7 +32,14 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
             $query->where('id_pengguna', $this->user->id);
         }
 
+        // ✅ 3. Tambahkan kondisi untuk memfilter berdasarkan tahun
+        if ($this->tahun) {
+            $query->where('tahun', $this->tahun);
+        }
+
         $rencanaKerjas = $query->get();
+
+        // ... sisa kode method collection() Anda tidak perlu diubah ...
         $rows = collect();
         $no = 1;
 
@@ -59,11 +69,21 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
                     ]);
                 } else {
                     $rows->push([
-                        'NO' => '', 'Sub Program' => '', 'Rencana Aksi' => '', 'Sub Kegiatan' => '',
-                        'Kegiatan' => '', 'Nama Program' => '', 'Lokasi' => '', 'Volume' => '', 'Satuan' => '',
+                        'NO' => '',
+                        'Sub Program' => '',
+                        'Rencana Aksi' => '',
+                        'Sub Kegiatan' => '',
+                        'Kegiatan' => '',
+                        'Nama Program' => '',
+                        'Lokasi' => '',
+                        'Volume' => '',
+                        'Satuan' => '',
                         'Anggaran'         => $anggarans[$i] ?? '-',
                         'Sumber Dana'      => $sumberdanas[$i] ?? '-',
-                        'Tahun' => '', 'Perangkat Daerah' => '', 'Status' => '', 'Keterangan' => '',
+                        'Tahun' => '',
+                        'Perangkat Daerah' => '',
+                        'Status' => '',
+                        'Keterangan' => '',
                     ]);
                 }
             }
@@ -73,6 +93,7 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
         return $rows;
     }
 
+    // ... sisa method lain di class ini (headings, styles, dll) tidak perlu diubah ...
     public function startCell(): string
     {
         return 'A3';
@@ -81,9 +102,21 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
     public function headings(): array
     {
         return [
-            'NO', 'Sub Program', 'Rencana Aksi', 'Sub Kegiatan', 'Kegiatan', 'Nama Program',
-            'Lokasi', 'Volume', 'Satuan', 'Anggaran', 'Sumber Dana', 'Tahun',
-            'Perangkat Daerah', 'Status', 'Keterangan',
+            'NO',
+            'Sub Program',
+            'Rencana Aksi',
+            'Sub Kegiatan',
+            'Kegiatan',
+            'Nama Program',
+            'Lokasi',
+            'Volume',
+            'Satuan',
+            'Anggaran',
+            'Sumber Dana',
+            'Tahun',
+            'Perangkat Daerah',
+            'Status',
+            'Keterangan',
         ];
     }
 
@@ -164,9 +197,21 @@ class RencanaExport implements FromCollection, WithHeadings, WithStyles, WithTit
     public function columnWidths(): array
     {
         return [
-            'A' => 5,   'B' => 25,  'C' => 30,  'D' => 30,  'E' => 25,
-            'F' => 30,  'G' => 20,  'H' => 10,  'I' => 10,  'J' => 20,
-            'K' => 20,  'L' => 10,  'M' => 25,  'N' => 15,  'O' => 30,
+            'A' => 5,
+            'B' => 25,
+            'C' => 30,
+            'D' => 30,
+            'E' => 25,
+            'F' => 30,
+            'G' => 20,
+            'H' => 10,
+            'I' => 10,
+            'J' => 20,
+            'K' => 20,
+            'L' => 10,
+            'M' => 25,
+            'N' => 15,
+            'O' => 30,
         ];
     }
 }

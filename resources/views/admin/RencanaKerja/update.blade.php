@@ -97,15 +97,22 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Perangkat Daerah</label>
-                                        <select name="id_opd" class="form-select" required>
-                                            <option value="">-- Pilih OPD --</option>
-                                            @foreach ($opd as $item)
-                                                <option value="{{ $item->id }}"
-                                                    {{ $item->id == $rencana->id_opd ? 'selected' : '' }}>
-                                                    {{ $item->nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        @php $user = Auth::guard('pengguna')->user(); @endphp
+                                        @if ($user && $user->level == 'Admin')
+                                            <input type="hidden" name="id_opd" value="{{ $user->id_opd }}">
+                                            <input type="text" class="form-control bg-light"
+                                                value="{{ $user->opd->nama ?? '-' }}" required>
+                                        @else
+                                            <select name="id_opd" class="form-select" required>
+                                                <option value="">-- Pilih OPD --</option>
+                                                @foreach ($opd as $data)
+                                                    <option value="{{ $data->id }}"
+                                                        {{ old('id_opd') == $data->id ? 'selected' : '' }}>
+                                                        {{ $data->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
 

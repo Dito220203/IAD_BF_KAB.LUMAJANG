@@ -46,7 +46,9 @@
                                             + Tambah Rencana
                                         </a>
 
-                                        <a href="{{ route('rencana.export.excel') }}" class="btn btn-success">
+                                        {{-- BARU --}}
+                                        <a href="{{ route('rencana.export.excel', request()->query()) }}"
+                                            class="btn btn-success">
                                             <i class="fa-solid fa-file-excel"></i> Export Excel
                                         </a>
                                     </div>

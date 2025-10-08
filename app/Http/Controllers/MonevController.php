@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\LogHelper;
 use App\Models\FotoProgres;
+use App\Models\Map;
 use App\Models\Monev;
 use App\Models\Notifikasi;
 use App\Models\Opd;
@@ -26,7 +27,7 @@ class MonevController extends Controller
         $query = Monev::query();
 
         // ✅ Load relasi
-        $query->with(['opd', 'subprogram', 'fotoProgres']);
+        $query->with(['opd', 'subprogram', 'fotoProgres','map']);
 
         // ✅ Ambil daftar tahun
         $tahuns = Monev::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
@@ -200,24 +201,29 @@ class MonevController extends Controller
     public function storeFoto(Request $request)
     {
         $validatedData = $request->validate([
-            'monev_id'  => 'required|exists:monevs,id',
-            'foto.*'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
-            'deskripsi' => 'nullable|string|max:255', // Diubah dari array menjadi string
+            'monev_id'   => 'required|exists:monevs,id',
+            'foto'       => 'required',
+            'foto.*'     => 'image|mimes:jpeg,jpg,png|max:2048',
+            'deskripsi'  => 'nullable|string|max:255',
+            'latitude'   => 'nullable|numeric',
+            'longitude'  => 'nullable|numeric',
         ], [
-            'foto.*.max' => 'Setiap foto maksimal berukuran 2MB.',
+            'foto.required'   => 'Minimal 1 foto harus diunggah.',
+            'foto.*.max'      => 'Setiap foto maksimal berukuran 2MB.',
         ]);
 
-        // Hapus foto lama jika ada (logika dari sebelumnya)
+        // Hapus foto lama
         $existingFotos = FotoProgres::where('id_monev', $validatedData['monev_id'])->get();
-        if ($existingFotos->isNotEmpty()) {
-            foreach ($existingFotos as $foto) {
+        foreach ($existingFotos as $foto) {
+            if (Storage::disk('public')->exists($foto->foto)) {
                 Storage::disk('public')->delete($foto->foto);
-                $foto->delete();
             }
+            $foto->delete();
         }
 
+        // Simpan foto baru
         if ($request->hasFile('foto')) {
-            foreach ($request->file('foto') as $index => $file) {
+            foreach ($request->file('foto') as $file) {
                 $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $extension    = $file->getClientOriginalExtension();
                 $safeName     = Str::slug($originalName);
@@ -228,11 +234,25 @@ class MonevController extends Controller
                     'id_monev'    => $validatedData['monev_id'],
                     'id_pengguna' => Auth::guard('pengguna')->id(),
                     'foto'        => $path,
-                    // Gunakan deskripsi tunggal untuk semua foto
                     'deskripsi'   => $validatedData['deskripsi'] ?? null,
                 ]);
             }
         }
+
+        // Simpan / update titik koordinat
+        if ($request->filled(['latitude', 'longitude'])) {
+            Map::updateOrCreate(
+                [
+                    'id_monev'    => $validatedData['monev_id'],
+                    'id_pengguna' => Auth::guard('pengguna')->id(),
+                ],
+                [
+                    'latitude'    => $request->latitude,
+                    'longitude'   => $request->longitude,
+                ]
+            );
+        }
+
 
         return redirect()->route('monev')->with('success', 'Foto dokumentasi berhasil diperbarui.');
     }
@@ -278,57 +298,71 @@ class MonevController extends Controller
     /**
      * Display the specified resource.
      */
+    // ... (method-method lain yang sudah ada)
 
+    public function exportExcel(Request $request)
+    {
+        // Ambil user yang sedang login
+        $user = Auth::guard('pengguna')->user();
+
+        // Ambil filter tahun dari URL
+        $tahun = $request->input('tahun');
+
+        // Tentukan nama file
+        $fileName = 'laporan_monev.xlsx';
+        if ($tahun) {
+            $fileName = 'laporan_monev_' . $tahun . '.xlsx';
+        }
+
+        // Panggil class Export dengan parameter user dan tahun
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\MonevExport($user, $tahun), $fileName);
+    }
+
+    // ... (sisa method di controller)
 
     public function exportPDF(Request $request)
     {
-        $tahun    = $request->tahun;
-        $triwulan = $request->triwulan;
+        // Ambil nilai tahun dari request
+        $selectedTahun = $request->input('tahun');
 
+        // Ambil user yang sedang login
         $user = Auth::guard('pengguna')->user();
 
-        $query = Monev::with(['subprogram', 'opd']);
+        // Siapkan query dasar dengan relasi yang dibutuhkan
+        $query = Monev::with(['subprogram', 'opd', 'rencanakerja']);
 
-        // Filter data kalau bukan superadmin
+        // Filter data jika bukan Super Admin
         if ($user->level !== 'Super Admin') {
             $query->where('id_pengguna', $user->id);
         }
 
-        // Filter Triwulan (pakai kolom tanggal, bukan kolom 'triwulan')
-        if ($triwulan) {
-            switch ($triwulan) {
-                case 1: // Jan - Mar
-                    $query->whereMonth('tanggal', '>=', 1)
-                        ->whereMonth('tanggal', '<=', 3);
-                    break;
-                case 2: // Apr - Jun
-                    $query->whereMonth('tanggal', '>=', 4)
-                        ->whereMonth('tanggal', '<=', 6);
-                    break;
-                case 3: // Jul - Sep
-                    $query->whereMonth('tanggal', '>=', 7)
-                        ->whereMonth('tanggal', '<=', 9);
-                    break;
-                case 4: // Okt - Des
-                    $query->whereMonth('tanggal', '>=', 10)
-                        ->whereMonth('tanggal', '<=', 12);
-                    break;
-            }
+        // =============================================================
+        // BAGIAN YANG DIPERBAIKI: Filter tahun
+        // =============================================================
+        // Cek jika filter tahun diisi, lalu terapkan ke query
+        if ($selectedTahun) {
+            $query->where('tahun', $selectedTahun);
         }
+        // =============================================================
 
-        // Filter Tahun (juga pakai kolom tanggal)
-        if ($tahun) {
-            $query->whereYear('tahun', $tahun);
-        }
-
+        // Ambil semua data hasil query
         $monev = $query->orderBy('created_at', 'desc')->get();
 
+        // Siapkan data untuk dikirim ke view PDF
+        $data = [
+            'monev' => $monev,
+            'tahun' => $selectedTahun, // Kirim variabel tahun ke view
+        ];
+
+        // Buat dan atur PDF
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
             'admin.MonitoringEvaluasi.export',
-            compact('monev', 'tahun', 'triwulan')
+            $data
         )->setPaper('a4', 'landscape');
 
-        return $pdf->download('laporan_monev.pdf');
+        // Beri nama file yang dinamis dan download
+        $fileName = 'laporan_monev' . ($selectedTahun ? '_' . $selectedTahun : '') . '.pdf';
+        return $pdf->download($fileName);
     }
 
 

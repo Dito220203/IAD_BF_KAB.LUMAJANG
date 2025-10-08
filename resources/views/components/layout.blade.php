@@ -37,7 +37,7 @@
 
     <!-- PETA -->
     <link href="{{ asset('assets/vendor/leaflet/leaflet.css') }}" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" crossorigin="" /> --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.css" />
 
     <link href="{{ asset('assets/vendor/quil1.3.6/dataTables.bootstrap5.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/quil1.3.6/quill.snow.css') }}" rel="stylesheet">
@@ -148,7 +148,9 @@
     <script src="{{ asset('js/alerthapus2.js') }}"></script>
     <script src="{{ asset('js/updateStatus.js') }}"></script>
     <script src="{{ asset('js/entries.js') }}"></script>
-     <script src="{{ asset('js/loadingSubmit.js') }}"></script>
+    <script src="{{ asset('js/loadingSubmit.js') }}"></script>
+    <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script>
+
 
     <!-- SweetAlert Success -->
     @if (session('success'))

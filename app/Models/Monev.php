@@ -72,10 +72,20 @@ class Monev extends Model
     {
         return $this->belongsTo(Opd::class, 'id_opd', 'id');
     }
-     public function rencanaAksi()
+    public function rencanaAksi()
     {
         // Pastikan nama model 'RencanaAksi' dan nama kolom 'rencana_aksi' sudah benar
         // Sesuaikan jika perlu
         return $this->belongsTo(RencanaAksi_6_tahun::class, 'rencana_aksi');
+    }
+    public function map()
+    {
+        return $this->hasOne(Map::class, 'id_monev', 'id');
+    }
+    // Ganti 'progresKerja' jika nama method relasi Anda berbeda
+    public function progresKerja()
+    {
+        // Asumsi satu Monev bisa memiliki BANYAK progres kerja
+        return $this->hasMany(ProgresKerja::class, 'id_monev','id');
     }
 }

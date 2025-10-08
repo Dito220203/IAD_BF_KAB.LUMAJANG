@@ -102,11 +102,14 @@ class RencanakerjaController extends Controller
 
         return view('admin.RencanaKerja.create', compact('subprogram', 'opd', 'rencanaAksi'));
     }
-    public function exportExcel()
+    // BARU
+    public function exportExcel(Request $request)
     {
         $user = Auth::guard('pengguna')->user();
+        $tahun = $request->input('tahun'); // Ambil nilai tahun dari request
 
-        return Excel::download(new RencanaExport($user), 'rencana_kerja.xlsx');
+        // Kirim user dan tahun ke class export
+        return Excel::download(new RencanaExport($user, $tahun), 'rencana_kerja.xlsx');
     }
 
     public function store(Request $request)
