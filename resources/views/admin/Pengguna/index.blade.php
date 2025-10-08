@@ -22,16 +22,15 @@
                                 <a href="{{ route('pengguna.create') }}" class="btn btn-primary">
                                     + Tambah Pengguna
                                 </a>
-                              <div class="col-12 col-lg-auto">
-     <form method="GET" class="input-group w-auto">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('pengguna') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                <div class="col-12 col-lg-auto">
+                                    <form method="GET" class="input-group w-auto">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('pengguna') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 
@@ -52,7 +51,7 @@
                                             <tr>
                                                 <td>{{ $pengguna->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->username }}</td>
-                                                 <td>{{ $data->opd->nama ?? '-' }}</td>
+                                                <td>{{ $data->opd->nama ?? '-' }}</td>
 
 
 
@@ -83,7 +82,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                             <div class="mt-3">
+                            <div class="mt-3">
                                 {{ $pengguna->links('vendor.pagination.bootstrap-5') }}
                             </div>
                             <!-- End Table -->

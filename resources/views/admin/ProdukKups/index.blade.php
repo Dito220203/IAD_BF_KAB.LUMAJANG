@@ -38,8 +38,7 @@
 
                                         <img id="previewUpdate"
                                             src="{{ $produkKupsEdit->gambar ? asset('storage/' . $produkKupsEdit->gambar) : '' }}"
-                                            class="img-fluid mt-2 rounded"
-                                            width="150"
+                                            class="img-fluid mt-2 rounded" width="150"
                                             style="{{ $produkKupsEdit->gambar ? '' : 'display:none;' }}">
 
                                         @error('e_gambar')
@@ -96,19 +95,22 @@
 
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                 <div class="col-12 col-lg-auto">
-                                                <!-- Pencarian -->
-                                                <form method="GET" class="input-group w-auto mb-2">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('produkKups') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                    <!-- Pencarian -->
+                                    <form method="GET" class="input-group w-auto mb-2">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('produkKups') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 
+                            <div class="table-container">
+                                <div class="top-scrollbar-container">
+                                    <div class="top-scrollbar-content"></div>
+                                </div>
                             <div class="table-responsive">
                                 <table id="produkKups" class="detail-table">
                                     <thead>
@@ -123,7 +125,7 @@
                                     <tbody>
                                         @foreach ($produkKups as $data)
                                             <tr>
-                                               <td>{{ $produkKups->firstItem() + $loop->index }}</td>
+                                                <td>{{ $produkKups->firstItem() + $loop->index }}</td>
                                                 <td>{{ $data->nama }}</td>
                                                 <td>
                                                     @if ($data->gambar)
@@ -160,8 +162,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                              <div class="mt-3">
+                            <div class="mt-3">
                                 {{ $produkKups->links('vendor.pagination.bootstrap-5') }}
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -190,37 +193,88 @@
 @endsection
 
 @push('scripts')
-<script>
-    function validateFileSize(input) {
-        const file = input.files[0];
-        if (file && file.size > 2 * 1024 * 1024) { // 2MB
-            alert('Ukuran gambar tidak boleh lebih dari 2MB.');
-            input.value = "";
-            return false;
-        }
-        return true;
-    }
-
-    // Ganti gambar lama dengan gambar baru
-    function previewReplaceImage(event, previewId) {
-        const file = event.target.files[0];
-        const preview = document.getElementById(previewId);
-
-        if (file) {
-            if (file.size > 2 * 1024 * 1024) {
-                preview.src = "";
-                preview.style.display = "none";
-                return;
+    <script>
+        function validateFileSize(input) {
+            const file = input.files[0];
+            if (file && file.size > 2 * 1024 * 1024) { // 2MB
+                alert('Ukuran gambar tidak boleh lebih dari 2MB.');
+                input.value = "";
+                return false;
             }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = "block";
-            };
-            reader.readAsDataURL(file);
+            return true;
         }
-    }
 
-</script>
+        // Ganti gambar lama dengan gambar baru
+        function previewReplaceImage(event, previewId) {
+            const file = event.target.files[0];
+            const preview = document.getElementById(previewId);
+
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    preview.src = "";
+                    preview.style.display = "none";
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+             document.addEventListener('DOMContentLoaded', function() {
+            // Cari semua kontainer tabel di halaman
+            const allTableContainers = document.querySelectorAll('.table-container');
+
+            allTableContainers.forEach(container => {
+                const topScrollbar = container.querySelector('.top-scrollbar-container');
+                const topScrollbarContent = container.querySelector('.top-scrollbar-content');
+                const tableWrapper = container.querySelector('.table-responsive');
+                const table = container.querySelector('.detail-table');
+
+                // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
+                if (!topScrollbar || !tableWrapper || !table) {
+                    return;
+                }
+
+                let isSyncing = false;
+
+                // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
+                //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
+                function updateTopScrollbarWidth() {
+                    if (table.scrollWidth > tableWrapper.clientWidth) {
+                        topScrollbarContent.style.width = table.scrollWidth + 'px';
+                        topScrollbar.style.display = 'block'; // Tampilkan jika perlu
+                    } else {
+                        topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
+                    }
+                }
+
+                // 2. Sinkronkan scroll dari atas ke bawah
+                topScrollbar.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    tableWrapper.scrollLeft = topScrollbar.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // 3. Sinkronkan scroll dari bawah ke atas
+                tableWrapper.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    topScrollbar.scrollLeft = tableWrapper.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // Panggil pertama kali saat halaman dimuat
+                updateTopScrollbarWidth();
+
+                // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
+                window.addEventListener('resize', updateTopScrollbarWidth);
+            });
+        });
+    </script>
 @endpush
+

@@ -95,7 +95,8 @@
                                         <tbody>
                                             @foreach ($subprogram as $data)
                                                 <tr>
-                                                    <td class="text-center">{{ $subprogram->firstItem() + $loop->index }}</td>
+                                                    <td class="text-center">{{ $subprogram->firstItem() + $loop->index }}
+                                                    </td>
                                                     <td class="text-center">{{ $data->program }}</td>
                                                     <td class="text-center">{{ $data->subprogram }}</td>
                                                     <td class="text-center align-middle">
@@ -134,7 +135,8 @@
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title">Edit Sub Program</h5>
                                                                     <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <form
@@ -273,7 +275,7 @@
                                                                         style="max-width: 200px; display: none; border: 1px solid #ddd; padding: 5px;">
                                                                 </div>
                                                             </div>
-                                                            <script>
+                                                            {{-- <script>
                                                                 // Preview foto create
                                                                 document.getElementById('fotoInput').addEventListener('change', function(e) {
                                                                     const file = e.target.files[0];
@@ -295,8 +297,7 @@
                                                                     }
                                                                     reader.readAsDataURL(file);
                                                                 });
-                                                            </script>
-
+                                                            </script> --}}
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Batal</button>
@@ -325,195 +326,226 @@
                                 </div>
 
                                 <!-- Table Produk -->
-                                <div class="table-responsive">
-                                    <table id="TableProduk" class="detail-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Program</th>
-                                                <th>Judul</th>
-                                                {{-- <th>Keterangan</th> --}}
-                                                <th>Foto</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($produk as $data)
+                                <div class="table-container">
+                                    <div class="top-scrollbar-container">
+                                        <div class="top-scrollbar-content"></div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table id="TableProduk" class="detail-table">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $produk->firstItem() + $loop->index }}</td>
-                                                    <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
-                                                    <td>{{ $data->judul }}</td>
-                                                    {{-- <td>{{ $data->keterangan }}</td> --}}
-                                                    <td>{{ $data->foto }}</td>
-                                                    <td class="text-center align-middle">
-                                                        <div class="d-flex justify-content-center gap-1">
-                                                            <button type="button" class="btn btn-info btn-sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#ModalDetailProduk{{ $data->id }}">
-                                                                <i class="fa-solid fa-circle-info"></i>
-                                                            </button>
-                                                            <!-- Edit -->
-                                                            <button type="button" class="btn btn-primary btn-sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#ModalupdateProduk{{ $data->id }}">
-                                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                            </button>
-                                                            <!-- Hapus -->
-                                                            <form id="formDeleteSub-{{ $data->id }}"
-                                                                action="{{ route('delete.produk', $data->id) }}"
-                                                                method="POST" style="display:inline;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="button" class="btn btn-danger btn-sm"
-                                                                    onclick="confirmDeleteSub('{{ $data->id }}')">
-                                                                    <i class="fa-solid fa-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </td>
+                                                    <th>No</th>
+                                                    <th>Program</th>
+                                                    <th>Judul</th>
+                                                    {{-- <th>Keterangan</th> --}}
+                                                    <th>Foto</th>
+                                                    <th>Aksi</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                        @foreach ($produk as $data)
-                                            <!-- Modal Detail -->
-                                            <div class="modal fade" id="ModalDetailProduk{{ $data->id }}"
-                                                tabindex="-1" aria-labelledby="DetailLabel{{ $data->id }}"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header bg-info text-white">
-                                                            <h5 class="modal-title" id="DetailLabel{{ $data->id }}">
-                                                                Detail Produk</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p><strong>Program:</strong>
-                                                                {{ $data->subprogram->subprogram ?? '-' }}</p>
-                                                            <p><strong>Judul:</strong> {{ $data->judul }}</p>
-                                                            <p><strong>Keterangan:</strong> {{ $data->keterangan }}</p>
-                                                            <p><strong>Foto:</strong></p>
-                                                            @if ($data->foto)
-                                                                <img src="{{ asset('storage/' . $data->foto) }}"
-                                                                    class="img-fluid rounded">
-                                                            @else
-                                                                <span class="text-muted">Tidak ada foto</span>
-                                                            @endif
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Tutup</button>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($produk as $data)
+                                                    <tr>
+                                                        <td>{{ $produk->firstItem() + $loop->index }}</td>
+                                                        <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
+                                                        <td>{{ $data->judul }}</td>
+                                                        {{-- <td>{{ $data->keterangan }}</td> --}}
+                                                        <td>{{ $data->foto }}</td>
+                                                        <td class="text-center align-middle">
+                                                            <div class="d-flex justify-content-center gap-1">
+                                                                <button type="button" class="btn btn-info btn-sm"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#ModalDetailProduk{{ $data->id }}">
+                                                                    <i class="fa-solid fa-circle-info"></i>
+                                                                </button>
+                                                                <!-- Edit -->
+                                                                <button type="button" class="btn btn-primary btn-sm"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#ModalupdateProduk{{ $data->id }}">
+                                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                                </button>
+                                                                <!-- Hapus -->
+                                                                <form id="formDeleteSub-{{ $data->id }}"
+                                                                    action="{{ route('delete.produk', $data->id) }}"
+                                                                    method="POST" style="display:inline;">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                                        onclick="confirmDeleteSub('{{ $data->id }}')">
+                                                                        <i class="fa-solid fa-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                            @foreach ($produk as $data)
+                                                <!-- Modal Detail -->
+                                                <div class="modal fade" id="ModalDetailProduk{{ $data->id }}"
+                                                    tabindex="-1" aria-labelledby="DetailLabel{{ $data->id }}"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-info text-white">
+                                                                <h5 class="modal-title"
+                                                                    id="DetailLabel{{ $data->id }}">
+                                                                    Detail Produk</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p><strong>Program:</strong>
+                                                                    {{ $data->subprogram->subprogram ?? '-' }}</p>
+                                                                <p><strong>Judul:</strong> {{ $data->judul }}</p>
+                                                                <p><strong>Keterangan:</strong> {{ $data->keterangan }}</p>
+                                                                <p><strong>Foto:</strong></p>
+                                                                @if ($data->foto)
+                                                                    <img src="{{ asset('storage/' . $data->foto) }}"
+                                                                        class="img-fluid rounded">
+                                                                @else
+                                                                    <span class="text-muted">Tidak ada foto</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Tutup</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
 
-                                    </table>
-                                </div>
-                                <div class="mt-3">
-                                    {{ $produk->links('vendor.pagination.bootstrap-5') }}
-                                </div>
-                                <!-- Modal Update Produk -->
-                                @foreach ($produk as $data)
-                                    <div class="modal fade" id="ModalupdateProduk{{ $data->id }}" tabindex="-1"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Update Produk Subprogram</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('update.produk', $data->id) }}" method="POST"
-                                                        enctype="multipart/form-data">
-                                                        @csrf
-                                                        @method('PUT')
+                                        </table>
+                                    </div>
+                                    <div class="mt-3">
+                                        {{ $produk->links('vendor.pagination.bootstrap-5') }}
+                                    </div>
+                                    <!-- Modal Update Produk -->
+                                    @foreach ($produk as $data)
+                                        <div class="modal fade" id="ModalupdateProduk{{ $data->id }}" tabindex="-1"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Update Produk Subprogram</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ route('update.produk', $data->id) }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('PUT')
 
-                                                        <!-- Pilih Sub Program -->
-                                                        <div class="mb-3">
-                                                            <label>Sub Program</label>
-                                                            <select name="e_id_subprogram" class="form-select" required>
-                                                                <option value="">Pilih Sub Program</option>
-                                                                @foreach ($subprogram as $program)
-                                                                    <option value="{{ $program->id }}"
-                                                                        {{ $data->id_subprogram == $program->id ? 'selected' : '' }}>
-                                                                        {{ $program->subprogram }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-
-                                                        <!-- Nama Produk -->
-                                                        <div class="mb-3">
-                                                            <label>Nama Produk</label>
-                                                            <input type="text" name="e_judul" class="form-control"
-                                                                value="{{ $data->judul }}" required>
-                                                        </div>
-
-                                                        <!-- Keterangan -->
-                                                        <div class="mb-3">
-                                                            <label>Keterangan</label>
-                                                            <textarea name="e_keterangan" class="form-control" rows="3">{{ $data->keterangan }}</textarea>
-                                                        </div>
-
-                                                        <!-- Upload Foto -->
-                                                        <div class="mb-3">
-                                                            <label>Upload Foto</label>
-                                                            <input type="file" name="e_foto"
-                                                                id="fotoInput{{ $data->id }}" class="form-control"
-                                                                accept="image/*">
-                                                            <small class="text-muted">Maksimal ukuran 2MB</small>
-                                                            <div class="mt-2">
-                                                                <img id="previewFoto{{ $data->id }}"
-                                                                    src="{{ $data->foto ? asset('storage/' . $data->foto) : '#' }}"
-                                                                    alt="Preview Foto"
-                                                                    style="max-width:200px; border:1px solid #ddd; padding:5px; {{ $data->foto ? '' : 'display:none;' }}">
+                                                            <!-- Pilih Sub Program -->
+                                                            <div class="mb-3">
+                                                                <label>Sub Program</label>
+                                                                <select name="e_id_subprogram" class="form-select"
+                                                                    required>
+                                                                    <option value="">Pilih Sub Program</option>
+                                                                    @foreach ($subprogram as $program)
+                                                                        <option value="{{ $program->id }}"
+                                                                            {{ $data->id_subprogram == $program->id ? 'selected' : '' }}>
+                                                                            {{ $program->subprogram }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Batal</button>
-                                                            <button type="submit" class="btn btn-primary">Update</button>
-                                                        </div>
-                                                    </form>
+                                                            <!-- Nama Produk -->
+                                                            <div class="mb-3">
+                                                                <label>Nama Produk</label>
+                                                                <input type="text" name="e_judul" class="form-control"
+                                                                    value="{{ $data->judul }}" required>
+                                                            </div>
+
+                                                            <!-- Keterangan -->
+                                                            <div class="mb-3">
+                                                                <label>Keterangan</label>
+                                                                <textarea name="e_keterangan" class="form-control" rows="3">{{ $data->keterangan }}</textarea>
+                                                            </div>
+
+                                                            <!-- Upload Foto -->
+                                                            <div class="mb-3">
+                                                                <label>Upload Foto</label>
+                                                                <input type="file" name="e_foto"
+                                                                    id="fotoInput{{ $data->id }}"
+                                                                    class="form-control" accept="image/*">
+                                                                <small class="text-muted">Maksimal ukuran 2MB</small>
+                                                                <div class="mt-2">
+                                                                    <img id="previewFoto{{ $data->id }}"
+                                                                        src="{{ $data->foto ? asset('storage/' . $data->foto) : '#' }}"
+                                                                        alt="Preview Foto"
+                                                                        style="max-width:200px; border:1px solid #ddd; padding:5px; {{ $data->foto ? '' : 'display:none;' }}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Batal</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary">Update</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <script>
-                                        // Preview foto update
-                                        document.getElementById('fotoInput{{ $data->id }}').addEventListener('change', function(e) {
-                                            const file = e.target.files[0];
-                                            if (!file) return;
+                                        <script>
+                                            // Preview foto update
+                                            document.getElementById('fotoInput{{ $data->id }}').addEventListener('change', function(e) {
+                                                const file = e.target.files[0];
+                                                if (!file) return;
 
-                                            const maxSize = 2 * 1024 * 1024; // 2MB
-                                            if (file.size > maxSize) {
-                                                alert('Ukuran file terlalu besar! Maksimal 2MB.');
-                                                e.target.value = '';
-                                                document.getElementById('previewFoto{{ $data->id }}').style.display = 'none';
-                                                return;
-                                            }
+                                                const maxSize = 2 * 1024 * 1024; // 2MB
+                                                if (file.size > maxSize) {
+                                                    alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                                                    e.target.value = '';
+                                                    document.getElementById('previewFoto{{ $data->id }}').style.display = 'none';
+                                                    return;
+                                                }
 
-                                            const reader = new FileReader();
-                                            reader.onload = function(event) {
-                                                const img = document.getElementById('previewFoto{{ $data->id }}');
-                                                img.src = event.target.result;
-                                                img.style.display = 'block';
-                                            }
-                                            reader.readAsDataURL(file);
-                                        });
-                                    </script>
-                                @endforeach
+                                                const reader = new FileReader();
+                                                reader.onload = function(event) {
+                                                    const img = document.getElementById('previewFoto{{ $data->id }}');
+                                                    img.src = event.target.result;
+                                                    img.style.display = 'block';
+                                                }
+                                                reader.readAsDataURL(file);
+                                            });
+                                        </script>
+                                    @endforeach
 
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
             </section>
         </main>
     @endsection
+    @push('scripts')
+        <script>
+            // Preview foto create
+            document.getElementById('fotoInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                if (file.size > maxSize) {
+                    alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                    e.target.value = '';
+                    document.getElementById('previewFoto').style.display = 'none';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.getElementById('previewFoto');
+                    img.src = event.target.result;
+                    img.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            });
+        </script>
+    @endpush

@@ -99,112 +99,117 @@
                                 @endpush
 
                             </div>
-
-                            <div class="table-responsive">
-                                <table class="detail-table" id="TableRencanaAksi" style="min-width: 2500px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 50px;">No</th>
-                                            <th style="width: 200px;">Sub Program</th>
-                                            <th style="width: 300px;">Rencana Aksi / Aktivitas</th>
-                                            <th style="width: 350px;">Sub Kegiatan</th>
-                                            <th style="width: 250px;">Kegiatan</th>
-                                            <th style="width: 300px;">Nama Program</th>
-                                            <th style="width: 150px;">Lokasi</th>
-                                            <th style="width: 100px;">Volume</th>
-                                            <th style="width: 100px;">Satuan</th>
-                                            <th style="width: 100px;">Tahun</th>
-                                            <th style="width: 300px;">Perangkat Daerah</th>
-                                            <th style="width: 150px;">Anggaran</th>
-                                            <th style="width: 150px;">Sumber Dana</th>
-                                            <th style="width: 300px;">Keterangan</th>
-                                            @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
-                                                <th style="width: 120px;">Aksi</th>
-                                            @endif
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($rencanaAksi as $data)
+                            <div class="table-container">
+                                <div class="top-scrollbar-container">
+                                    <div class="top-scrollbar-content"></div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="detail-table" id="TableRencanaAksi" style="min-width: 2500px;">
+                                        <thead>
                                             <tr>
-                                                <td class="text-center">{{ $rencanaAksi->firstItem() + $loop->index }}</td>
-                                                <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
-                                                <td>{{ $data->rencana_aksi }}</td>
-                                                <td>{{ $data->sub_kegiatan }}</td>
-                                                <td>{{ $data->kegiatan }}</td>
-                                                <td>{{ $data->nama_program }}</td>
-                                                <td>{{ $data->lokasi }}</td>
-                                                <td>{{ $data->volume }}</td>
-                                                <td>{{ $data->satuan }}</td>
-                                                <td>{{ $data->tahun }}</td>
-                                                <td>{{ $data->opd->nama ?? '-' }}</td>
-
-                                                {{-- ================================================================ --}}
-                                                {{-- AWAL LOGIKA BARU UNTUK TAMPILAN SEMPURNA --}}
-                                                {{-- ================================================================ --}}
-                                                @php
-                                                    $anggarans = explode('; ', $data->anggaran);
-                                                    $sumberdanas = explode('; ', $data->sumberdana);
-                                                @endphp
-
-                                                {{-- Cek untuk Kolom Anggaran --}}
-                                                @if (count($anggarans) > 1)
-                                                    {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
-                                                    <td class="multi-item align-middle">
-                                                        @foreach ($anggarans as $anggaran)
-                                                            <div>{{ $anggaran ?: '-' }}</div>
-                                                        @endforeach
-                                                    </td>
-                                                @else
-                                                    {{-- Jika data hanya satu, tampilkan seperti biasa --}}
-                                                    <td class="align-middle">{{ $data->anggaran ?: '-' }}</td>
+                                                <th style="width: 50px;">No</th>
+                                                <th style="width: 200px;">Sub Program</th>
+                                                <th style="width: 300px;">Rencana Aksi / Aktivitas</th>
+                                                <th style="width: 350px;">Sub Kegiatan</th>
+                                                <th style="width: 250px;">Kegiatan</th>
+                                                <th style="width: 300px;">Nama Program</th>
+                                                <th style="width: 150px;">Lokasi</th>
+                                                <th style="width: 100px;">Volume</th>
+                                                <th style="width: 100px;">Satuan</th>
+                                                <th style="width: 100px;">Tahun</th>
+                                                <th style="width: 300px;">Perangkat Daerah</th>
+                                                <th style="width: 150px;">Anggaran</th>
+                                                <th style="width: 150px;">Sumber Dana</th>
+                                                <th style="width: 300px;">Keterangan</th>
+                                                @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                                    <th style="width: 120px;">Aksi</th>
                                                 @endif
-
-                                                {{-- Cek untuk Kolom Sumber Dana --}}
-                                                @if (count($sumberdanas) > 1)
-                                                    {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
-                                                    <td class="multi-item align-middle">
-                                                        @foreach ($sumberdanas as $sumber)
-                                                            <div>{{ $sumber ?: '-' }}</div>
-                                                        @endforeach
-                                                    </td>
-                                                @else
-                                                    {{-- Jika data hanya satu, tampilkan seperti biasa --}}
-                                                    <td class="align-middle">{{ $data->sumberdana ?: '-' }}</td>
-                                                @endif
-                                                {{-- ================================================================ --}}
-                                                {{-- AKHIR LOGIKA BARU --}}
-                                                {{-- ================================================================ --}}
-
-
-                                                <td>{{ $data->keterangan ?? '-' }}</td>
-                                                <td>
-                                                    @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
-                                                        <div class="d-flex justify-content-center gap-1">
-                                                            <a href="{{ route('rencanaAksi.edit', $data->id) }}"
-                                                                class="btn btn-primary btn-sm" title="Edit">
-                                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                            </a>
-                                                            <form id="formDelete-{{ $data->id }}"
-                                                                action="{{ route('rencanaAksi.destroy', $data->id) }}"
-                                                                method="POST" style="display:inline;">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="button" class="btn btn-danger btn-sm"
-                                                                    onclick="confirmDelete('{{ $data->id }}')">
-                                                                    <i class="fa-solid fa-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    @endif
-                                                </td>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($rencanaAksi as $data)
+                                                <tr>
+                                                    <td class="text-center">{{ $rencanaAksi->firstItem() + $loop->index }}
+                                                    </td>
+                                                    <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
+                                                    <td>{{ $data->rencana_aksi }}</td>
+                                                    <td>{{ $data->sub_kegiatan }}</td>
+                                                    <td>{{ $data->kegiatan }}</td>
+                                                    <td>{{ $data->nama_program }}</td>
+                                                    <td>{{ $data->lokasi }}</td>
+                                                    <td>{{ $data->volume }}</td>
+                                                    <td>{{ $data->satuan }}</td>
+                                                    <td>{{ $data->tahun }}</td>
+                                                    <td>{{ $data->opd->nama ?? '-' }}</td>
 
-                            <div class="mt-3">
-                                {{ $rencanaAksi->links('vendor.pagination.bootstrap-5') }}
+                                                    {{-- ================================================================ --}}
+                                                    {{-- AWAL LOGIKA BARU UNTUK TAMPILAN SEMPURNA --}}
+                                                    {{-- ================================================================ --}}
+                                                    @php
+                                                        $anggarans = explode('; ', $data->anggaran);
+                                                        $sumberdanas = explode('; ', $data->sumberdana);
+                                                    @endphp
+
+                                                    {{-- Cek untuk Kolom Anggaran --}}
+                                                    @if (count($anggarans) > 1)
+                                                        {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
+                                                        <td class="multi-item align-middle">
+                                                            @foreach ($anggarans as $anggaran)
+                                                                <div>{{ $anggaran ?: '-' }}</div>
+                                                            @endforeach
+                                                        </td>
+                                                    @else
+                                                        {{-- Jika data hanya satu, tampilkan seperti biasa --}}
+                                                        <td class="align-middle">{{ $data->anggaran ?: '-' }}</td>
+                                                    @endif
+
+                                                    {{-- Cek untuk Kolom Sumber Dana --}}
+                                                    @if (count($sumberdanas) > 1)
+                                                        {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
+                                                        <td class="multi-item align-middle">
+                                                            @foreach ($sumberdanas as $sumber)
+                                                                <div>{{ $sumber ?: '-' }}</div>
+                                                            @endforeach
+                                                        </td>
+                                                    @else
+                                                        {{-- Jika data hanya satu, tampilkan seperti biasa --}}
+                                                        <td class="align-middle">{{ $data->sumberdana ?: '-' }}</td>
+                                                    @endif
+                                                    {{-- ================================================================ --}}
+                                                    {{-- AKHIR LOGIKA BARU --}}
+                                                    {{-- ================================================================ --}}
+
+
+                                                    <td>{{ $data->keterangan ?? '-' }}</td>
+                                                    <td>
+                                                        @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                                            <div class="d-flex justify-content-center gap-1">
+                                                                <a href="{{ route('rencanaAksi.edit', $data->id) }}"
+                                                                    class="btn btn-primary btn-sm" title="Edit">
+                                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                                </a>
+                                                                <form id="formDelete-{{ $data->id }}"
+                                                                    action="{{ route('rencanaAksi.destroy', $data->id) }}"
+                                                                    method="POST" style="display:inline;">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                                        onclick="confirmDelete('{{ $data->id }}')">
+                                                                        <i class="fa-solid fa-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="mt-3">
+                                    {{ $rencanaAksi->links('vendor.pagination.bootstrap-5') }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -213,3 +218,59 @@
         </section>
     </main>
 @endsection
+@push('scripts')
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+            // Cari semua kontainer tabel di halaman
+            const allTableContainers = document.querySelectorAll('.table-container');
+
+            allTableContainers.forEach(container => {
+                const topScrollbar = container.querySelector('.top-scrollbar-container');
+                const topScrollbarContent = container.querySelector('.top-scrollbar-content');
+                const tableWrapper = container.querySelector('.table-responsive');
+                const table = container.querySelector('.detail-table');
+
+                // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
+                if (!topScrollbar || !tableWrapper || !table) {
+                    return;
+                }
+
+                let isSyncing = false;
+
+                // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
+                //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
+                function updateTopScrollbarWidth() {
+                    if (table.scrollWidth > tableWrapper.clientWidth) {
+                        topScrollbarContent.style.width = table.scrollWidth + 'px';
+                        topScrollbar.style.display = 'block'; // Tampilkan jika perlu
+                    } else {
+                        topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
+                    }
+                }
+
+                // 2. Sinkronkan scroll dari atas ke bawah
+                topScrollbar.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    tableWrapper.scrollLeft = topScrollbar.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // 3. Sinkronkan scroll dari bawah ke atas
+                tableWrapper.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    topScrollbar.scrollLeft = tableWrapper.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // Panggil pertama kali saat halaman dimuat
+                updateTopScrollbarWidth();
+
+                // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
+                window.addEventListener('resize', updateTopScrollbarWidth);
+            });
+        });
+</script>  
+@endpush
+

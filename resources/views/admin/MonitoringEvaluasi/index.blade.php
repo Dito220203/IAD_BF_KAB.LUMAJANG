@@ -612,9 +612,9 @@
 
     @push('scripts')
         {{-- Library JQuery (jika belum ada di layout utama) & Peta --}}
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-        <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script>
+        {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+        {{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> --}}
+        {{-- <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script> --}}
 
         {{-- Script untuk auto-submit filter tahun --}}
         <script>
@@ -785,6 +785,61 @@
                 L.marker([lat, lng]).addTo(detailMap);
 
                 setTimeout(() => detailMap.invalidateSize(), 200);
+            });
+        </script>
+        
+        {{-- Script scroll atas --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Cari semua kontainer tabel di halaman
+                const allTableContainers = document.querySelectorAll('.table-container');
+
+                allTableContainers.forEach(container => {
+                    const topScrollbar = container.querySelector('.top-scrollbar-container');
+                    const topScrollbarContent = container.querySelector('.top-scrollbar-content');
+                    const tableWrapper = container.querySelector('.table-responsive');
+                    const table = container.querySelector('.detail-table');
+
+                    // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
+                    if (!topScrollbar || !tableWrapper || !table) {
+                        return;
+                    }
+
+                    let isSyncing = false;
+
+                    // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
+                    //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
+                    function updateTopScrollbarWidth() {
+                        if (table.scrollWidth > tableWrapper.clientWidth) {
+                            topScrollbarContent.style.width = table.scrollWidth + 'px';
+                            topScrollbar.style.display = 'block'; // Tampilkan jika perlu
+                        } else {
+                            topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
+                        }
+                    }
+
+                    // 2. Sinkronkan scroll dari atas ke bawah
+                    topScrollbar.addEventListener('scroll', function() {
+                        if (isSyncing) return;
+                        isSyncing = true;
+                        tableWrapper.scrollLeft = topScrollbar.scrollLeft;
+                        isSyncing = false;
+                    });
+
+                    // 3. Sinkronkan scroll dari bawah ke atas
+                    tableWrapper.addEventListener('scroll', function() {
+                        if (isSyncing) return;
+                        isSyncing = true;
+                        topScrollbar.scrollLeft = tableWrapper.scrollLeft;
+                        isSyncing = false;
+                    });
+
+                    // Panggil pertama kali saat halaman dimuat
+                    updateTopScrollbarWidth();
+
+                    // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
+                    window.addEventListener('resize', updateTopScrollbarWidth);
+                });
             });
         </script>
     @endpush

@@ -1,4 +1,4 @@
- @extends('components.layout')
+@extends('components.layout')
  @section('content')
      <main id="main" class="main">
          <div class="pagetitle">
@@ -200,8 +200,8 @@
  @endsection
  @push('scripts')
     {{-- Pastikan library Leaflet sudah dimuat di layout utama atau di sini --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> --}}
 
     <script>
         // Event listener ini akan berjalan untuk SEMUA modal di halaman
