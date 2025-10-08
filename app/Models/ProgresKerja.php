@@ -14,7 +14,7 @@ class ProgresKerja extends Model
 
     public function maps()
     {
-        return $this->hasMany(Map::class, 'id_progres', 'id');
+        return $this->hasMany(Map::class, 'id_monev', 'id');
     }
 
     public function subprogram()
