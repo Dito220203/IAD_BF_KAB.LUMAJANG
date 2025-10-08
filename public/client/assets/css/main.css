@@ -2930,7 +2930,7 @@ section,
   color: #6c757d;
 }
 
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 #  detail-table Section
 --------------------------------------------------------------*/
 .detail-form-section {
@@ -2959,33 +2959,54 @@ section,
 }
 
 .table-wrapper {
-  border-radius: 12px;
-  padding: 15px;
-  overflow-x: auto; /* ini yang bikin bisa scroll di mobile */
-  -webkit-overflow-scrolling: touch;
+    /* Jadikan ini sebagai PEMBUNGKUS UTAMA */
+    max-height: 85vh;
+    overflow: auto; /* Ini sudah cukup untuk scroll vertikal & horizontal */
+    
+    /* Pindahkan semua style dari .card-table-container dan .detail-table ke sini */
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+    /* --- Pengaturan Scrollbar --- */
+    scrollbar-width: thin;
+    scrollbar-color: #196b4a #f1f1f1;
 }
 
 .detail-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 15px;
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 15px;
+
+    /* HAPUS SEMUA STYLE PEMBUNGKUS DARI SINI */
+    /* Hapus margin, border-radius, box-shadow, dan overflow */
+    margin: 0;
 }
 
 .detail-table thead {
   background: #2c7a7b;
   color: #fff;
 }
+.detail-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
 
-.detail-table th,
+/* .detail-table th,
 .detail-table td {
   padding: 12px 15px;
   text-align: center;
   border-bottom: 1px solid #e5e7eb;
+} */
+ /* DENGAN kode ini */
+.detail-table th,
+.detail-table td {
+    padding: 16px; /* Padding dibuat lebih besar agar lega */
+    text-align: left; /* Default rata kiri untuk semua teks */
+    border: none; /* 1. Hapus semua border yang ada */
+    border-bottom: 1px solid #e5e7eb; /* 2. Sisakan border bawah saja */
+    vertical-align: middle; /* Pastikan teks di tengah secara vertikal */
 }
 
 .detail-table th {
@@ -3002,9 +3023,9 @@ section,
   background: #e6fffa;
   transition: 0.3s;
 }
-.detail-table .kolom-keterangan {
+.detail-table .kolom-lebar {
     width: 50%; /* Coba atur 30% dari total lebar tabel */
-    min-width: 800px; /* Atur lebar minimal agar tidak terlalu kecil */
+    min-width: 500px; /* Atur lebar minimal agar tidak terlalu kecil */
 }
 
 
@@ -3042,10 +3063,14 @@ section,
 
 .card-table-container {
   border-radius: 12px;
+  /* box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08); */
+  background-color: #ffffff; 
+} 
+.card-table-container1 {
+  border-radius: 10px;
   box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
-    overflow: hidden;
-}
+  background-color: #c93939; 
+} 
 
 /* --- Standar untuk Browser Firefox --- */
 

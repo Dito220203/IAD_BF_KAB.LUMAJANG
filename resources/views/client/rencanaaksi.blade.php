@@ -7,6 +7,7 @@
 
         <section class="detail-form-section">
             <div class="container">
+                <div class="card-table-container1">
                 <div class="card-table-container">
                     <div class="table-header">
                         <form action="{{ route('client.rencanaaksi', ['id' => $subprogram->id]) }}" method="GET"
@@ -52,11 +53,11 @@
                                         <td>{{ ($rencanaAksi->currentPage() - 1) * $rencanaAksi->perPage() + $loop->iteration }}
                                         </td>
                                         <td>{{ $rk->subprogram->subprogram ?? '-' }}</td>
-                                     <td style="text-align: left;">{{ $rk->rencana_aksi }}</td>
-<td style="text-align: left;">{{ $rk->sub_kegiatan }}</td>
-<td style="text-align: left;">{{ $rk->kegiatan }}</td>
-<td style="text-align: left;">{{ $rk->nama_program }}</td>
-<td style="text-align: left;">{{ $rk->lokasi }}</td>
+                                        <td style="text-align: left;">{{ $rk->rencana_aksi }}</td>
+                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->sub_kegiatan }}</td>
+                                        <td style="text-align: left;">{{ $rk->kegiatan }}</td>
+                                        <td style="text-align: left;">{{ $rk->nama_program }}</td>
+                                        <td style="text-align: left;">{{ $rk->lokasi }}</td>
 
                                         <td>{{ $rk->volume }}</td>
                                         <td>{{ $rk->satuan }}</td>
@@ -88,6 +89,7 @@
                             {{ $rencanaAksi->appends(['tahun' => $selectedYear])->onEachSide(1)->links('vendor.pagination.buttons-only') }}
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </section>

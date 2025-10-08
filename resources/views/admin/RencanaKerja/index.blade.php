@@ -26,42 +26,46 @@
                                         <i class="fa-solid fa-file-excel"></i> Export Excel
                                     </a>
                                 </div>
-                               {{-- resources/views/admin/RencanaKerja/index.blade.php --}}
+                                {{-- resources/views/admin/RencanaKerja/index.blade.php --}}
 
-{{-- ... kode lainnya ... --}}
+                                {{-- ... kode lainnya ... --}}
 
-{{-- UBAH FORM MENJADI SEPERTI INI --}}
-<form method="GET" class="d-flex flex-column flex-md-row gap-2">
-    {{-- TAMBAHKAN DROPDOWN FILTER TAHUN DI SINI --}}
-    <div class="input-group w-auto">
-        <select name="tahun" class="form-select" onchange="this.form.submit()">
-            <option value="">Semua Tahun</option>
-            @foreach ($daftarTahun as $thn)
-                <option value="{{ $thn }}" {{ $tahun == $thn ? 'selected' : '' }}>
-                    {{ $thn }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+                                {{-- UBAH FORM MENJADI SEPERTI INI --}}
+                                <form method="GET" class="d-flex flex-column flex-md-row gap-2">
+                                    {{-- TAMBAHKAN DROPDOWN FILTER TAHUN DI SINI --}}
+                                    <div class="input-group w-auto">
+                                        <select name="tahun" class="form-select" onchange="this.form.submit()">
+                                            <option value="">Semua Tahun</option>
+                                            @foreach ($daftarTahun as $thn)
+                                                <option value="{{ $thn }}" {{ $tahun == $thn ? 'selected' : '' }}>
+                                                    {{ $thn }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-    {{-- Form pencarian yang sudah ada --}}
-    <div class="input-group w-auto">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data..." value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-    </div>
+                                    {{-- Form pencarian yang sudah ada --}}
+                                    <div class="input-group w-auto">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data..."
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                    </div>
 
-    {{-- Tombol Reset untuk membersihkan semua filter --}}
-    @if (request('search') || request('tahun'))
-        <a href="{{ route('rencanakerja') }}" class="btn btn-secondary">Reset</a>
-    @endif
-</form>
+                                    {{-- Tombol Reset untuk membersihkan semua filter --}}
+                                    @if (request('search') || request('tahun'))
+                                        <a href="{{ route('rencanakerja') }}" class="btn btn-secondary">Reset</a>
+                                    @endif
+                                </form>
 
-{{-- ... sisa kode Anda ... --}}
+                                {{-- ... sisa kode Anda ... --}}
                             </div>
 
 
                             <!-- Table -->
+                            <div class="table-container">
+                                <div class="top-scrollbar-container">
+                                    <div class="top-scrollbar-content"></div>
+                                </div>
                             <div class="table-responsive">
                                 <table class="detail-table" id="TableRencanaAksi" style="min-width: 1800px;">
                                     <thead>
@@ -155,6 +159,7 @@
                             <div class="mt-3">
                                 {{ $rencana->links('vendor.pagination.bootstrap-5') }}
                             </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -162,3 +167,58 @@
         </section>
     </main>
 @endsection
+@push('scripts')
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+            // Cari semua kontainer tabel di halaman
+            const allTableContainers = document.querySelectorAll('.table-container');
+
+            allTableContainers.forEach(container => {
+                const topScrollbar = container.querySelector('.top-scrollbar-container');
+                const topScrollbarContent = container.querySelector('.top-scrollbar-content');
+                const tableWrapper = container.querySelector('.table-responsive');
+                const table = container.querySelector('.detail-table');
+
+                // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
+                if (!topScrollbar || !tableWrapper || !table) {
+                    return;
+                }
+
+                let isSyncing = false;
+
+                // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
+                //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
+                function updateTopScrollbarWidth() {
+                    if (table.scrollWidth > tableWrapper.clientWidth) {
+                        topScrollbarContent.style.width = table.scrollWidth + 'px';
+                        topScrollbar.style.display = 'block'; // Tampilkan jika perlu
+                    } else {
+                        topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
+                    }
+                }
+
+                // 2. Sinkronkan scroll dari atas ke bawah
+                topScrollbar.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    tableWrapper.scrollLeft = topScrollbar.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // 3. Sinkronkan scroll dari bawah ke atas
+                tableWrapper.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    topScrollbar.scrollLeft = tableWrapper.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // Panggil pertama kali saat halaman dimuat
+                updateTopScrollbarWidth();
+
+                // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
+                window.addEventListener('resize', updateTopScrollbarWidth);
+            });
+        });
+</script>  
+@endpush

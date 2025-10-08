@@ -300,6 +300,9 @@
                 </div>
         </section>
     </main>
+    
+@endsection
+@push('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var modalPesan = document.getElementById('modalPesan');
@@ -309,9 +312,6 @@
                 modalPesan.querySelector('#idMonev').value = idMonev;
             });
         });
-    </script>
-
-    <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.btn-lanjut').forEach(function(button) {
                 button.addEventListener('click', function() {
@@ -335,7 +335,7 @@
                 });
             });
         });
-
+// scroll atas
         document.addEventListener('DOMContentLoaded', function() {
             // Cari semua kontainer tabel di halaman
             const allTableContainers = document.querySelectorAll('.table-container');
@@ -388,4 +388,4 @@
             });
         });
     </script>
-@endsection
+@endpush

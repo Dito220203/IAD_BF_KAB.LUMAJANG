@@ -23,17 +23,16 @@
                                     + Tambah
                                 </a>
 
-                                 <div class="col-12 col-lg-auto">
-                                                <!-- Pencarian -->
-                                                <form method="GET" class="input-group w-auto mb-1">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('potensi') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                <div class="col-12 col-lg-auto">
+                                    <!-- Pencarian -->
+                                    <form method="GET" class="input-group w-auto mb-1">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('potensi') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 

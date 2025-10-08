@@ -12,7 +12,7 @@
         </div>
 
         <section class="section">
-             <div class="row">
+            <div class="row">
                 <div class="col-lg-6">
 
                     <div class="card ">
@@ -66,18 +66,17 @@
 
                             <!-- Filter & Search -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-                                
+
                                 <div class="col-12 col-lg-auto">
-                                                <!-- Pencarian -->
-                                                <form method="GET" class="input-group w-auto mb-2">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('subprogram') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                    <!-- Pencarian -->
+                                    <form method="GET" class="input-group w-auto mb-2">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('subprogram') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 
@@ -234,29 +233,7 @@
                                                                 style="max-width: 200px; display: none; border: 1px solid #ddd; padding: 5px;">
                                                         </div>
                                                     </div>
-                                                    <script>
-                                                        // Preview foto create
-                                                        document.getElementById('fotoInput').addEventListener('change', function(e) {
-                                                            const file = e.target.files[0];
-                                                            if (!file) return;
 
-                                                            const maxSize = 2 * 1024 * 1024; // 2MB
-                                                            if (file.size > maxSize) {
-                                                                alert('Ukuran file terlalu besar! Maksimal 2MB.');
-                                                                e.target.value = '';
-                                                                document.getElementById('previewFoto').style.display = 'none';
-                                                                return;
-                                                            }
-
-                                                            const reader = new FileReader();
-                                                            reader.onload = function(event) {
-                                                                const img = document.getElementById('previewFoto');
-                                                                img.src = event.target.result;
-                                                                img.style.display = 'block';
-                                                            }
-                                                            reader.readAsDataURL(file);
-                                                        });
-                                                    </script>
 
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -271,16 +248,20 @@
 
                                 <!-- Filter & Search Produk -->
                                 <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-                                   <div class="input-group w-100">
-                                
+                                    <div class="input-group w-100">
+
                                         <input type="text" class="form-control searchInput" data-target="TableProduk"
                                             placeholder="Cari Data...">
-                                  
-                                </div>
+
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- Table Produk -->
+                            <!-- Table Produk -->
+                            <div class="table-container">
+                                <div class="top-scrollbar-container">
+                                    <div class="top-scrollbar-content"></div>
+                                </div>
                                 <div class="table-responsive">
                                     <table id="TableProduk" class="detail-table">
                                         <thead>
@@ -370,106 +351,184 @@
                                 <div class="mt-3">
                                     {{ $produk->links('vendor.pagination.bootstrap-5') }}
                                 </div>
-                                <!-- Modal Update Produk -->
-                                @foreach ($produk as $data)
-                                    <div class="modal fade" id="ModalupdateProduk{{ $data->id }}" tabindex="-1"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Update Produk Subprogram</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('update.produk', $data->id) }}" method="POST"
-                                                        enctype="multipart/form-data">
-                                                        @csrf
-                                                        @method('PUT')
+                            </div>
+                            <!-- Modal Update Produk -->
+                            @foreach ($produk as $data)
+                                <div class="modal fade" id="ModalupdateProduk{{ $data->id }}" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Update Produk Subprogram</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('update.produk', $data->id) }}" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
 
-                                                        <!-- Pilih Sub Program -->
-                                                        <div class="mb-3">
-                                                            <label>Sub Program</label>
-                                                            <select name="e_id_subprogram" class="form-select" required>
-                                                                <option value="">Pilih Sub Program</option>
-                                                                @foreach ($subprogram as $program)
-                                                                    <option value="{{ $program->id }}"
-                                                                        {{ $data->id_subprogram == $program->id ? 'selected' : '' }}>
-                                                                        {{ $program->subprogram }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+                                                    <!-- Pilih Sub Program -->
+                                                    <div class="mb-3">
+                                                        <label>Sub Program</label>
+                                                        <select name="e_id_subprogram" class="form-select" required>
+                                                            <option value="">Pilih Sub Program</option>
+                                                            @foreach ($subprogram as $program)
+                                                                <option value="{{ $program->id }}"
+                                                                    {{ $data->id_subprogram == $program->id ? 'selected' : '' }}>
+                                                                    {{ $program->subprogram }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
 
-                                                        <!-- Nama Produk -->
-                                                        <div class="mb-3">
-                                                            <label>Nama Produk</label>
-                                                            <input type="text" name="e_judul" class="form-control"
-                                                                value="{{ $data->judul }}" required>
-                                                        </div>
+                                                    <!-- Nama Produk -->
+                                                    <div class="mb-3">
+                                                        <label>Nama Produk</label>
+                                                        <input type="text" name="e_judul" class="form-control"
+                                                            value="{{ $data->judul }}" required>
+                                                    </div>
 
-                                                        <!-- Keterangan -->
-                                                        <div class="mb-3">
-                                                            <label>Keterangan</label>
-                                                            <textarea name="e_keterangan" class="form-control" rows="3">{{ $data->keterangan }}</textarea>
-                                                        </div>
+                                                    <!-- Keterangan -->
+                                                    <div class="mb-3">
+                                                        <label>Keterangan</label>
+                                                        <textarea name="e_keterangan" class="form-control" rows="3">{{ $data->keterangan }}</textarea>
+                                                    </div>
 
-                                                        <!-- Upload Foto -->
-                                                        <div class="mb-3">
-                                                            <label>Upload Foto</label>
-                                                            <input type="file" name="e_foto"
-                                                                id="fotoInput{{ $data->id }}" class="form-control"
-                                                                accept="image/*">
-                                                            <small class="text-muted">Maksimal ukuran 2MB</small>
-                                                            <div class="mt-2">
-                                                                <img id="previewFoto{{ $data->id }}"
-                                                                    src="{{ $data->foto ? asset('storage/' . $data->foto) : '#' }}"
-                                                                    alt="Preview Foto"
-                                                                    style="max-width:200px; border:1px solid #ddd; padding:5px; {{ $data->foto ? '' : 'display:none;' }}">
-                                                            </div>
+                                                    <!-- Upload Foto -->
+                                                    <div class="mb-3">
+                                                        <label>Upload Foto</label>
+                                                        <input type="file" name="e_foto"
+                                                            id="fotoInput{{ $data->id }}" class="form-control"
+                                                            accept="image/*">
+                                                        <small class="text-muted">Maksimal ukuran 2MB</small>
+                                                        <div class="mt-2">
+                                                            <img id="previewFoto{{ $data->id }}"
+                                                                src="{{ $data->foto ? asset('storage/' . $data->foto) : '#' }}"
+                                                                alt="Preview Foto"
+                                                                style="max-width:200px; border:1px solid #ddd; padding:5px; {{ $data->foto ? '' : 'display:none;' }}">
                                                         </div>
+                                                    </div>
 
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Batal</button>
-                                                            <button type="submit" class="btn btn-primary">Update</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <script>
-                                        // Preview foto update
-                                        document.getElementById('fotoInput{{ $data->id }}').addEventListener('change', function(e) {
-                                            const file = e.target.files[0];
-                                            if (!file) return;
+                                <script>
+                                    // Preview foto update
+                                    document.getElementById('fotoInput{{ $data->id }}').addEventListener('change', function(e) {
+                                        const file = e.target.files[0];
+                                        if (!file) return;
 
-                                            const maxSize = 2 * 1024 * 1024; // 2MB
-                                            if (file.size > maxSize) {
-                                                alert('Ukuran file terlalu besar! Maksimal 2MB.');
-                                                e.target.value = '';
-                                                document.getElementById('previewFoto{{ $data->id }}').style.display = 'none';
-                                                return;
-                                            }
+                                        const maxSize = 2 * 1024 * 1024; // 2MB
+                                        if (file.size > maxSize) {
+                                            alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                                            e.target.value = '';
+                                            document.getElementById('previewFoto{{ $data->id }}').style.display = 'none';
+                                            return;
+                                        }
 
-                                            const reader = new FileReader();
-                                            reader.onload = function(event) {
-                                                const img = document.getElementById('previewFoto{{ $data->id }}');
-                                                img.src = event.target.result;
-                                                img.style.display = 'block';
-                                            }
-                                            reader.readAsDataURL(file);
-                                        });
-                                    </script>
-                                @endforeach
+                                        const reader = new FileReader();
+                                        reader.onload = function(event) {
+                                            const img = document.getElementById('previewFoto{{ $data->id }}');
+                                            img.src = event.target.result;
+                                            img.style.display = 'block';
+                                        }
+                                        reader.readAsDataURL(file);
+                                    });
+                                </script>
+                            @endforeach
 
 
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </section>
     </main>
 @endsection
+@push('scripts')
+    <script>
+        // Preview foto create
+        document.getElementById('fotoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            if (file.size > maxSize) {
+                alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                e.target.value = '';
+                document.getElementById('previewFoto').style.display = 'none';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = document.getElementById('previewFoto');
+                img.src = event.target.result;
+                img.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cari semua kontainer tabel di halaman
+            const allTableContainers = document.querySelectorAll('.table-container');
+
+            allTableContainers.forEach(container => {
+                const topScrollbar = container.querySelector('.top-scrollbar-container');
+                const topScrollbarContent = container.querySelector('.top-scrollbar-content');
+                const tableWrapper = container.querySelector('.table-responsive');
+                const table = container.querySelector('.detail-table');
+
+                // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
+                if (!topScrollbar || !tableWrapper || !table) {
+                    return;
+                }
+
+                let isSyncing = false;
+
+                // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
+                //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
+                function updateTopScrollbarWidth() {
+                    if (table.scrollWidth > tableWrapper.clientWidth) {
+                        topScrollbarContent.style.width = table.scrollWidth + 'px';
+                        topScrollbar.style.display = 'block'; // Tampilkan jika perlu
+                    } else {
+                        topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
+                    }
+                }
+
+                // 2. Sinkronkan scroll dari atas ke bawah
+                topScrollbar.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    tableWrapper.scrollLeft = topScrollbar.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // 3. Sinkronkan scroll dari bawah ke atas
+                tableWrapper.addEventListener('scroll', function() {
+                    if (isSyncing) return;
+                    isSyncing = true;
+                    topScrollbar.scrollLeft = tableWrapper.scrollLeft;
+                    isSyncing = false;
+                });
+
+                // Panggil pertama kali saat halaman dimuat
+                updateTopScrollbarWidth();
+
+                // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
+                window.addEventListener('resize', updateTopScrollbarWidth);
+            });
+        });
+    </script>
+@endpush

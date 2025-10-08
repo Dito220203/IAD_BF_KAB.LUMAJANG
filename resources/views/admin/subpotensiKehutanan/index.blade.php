@@ -24,52 +24,51 @@
                                 </button>
 
                                 <div class="col-12 col-lg-auto">
-                                                <!-- Pencarian -->
-                                                <form method="GET" class="input-group w-auto mb-2">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('SubpotensiKehutanan') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                    <!-- Pencarian -->
+                                    <form method="GET" class="input-group w-auto mb-2">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('SubpotensiKehutanan') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 
-                                <!-- Modal Tambah Subpotensi -->
-                                <div class="modal fade" id="modalSubpotensi" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Tambah Subpotensi</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="{{ route('subpotensi.store') }}" method="POST">
-                                                    @csrf
-                                                    <div class="mb-3">
-                                                        <label>Nama Subpotensi</label>
-                                                        <input type="text" class="form-control" name="sub_potensi"
-                                                            required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label>Deskripsi</label>
-                                                        <textarea class="form-control" name="keterangan" rows="4" required></textarea>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-primary">Simpan</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                            <!-- Modal Tambah Subpotensi -->
+                            <div class="modal fade" id="modalSubpotensi" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Tambah Subpotensi</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('subpotensi.store') }}" method="POST">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label>Nama Subpotensi</label>
+                                                    <input type="text" class="form-control" name="sub_potensi" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label>Deskripsi</label>
+                                                    <textarea class="form-control" name="keterangan" rows="4" required></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- Tabel Subpotensi -->
+                            <!-- Tabel Subpotensi -->
+                           
                                 <div class="table-responsive">
                                     <table class="detail-table" id="TableSubPotensi">
                                         <thead>
@@ -150,15 +149,17 @@
                                 <div class="mt-3">
                                     {{ $subpotensi->links('vendor.pagination.bootstrap-5') }}
                                 </div>
-                            </div>
+                          
                         </div>
                     </div>
-
-
                 </div>
+
+
+            </div>
         </section>
     </main>
-
+@endsection
+@push('scripts')
     <script>
         function validateAndPreview(event) {
             const file = event.target.files[0];
@@ -183,4 +184,4 @@
             }
         }
     </script>
-@endsection
+@endpush

@@ -37,12 +37,12 @@
                                         <input type="text" name="e_luas" class="form-control"
                                             value="{{ $kthEdit->luas }}" required>
                                     </div>
-                                     <div class="mb-3">
+                                    <div class="mb-3">
                                         <label class="form-label">Kecamatan</label>
                                         <input type="text" name="e_kecamatan" class="form-control"
                                             value="{{ $kthEdit->kecamatan }}" required>
                                     </div>
-                                     <div class="mb-3">
+                                    <div class="mb-3">
                                         <label class="form-label">Desa</label>
                                         <input type="text" name="e_desa" class="form-control"
                                             value="{{ $kthEdit->desa }}" required>
@@ -65,12 +65,12 @@
                                         <input type="text" name="luas" class="form-control" required>
                                     </div>
 
-                                      <div class="mb-3">
+                                    <div class="mb-3">
                                         <label for="kecamatan" class="form-label">Kecamatan</label>
                                         <input type="text" name="kecamatan" class="form-control" required>
                                     </div>
 
-                                      <div class="mb-3">
+                                    <div class="mb-3">
                                         <label for="desa" class="form-label">Desa</label>
                                         <input type="text" name="desa" class="form-control" required>
                                     </div>
@@ -92,66 +92,68 @@
 
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
 
-                               <div class="col-12 col-lg-auto">
-                                                <!-- Pencarian -->
-                                                <form method="GET" class="input-group w-auto mb-3">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('kth') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
-                              
-                            </div>
+                                <div class="col-12 col-lg-auto">
+                                    <!-- Pencarian -->
+                                    <form method="GET" class="input-group w-auto mb-3">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('kth') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
+
+                                </div>
                             </div>
 
-                            <div class="table-responsive">
-                                <table id="TableKTH" class="detail-table">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama KTH</th>
-                                            <th>Luas areal kelola sesuai SK (Ha)</th>
-                                            <th>Kecamatan</th>
-                                            <th>Desa</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($kth as $data)
+                           
+                                <div class="table-responsive">
+                                    <table id="TableKTH" class="detail-table">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $kth->firstItem() + $loop->index }}</td>
-                                                <td>{{ $data->kth }}</td>
-                                                <td>{{ $data->luas }}</td>
-                                                <td>{{ $data->kecamatan }}</td>
-                                                <td>{{ $data->desa }}</td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center gap-1">
-                                                        <a href="{{ route('kth.edit', $data->id) }}"
-                                                            class="btn btn-primary btn-sm">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                        </a>
-                                                        <form id="formDelete-{{ $data->id }}"
-                                                            action="{{ route('kth.delete', $data->id) }}" method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="confirmDelete('{{ $data->id }}')">
-                                                                <i class="fa-solid fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
+                                                <th>No</th>
+                                                <th>Nama KTH</th>
+                                                <th>Luas areal kelola sesuai SK (Ha)</th>
+                                                <th>Kecamatan</th>
+                                                <th>Desa</th>
+                                                <th>Aksi</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="mt-3">
-                                {{ $kth->links('vendor.pagination.bootstrap-5') }}
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($kth as $data)
+                                                <tr>
+                                                    <td>{{ $kth->firstItem() + $loop->index }}</td>
+                                                    <td>{{ $data->kth }}</td>
+                                                    <td>{{ $data->luas }}</td>
+                                                    <td>{{ $data->kecamatan }}</td>
+                                                    <td>{{ $data->desa }}</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-1">
+                                                            <a href="{{ route('kth.edit', $data->id) }}"
+                                                                class="btn btn-primary btn-sm">
+                                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                            </a>
+                                                            <form id="formDelete-{{ $data->id }}"
+                                                                action="{{ route('kth.delete', $data->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="button" class="btn btn-danger btn-sm"
+                                                                    onclick="confirmDelete('{{ $data->id }}')">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mt-3">
+                                    {{ $kth->links('vendor.pagination.bootstrap-5') }}
+                                </div>
+                            
                         </div>
                     </div>
                 </div>

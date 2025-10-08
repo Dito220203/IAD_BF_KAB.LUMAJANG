@@ -32,93 +32,95 @@
                              </div>
 
                              <!-- Table -->
-                             <div class="table-responsive">
-                                 <table class="detail-table" id="TableProgres">
-                                     <thead>
-                                         <tr>
-                                             <th>
-                                                 No
-                                             </th>
-                                             <th>Sub Program</th>
-                                             <th>Judul</th>
-                                             <th data-type="date">Tahun</th>
-                                             <th>Status</th>
-                                             <th>Aksi</th>
-                                         </tr>
-                                     </thead>
-                                     <tbody>
-                                         @foreach ($progres as $data)
-                                             <tr id="row-{{ $data->id }}">
-                                                 <td>{{ $progres->firstItem() + $loop->index }}</td>
-                                                 <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
-
-                                                 <td>{{ $data->judul }}</td>
-                                                 <td>{{ $data->tahun }}</td>
-                                                 <td>
-                                                     @if ($data->status === 'Valid')
-                                                         <span class="badge bg-success">{{ $data->status }}</span>
-                                                     @else
-                                                         <span class="badge bg-secondary">{{ $data->status }}</span>
-                                                     @endif
-                                                 </td>
-                                                 <td class="text-center align-middle">
-                                                     <div class="d-flex justify-content-center gap-1">
-                                                         @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
-                                                             <button
-                                                                 class="btn btn-sm {{ $data->status == 'Valid' ? 'btn-warning' : 'btn-success' }}"
-                                                                 onclick="updateStatus('{{ $data->id }}', '{{ $data->status }}')">
-                                                                 @if ($data->status == 'Valid')
-                                                                     Batalkan Validasi
-                                                                 @else
-                                                                     Validasi
-                                                                 @endif
-                                                             </button>
-
-                                                             <form id="form-status-{{ $data->id }}"
-                                                                 action="{{ route('progres.updateStatus', $data->id) }}"
-                                                                 method="POST" style="display:none;">
-                                                                 @csrf
-                                                                 @method('PUT')
-                                                                 <input type="hidden" name="status" value="">
-                                                             </form>
-                                                         @endif
-
-
-                                                         <form action="{{ route('progres.show', $data->id) }}"
-                                                             method="GET" style="display:inline;">
-                                                             <button class="btn btn-info btn-sm" title="Lihat">
-                                                                 <i class="fa-solid fa-eye"></i>
-                                                             </button>
-                                                         </form>
-                                                         <form action="{{ route('progres.edit', $data->id) }}"
-                                                             method="GET">
-                                                             <button class="btn btn-primary btn-sm">
-                                                                 <i class="fa-solid fa-pen-to-square"></i>
-                                                             </button>
-                                                         </form>
-                                                         <form id="formDelete-{{ $data->id }}"
-                                                             action="{{ route('progres.delete', $data->id) }}"
-                                                             method="POST" style="display:inline;">
-                                                             @csrf
-                                                             @method('DELETE')
-                                                             <button type="button" class="btn btn-danger btn-sm"
-                                                                 onclick="confirmDelete('{{ $data->id }}')">
-                                                                 <i class="fa-solid fa-trash"></i>
-                                                             </button>
-                                                         </form>
-                                                     </div>
-                                                 </td>
-
+                          
+                                 <div class="table-responsive">
+                                     <table class="detail-table" id="TableProgres">
+                                         <thead>
+                                             <tr>
+                                                 <th>
+                                                     No
+                                                 </th>
+                                                 <th>Sub Program</th>
+                                                 <th>Judul</th>
+                                                 <th data-type="date">Tahun</th>
+                                                 <th>Status</th>
+                                                 <th>Aksi</th>
                                              </tr>
-                                         @endforeach
-                                     </tbody>
-                                 </table>
-                                 <!-- End Table with stripped rows -->
+                                         </thead>
+                                         <tbody>
+                                             @foreach ($progres as $data)
+                                                 <tr id="row-{{ $data->id }}">
+                                                     <td>{{ $progres->firstItem() + $loop->index }}</td>
+                                                     <td>{{ $data->subprogram->subprogram ?? '-' }}</td>
 
-                             </div>
-                             <div class="mt-3">
-                                 {{ $progres->links('vendor.pagination.bootstrap-5') }}
-                             </div>
+                                                     <td>{{ $data->judul }}</td>
+                                                     <td>{{ $data->tahun }}</td>
+                                                     <td>
+                                                         @if ($data->status === 'Valid')
+                                                             <span class="badge bg-success">{{ $data->status }}</span>
+                                                         @else
+                                                             <span class="badge bg-secondary">{{ $data->status }}</span>
+                                                         @endif
+                                                     </td>
+                                                     <td class="text-center align-middle">
+                                                         <div class="d-flex justify-content-center gap-1">
+                                                             @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
+                                                                 <button
+                                                                     class="btn btn-sm {{ $data->status == 'Valid' ? 'btn-warning' : 'btn-success' }}"
+                                                                     onclick="updateStatus('{{ $data->id }}', '{{ $data->status }}')">
+                                                                     @if ($data->status == 'Valid')
+                                                                         Batalkan Validasi
+                                                                     @else
+                                                                         Validasi
+                                                                     @endif
+                                                                 </button>
+
+                                                                 <form id="form-status-{{ $data->id }}"
+                                                                     action="{{ route('progres.updateStatus', $data->id) }}"
+                                                                     method="POST" style="display:none;">
+                                                                     @csrf
+                                                                     @method('PUT')
+                                                                     <input type="hidden" name="status" value="">
+                                                                 </form>
+                                                             @endif
+
+
+                                                             <form action="{{ route('progres.show', $data->id) }}"
+                                                                 method="GET" style="display:inline;">
+                                                                 <button class="btn btn-info btn-sm" title="Lihat">
+                                                                     <i class="fa-solid fa-eye"></i>
+                                                                 </button>
+                                                             </form>
+                                                             <form action="{{ route('progres.edit', $data->id) }}"
+                                                                 method="GET">
+                                                                 <button class="btn btn-primary btn-sm">
+                                                                     <i class="fa-solid fa-pen-to-square"></i>
+                                                                 </button>
+                                                             </form>
+                                                             <form id="formDelete-{{ $data->id }}"
+                                                                 action="{{ route('progres.delete', $data->id) }}"
+                                                                 method="POST" style="display:inline;">
+                                                                 @csrf
+                                                                 @method('DELETE')
+                                                                 <button type="button" class="btn btn-danger btn-sm"
+                                                                     onclick="confirmDelete('{{ $data->id }}')">
+                                                                     <i class="fa-solid fa-trash"></i>
+                                                                 </button>
+                                                             </form>
+                                                         </div>
+                                                     </td>
+
+                                                 </tr>
+                                             @endforeach
+                                         </tbody>
+                                     </table>
+                                     <!-- End Table with stripped rows -->
+
+                                 </div>
+                                 <div class="mt-3">
+                                     {{ $progres->links('vendor.pagination.bootstrap-5') }}
+                                 </div>
+                             
                          </div>
 
                      </div>
@@ -127,3 +129,4 @@
          </section>
      </main>
  @endsection
+

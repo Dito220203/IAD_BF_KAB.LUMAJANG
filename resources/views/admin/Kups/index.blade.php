@@ -75,38 +75,6 @@
                                             value="{{ old('e_pendapatan', $kupsEdit->pendapatan) }}" required>
                                     </div>
 
-                                    <script>
-                                        const pendapatanUpdateInput = document.getElementById('e_pendapatan');
-                                        const form = document.querySelector('form');
-
-                                        // Format value awal saat halaman dibuka
-                                        if (pendapatanUpdateInput.value) {
-                                            let numeric = pendapatanUpdateInput.value.replace(/\D/g, '');
-                                            if (numeric) {
-                                                numeric = parseInt(numeric).toLocaleString('id-ID');
-                                                pendapatanUpdateInput.value = 'Rp. ' + numeric;
-                                            }
-                                        }
-
-                        
-                                      // Format saat user mengetik
-pendapatanUpdateInput.addEventListener('input', function() {
-    let raw = this.value;
-
-    // Kalau hanya angka → diformat
-    if (/^\d+$/.test(raw.replace(/\./g, ''))) {
-        let value = raw.replace(/\D/g, ''); // ambil angka
-        if (value) {
-            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
-            this.value = 'Rp. ' + value;
-        }
-    } 
-    // Kalau teks → biarkan apa adanya
-});
-
-
-                               
-                                    </script>
 
                                     <button type="submit" class="btn btn-primary w-100">Update</button>
                                     <a href="{{ route('kups') }}" class="btn btn-secondary w-100 mt-2">Batal</a>
@@ -150,27 +118,6 @@ pendapatanUpdateInput.addEventListener('input', function() {
                                             required>
                                     </div>
 
-                                    <script>
-                                        const pendapatanCreateInput = document.getElementById('pendapatan');
-                                        const form = document.querySelector('form');
-
-                                        // Format saat user mengetik
-                                      pendapatanCreateInput.addEventListener('input', function() {
-    let raw = this.value;
-
-    // Kalau isinya angka → diformat Rp
-    if (/^\d+$/.test(raw.replace(/\./g, ''))) {
-        let value = raw.replace(/\D/g, ''); // ambil angka saja
-        if (value) {
-            value = parseInt(value).toLocaleString('id-ID'); // format ribuan
-            this.value = 'Rp. ' + value;
-        }
-    } 
-    // Kalau teks → biarkan apa adanya (tidak diformat)
-});
-
-                                       
-                                    </script>
 
                                     <button type="submit" class="btn btn-success w-100">Simpan</button>
                                 </form>
@@ -188,20 +135,23 @@ pendapatanUpdateInput.addEventListener('input', function() {
 
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
                                 <!-- Search -->
-                               <div class="col-12 col-lg-auto">
-                                                <!-- Pencarian -->
-                                                <form method="GET" class="input-group w-auto mb-3">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('kups') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                <div class="col-12 col-lg-auto">
+                                    <!-- Pencarian -->
+                                    <form method="GET" class="input-group w-auto mb-3">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('kups') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 
+                            <div class="table-container">
+                                <div class="top-scrollbar-container">
+                                    <div class="top-scrollbar-content"></div>
+                                </div>
                             <div class="table-responsive">
                                 <table id="TableKUPS" class="detail-table">
                                     <thead>
@@ -250,6 +200,7 @@ pendapatanUpdateInput.addEventListener('input', function() {
                             <div class="mt-3">
                                 {{ $kups->links('vendor.pagination.bootstrap-5') }}
                             </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -258,3 +209,51 @@ pendapatanUpdateInput.addEventListener('input', function() {
         </section>
     </main>
 @endsection
+@push('scripts')
+    <script>
+        const pendapatanUpdateInput = document.getElementById('e_pendapatan');
+        const form = document.querySelector('form');
+
+        // Format value awal saat halaman dibuka
+        if (pendapatanUpdateInput.value) {
+            let numeric = pendapatanUpdateInput.value.replace(/\D/g, '');
+            if (numeric) {
+                numeric = parseInt(numeric).toLocaleString('id-ID');
+                pendapatanUpdateInput.value = 'Rp. ' + numeric;
+            }
+        }
+
+
+        // Format saat user mengetik
+        pendapatanUpdateInput.addEventListener('input', function() {
+            let raw = this.value;
+
+            // Kalau hanya angka → diformat
+            if (/^\d+$/.test(raw.replace(/\./g, ''))) {
+                let value = raw.replace(/\D/g, ''); // ambil angka
+                if (value) {
+                    value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                    this.value = 'Rp. ' + value;
+                }
+            }
+        });
+
+        const pendapatanCreateInput = document.getElementById('pendapatan');
+        const form = document.querySelector('form');
+
+        // Format saat user mengetik
+        pendapatanCreateInput.addEventListener('input', function() {
+            let raw = this.value;
+
+            // Kalau isinya angka → diformat Rp
+            if (/^\d+$/.test(raw.replace(/\./g, ''))) {
+                let value = raw.replace(/\D/g, ''); // ambil angka saja
+                if (value) {
+                    value = parseInt(value).toLocaleString('id-ID'); // format ribuan
+                    this.value = 'Rp. ' + value;
+                }
+            }
+        });
+
+    </script>
+@endpush

@@ -1067,36 +1067,30 @@ h6 {
     scrollbar-color: #0084ff #f1f1f1;
 }
 
-/* 2. LOGIKA STICKY HEADER */
-.detail-table > thead th {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: #0084ff;
+
+/* Gabungkan selector ini */
+.table-responsive::-webkit-scrollbar,
+.top-scrollbar-container::-webkit-scrollbar {
+    width: 8px;  /* Anda bisa set ke 8px agar konsisten jika ada scroll vertikal */
+    height: 8px;
 }
 
-/* 3. STYLING SCROLLBAR KUSTOM (UNTUK CHROME, EDGE) */
-
-/* Atur lebar (vertikal) dan tinggi (horizontal) */
-.table-responsive::-webkit-scrollbar {
-    width: 0;      /* Sembunyikan scrollbar vertikal */
-    height: 8px;   /* Tampilkan scrollbar horizontal dengan tinggi 8px */
-}
-
-/* Latar belakang rel scrollbar */
-.table-responsive::-webkit-scrollbar-track {
+/* Gabungkan selector ini */
+.table-responsive::-webkit-scrollbar-track,
+.top-scrollbar-container::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
 
-/* Handle scrollbar yang digeser */
-.table-responsive::-webkit-scrollbar-thumb {
+/* Gabungkan selector ini */
+.table-responsive::-webkit-scrollbar-thumb,
+.top-scrollbar-container::-webkit-scrollbar-thumb {
     background: #0084ff;
     border-radius: 5px;
 }
 
-/* Efek saat handle disorot mouse */
-.table-responsive::-webkit-scrollbar-thumb:hover {
+/* Gabungkan selector ini */
+.table-responsive::-webkit-scrollbar-thumb:hover,
+.top-scrollbar-container::-webkit-scrollbar-thumb:hover {
     background: #0084ff78;
 }
 
@@ -1158,12 +1152,14 @@ h6 {
     overflow-x: auto;
     overflow-y: hidden; /* Sembunyikan scrollbar vertikal yang mungkin muncul */
     height: 12px; /* Sesuaikan dengan tinggi scrollbar bawah Anda */
-    margin-bottom: 10px; /* Beri sedikit jarak ke tabel */
-}
+    margin-bottom: 8px; /* Beri sedikit jarak ke tabel */
+  scrollbar-width: thin;
+    scrollbar-color: #0084ff #f1f1f1;
+  }
 
 /* KONTEN PALSU DI DALAM SCROLLBAR ATAS */
 .top-scrollbar-content {
-    height: 3px; /* Cukup 1px karena hanya butuh lebarnya */
+    height: 1px; /* Cukup 1px karena hanya butuh lebarnya */
 }
 
 /* PENYESUAIAN KECIL PADA CSS LAMA ANDA */
@@ -1172,6 +1168,10 @@ h6 {
     width: 8px;   /* Atur juga scrollbar vertikal jika perlu */
     height: 8px;  /* SAMAKAN TINGGINYA dengan .top-scrollbar-container */
 }
+
+
+
+
 
 /*--------------------------------------------------------------
 # F.A.Q Page
