@@ -7,7 +7,7 @@
 
         <section class="detail-form-section">
             <div class="container">
-                <div class="card-table-container1">
+
                 <div class="card-table-container">
                     <div class="table-header">
                         <form action="{{ route('client.rencanaaksi', ['id' => $subprogram->id]) }}" method="GET"
@@ -53,23 +53,23 @@
                                         <td>{{ ($rencanaAksi->currentPage() - 1) * $rencanaAksi->perPage() + $loop->iteration }}
                                         </td>
                                         <td>{{ $rk->subprogram->subprogram ?? '-' }}</td>
-                                        <td style="text-align: left;">{{ $rk->rencana_aksi }}</td>
+                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->rencana_aksi }}</td>
                                         <td style="text-align: left;" class="kolom-lebar">{{ $rk->sub_kegiatan }}</td>
-                                        <td style="text-align: left;">{{ $rk->kegiatan }}</td>
-                                        <td style="text-align: left;">{{ $rk->nama_program }}</td>
-                                        <td style="text-align: left;">{{ $rk->lokasi }}</td>
+                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->kegiatan }}</td>
+                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->nama_program }}</td>
+                                        <td>{{ $rk->lokasi }}</td>
 
                                         <td>{{ $rk->volume }}</td>
                                         <td>{{ $rk->satuan }}</td>
                                         <td>{{ $rk->sumberdana }}</td>
                                         <td>{{ $rk->tahun }}</td>
                                         <td>{{ $rk->opd->nama ?? '-' }}</td>
-                                        <td style="text-align: left;">{{ $rk->keterangan }}</td>
+                                        <td>{{ $rk->keterangan }}</td>
 
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="14" class="text-center">
+                                        <td colspan="20">
                                             Belum ada data rencana kegiatan untuk subprogram ini.
                                         </td>
                                     </tr>
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                </div>
+
             </div>
         </section>
 

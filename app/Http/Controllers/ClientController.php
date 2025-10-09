@@ -250,10 +250,10 @@ class ClientController extends Controller
     }
 
 
-    public function progreskegiatandetail($id)
+    public function progreskegiatandetail($id, $detail_id)
     {
         $progres = ProgresKerja::with(['fotoProgres', 'maps', 'monev.subprogram'])
-            ->findOrFail($id);
+            ->findOrFail($detail_id);
 
         $contact = Kontak::all();
         $subprograms = Subprogram::where('delete_at', '0')->get();

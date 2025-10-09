@@ -24,9 +24,9 @@
                                 @foreach ($Kups as $data)
                                     <tr>
                                         <td>{{ ($Kups->currentPage() - 1) * $Kups->perPage() + $loop->iteration }}</td>
-                                        <td class="text-center">{{ $data->kth->kth ?? '-' }}</td>
-                                        <td class="text-center">{{ $data->kups }}</td>
-                                        <td class="text-center">{{ $data->kategori }}</td>
+                                        <td>{{ $data->kth->kth ?? '-' }}</td>
+                                        <td>{{ $data->kups }}</td>
+                                        <td>{{ $data->kategori }}</td>
 
                                     </tr>
                                 @endforeach

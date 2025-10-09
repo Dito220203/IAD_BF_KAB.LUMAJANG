@@ -51,11 +51,11 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $rk->subprogram->subprogram ?? '-' }}</td>
-                                        <td style="text-align: left;">{{ $rk->rencana_aksi }}</td>
-                                        <td style="text-align: left;">{{ $rk->sub_kegiatan }}</td>
-                                        <td style="text-align: left;">{{ $rk->kegiatan }}</td>
-                                        <td style="text-align: left;">{{ $rk->nama_program }}</td>
-                                        <td style="text-align: left;">{{ $rk->lokasi }}</td>
+                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->rencana_aksi }}</td>
+                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->sub_kegiatan }}</td>
+                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->kegiatan }}</td>
+                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->nama_program }}</td>
+                                        <td>{{ $rk->lokasi }}</td>
                                         <td>{{ $rk->volume }}</td>
                                         <td>{{ $rk->satuan }}</td>
                                         <td>{{ $rk->sumberdana }}</td>
@@ -65,7 +65,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">Belum ada data rencana kegiatan untuk
+                                        <td colspan="20">Belum ada data rencana kegiatan untuk
                                             subprogram
                                             ini.</td>
                                     </tr>

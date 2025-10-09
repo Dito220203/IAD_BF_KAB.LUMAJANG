@@ -2977,6 +2977,7 @@ section,
     border-collapse: collapse;
     background: #fff;
     font-size: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
     /* HAPUS SEMUA STYLE PEMBUNGKUS DARI SINI */
     /* Hapus margin, border-radius, box-shadow, dan overflow */
@@ -3003,7 +3004,7 @@ section,
 .detail-table th,
 .detail-table td {
     padding: 16px; /* Padding dibuat lebih besar agar lega */
-    text-align: left; /* Default rata kiri untuk semua teks */
+    text-align: center; /* Default rata kiri untuk semua teks */
     border: none; /* 1. Hapus semua border yang ada */
     border-bottom: 1px solid #e5e7eb; /* 2. Sisakan border bawah saja */
     vertical-align: middle; /* Pastikan teks di tengah secara vertikal */
@@ -3024,8 +3025,8 @@ section,
   transition: 0.3s;
 }
 .detail-table .kolom-lebar {
-    width: 50%; /* Coba atur 30% dari total lebar tabel */
-    min-width: 500px; /* Atur lebar minimal agar tidak terlalu kecil */
+    width: 30%; /* Coba atur 30% dari total lebar tabel */
+    min-width: 350px; /* Atur lebar minimal agar tidak terlalu kecil */
 }
 
 
@@ -3063,14 +3064,11 @@ section,
 
 .card-table-container {
   border-radius: 12px;
-  /* box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08); */
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08);
+  padding: 20px;
   background-color: #ffffff; 
 } 
-.card-table-container1 {
-  border-radius: 10px;
-  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08);
-  background-color: #c93939; 
-} 
+
 
 /* --- Standar untuk Browser Firefox --- */
 

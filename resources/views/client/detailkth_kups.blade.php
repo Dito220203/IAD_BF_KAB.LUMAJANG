@@ -23,7 +23,7 @@
                                     <tr>
                                         <td>{{ ($kthKups->currentPage() - 1) * $kthKups->perPage() + $loop->iteration }}
                                         </td>
-                                        <td class="text-center">{{ $data->kth }}</td>
+                                        <td>{{ $data->kth }}</td>
                                         <td>{{ $data->kecamatan }}</td>
                                         <td>{{ $data->desa }}</td>
                                     </tr>

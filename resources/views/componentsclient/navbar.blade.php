@@ -21,7 +21,7 @@
 
                         @foreach ($subprograms as $subprogram)
                             <li class="dropdown">
-                                <a href="#">
+                                <a href="#" class="{{ request()->is('subprogram/' . $subprogram->id . '*') ? 'active' : '' }}">
                                     <span>{{ $subprogram->subprogram }}</span>
                                     <i class="bi bi-chevron-down toggle-dropdown"></i>
                                 </a>
@@ -47,7 +47,7 @@
                                     </li>
                                     <li>
                                         <a href="{{ route('client.progreskegiatan', ['id' => $subprogram->id]) }}"
-                                            class="{{ request()->is('subprogram/' . $subprogram->id . '/progres') ? 'active' : '' }}">
+                                            class="{{ request()->is('subprogram/' . $subprogram->id . '/progres*') ? 'active' : '' }}">
                                             PROGRES KEGIATAN
                                         </a>
                                     </li>
@@ -67,7 +67,7 @@
                 </li>
 
                 <li class="dropdown">
-                    <a href="#" class="{{ request()->routeIs('profilkawasan.search') ? 'active' : '' }}">
+                    <a href="#" class="{{ request()->is('profil-kawasan*') ? 'active' : '' }}">
                         <span>PROFIL KAWASAN IAD</span>
                         <i class="bi bi-chevron-down toggle-dropdown"></i>
                     </a>
@@ -104,9 +104,9 @@
 
                 <li>
                     <a href="{{ route('client.regulasi') }}"
-                        class="{{ request()->routeIs('client.regulasi') ? 'active' : '' }}">
-                        REGULASI IAD
-                    </a>
+       class="{{ request()->routeIs('client.regulasi', 'client.detailregulasi') ? 'active' : '' }}">
+        REGULASI IAD
+    </a>
                 </li>
 
                 <li><a href="{{ route('client') }}#video">VIDEO</a></li>

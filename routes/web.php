@@ -49,11 +49,14 @@ Route::prefix('subprogram/{id}')->group(function () {
     Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
     Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])
         ->name('client.petasebarankegiatan');
+         Route::get('/progreskegiatan/detail/{detail_id}', [ClientController::class, 'progreskegiatandetail'])
+        ->name('client.progreskegiatandetail');
 });
-Route::get('/progres-kegiatandetail/{id}', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
+
+// Route::get('/progres-kegiatandetail/{id}', [ClientController::class, 'progreskegiatandetail'])->name('client.progreskegiatandetail');
 
 Route::get('/regulasi-client', [ClientController::class, 'regulasi'])->name('client.regulasi');
-Route::get('/detail-regulasi/{id}', [ClientController::class, 'detailregulasi'])->name('client.detailregulasi');
+Route::get('/regulasi-client/detail-regulasi/{id}', [ClientController::class, 'detailregulasi'])->name('client.detailregulasi');
 
 //detail card
 Route::get('/detailluasperhutanan', [ClientController::class, 'detailluasperhutanan'])->name('client.detailluasperhutanan');
