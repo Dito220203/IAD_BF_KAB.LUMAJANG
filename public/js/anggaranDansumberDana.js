@@ -1,7 +1,7 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // --- Elemen-elemen yang dibutuhkan ---
     const modalElement = document.getElementById('anggaranModal');
-    if (!modalElement) return; // Keluar jika modal tidak ada di halaman ini
+    if (!modalElement) return;
 
     const modal = new bootstrap.Modal(modalElement);
     const modalForm = document.getElementById('modal-anggaran-form');
@@ -21,7 +21,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // --- Event Listener untuk Modal ---
     anggaranInput.addEventListener('input', () => {
-        anggaranInput.value = formatRupiah({ value: anggaranInput.value });
+        anggaranInput.value = formatRupiah({
+            value: anggaranInput.value
+        });
     });
 
     sumberDanaSelect.addEventListener('change', () => {
@@ -41,7 +43,11 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        const anggaranValue = anggaranInput.value.replace(/\D/g, '');
+        // --- Blok Kode yang Diubah ---
+        const anggaranFormatted = anggaranInput.value; // <-- PERUBAHAN: Ambil nilai asli yang sudah diformat
+        const anggaranValueOnly = anggaranInput.value.replace(/\D/g, ''); // <-- PERUBAHAN: Buat versi angka murni hanya untuk validasi
+        // --- Akhir Blok Kode yang Diubah ---
+
         let sumberDanaValue = sumberDanaSelect.value;
         const sumberDanaText = sumberDanaValue === 'Lainnya' ? lainnyaInput.value : sumberDanaSelect.options[sumberDanaSelect.selectedIndex].text;
 
@@ -49,7 +55,8 @@ document.addEventListener("DOMContentLoaded", function() {
             sumberDanaValue = lainnyaInput.value;
         }
 
-        if (!anggaranValue || !sumberDanaValue) {
+        // Validasi menggunakan versi angka murni
+        if (!anggaranValueOnly || !sumberDanaValue) { // <-- PERUBAHAN: Menggunakan anggaranValueOnly
             alert('Anggaran dan Sumber Dana harus diisi.');
             return;
         }
@@ -58,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const newRow = `
             <tr id="${uniqueId}">
-                <td class="text-center">${formatRupiah({value: anggaranValue})}</td>
+                <td class="text-center">${anggaranFormatted}</td>
                 <td class="text-center">${sumberDanaText}</td>
                 <td class="text-center">
                     <button type="button" class="btn btn-danger btn-sm hapus-anggaran-row" data-target="${uniqueId}">
@@ -71,10 +78,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const newHiddenInputs = `
             <div id="hidden-${uniqueId}">
-                <input type="hidden" name="anggaran[]" value="${anggaranValue}">
+                <input type="hidden" name="anggaran[]" value="${anggaranFormatted}">
                 <input type="hidden" name="sumberdana[]" value="${sumberDanaValue}">
             </div>
-        `;
+        `; // <-- PERUBAHAN: 'value' dari input anggaran menggunakan anggaranFormatted
         hiddenContainer.insertAdjacentHTML('beforeend', newHiddenInputs);
 
         modalForm.reset();

@@ -140,11 +140,11 @@
                     <div class="card ">
                         <div class="card-body">
                             <div class="row g-3 align-items-center mb-3 mt-3">
-                                <div class="col-12 col-md-auto">
+                                {{-- <div class="col-12 col-md-auto">
                                     <a href="{{ route('monev.create') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-plus me-2"></i>Tambah Data
                                     </a>
-                                </div>
+                                </div> --}}
                                 @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
                                     <div class="col-12 col-md-auto">
                                         <a href="{{ route('monev.export.excel', request()->query()) }}"
@@ -495,6 +495,7 @@
                         </div>
                     </div>
                 </div>
+                {{-- modal aplud --}}
                 <div class="modal fade" id="uploadFotoModal" tabindex="-1" aria-labelledby="uploadFotoModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -549,9 +550,9 @@
                 @foreach ($monev as $data)
                     <div class="modal fade" id="ModalDetailProduk{{ $data->id }}" tabindex="-1"
                         aria-labelledby="DetailLabel{{ $data->id }}" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-dialog modal-xl modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header bg-info text-white">
+                                <div class="modal-header">
                                     <h5 class="modal-title" id="DetailLabel{{ $data->id }}">Dokumentasi Foto & Peta
                                         Lokasi
                                     </h5>
@@ -559,44 +560,54 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    @if ($data->fotoProgres->isNotEmpty())
-                                        <div class="mb-3">
-                                            <strong>Keterangan:</strong>
-                                            <p class="mt-1" style="font-size: 1.1em;">
-                                                {{ $data->fotoProgres->first()->deskripsi ?: 'Tidak ada keterangan.' }}</p>
-                                        </div>
-                                        <strong>Galeri Foto:</strong>
-                                        <div class="row mt-2">
-                                            @foreach ($data->fotoProgres as $foto)
-                                                <div class="col-lg-4 col-md-6 mb-4">
-                                                    <a href="{{ asset('storage/' . $foto->foto) }}" target="_blank"
-                                                        title="Lihat ukuran penuh">
-                                                        <img src="{{ asset('storage/' . $foto->foto) }}"
-                                                            class="card-img-top" alt="Foto"
-                                                            style="height: 200px; object-fit: cover;">
-                                                    </a>
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+                                            @if ($data->fotoProgres->isNotEmpty())
+                                                <div class="mb-3">
+                                                    <strong>Keterangan:</strong>
+                                                    <p class="mt-1" style="font-size: 1.1em;">
+                                                        {{ $data->fotoProgres->first()->deskripsi ?: 'Tidak ada keterangan.' }}
+                                                    </p>
                                                 </div>
-                                            @endforeach
+
+                                                <strong>Galeri Foto:</strong>
+                                                <div class="row mt-2">
+                                                    @foreach ($data->fotoProgres as $foto)
+                                                        <div class="col-lg-6 col-md-12 mb-3">
+                                                            <a href="{{ asset('storage/' . $foto->foto) }}"
+                                                                target="_blank" title="Lihat ukuran penuh">
+                                                                <img src="{{ asset('storage/' . $foto->foto) }}"
+                                                                    class="img-fluid" alt="Foto"
+                                                                    style="height: 150px; width: 100%; object-fit: cover; border-radius: 8px;">
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <div class="alert alert-warning text-center">
+                                                    <i class="bi bi-exclamation-triangle-fill"></i> Belum ada dokumentasi.
+                                                </div>
+                                            @endif
                                         </div>
-                                    @else
-                                        <div class="alert alert-warning text-center"><i
-                                                class="bi bi-exclamation-triangle-fill"></i> Belum ada dokumentasi.</div>
-                                    @endif
-                                    <hr>
-                                    <div class="mb-4">
-                                        <strong>Lokasi di Peta:</strong>
-                                        @if ($data->map && $data->map->latitude && $data->map->longitude)
-                                            <div id="detailMap{{ $data->id }}" class="mt-2 detail-map-container"
-                                                style="height: 300px; width: 100%; border-radius: 8px; z-index: 0;"
-                                                data-latitude="{{ $data->map->latitude }}"
-                                                data-longitude="{{ $data->map->longitude }}">
-                                            </div>
-                                        @else
-                                            <div class="alert alert-light text-center mt-2">Lokasi belum ditandai.</div>
-                                        @endif
+
+                                        <div class="col-md-6">
+                                            <strong>Lokasi di Peta:</strong>
+                                            @if ($data->map && $data->map->latitude && $data->map->longitude)
+                                                <div id="detailMap{{ $data->id }}" class="mt-2 detail-map-container"
+                                                    style="height: 400px; width: 100%; border-radius: 8px; z-index: 0;"
+                                                    data-latitude="{{ $data->map->latitude }}"
+                                                    data-longitude="{{ $data->map->longitude }}">
+                                                </div>
+                                            @else
+                                                <div class="alert alert-light text-center mt-2 d-flex align-items-center justify-content-center"
+                                                    style="height: 400px;">
+                                                    Lokasi belum ditandai.
+                                                </div>
+                                            @endif
+                                        </div>
+
                                     </div>
-
-
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
@@ -787,7 +798,7 @@
                 setTimeout(() => detailMap.invalidateSize(), 200);
             });
         </script>
-        
+
         {{-- Script scroll atas --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {

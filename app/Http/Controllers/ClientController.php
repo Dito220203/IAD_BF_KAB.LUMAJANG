@@ -230,6 +230,22 @@ class ClientController extends Controller
         return view('client.progreskegiatan', compact('contact', 'subprograms', 'subprogram', 'progres'));
     }
 
+     public function progreskegiatandetail($id, $detail_id)
+    {
+        $progres = ProgresKerja::with(['fotoProgres', 'maps', 'monev.subprogram'])
+            ->findOrFail($detail_id);
+
+        $contact = Kontak::all();
+        $subprograms = Subprogram::where('delete_at', '0')->get();
+        $photoCount = $progres->fotoProgres->count();
+
+        return view('client.progreskegiatandetail', compact(
+            'contact',
+            'subprograms',
+            'progres',
+            'photoCount'
+        ));
+    }
 
 
 
@@ -250,22 +266,6 @@ class ClientController extends Controller
     }
 
 
-    public function progreskegiatandetail($id, $detail_id)
-    {
-        $progres = ProgresKerja::with(['fotoProgres', 'maps', 'monev.subprogram'])
-            ->findOrFail($detail_id);
-
-        $contact = Kontak::all();
-        $subprograms = Subprogram::where('delete_at', '0')->get();
-        $photoCount = $progres->fotoProgres->count();
-
-        return view('client.progreskegiatandetail', compact(
-            'contact',
-            'subprograms',
-            'progres',
-            'photoCount'
-        ));
-    }
 
 
     public function profilkawasan()

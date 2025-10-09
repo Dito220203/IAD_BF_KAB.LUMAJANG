@@ -150,6 +150,7 @@
     <script src="{{ asset('js/updateStatus.js') }}"></script>
     <script src="{{ asset('js/entries.js') }}"></script>
     <script src="{{ asset('js/loadingSubmit.js') }}"></script>
+    <script src="{{ asset('js/modalApludMonevDokumentasi.js') }}"></script>
     <script src="{{ asset('assets/vendor/leaflet/geosearch.umd.js') }}"></script>
 
 

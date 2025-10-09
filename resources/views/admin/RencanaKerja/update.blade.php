@@ -101,15 +101,16 @@
                                         @if ($user && $user->level == 'Admin')
                                             <input type="hidden" name="id_opd" value="{{ $user->id_opd }}">
                                             <input type="text" class="form-control bg-light"
-                                                value="{{ $user->opd->nama ?? '-' }}" required>
+                                                value="{{ $user->opd->nama ?? '-' }}" readonly>
                                         @else
                                             <select name="id_opd" class="form-select" required>
                                                 <option value="">-- Pilih OPD --</option>
                                                 @foreach ($opd as $data)
-                                                    <option value="{{ $data->id }}"
-                                                        {{ old('id_opd') == $data->id ? 'selected' : '' }}>
-                                                        {{ $data->nama }}
-                                                    </option>
+                                                   {{-- Asumsi variabel data yang diedit adalah $rencanaKerja --}}
+<option value="{{ $data->id }}"
+    @selected(old('id_opd', $rencana->id_opd) == $data->id)>
+    {{ $data->nama }}
+</option>
                                                 @endforeach
                                             </select>
                                         @endif
@@ -184,7 +185,7 @@
                                 </fieldset>
 
                                 <div class="d-flex justify-content-end gap-2 mt-4">
-                                    <a href="{{ route('rencana6tahun') }}" class="btn btn-warning">Batal</a>
+                                    <a href="{{ route('rencanakerja') }}" class="btn btn-warning">Batal</a>
                                     <button type="submit" class="btn btn-success">Update</button>
                                 </div>
                             </form>
