@@ -124,7 +124,7 @@
                                                             $sumberDanaValue = $rencanaAksi->sumberdana[$index] ?? '';
                                                         @endphp
                                                         <tr id="{{ $uniqueId }}">
-                                                            <td class="text-center">Rp. {{ number_format($anggaranValue, 0, ',', '.') }}</td>
+                                                            <td class="text-center">{{$anggaranValue}}</td>
                                                             <td class="text-center">{{ $sumberDanaValue }}</td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-danger btn-sm hapus-anggaran-row" data-target="{{ $uniqueId }}">

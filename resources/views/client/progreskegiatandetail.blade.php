@@ -13,11 +13,11 @@
                 <p><strong>Tahun Pelaksanaan :</strong> {{ $progres->monev->tahun ?? '-' }}</p>
                 {{-- <p><strong>Nama Kegiatan:</strong> {{ $progres->jumlah_anggaran }}</p> --}}
                 <p><strong>Uraian :</strong>
-                    @forelse($progres->fotoProgres as $foto)
-                        {{ $foto->deskripsi ?? '-' }}
-                    @empty
-                        Belum ada Uraian
-                    @endforelse
+                    @if ($progres->monev && $progres->monev->fotoProgres->isNotEmpty())
+                        {{ $progres->monev->fotoProgres->first()->deskripsi ?? 'Tidak ada uraian.' }}
+                    @else
+                        <span class="text-muted">Tidak ada uraian</span>
+                    @endif
                 </p>
 
 
@@ -37,7 +37,7 @@
                             </div>
                         @empty
                             <div class="swiper-slide">
-                               <img src="{{ asset('storage/' . $foto->foto) }}">
+                                <img src="{{ asset('storage/' . $foto->foto) }}">
                             </div>
                         @endforelse
                     </div>

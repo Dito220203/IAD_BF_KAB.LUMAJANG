@@ -2962,7 +2962,7 @@ section,
     /* Jadikan ini sebagai PEMBUNGKUS UTAMA */
     max-height: 85vh;
     overflow: auto; /* Ini sudah cukup untuk scroll vertikal & horizontal */
-    
+
     /* Pindahkan semua style dari .card-table-container dan .detail-table ke sini */
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
@@ -3064,13 +3064,13 @@ section,
 .card-table-container {
   border-radius: 12px;
   /* box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08); */
-  background-color: #ffffff; 
-} 
+  background-color: #ffffff;
+}
 .card-table-container1 {
   border-radius: 10px;
   box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08);
-  background-color: #c93939; 
-} 
+  background-color: #c93939;
+}
 
 /* --- Standar untuk Browser Firefox --- */
 
