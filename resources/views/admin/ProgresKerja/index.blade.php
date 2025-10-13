@@ -97,98 +97,130 @@
                                 </table>
                                 <!-- End Table -->
 
-                                {{-- Ganti @foreach yang lama dengan ini --}}
-                                @foreach ($progres as $data)
-                                    <div class="modal fade" id="detailModal{{ $data->id }}" tabindex="-1"
-                                        aria-labelledby="detailModalLabel{{ $data->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl modal-dialog-centered"> {{-- Ubah menjadi modal-xl --}}
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="detailModalLabel{{ $data->id }}">
-                                                        Detail Progres
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    {{-- Gunakan sistem grid Bootstrap --}}
-                                                    <div class="row">
+                               {{-- Ganti @foreach yang lama dengan ini --}}
+@foreach ($progres as $data)
+    <div class="modal fade" id="detailModal{{ $data->id }}" tabindex="-1"
+        aria-labelledby="detailModalLabel{{ $data->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="detailModalLabel{{ $data->id }}">
+                        <i class="bi bi-info-circle me-2"></i>Detail Progres
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{-- Gunakan sistem grid Bootstrap --}}
+                    <div class="row">
 
-                                                        <div class="col-lg-6">
-                                                            <table class="table table-bordered">
-                                                                <tr>
-                                                                    <th style="width: 30%;">Nama Program</th>
-                                                                    <td>{{ $data->monev->nama_program ?? '-' }}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Tahun</th>
-                                                                    <td>{{ $data->monev->tahun ?? '-' }}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Status</th>
-                                                                    <td>{{ $data->status }}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Uraian</th>
-                                                                    <td>
-                                                                        @if ($data->monev && $data->monev->fotoProgres->isNotEmpty())
-                                                                            {{ $data->monev->fotoProgres->first()->deskripsi ?? 'Tidak ada uraian.' }}
-                                                                        @else
-                                                                            <span class="text-muted">Tidak ada uraian</span>
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Foto</th>
-                                                                    <td>
-                                                                        @if ($data->monev && $data->monev->fotoProgres->isNotEmpty())
-                                                                            <div class="row">
-                                                                                @foreach ($data->monev->fotoProgres as $foto)
-                                                                                    <div class="col-6 mb-2">
-                                                                                        <a href="{{ asset('storage/' . $foto->foto) }}"
-                                                                                            target="_blank">
-                                                                                            <img src="{{ asset('storage/' . $foto->foto) }}"
-                                                                                                alt="Foto Progres"
-                                                                                                class="img-fluid rounded">
-                                                                                        </a>
-                                                                                    </div>
-                                                                                @endforeach
-                                                                            </div>
-                                                                        @else
-                                                                            <span class="text-muted">Belum ada foto</span>
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </div>
+                        <div class="col-lg-8">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <th style="width: 35%;" class="bg-light">
+                                                <i class="bi bi-clipboard-check text-primary me-2"></i>Rencana Aksi / Aktivitas
+                                            </th>
+                                            <td class="fw-medium">{{ $data->monev?->rencanakerja?->rencana_aksi ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">
+                                                <i class="bi bi-calendar text-primary me-2"></i>Tahun
+                                            </th>
+                                            <td>{{ $data->monev->tahun ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">
+                                                <i class="bi bi-flag text-primary me-2"></i>Status
+                                            </th>
+                                            <td>
+                                                <span class="badge bg-success">{{ $data->status }}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">
+                                                <i class="bi bi-card-text text-primary me-2"></i>Uraian
+                                            </th>
+                                            <td>
+                                                @if ($data->monev && $data->monev->fotoProgres->isNotEmpty())
+                                                    {{ $data->monev->fotoProgres->first()->deskripsi ?? 'Tidak ada uraian.' }}
+                                                @else
+                                                    <span class="text-muted fst-italic">Tidak ada uraian</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    </table>
 
-                                                        <div class="col-lg-6">
-                                                            <h6 class="mb-2">Lokasi Peta</h6>
-                                                            @if ($data->monev && $data->monev->map)
-                                                                <div id="detailMapProgres{{ $data->id }}"
-                                                                    class="detail-map-container"
-                                                                    style="height: 100%; min-height: 400px; width: 100%; border-radius: 8px; z-index: 0;"
-                                                                    data-latitude="{{ $data->monev->map->latitude }}"
-                                                                    data-longitude="{{ $data->monev->map->longitude }}">
-                                                                </div>
-                                                            @else
-                                                                <div
-                                                                    class="alert alert-light text-center p-2 h-100 d-flex align-items-center justify-content-center">
-                                                                    Lokasi belum ditandai.
-                                                                </div>
-                                                            @endif
-                                                        </div>
+                                    <div class="mt-4">
+                                        <h6 class="mb-3">
+                                            <i class="bi bi-images text-primary me-2"></i>Dokumentasi Foto
+                                        </h6>
+                                        @if ($data->monev && $data->monev->fotoProgres->isNotEmpty())
+                                            <div class="row g-3">
+                                                @foreach ($data->monev->fotoProgres as $foto)
+                                                    <div class="col-md-6">
+                                                        <a href="{{ asset('storage/' . $foto->foto) }}"
+                                                            target="_blank" class="d-block">
+                                                            <img src="{{ asset('storage/' . $foto->foto) }}"
+                                                                alt="Foto Progres"
+                                                                class="img-fluid rounded shadow-sm hover-zoom"
+                                                                style="width: 100%; height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+                                                        </a>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Tutup</button>
-                                                </div>
+                                                @endforeach
                                             </div>
-                                        </div>
+                                        @else
+                                            <div class="alert alert-light text-center">
+                                                <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                                <p class="mb-0 mt-2 text-muted">Belum ada foto</p>
+                                            </div>
+                                        @endif
                                     </div>
-                                @endforeach
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="col-lg-4">
+                            <div class="card border-0 shadow-sm h-800">
+                                <div class="card-body">
+                                    <h6 class="mb-3">
+                                        <i class="bi bi-geo-alt-fill text-danger me-2"></i>Lokasi Peta
+                                    </h6>
+                                    @if ($data->monev && $data->monev->map)
+                                        <div id="detailMapProgres{{ $data->id }}"
+                                            class="detail-map-container rounded shadow-sm"
+                                            style="height: 350px; width: 100%; border: 2px solid #e9ecef; z-index: 0;"
+                                            data-latitude="{{ $data->monev->map->latitude }}"
+                                            data-longitude="{{ $data->monev->map->longitude }}">
+                                        </div>
+                                    @else
+                                        <div class="alert alert-light text-center d-flex flex-column align-items-center justify-content-center"
+                                            style="height: 350px;">
+                                            <i class="bi bi-map text-muted" style="font-size: 3rem;"></i>
+                                            <p class="mb-0 mt-3 text-muted">Lokasi belum ditandai</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-2"></i>Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+
+<style>
+    .hover-zoom:hover {
+        transform: scale(1.05);
+    }
+</style>
                                 <!-- End Table with stripped rows -->
 
                             </div>

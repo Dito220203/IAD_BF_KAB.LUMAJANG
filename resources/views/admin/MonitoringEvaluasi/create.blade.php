@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Nama Program</label>
+                                        <label class="form-label">Program</label>
                                         <input type="text" id="nama_program" name="nama_program" class="form-control bg-light" value="{{ old('nama_program') }}" readonly>
                                     </div>
                                     <div class="col-md-6">
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Volume</label>
+                                        <label class="form-label">Volume Target</label>
                                         <input type="text" name="volume" value="{{ old('volume') }}" class="form-control " required>
                                     </div>
                                     <div class="col-md-6">
@@ -178,7 +178,7 @@
 
                                         {{-- Kolom Volume Target --}}
                                         <div class="col-md-4" id="volume-target-container">
-                                            <label class="form-label">Volume Target</label>
+                                            <label class="form-label">Volume Realisasi</label>
                                             @for ($i = 1; $i <= 4; $i++)
                                                 <div id="volume-target-tw{{ $i }}-block" class="mt-2" style="{{ $i > 1 ? 'display: none;' : '' }}">
                                                     <input type="text" name="volumeTarget[{{ $i }}]" placeholder="Volume Target TW {{ $twRomans[$i-1] }}" class="form-control p-2">

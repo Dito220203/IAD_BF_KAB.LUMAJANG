@@ -49,7 +49,7 @@ Route::prefix('subprogram/{id}')->group(function () {
     Route::get('/progreskegiatan', [ClientController::class, 'progreskegiatan'])->name('client.progreskegiatan');
     Route::get('/petasebarankegiatan', [ClientController::class, 'petasebarankegiatan'])
         ->name('client.petasebarankegiatan');
-         Route::get('/progreskegiatan/detail/{detail_id}', [ClientController::class, 'progreskegiatandetail'])
+    Route::get('/progreskegiatan/detail/{detail_id}', [ClientController::class, 'progreskegiatandetail'])
         ->name('client.progreskegiatandetail');
 });
 
@@ -170,6 +170,8 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::get('/rencana-edit/{id}', [RencanakerjaController::class, 'edit'])->name('rencana.edit');
     Route::put('/rencana-update/{id}', [RencanakerjaController::class, 'update'])->name('rencana.update');
     Route::delete('/rencana-delete/{id}', [RencanakerjaController::class, 'destroy'])->name('rencana.delete');
+    Route::put('/renja/bulk-toggle-lock', [RencanakerjaController::class, 'bulkToggleLock'])->name('renja.bulk-lock');
+
 
     Route::get('/progres', [ProgreskerjaController::class, 'index'])->name('progres');
     Route::get('/progres-create', [ProgreskerjaController::class, 'create'])->name('progrescreate');
@@ -194,6 +196,8 @@ Route::middleware(['authadmin', 'noCache'])->group(function () {
     Route::get('/monev-edit/{id}', [MonevController::class, 'edit'])->name('monev.edit');
     Route::put('/monev-update/{id}', [MonevController::class, 'update'])->name('monev.update');
     Route::delete('/monev-delete/{id}', [MonevController::class, 'destroy'])->name('monev.delete');
+    Route::put('/monev/bulk-toggle-lock', [MonevController::class, 'bulkToggleLock'])->name('monev.bulk-lock');
+
 
     // Route::get('/potensi', [PotensiController::class, 'index'])->name('potensi');
     Route::get('/potensi', [PotensiController::class, 'index'])->name('potensi');

@@ -189,6 +189,49 @@
                                     </form>
                                 </div>
                             </div>
+                            {{-- --- aksi buka kunci --- --}}
+                            @if (Auth::guard('pengguna')->user()->level === 'Super Admin' && isset($allOpds) && $allOpds->isNotEmpty())
+                                <div class="card-body border-top pt-3">
+                                    <h5 class="card-title" style="padding: 0 !important; margin-bottom: 5px;">Aksi Kunci
+                                        Data per OPD</h5>
+                                    <form action="{{ route('monev.bulk-lock') }}" method="POST" id="bulk-lock-form">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="row g-2 align-items-end">
+                                            {{-- Dropdown Pilih OPD --}}
+                                            <div class="col-md-5">
+                                                <label for="opd_id_filter" class="form-label">Perangkat Daerah</label>
+                                                <select name="opd_id" id="opd_id_filter" class="form-select form-select-sm"
+                                                    required>
+                                                    <option value="" selected disabled>-- Pilih Perangkat Daerah --
+                                                    </option>
+                                                    @foreach ($allOpds as $opd)
+                                                        <option value="{{ $opd->id }}">{{ $opd->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            {{-- Dropdown Pilih Aksi --}}
+                                            <div class="col-md-4">
+                                                <label for="action_filter" class="form-label">Aksi</label>
+                                                <select name="action" id="action_filter" class="form-select form-select-sm"
+                                                    required>
+                                                    <option value="" selected disabled>-- Pilih Aksi --</option>
+                                                    <option value="lock">Kunci Semua Data</option>
+                                                    <option value="unlock">Buka Semua Kunci</option>
+                                                </select>
+                                            </div>
+
+                                            {{-- Tombol Terapkan --}}
+                                            <div class="col-md-3">
+                                                <button type="submit" class="btn btn-danger btn-sm w-100">
+                                                    <i class="fas fa-play me-1"></i> Terapkan Aksi
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endif
                             <div class="table-container">
                                 <div class="top-scrollbar-container">
                                     <div class="top-scrollbar-content"></div>
@@ -208,9 +251,9 @@
                                                 <th class="text-center" style="width: 300px;">Rencana Aksi / Aktivitas</th>
                                                 <th class="text-center" style="width: 200px;">Sub Kegiatan</th>
                                                 <th class="text-center" style="width: 200px;">Kegiatan</th>
-                                                <th class="text-center" style="width: 200px;">Nama Program</th>
+                                                <th class="text-center" style="width: 200px;">Program</th>
                                                 <th class="text-center">Lokasi</th>
-                                                <th class="text-center">Volume</th>
+                                                <th class="text-center">Volume Target</th>
                                                 <th class="text-center">Satuan</th>
                                                 <th class="text-center">Tahun</th>
                                                 <th class="text-center">Perangkat Daerah</th>
@@ -218,8 +261,9 @@
                                                 <th class="text-center" style="width: 200px;">Sumber Dana</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-center">Dokumen Anggaran</th>
-                                                <th class="text-center">Realisasi</th>
-                                                <th class="text-center">Volume Target</th>
+                                                <th class="text-center">Realisasi Anggaran</th>
+                                                <th class="text-center">Volume Realisasi</th>
+                                                <th class="text-center">Satuan Volume</th>
                                                 <th class="text-center">Keterangan</th>
                                                 @if ($adaPesan)
                                                     <th class="text-center">Catatan</th>
@@ -232,7 +276,8 @@
                                             @foreach ($monev as $data)
                                                 <tr id="row-{{ $data->id }}">
                                                     <td class="text-center">{{ $monev->firstItem() + $loop->index }}</td>
-                                                    <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
+                                                    <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}
+                                                    </td>
                                                     <td>{{ $data->rencanakerja->rencana_aksi ?? '-' }}</td>
                                                     <td>{{ $data->sub_kegiatan }}</td>
                                                     <td>{{ $data->kegiatan }}</td>
@@ -276,7 +321,7 @@
                                                     @endif
 
 
-
+                                                    {{-- kolom status --}}
                                                     <td class="text-center">
                                                         @if ($data->status === 'Valid')
                                                             <span class="badge bg-success">{{ $data->status }}</span>
@@ -329,7 +374,7 @@
                                                         @endif
                                                     </td>
 
-                                                    {{-- Kolom Volume Target (Diperbaiki dengan Flexbox) --}}
+                                                    {{-- Kolom Volume realisasi (Diperbaiki dengan Flexbox) --}}
                                                     <td>
                                                         @if (is_array($data->volumeTarget))
                                                             @foreach ($data->volumeTarget as $triwulan => $nilai)
@@ -349,7 +394,44 @@
                                                         @endif
                                                     </td>
 
-                                                    <td>{{ $data->uraian }}</td>
+                                                    {{-- Kolom Satuan Realisasi (Diperbaiki dengan Flexbox) --}}
+                                                    <td>
+                                                        @if (is_array($data->satuan_realisasi))
+                                                            @foreach ($data->satuan_realisasi as $triwulan => $nilai)
+                                                                @if ($nilai)
+                                                                    <div style="display: flex; align-items: baseline;">
+                                                                        <span style="width: 55px; display: inline-block;">
+                                                                            TW {{ $romanMap[$triwulan] ?? $triwulan }}
+                                                                        </span>
+                                                                        <span>:</span>
+                                                                        <strong
+                                                                            style="margin-left: 5px;">{{ $nilai }}</strong>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            {{ $data->satuan_realisasi }}
+                                                        @endif
+                                                    </td>
+                                                    {{-- kolom uraian --}}
+                                                    <td>
+                                                        @if (is_array($data->uraian))
+                                                            @foreach ($data->uraian as $triwulan => $nilai)
+                                                                @if ($nilai)
+                                                                    <div style="display: flex; align-items: baseline;">
+                                                                        <span style="width: 55px; display: inline-block;">
+                                                                            TW {{ $romanMap[$triwulan] ?? $triwulan }}
+                                                                        </span>
+                                                                        <span>:</span>
+                                                                        <strong
+                                                                            style="margin-left: 5px;">{{ $nilai }}</strong>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            {{ $data->uraian }}
+                                                        @endif
+                                                    </td>
                                                     @if ($adaPesan)
                                                         <td>{{ $data->pesan }}</td>
                                                     @endif
@@ -375,12 +457,25 @@
                                                                 data-id="{{ $data->id }}">
                                                                 <i class="fas fa-camera"></i> Upload
                                                             </button>
-                                                            <form action="{{ route('monev.edit', $data->id) }}"
-                                                                method="GET">
-                                                                <button class="btn btn-primary btn-sm">
-                                                                    Edit/Lengkapi
+
+                                                            @if ($data->is_locked)
+                                                                {{-- Jika terkunci, tombol dinonaktifkan --}}
+                                                                <button type="button" class="btn btn-secondary btn-sm"
+                                                                    onclick="showLockedAlert()">
+                                                                    <i class="fas fa-lock"></i> Edit/Lengkapi
                                                                 </button>
-                                                            </form>
+                                                            @else
+                                                                {{-- Jika tidak terkunci, tombol berfungsi normal --}}
+                                                                <form action="{{ route('monev.edit', $data->id) }}"
+                                                                    method="GET" style="display:inline;">
+                                                                    <button class="btn btn-primary btn-sm">
+                                                                        <i class="fas fa-edit"></i> Edit/Lengkapi
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                            @push('scripts')
+                                                                <script src="{{ asset('js/kunciMonev.js') }}"></script>
+                                                            @endpush
 
                                                             @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
                                                                 <button
@@ -518,7 +613,7 @@
                                             <p class="text-muted small">Drag & drop atau klik (JPG, PNG, Maks 2MB)</p>
                                         </div>
                                         <input type="file" id="fileInput" name="foto[]" accept="image/*" multiple
-                                            style="display: none;">
+                                            style="display: none;" required>
                                     </div>
 
                                     <div id="previewContainer" class="mb-3">
@@ -526,7 +621,7 @@
                                     <div class="form-group mb-4">
                                         <label for="deskripsi_input" class="form-label">Uraian</label>
                                         <textarea name="deskripsi" id="deskripsi_input" class="form-control" placeholder="Masukkan keterangan..."
-                                            rows="3"></textarea>
+                                            rows="3" required></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Tandai Lokasi di Peta</label>
@@ -546,6 +641,7 @@
                         </div>
                     </div>
                 </div>
+
                 {{-- modal detail --}}
                 @foreach ($monev as $data)
                     <div class="modal fade" id="ModalDetailProduk{{ $data->id }}" tabindex="-1"

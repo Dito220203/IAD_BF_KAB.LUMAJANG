@@ -30,6 +30,7 @@ return new class extends Migration
             $table->longText('keterangan')->nullable();
             $table->string('input')->nullable();
             $table->enum('delete_at', ['0', '1'])->default('0')->nullable();
+            $table->boolean('is_locked')->default(false);
             $table->timestamps();
         });
     }

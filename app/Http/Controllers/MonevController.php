@@ -27,7 +27,7 @@ class MonevController extends Controller
         $query = Monev::query();
 
         // ✅ Load relasi
-        $query->with(['opd', 'subprogram', 'fotoProgres','map']);
+        $query->with(['opd', 'subprogram', 'fotoProgres', 'map']);
 
         // ✅ Ambil daftar tahun
         $tahuns = Monev::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
@@ -67,8 +67,10 @@ class MonevController extends Controller
 
         // ✅ Pagination (DIUBAH DARI latest() MENJADI oldest())
         $monev = $query->oldest()->paginate(10)->appends($request->query());
+        $opdIdsWithData = Monev::select('id_opd')->whereNotNull('id_opd')->distinct()->pluck('id_opd');
 
-        return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahuns'));
+        $allOpds = Opd::whereIn('id', $opdIdsWithData)->orderBy('nama', 'asc')->get();
+        return view('admin.MonitoringEvaluasi.index', compact('monev', 'tahuns', 'allOpds'));
     }
 
 
@@ -423,12 +425,14 @@ class MonevController extends Controller
             'sumberdana.*' => 'required|string',
             'lokasi'        => 'required|string',
             'id_opd'        => 'required|exists:opds,id',
-            'uraian'    => 'required|string',
+
 
             // Validasi untuk data triwulan sebagai array
-            'tw'            => 'nullable|array',
+            'dokumen_anggaran'  => 'nullable|array',
             'realisasi'     => 'nullable|array',
             'volumeTarget'  => 'nullable|array',
+            'satuan_realisasi'  => 'nullable|array',
+            'uraian'    => 'nullable|array',
         ]);
 
         $anggaranString = implode('; ', $validatedData['anggaran']);
@@ -437,7 +441,7 @@ class MonevController extends Controller
         // 3. Siapkan data untuk diupdate dengan memetakan nama field
         $updateData = [
             'id_subprogram'    => $validatedData['id_subprogram'],
-            'rencana_aksi'     => $validatedData['rencanaAksi'], // Peta 'rencanaAksi' ke 'rencana_aksi'
+            'rencana_aksi'     => $validatedData['rencanaAksi'],
             'sub_kegiatan'     => $validatedData['sub_kegiatan'],
             'kegiatan'         => $validatedData['kegiatan'],
             'nama_program'     => $validatedData['nama_program'],
@@ -448,12 +452,14 @@ class MonevController extends Controller
             'sumberdana'    => $sumberdanaString,
             'lokasi'           => $validatedData['lokasi'],
             'id_opd'           => $validatedData['id_opd'],
-            'uraian'       => $validatedData['uraian'],
+
 
             // Peta nama input ke nama kolom database untuk data array
-            'dokumen_anggaran' => $validatedData['tw'] ?? [],
+            'dokumen_anggaran' => $validatedData['dokumen_anggaran'] ?? [],
             'realisasi'        => $validatedData['realisasi'] ?? [],
             'volumeTarget'     => $validatedData['volumeTarget'] ?? [],
+            'satuan_realisasi'     => $validatedData['satuan_realisasi'] ?? [],
+            'uraian'       => $validatedData['uraian'] ?? [],
         ];
 
         // 4. Lakukan update pada data
@@ -464,6 +470,46 @@ class MonevController extends Controller
         return redirect()->route('monev')->with('success', 'Data Monitoring Evaluasi berhasil diperbarui.');
     }
 
+
+
+    // File: app/Http/Controllers/MonevController.php
+
+    public function bulkToggleLock(Request $request)
+    {
+        // 1. Pastikan hanya Super Admin yang bisa mengakses
+        if (auth()->guard('pengguna')->user()->level !== 'Super Admin') {
+            abort(403, 'Anda tidak memiliki akses.');
+        }
+
+        // 2. Validasi input dari form
+        $validated = $request->validate([
+            'opd_id' => 'required|exists:opds,id',
+            'action' => 'required|in:lock,unlock',
+        ], [
+            'opd_id.required' => 'Anda harus memilih Perangkat Daerah.',
+            'action.required' => 'Anda harus memilih Aksi.',
+        ]);
+
+        $opdId = $validated['opd_id'];
+        $action = $validated['action'];
+        $opd = Opd::findOrFail($opdId);
+
+        // 3. Tentukan status kunci yang baru
+        $newState = ($action === 'lock');
+
+        // 4. 👇 BAGIAN YANG DIPERBAIKI ADA DI SINI 👇
+        // Update semua data monev yang dimiliki oleh OPD tersebut
+        Monev::where('id_opd', $opdId)->update(['is_locked' => $newState]);
+
+        // 5. Siapkan pesan feedback untuk pengguna
+        $actionText = $newState ? 'dikunci' : 'dibuka';
+        $message = "Semua data untuk OPD '{$opd->nama}' berhasil {$actionText}.";
+
+        LogHelper::add(ucfirst($actionText) . " semua data Monev untuk OPD: {$opd->nama}");
+
+        // 6. Kembalikan ke halaman sebelumnya dengan pesan sukses
+        return back()->with('success', $message);
+    }
 
 
 

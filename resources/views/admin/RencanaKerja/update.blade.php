@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Nama Program</label>
+                                        <label class="form-label">Program</label>
                                         <input type="text" name="nama_program" class="form-control"
                                             value="{{ old('nama_program', $rencana->nama_program) }}" required>
                                     </div>
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Volume</label>
+                                        <label class="form-label">Volume Target</label>
                                         <input type="text" name="volume" class="form-control"
                                             value="{{ old('volume', $rencana->volume) }}" required>
                                     </div>
@@ -106,11 +106,10 @@
                                             <select name="id_opd" class="form-select" required>
                                                 <option value="">-- Pilih OPD --</option>
                                                 @foreach ($opd as $data)
-                                                   {{-- Asumsi variabel data yang diedit adalah $rencanaKerja --}}
-<option value="{{ $data->id }}"
-    @selected(old('id_opd', $rencana->id_opd) == $data->id)>
-    {{ $data->nama }}
-</option>
+                                                    {{-- Asumsi variabel data yang diedit adalah $rencanaKerja --}}
+                                                    <option value="{{ $data->id }}" @selected(old('id_opd', $rencana->id_opd) == $data->id)>
+                                                        {{ $data->nama }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         @endif

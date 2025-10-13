@@ -29,15 +29,20 @@ class Monev extends Model
         'realisasi',
         'dokumen_anggaran',
         'volumeTarget',
+        'satuan_realisasi',
         'pesan',
         'status',
-        'uraian'
+        'uraian',
+        'is_locked',
     ];
 
     protected $casts = [
         'dokumen_anggaran' => 'array',
         'realisasi'        => 'array',
         'volumeTarget'     => 'array',
+        'satuan_realisasi'     => 'array',
+        'uraian'     => 'array',
+
     ];
     protected function dokumenAnggaran(): Attribute
     {

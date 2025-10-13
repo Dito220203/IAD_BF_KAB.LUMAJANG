@@ -64,9 +64,12 @@ class RencanakerjaController extends Controller
         $rencana = $query->paginate(10);
         // Tambahkan 'tahun' agar pagination tetap mengingat filter tahun yang dipilih
         $rencana->appends($request->only('search', 'tahun'));
+        $opdIdsWithData = RencanaKerja::select('id_opd')->whereNotNull('id_opd')->distinct()->pluck('id_opd');
+
+        $allOpds = Opd::whereIn('id', $opdIdsWithData)->orderBy('nama', 'asc')->get();
 
         // KIRIM VARIABEL BARU KE VIEW
-        return view('admin.RencanaKerja.index', compact('rencana', 'search', 'daftarTahun', 'tahun'));
+        return view('admin.RencanaKerja.index', compact('rencana', 'search', 'daftarTahun', 'tahun', 'allOpds'));
     }
 
 
@@ -170,6 +173,7 @@ class RencanakerjaController extends Controller
             'tahun'         => $rencana->tahun,
             'id_opd'        => $rencana->id_opd,
             'status'        => 'Belum divalidasi',
+            'is_locked'     => true,
 
 
         ]);
@@ -301,6 +305,43 @@ class RencanakerjaController extends Controller
 
         return redirect()->route('rencanakerja')
             ->with('success', 'Rencana Kerja berhasil diperbarui!');
+    }
+
+    public function bulkToggleLock(Request $request)
+    {
+        // 1. Pastikan hanya Super Admin yang bisa mengakses
+        if (auth()->guard('pengguna')->user()->level !== 'Super Admin') {
+            abort(403, 'Anda tidak memiliki akses.');
+        }
+
+        // 2. Validasi input dari form
+        $validated = $request->validate([
+            'opd_id' => 'required|exists:opds,id',
+            'action' => 'required|in:lock,unlock',
+        ], [
+            'opd_id.required' => 'Anda harus memilih Perangkat Daerah.',
+            'action.required' => 'Anda harus memilih Aksi.',
+        ]);
+
+        $opdId = $validated['opd_id'];
+        $action = $validated['action'];
+        $opd = Opd::findOrFail($opdId);
+
+        // 3. Tentukan status kunci yang baru
+        $newState = ($action === 'lock');
+
+        // 4. 👇 BAGIAN YANG DIPERBAIKI ADA DI SINI 👇
+        // Update semua data monev yang dimiliki oleh OPD tersebut
+        RencanaKerja::where('id_opd', $opdId)->update(['is_locked' => $newState]);
+
+        // 5. Siapkan pesan feedback untuk pengguna
+        $actionText = $newState ? 'dikunci' : 'dibuka';
+        $message = "Semua data untuk OPD '{$opd->nama}' berhasil {$actionText}.";
+
+        LogHelper::add(ucfirst($actionText) . " semua data Monev untuk OPD: {$opd->nama}");
+
+        // 6. Kembalikan ke halaman sebelumnya dengan pesan sukses
+        return back()->with('success', $message);
     }
 
 

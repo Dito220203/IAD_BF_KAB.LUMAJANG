@@ -31,9 +31,11 @@ return new class extends Migration
             $table->json('dokumen_anggaran')->nullable();
             $table->json('realisasi')->nullable();
             $table->json('volumeTarget')->nullable();
+            $table->json('satuan_realisasi')->nullable();
             $table->string('pesan')->nullable();
             $table->string('status')->default('Belum divalidasi');
-            $table->longText('uraian')->nullable();
+            $table->json('uraian')->nullable();
+            $table->boolean('is_locked')->default(false);
             $table->timestamps();
         });
     }

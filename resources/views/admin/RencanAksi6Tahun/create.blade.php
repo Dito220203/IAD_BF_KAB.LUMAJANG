@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Nama Program</label>
+                                        <label class="form-label">Program</label>
                                         <input type="text" name="nama_program" class="form-control" required>
                                     </div>
                                     <div class="col-md-6">
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Volume</label>
+                                        <label class="form-label">Volume Target</label>
                                         <input type="text" name="volume" class="form-control" required>
                                     </div>
                                     <div class="col-md-6">

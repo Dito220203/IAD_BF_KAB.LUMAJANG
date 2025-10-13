@@ -28,7 +28,8 @@ class RencanaKerja extends Model
         'status',
         'keterangan',
         'input',
-        'delete_at'
+        'delete_at',
+        'is_locked',
     ];
 
     public function pengguna()

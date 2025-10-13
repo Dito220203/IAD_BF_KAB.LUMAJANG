@@ -112,9 +112,9 @@
                                                 <th style="width: 300px;">Rencana Aksi / Aktivitas</th>
                                                 <th style="width: 350px;">Sub Kegiatan</th>
                                                 <th style="width: 250px;">Kegiatan</th>
-                                                <th style="width: 300px;">Nama Program</th>
+                                                <th style="width: 300px;">Program</th>
                                                 <th style="width: 150px;">Lokasi</th>
-                                                <th style="width: 100px;">Volume</th>
+                                                <th style="width: 100px;">Volume Target</th>
                                                 <th style="width: 100px;">Satuan</th>
                                                 <th style="width: 100px;">Tahun</th>
                                                 <th style="width: 300px;">Perangkat Daerah</th>
@@ -271,6 +271,6 @@
                 window.addEventListener('resize', updateTopScrollbarWidth);
             });
         });
-</script>  
+</script>
 @endpush
 
