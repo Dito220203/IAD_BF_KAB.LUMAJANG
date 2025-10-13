@@ -33,7 +33,7 @@
         <section id="perhut" class="perhutanan">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="global-title">
-                    <h2>IAD PERHUTANAN</h2>
+                    <h2>IAD PERHUTANAN SOSIAL KABUPATEN LUMAJANG</h2>
                 </div>
                 <div class="perhut-cards" data-aos="fade-down" data-aos-delay="200" id="PerhutCards">
                     <div class="row gy-4">
@@ -267,7 +267,7 @@
                 <h2>VIDEO</h2>
             </div>
             <div class="video-wrapper">
-                <div class="video-cards" data-aos="fade-left" data-aos-delay="200" id="informasiCards">
+                <div class="video-cards" data-aos="fade-up" data-aos-delay="200" id="informasiCards">
                     @forelse ($videos as $video)
                         @php
                             preg_match(
