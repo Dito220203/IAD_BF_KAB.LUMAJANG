@@ -37,7 +37,9 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
         }
 
         if ($this->tahun) {
-            $query->where('tahun', $this->tahun);
+            $query->whereHas('rencanakerja', function ($q) {
+                $q->where('tahun', $this->tahun);
+            });
         }
 
         $monevs = $query->get();
@@ -84,15 +86,15 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
                         'No'                => $no,
                         'Sub Program'       => $item->subprogram->subprogram ?? '-',
                         'Rencana Aksi'      => $item->rencanakerja->rencana_aksi ?? '-',
-                        'Sub Kegiatan'      => $item->sub_kegiatan,
-                        'Kegiatan'          => $item->kegiatan,
-                        'Program'           => $item->nama_program,
-                        'Lokasi'            => $item->lokasi,
-                        'Vol Target'        => $item->volume,
-                        'Satuan'            => $item->satuan,
+                        'Sub Kegiatan'      => $item->rencanakerja->sub_kegiatan ?? '-',
+                        'Kegiatan'          => $item->rencanakerja->kegiatan ?? '-',
+                        'Program'           => $item->rencanakerja->nama_program ?? '-',
+                        'Lokasi'            => $item->rencanakerja->lokasi ?? '-',
+                        'Vol Target'        => $item->rencanakerja->volume ?? '-',
+                        'Satuan'            => $item->rencanakerja->satuan ?? '-',
                         'Anggaran'          => $anggarans[$i] ?? '-',
                         'Sumber Dana'       => $sumberdanas[$i] ?? '-',
-                        'Tahun'             => $item->tahun,
+                        'Tahun'             => $item->rencanakerja->tahun ?? '-',
                         'Perangkat Daerah'  => $item->opd->nama ?? '-',
                         'Dokumen Anggaran'  => $dokAnggaranStr,
                         'Realisasi Anggaran'         => $realisasiStr,

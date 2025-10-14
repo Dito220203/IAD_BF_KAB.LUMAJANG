@@ -14,20 +14,14 @@ return new class extends Migration
         Schema::create('monevs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_pengguna')->references('id')->on('penggunas')->onDelete('cascade');
+            $table->foreignId('id_renja')->references('id')->on('rencana_kerjas')->onDelete('cascade');
             $table->foreignId('id_subprogram')->references('id')->on('subprograms')->onDelete('cascade');
-            $table->foreignId('rencana_aksi')->references('id')->on('rencana_kerjas')->onDelete('cascade');
-            $table->string('sub_kegiatan');
-            $table->longText('kegiatan');
-            $table->string('nama_program');
-            $table->string('lokasi');
-            $table->string('volume');
-            $table->string('satuan');
-            $table->string('anggaran');
-            $table->string('sumberdana');
-            $table->string('tahun');
             $table->unsignedBigInteger('id_opd')->nullable();
             $table->foreign('id_opd')->references('id')->on('opds')->onDelete('set null');
 
+
+            $table->string('anggaran');
+            $table->string('sumberdana');
             $table->json('dokumen_anggaran')->nullable();
             $table->json('realisasi')->nullable();
             $table->json('volumeTarget')->nullable();

@@ -13,21 +13,15 @@ class Monev extends Model
     protected $table = 'monevs';
     protected $fillable = [
         'id_pengguna',
+        'id_renja',
         'id_subprogram',
-        'rencana_aksi',
-        'sub_kegiatan',
-        'kegiatan',
-        'nama_program',
-        'lokasi',
-        'volume',
-        'satuan',
-        'anggaran',
-        'sumberdana',
-        'tahun',
         'id_opd',
 
-        'realisasi',
+
+        'anggaran',
+        'sumberdana',
         'dokumen_anggaran',
+        'realisasi',
         'volumeTarget',
         'satuan_realisasi',
         'pesan',
@@ -69,9 +63,13 @@ class Monev extends Model
     {
         return $this->hasMany(FotoProgres::class, 'id_monev', 'id');
     }
+    // public function rencanakerja()
+    // {
+    //     return $this->belongsTo(RencanaKerja::class, 'rencana_aksi', 'id');
+    // }
     public function rencanakerja()
     {
-        return $this->belongsTo(RencanaKerja::class, 'rencana_aksi', 'id');
+        return $this->belongsTo(RencanaKerja::class, 'id_renja', 'id');
     }
     public function opd()
     {
@@ -91,6 +89,6 @@ class Monev extends Model
     public function progresKerja()
     {
         // Asumsi satu Monev bisa memiliki BANYAK progres kerja
-        return $this->hasMany(ProgresKerja::class, 'id_monev','id');
+        return $this->hasMany(ProgresKerja::class, 'id_monev', 'id');
     }
 }

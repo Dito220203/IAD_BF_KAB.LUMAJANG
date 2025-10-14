@@ -53,7 +53,7 @@
                                                     {{-- Panggil relasi 'rencanakerja', lalu kolom 'rencana_aksi' dari tabel RencanaKerja --}}
                                                     {{ $data->monev?->rencanakerja?->rencana_aksi ?? '-' }}
                                                 </td>
-                                                <td class="text-center">{{ $data->monev->tahun ?? '-' }}</td>
+                                                <td class="text-center">{{ $data->monev->rencanakerja->tahun ?? '-' }}</td>
                                                 <td class="text-center">
                                                     @if ($data->status === 'Valid')
                                                         <span class="badge bg-success">{{ $data->status }}</span>
@@ -128,7 +128,7 @@
                                             <th class="bg-light">
                                                 <i class="bi bi-calendar text-primary me-2"></i>Tahun
                                             </th>
-                                            <td>{{ $data->monev->tahun ?? '-' }}</td>
+                                            <td>{{ $data->monev->rencanakerja->tahun ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th class="bg-light">

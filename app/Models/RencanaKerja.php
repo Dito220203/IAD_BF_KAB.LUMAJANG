@@ -51,9 +51,13 @@ class RencanaKerja extends Model
         return $this->belongsTo(Opd::class, 'id_opd', 'id');
     }
 
+    // public function monev()
+    // {
+    //     return $this->hasMany(Monev::class, 'rencana_aksi', 'id');
+    // }
     public function monev()
     {
-        return $this->hasMany(Monev::class, 'rencana_aksi', 'id');
+        return $this->hasMany(Monev::class, 'id_renja', 'id');
     }
     // di dalam model RencanaKerja.php
     public function scopeActive($query)
