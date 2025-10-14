@@ -15,69 +15,73 @@ class DasboardAdminController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $user = auth()->guard('pengguna')->user();
+    {
+        $user = auth()->guard('pengguna')->user();
 
-    // ===== Bagian untuk Rencana Kerja =====
-    if ($user->level == 'Super Admin') {
-        $totalRencanaKerja = RencanaKerja::active()->count();
-        $rencanaSelesai    = RencanaKerja::active()->where('status', 'Valid')->count();
-        $rencanaProgress   = RencanaKerja::active()->where('status', 'Belum divalidasi')->count();
-    } else {
-        $totalRencanaKerja = RencanaKerja::active()->where('id_pengguna', $user->id)->count();
-        $rencanaSelesai    = RencanaKerja::active()->where('id_pengguna', $user->id)->where('status', 'Valid')->count();
-        $rencanaProgress   = RencanaKerja::active()->where('id_pengguna', $user->id)->where('status', 'Belum divalidasi')->count();
-    }
-
-    // ===== Bagian untuk Monev =====
-    if ($user->level == 'Super Admin') {
-        $allMonev = Monev::all();
-    } else {
-        $allMonev = Monev::where('id_pengguna', $user->id)->get();
-    }
-
-    // filter data lengkap
-    $monevLengkap = $allMonev->filter(function ($item) {
-        $requiredFields = [
-            'id_pengguna',
-            'id_subprogram',
-            'rencana_aksi',
-            'sub_kegiatan',
-            'kegiatan',
-            'nama_program',
-            'lokasi',
-            'volume',
-            'satuan',
-            'anggaran',
-            'sumberdana',
-            'tahun',
-            'id_opd',
-            'realisasi',
-            'dokumen_anggaran',
-            'uraian' // pastikan 'uraian' ada di sini
-        ];
-
-        foreach ($requiredFields as $field) {
-            if (empty($item->$field)) {
-                return false; // tidak lengkap
-            }
+        // ===== Bagian untuk Rencana Kerja =====
+        if ($user->level == 'Super Admin') {
+            $totalRencanaKerja = RencanaKerja::active()->count();
+            $rencanaSelesai    = RencanaKerja::active()->where('status', 'Valid')->count();
+            $rencanaProgress   = RencanaKerja::active()->where('status', 'tidak valid')->count();
+        } else {
+            $totalRencanaKerja = RencanaKerja::active()->where('id_pengguna', $user->id)->count();
+            $rencanaSelesai    = RencanaKerja::active()->where('id_pengguna', $user->id)->where('status', 'Valid')->count();
+            $rencanaProgress   = RencanaKerja::active()->where('id_pengguna', $user->id)->where('status', 'tidak valid')->count();
         }
 
-        return true; // lengkap
-    })->count();
+        // ===== Bagian untuk Monev =====
+        if ($user->level == 'Super Admin') {
+            $allMonev = Monev::all();
+        } else {
+            $allMonev = Monev::where('id_pengguna', $user->id)->get();
+        }
 
-    $totalMonev = $allMonev->count();
-    $monevBelumLengkap = $totalMonev - $monevLengkap;
+        // filter data lengkap
+        $monevLengkap = $allMonev->filter(function ($item) {
+            $requiredFields = [
+                'id_pengguna',
+                'id_subprogram',
+                'rencana_aksi',
+                'sub_kegiatan',
+                'kegiatan',
+                'nama_program',
+                'lokasi',
+                'volume',
+                'satuan',
+                'anggaran',
+                'sumberdana',
+                'tahun',
+                'id_opd',
 
-    return view('admin.Dasboard.index', compact(
-        'totalRencanaKerja',
-        'rencanaSelesai',
-        'rencanaProgress',
-        'totalMonev',
-        'monevLengkap',
-        'monevBelumLengkap'
-    ));
-}
+
+                'dokumen_anggaran',
+                'realisasi',
+                'volumeTarget',
+                'satuan_realisasi',
+                'uraian' // pastikan 'uraian' ada di sini
+            ];
+
+            foreach ($requiredFields as $field) {
+                if (empty($item->$field)) {
+                    return false; // tidak lengkap
+                }
+            }
+
+            return true; // lengkap
+        })->count();
+
+        $totalMonev = $allMonev->count();
+        $monevBelumLengkap = $totalMonev - $monevLengkap;
+
+        return view('admin.Dasboard.index', compact(
+            'totalRencanaKerja',
+            'rencanaSelesai',
+            'rencanaProgress',
+            'totalMonev',
+            'monevLengkap',
+            'monevBelumLengkap'
+        ));
+    }
 
 
 

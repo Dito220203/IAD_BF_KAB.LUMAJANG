@@ -250,7 +250,7 @@ class MonevController extends Controller
 
         // ganti status progres
         if ($monev->status === 'Valid') {
-            $monev->status = 'Belum Validasi';
+            $monev->status = 'Belum divalidasi';
         } else {
             $monev->status = 'Valid';
         }
@@ -376,14 +376,6 @@ class MonevController extends Controller
         // 2. Validasi semua input dari request
         $validatedData = $request->validate([
             'id_subprogram' => 'required|exists:subprograms,id',
-            // 'rencanaAksi'   => 'required|exists:rencana_kerjas,id',
-            // 'sub_kegiatan'  => 'required|string',
-            // 'kegiatan'      => 'required|string',
-            // 'nama_program'  => 'required|string',
-            // 'tahun'         => 'required|string',
-            // 'volume'        => 'required|string',
-            // 'satuan'        => 'required|string',
-            // 'lokasi'        => 'required|string',
             'id_opd'        => 'required|exists:opds,id',
 
 
@@ -405,14 +397,7 @@ class MonevController extends Controller
         // 3. Siapkan data untuk diupdate dengan memetakan nama field
         $updateData = [
             'id_subprogram'    => $validatedData['id_subprogram'],
-            // 'rencana_aksi'     => $validatedData['rencanaAksi'],
-            // 'sub_kegiatan'     => $validatedData['sub_kegiatan'],
-            // 'kegiatan'         => $validatedData['kegiatan'],
-            // 'nama_program'     => $validatedData['nama_program'],
-            // 'tahun'            => $validatedData['tahun'],
-            // 'volume'           => $validatedData['volume'],
-            // 'satuan'           => $validatedData['satuan'],
-            // 'lokasi'           => $validatedData['lokasi'],
+
             'id_opd'           => $validatedData['id_opd'],
             'anggaran'      => $anggaranString,
             'sumberdana'    => $sumberdanaString,
@@ -467,7 +452,8 @@ class MonevController extends Controller
 
         // 5. Siapkan pesan feedback untuk pengguna
         $actionText = $newState ? 'dikunci' : 'dibuka';
-        $message = "Semua data untuk OPD '{$opd->nama}' berhasil {$actionText}.";
+        $message = "Semua data untuk OPD {$opd->nama} berhasil {$actionText}.";
+
 
         LogHelper::add(ucfirst($actionText) . " semua data Monev untuk OPD: {$opd->nama}");
 

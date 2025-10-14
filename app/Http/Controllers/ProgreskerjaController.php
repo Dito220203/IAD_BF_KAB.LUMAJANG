@@ -80,7 +80,7 @@ class ProgreskerjaController extends Controller
 
         // ganti status progres
         if ($progres->status === 'Valid') {
-            $progres->status = 'Belum Validasi';
+            $progres->status = 'tidak valid';
         } else {
             $progres->status = 'Valid';
         }

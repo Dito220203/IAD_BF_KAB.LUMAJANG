@@ -197,7 +197,7 @@ class RencanakerjaController extends Controller
     public function updateStatus(string $id)
     {
         $rencana = RencanaKerja::findOrFail($id);
-        $rencana->status = $rencana->status === 'Valid' ? 'Belum divalidasi' : 'Valid';
+        $rencana->status = $rencana->status === 'Valid' ? 'tidak valid' : 'Valid';
         $rencana->save();
 
         LogHelper::add('Mengubah status data Rencana Kerja');
@@ -332,7 +332,8 @@ class RencanakerjaController extends Controller
 
         // 5. Siapkan pesan feedback untuk pengguna
         $actionText = $newState ? 'dikunci' : 'dibuka';
-        $message = "Semua data untuk OPD '{$opd->nama}' berhasil {$actionText}.";
+        $message = "Semua data untuk OPD {$opd->nama} berhasil {$actionText}.";
+
 
         LogHelper::add(ucfirst($actionText) . " semua data Monev untuk OPD: {$opd->nama}");
 
