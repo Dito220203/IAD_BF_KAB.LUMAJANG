@@ -266,7 +266,7 @@
                                                 <th class="text-center">Realisasi Anggaran</th>
                                                 <th class="text-center">Volume Realisasi</th>
                                                 <th class="text-center">Satuan Volume</th>
-                                                <th class="text-center">Keterangan</th>
+                                                <th class="text-center" style="width: 400px;">Keterangan</th>
                                                 @if ($adaPesan)
                                                     <th class="text-center">Catatan</th>
                                                 @endif
@@ -281,13 +281,13 @@
                                                     <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}
                                                     </td>
                                                     <td>{{ $data->rencanakerja->rencana_aksi ?? '-' }}</td>
-                                                    <td>{{ $data->sub_kegiatan }}</td>
-                                                    <td>{{ $data->kegiatan }}</td>
-                                                    <td>{{ $data->nama_program }}</td>
-                                                    <td class="text-center">{{ $data->lokasi }}</td>
-                                                    <td class="text-center">{{ $data->volume }}</td>
-                                                    <td class="text-center">{{ $data->satuan }}</td>
-                                                    <td class="text-center">{{ $data->tahun }}</td>
+                                                    <td>{{ $data->rencanakerja->sub_kegiatan ?? '-'  }}</td>
+                                                    <td>{{ $data->rencanakerja->kegiatan ?? '-'}}</td>
+                                                    <td>{{ $data->rencanakerja->nama_program ?? '-' }}</td>
+                                                    <td class="text-center">{{ $data->rencanakerja->lokasi ?? '-' }}</td>
+                                                    <td class="text-center">{{ $data->rencanakerja->volume ?? '-' }}</td>
+                                                    <td class="text-center">{{ $data->rencanakerja->satuan ?? '-' }}</td>
+                                                    <td class="text-center">{{ $data->rencanakerja->tahun ?? '-' }}</td>
                                                     <td class="text-center" class="text-center">
                                                         {{ $data->opd->nama ?? '-' }}
                                                     </td>
@@ -366,8 +366,9 @@
                                                                         </span>
                                                                         <span>:</span>
                                                                         {{-- Beri sedikit jarak kiri --}}
-                                                                        <strong
-                                                                            style="margin-left: 5px;">{{ $nilai }}</strong>
+                                                                        <span
+                                                                            style="margin-left: 5px;">{{ $nilai }}</span>
+
                                                                     </div>
                                                                 @endif
                                                             @endforeach
@@ -386,8 +387,9 @@
                                                                             TW {{ $romanMap[$triwulan] ?? $triwulan }}
                                                                         </span>
                                                                         <span>:</span>
-                                                                        <strong
-                                                                            style="margin-left: 5px;">{{ $nilai }}</strong>
+                                                                        <span
+                                                                            style="margin-left: 5px;">{{ $nilai }}</span>
+
                                                                     </div>
                                                                 @endif
                                                             @endforeach
@@ -406,8 +408,9 @@
                                                                             TW {{ $romanMap[$triwulan] ?? $triwulan }}
                                                                         </span>
                                                                         <span>:</span>
-                                                                        <strong
-                                                                            style="margin-left: 5px;">{{ $nilai }}</strong>
+                                                                        <span
+                                                                            style="margin-left: 5px;">{{ $nilai }}</span>
+
                                                                     </div>
                                                                 @endif
                                                             @endforeach
@@ -425,8 +428,9 @@
                                                                             TW {{ $romanMap[$triwulan] ?? $triwulan }}
                                                                         </span>
                                                                         <span>:</span>
-                                                                        <strong
-                                                                            style="margin-left: 5px;">{{ $nilai }}</strong>
+                                                                        <span
+                                                                            style="margin-left: 5px;">{{ $nilai }}</span>
+
                                                                     </div>
                                                                 @endif
                                                             @endforeach

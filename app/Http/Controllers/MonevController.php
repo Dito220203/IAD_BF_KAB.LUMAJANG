@@ -30,7 +30,7 @@ class MonevController extends Controller
         $query->with(['opd', 'subprogram', 'fotoProgres', 'map']);
 
         // ✅ Ambil daftar tahun
-        $tahuns = Monev::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+        $tahuns = RencanaKerja::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
 
         // ✅ Batasi berdasarkan user (kecuali Super Admin)
         if ($user->level !== 'Super Admin') {
@@ -39,31 +39,50 @@ class MonevController extends Controller
 
         // ✅ Filter Tahun
         if ($request->filled('tahun')) {
-            $query->where('tahun', $request->tahun);
+            $query->whereHas('rencanakerja', function ($q) use ($request) {
+                $q->where('tahun', $request->tahun);
+            });
         }
 
         // ✅ Filter Search (dibungkus supaya tidak merusak filter tahun)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('rencana_aksi', 'like', "%{$search}%")
-                    ->orWhere('nama_program', 'like', "%{$search}%")
-                    ->orWhere('kegiatan', 'like', "%{$search}%")
-                    ->orWhere('sub_kegiatan', 'like', "%{$search}%")
-                    ->orWhere('lokasi', 'like', "%{$search}%")
-                    ->orWhere('anggaran', 'like', "%{$search}%")
-                    ->orWhere('volume', 'like', "%{$search}%")
-                    ->orWhere('satuan', 'like', "%{$search}%")
+                // ✅ Kolom yang ada langsung di tabel 'monevs' (dengan nama yang sudah dikoreksi)
+                $q->where('anggaran', 'like', "%{$search}%")
+                    ->orWhere('volumeTarget', 'like', "%{$search}%")      // <-- DIUBAH DARI 'volume'
+                    ->orWhere('satuan_realisasi', 'like', "%{$search}%")  // <-- DIUBAH DARI 'satuan'
                     ->orWhere('sumberdana', 'like', "%{$search}%")
                     ->orWhere('uraian', 'like', "%{$search}%")
-                    ->orWhereHas('opd', function ($q) use ($search) {
-                        $q->where('nama', 'like', "%{$search}%");
+
+                    // ✅ Mencari di dalam relasi 'opd'
+                    ->orWhereHas('opd', function ($queryOpd) use ($search) {
+                        $queryOpd->where('nama', 'like', "%{$search}%");
                     })
-                    ->orWhereHas('subprogram', function ($q) use ($search) {
-                        $q->where('subprogram', 'like', "%{$search}%");
+
+                    // ✅ Mencari di dalam relasi 'subprogram'
+                    ->orWhereHas('subprogram', function ($querySub) use ($search) {
+                        $querySub->where('subprogram', 'like', "%{$search}%");
+                    })
+
+                    // ✅ Mencari di dalam relasi 'rencanakerja'
+                    ->orWhereHas('rencanakerja', function ($queryRenja) use ($search) {
+                        $queryRenja->where('rencana_aksi', 'like', "%{$search}%")
+                            ->orWhere('nama_program', 'like', "%{$search}%")
+                            ->orWhere('kegiatan', 'like', "%{$search}%")
+                            ->orWhere('sub_kegiatan', 'like', "%{$search}%")
+                            ->orWhere('lokasi', 'like', "%{$search}%")
+                            ->orWhere('volume', 'like', "%{$search}%")
+                            ->orWhere('satuan', 'like', "%{$search}%")
+                            ->orWhere('anggaran', 'like', "%{$search}%")
+                            ->orWhere('sumberdana', 'like', "%{$search}%")
+                            ->orWhere('tahun', 'like', "%{$search}%")
+                            ->orWhere('id_opd', 'like', "%{$search}%")
+                            ->orWhere('status', 'like', "%{$search}%");
                     });
             });
         }
+        // ...
 
         // ✅ Pagination (DIUBAH DARI latest() MENJADI oldest())
         $monev = $query->oldest()->paginate(10)->appends($request->query());
@@ -140,64 +159,7 @@ class MonevController extends Controller
      */
     // MonevController.php
 
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'id_subprogram' => 'required|exists:subprograms,id',
-            'rencanaAksi'   => 'required|exists:rencana_kerjas,id',
-            'sub_kegiatan'  => 'required',
-            'kegiatan'      => 'required',
-            'nama_program'  => 'required',
-            'tahun'         => 'required',
-            'volume'        => 'required',
-            'satuan'        => 'required',
-            'anggaran'     => 'required|array',
-            'anggaran.*'   => 'required|string',
-            'sumberdana'   => 'required|array',
-            'sumberdana.*' => 'required|string',
-            'lokasi'        => 'required',
-            'id_opd'        => 'required|exists:opds,id',
-            'uraian'    => 'required',
-            'tw'            => 'nullable|array',
-            'realisasi'     => 'nullable|array',
-            'volumeTarget'  => 'nullable|array',
 
-        ]);
-        $anggaranString = implode('; ', $validatedData['anggaran']);
-        $sumberdanaString = implode('; ', $validatedData['sumberdana']);
-
-
-        $monev = Monev::create([
-            'id_pengguna'    => Auth::guard('pengguna')->id(),
-            'id_subprogram'  => $validatedData['id_subprogram'],
-            'rencana_aksi'   => $validatedData['rencanaAksi'],
-            'sub_kegiatan'   => $validatedData['sub_kegiatan'],
-            'kegiatan'       => $validatedData['kegiatan'],
-            'nama_program'   => $validatedData['nama_program'],
-            'tahun'          => $validatedData['tahun'],
-            'volume'         => $validatedData['volume'],
-            'satuan'         => $validatedData['satuan'],
-            'anggaran'      => $anggaranString,
-            'sumberdana'    => $sumberdanaString,
-            'lokasi'         => $validatedData['lokasi'],
-            'id_opd'         => $validatedData['id_opd'],
-            'uraian'     => $validatedData['uraian'],
-
-            // Simpan data array
-            'realisasi'        => $validatedData['realisasi'] ?? null,
-            'dokumen_anggaran' => $validatedData['tw'] ?? null,
-            'volumeTarget'     => $validatedData['volumeTarget'] ?? null,
-        ]);
-
-        ProgresKerja::create([
-            'id_pengguna' => $monev->id_pengguna,
-            'id_monev'    => $monev->id,
-
-        ]);
-
-
-        return redirect()->route('monev')->with('success', 'Data Monitoring Evaluasi berhasil disimpan.');
-    }
 
 
     public function storeFoto(Request $request)
@@ -288,7 +250,7 @@ class MonevController extends Controller
 
         // ganti status progres
         if ($monev->status === 'Valid') {
-            $monev->status = 'Belum Validasi';
+            $monev->status = 'Belum divalidasi';
         } else {
             $monev->status = 'Valid';
         }
@@ -341,9 +303,11 @@ class MonevController extends Controller
         // =============================================================
         // BAGIAN YANG DIPERBAIKI: Filter tahun
         // =============================================================
-        // Cek jika filter tahun diisi, lalu terapkan ke query
         if ($selectedTahun) {
-            $query->where('tahun', $selectedTahun);
+            // Mencari 'tahun' melalui relasi 'rencanakerja'
+            $query->whereHas('rencanakerja', function ($q) use ($selectedTahun) {
+                $q->where('tahun', $selectedTahun);
+            });
         }
         // =============================================================
 
@@ -412,21 +376,13 @@ class MonevController extends Controller
         // 2. Validasi semua input dari request
         $validatedData = $request->validate([
             'id_subprogram' => 'required|exists:subprograms,id',
-            'rencanaAksi'   => 'required|exists:rencana_kerjas,id',
-            'sub_kegiatan'  => 'required|string',
-            'kegiatan'      => 'required|string',
-            'nama_program'  => 'required|string',
-            'tahun'         => 'required|string',
-            'volume'        => 'required|string',
-            'satuan'        => 'required|string',
+            'id_opd'        => 'required|exists:opds,id',
+
+
             'anggaran'     => 'required|array',
             'anggaran.*'   => 'required|string',
             'sumberdana'   => 'required|array',
             'sumberdana.*' => 'required|string',
-            'lokasi'        => 'required|string',
-            'id_opd'        => 'required|exists:opds,id',
-
-
             // Validasi untuk data triwulan sebagai array
             'dokumen_anggaran'  => 'nullable|array',
             'realisasi'     => 'nullable|array',
@@ -441,17 +397,10 @@ class MonevController extends Controller
         // 3. Siapkan data untuk diupdate dengan memetakan nama field
         $updateData = [
             'id_subprogram'    => $validatedData['id_subprogram'],
-            'rencana_aksi'     => $validatedData['rencanaAksi'],
-            'sub_kegiatan'     => $validatedData['sub_kegiatan'],
-            'kegiatan'         => $validatedData['kegiatan'],
-            'nama_program'     => $validatedData['nama_program'],
-            'tahun'            => $validatedData['tahun'],
-            'volume'           => $validatedData['volume'],
-            'satuan'           => $validatedData['satuan'],
+
+            'id_opd'           => $validatedData['id_opd'],
             'anggaran'      => $anggaranString,
             'sumberdana'    => $sumberdanaString,
-            'lokasi'           => $validatedData['lokasi'],
-            'id_opd'           => $validatedData['id_opd'],
 
 
             // Peta nama input ke nama kolom database untuk data array
@@ -503,7 +452,8 @@ class MonevController extends Controller
 
         // 5. Siapkan pesan feedback untuk pengguna
         $actionText = $newState ? 'dikunci' : 'dibuka';
-        $message = "Semua data untuk OPD '{$opd->nama}' berhasil {$actionText}.";
+        $message = "Semua data untuk OPD {$opd->nama} berhasil {$actionText}.";
+
 
         LogHelper::add(ucfirst($actionText) . " semua data Monev untuk OPD: {$opd->nama}");
 

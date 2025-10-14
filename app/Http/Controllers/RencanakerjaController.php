@@ -161,18 +161,10 @@ class RencanakerjaController extends Controller
         $monev = Monev::create([
             'id_pengguna'   => $rencana->id_pengguna,
             'id_subprogram' => $rencana->id_subprogram,
-            'rencana_aksi'  => $rencana->id,
-            'sub_kegiatan'  => $rencana->sub_kegiatan,
-            'kegiatan'      => $rencana->kegiatan,
-            'nama_program'  => $rencana->nama_program,
-            'lokasi'        => $rencana->lokasi,
-            'volume'        => $rencana->volume,
-            'satuan'        => $rencana->satuan,
+            'id_renja'      => $rencana->id,
+            'id_opd'        => $rencana->id_opd,
             'anggaran'      => $anggaranString,
             'sumberdana'    => $sumberdanaString,
-            'tahun'         => $rencana->tahun,
-            'id_opd'        => $rencana->id_opd,
-            'status'        => 'Belum divalidasi',
             'is_locked'     => true,
 
 
@@ -205,7 +197,7 @@ class RencanakerjaController extends Controller
     public function updateStatus(string $id)
     {
         $rencana = RencanaKerja::findOrFail($id);
-        $rencana->status = $rencana->status === 'Valid' ? 'Belum divalidasi' : 'Valid';
+        $rencana->status = $rencana->status === 'Valid' ? 'tidak valid' : 'Valid';
         $rencana->save();
 
         LogHelper::add('Mengubah status data Rencana Kerja');
@@ -240,7 +232,7 @@ class RencanakerjaController extends Controller
 
     public function update(Request $request, string $id)
     {
-        // 1. Validasi untuk menerima array
+        // 1️⃣ Validasi input
         $validate = $request->validate([
             'sub_program'  => 'required|exists:subprograms,id',
             'rencanaAksi'  => 'required',
@@ -259,21 +251,22 @@ class RencanakerjaController extends Controller
             'keterangan'   => 'required'
         ]);
 
-        // 2. Gabungkan array menjadi string
+        // 2️⃣ Gabungkan array menjadi string
         $anggaranString = implode('; ', $validate['anggaran']);
         $sumberdanaString = implode('; ', $validate['sumberdana']);
 
+        // 3️⃣ Ambil data lama
         $rencana = RencanaKerja::findOrFail($id);
-
         $user = Auth::guard('pengguna')->user();
+
         if ($user->level !== 'Super Admin' && $rencana->id_pengguna !== $user->id) {
             abort(403, 'Anda tidak memiliki akses untuk mengupdate data ini.');
         }
 
-        // 3. Siapkan data untuk diupdate
+        // 4️⃣ Data update utama
         $updateData = [
             'id_subprogram' => $validate['sub_program'],
-            'rencana_aksi'  => $validate['rencanaAksi'], // Ini berisi teks
+            'rencana_aksi'  => $validate['rencanaAksi'],
             'sub_kegiatan'  => $validate['sub_kegiatan'],
             'kegiatan'      => $validate['kegiatan'],
             'nama_program'  => $validate['nama_program'],
@@ -287,22 +280,25 @@ class RencanakerjaController extends Controller
             'keterangan'    => $validate['keterangan'],
         ];
 
-        // 4. Update RencanaKerja
+        // 5️⃣ Update tabel Rencana Kerja
         $rencana->update($updateData);
 
-        // 5. Cari dan update Monev
-        $monev = Monev::where('rencana_aksi', $rencana->id)->first();
-        if ($monev) {
-            // PERBAIKAN DI SINI:
-            // Hapus 'rencana_aksi' dari data update untuk Monev
-            unset($updateData['rencana_aksi']);
+        // 6️⃣ Cari Monev berdasarkan id_renja (bukan rencana_aksi)
+        $monev = Monev::where('id_renja', $rencana->id)->first();
 
-            // Update Monev hanya dengan data yang relevan
-            $monev->update($updateData);
+        if ($monev) {
+            $monev->update([
+                'id_subprogram' => $rencana->id_subprogram,
+                'id_opd'        => $rencana->id_opd,
+                'anggaran'      => $anggaranString,
+                'sumberdana'    => $sumberdanaString,
+            ]);
         }
 
-        LogHelper::add('Mengedit Data Rencana Kerja (ID: ' . $id . ') + otomatis update Monev');
+        // 7️⃣ Log aktivitas
+        LogHelper::add('Mengedit Data Rencana Kerja + otomatis update Monev');
 
+        // 8️⃣ Redirect
         return redirect()->route('rencanakerja')
             ->with('success', 'Rencana Kerja berhasil diperbarui!');
     }
@@ -336,7 +332,8 @@ class RencanakerjaController extends Controller
 
         // 5. Siapkan pesan feedback untuk pengguna
         $actionText = $newState ? 'dikunci' : 'dibuka';
-        $message = "Semua data untuk OPD '{$opd->nama}' berhasil {$actionText}.";
+        $message = "Semua data untuk OPD {$opd->nama} berhasil {$actionText}.";
+
 
         LogHelper::add(ucfirst($actionText) . " semua data Monev untuk OPD: {$opd->nama}");
 

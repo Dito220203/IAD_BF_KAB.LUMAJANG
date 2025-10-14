@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Rencana Aksi</label>
-                                        <input type="hidden" name="rencanaAksi" value="{{ $monev->rencana_aksi }}">
+                                        <input type="hidden"  value="{{ $monev->rencana_aksi }}">
                                         <input type="text" class="form-control bg-light"
                                             value="{{ $monev->rencanakerja->rencana_aksi ?? 'Data tidak ditemukan' }}"
                                             readonly>
@@ -51,47 +51,47 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Sub Kegiatan</label>
-                                        <input type="text" id="sub_kegiatan" name="sub_kegiatan"
-                                            value="{{ old('sub_kegiatan', $monev->sub_kegiatan) }}"
+                                        <input type="text" id="sub_kegiatan"
+                                            value="{{ old('sub_kegiatan', $monev->rencanakerja->sub_kegiatan) }}"
                                             class="form-control bg-light" readonly>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Kegiatan</label>
-                                        <input type="text" id="kegiatan" name="kegiatan"
-                                            value="{{ old('kegiatan', $monev->kegiatan) }}" class="form-control bg-light"
-                                            readonly>
+                                        <input type="text" id="kegiatan"
+                                            value="{{ old('kegiatan', $monev->rencanakerja->kegiatan) }}"
+                                            class="form-control bg-light" readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Program</label>
-                                        <input type="text" id="nama_program" name="nama_program"
-                                            value="{{ old('nama_program', $monev->nama_program) }}"
+                                        <input type="text" id="nama_program"
+                                            value="{{ old('nama_program', $monev->rencanakerja->nama_program) }}"
                                             class="form-control bg-light" readonly>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Tahun</label>
-                                        <input type="text" id="tahun" name="tahun"
-                                            value="{{ old('tahun', $monev->tahun) }}" class="form-control bg-light"
-                                            readonly>
+                                        <input type="text" id="tahun"
+                                            value="{{ old('tahun', $monev->rencanakerja->tahun) }}"
+                                            class="form-control bg-light" readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Volume Target</label>
-                                        <input type="text" name="volume" value="{{ old('volume', $monev->volume) }}"
+                                        <input type="text" value="{{ old('volume', $monev->rencanakerja->volume) }}"
                                             class="form-control bg-light" readonly>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Satuan</label>
-                                        <input type="text" name="satuan" value="{{ old('satuan', $monev->satuan) }}"
+                                        <input type="text" value="{{ old('satuan', $monev->rencanakerja->satuan) }}"
                                             class="form-control bg-light" readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-5">
                                     <div class="col-md-6">
                                         <label class="form-label">Lokasi</label>
-                                        <input type="text" name="lokasi" value="{{ old('lokasi', $monev->lokasi) }}"
+                                        <input type="text" value="{{ old('lokasi', $monev->rencanakerja->lokasi) }}"
                                             class="form-control bg-light" readonly>
                                     </div>
                                     <div class="col-md-6">
@@ -115,7 +115,7 @@
                                     </div>
                                 </div>
 
-                                {{-- Fieldset untuk Detail Pendanaan --}}
+                                 {{-- Fieldset untuk Detail Pendanaan --}}
                                 <fieldset class="border p-3 rounded-3 mb-3">
                                     <legend class="float-none w-auto px-2 h6">Detail Pendanaan</legend>
                                     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
@@ -175,10 +175,10 @@
                                 @push('scripts')
                                     <script src="{{ asset('js/anggaranDansumberDana.js') }}"></script>
                                 @endpush
-
                                 <fieldset class="border rounded-3 p-3 mb-3">
                                     <legend class="float-none w-auto px-3 h6">Data Per Triwulan</legend>
-                                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#triwulanModal">
+                                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                                        data-bs-target="#triwulanModal">
                                         <i class="bi bi-plus-circle"></i> Tambah Data Triwulan
                                     </button>
                                     <div class="table-responsive">
@@ -207,7 +207,12 @@
                                                 @endphp
 
                                                 @for ($i = 1; $i <= 4; $i++)
-                                                    @if (!empty($all_data['dokumen_anggaran'][$i]) || !empty($all_data['realisasi'][$i]) || !empty($all_data['volumeTarget'][$i]) || !empty($all_data['satuan_realisasi'][$i]) || !empty($all_data['uraian'][$i]))
+                                                    @if (
+                                                        !empty($all_data['dokumen_anggaran'][$i]) ||
+                                                            !empty($all_data['realisasi'][$i]) ||
+                                                            !empty($all_data['volumeTarget'][$i]) ||
+                                                            !empty($all_data['satuan_realisasi'][$i]) ||
+                                                            !empty($all_data['uraian'][$i]))
                                                         @php
                                                             $uniqueId = 'tw-row-initial-' . $i;
                                                             $twRoman = $romanMap[$i - 1] ?? $i;
@@ -218,7 +223,8 @@
                                                             $uraianValue = $all_data['uraian'][$i] ?? '-';
                                                         @endphp
                                                         <tr id="{{ $uniqueId }}" data-tw="{{ $i }}">
-                                                            <td class="text-center"><strong>TW {{ $twRoman }}</strong></td>
+                                                            <td class="text-center"><strong>TW
+                                                                    {{ $twRoman }}</strong></td>
                                                             <td class="text-center">
                                                                 {{-- =============================================== --}}
                                                                 {{-- PERUBAHAN PHP UNTUK TAMPILAN DATA LAMA          --}}
@@ -226,8 +232,9 @@
                                                                 @php
                                                                     $parts = explode(' | ', $dokumenValue);
                                                                 @endphp
-                                                                @if(count($parts) === 3)
-                                                                    <strong>{{ $parts[1] }} = {{ $parts[2] }}</strong>
+                                                                @if (count($parts) === 3)
+                                                                    <strong>{{ $parts[1] }} =
+                                                                        {{ $parts[2] }}</strong>
                                                                 @else
                                                                     N/A
                                                                 @endif
@@ -237,7 +244,9 @@
                                                             <td class="text-center">{{ $satuanValue }}</td>
                                                             <td>{{ $uraianValue }}</td>
                                                             <td class="text-center">
-                                                                <button type="button" class="btn btn-danger btn-sm hapus-triwulan-row" data-target="hidden-{{ $uniqueId }}">
+                                                                <button type="button"
+                                                                    class="btn btn-danger btn-sm hapus-triwulan-row"
+                                                                    data-target="hidden-{{ $uniqueId }}">
                                                                     <i class="bi bi-trash"></i>
                                                                 </button>
                                                             </td>
@@ -250,16 +259,26 @@
 
                                     <div id="hidden-triwulan-inputs" style="display: none;">
                                         @for ($i = 1; $i <= 4; $i++)
-                                            @if (!empty($all_data['dokumen_anggaran'][$i]) || !empty($all_data['realisasi'][$i]) || !empty($all_data['volumeTarget'][$i]) || !empty($all_data['satuan_realisasi'][$i]) || !empty($all_data['uraian'][$i]))
+                                            @if (
+                                                !empty($all_data['dokumen_anggaran'][$i]) ||
+                                                    !empty($all_data['realisasi'][$i]) ||
+                                                    !empty($all_data['volumeTarget'][$i]) ||
+                                                    !empty($all_data['satuan_realisasi'][$i]) ||
+                                                    !empty($all_data['uraian'][$i]))
                                                 @php
                                                     $uniqueId = 'tw-row-initial-' . $i;
                                                 @endphp
                                                 <div id="hidden-{{ $uniqueId }}">
-                                                    <input type="hidden" name="dokumen_anggaran[{{ $i }}]" value="{{ $all_data['dokumen_anggaran'][$i] ?? '' }}">
-                                                    <input type="hidden" name="realisasi[{{ $i }}]" value="{{ $all_data['realisasi'][$i] ?? '' }}">
-                                                    <input type="hidden" name="volumeTarget[{{ $i }}]" value="{{ $all_data['volumeTarget'][$i] ?? '' }}">
-                                                    <input type="hidden" name="satuan_realisasi[{{ $i }}]" value="{{ $all_data['satuan_realisasi'][$i] ?? '' }}">
-                                                    <input type="hidden" name="uraian[{{ $i }}]" value="{{ $all_data['uraian'][$i] ?? '' }}">
+                                                    <input type="hidden" name="dokumen_anggaran[{{ $i }}]"
+                                                        value="{{ $all_data['dokumen_anggaran'][$i] ?? '' }}">
+                                                    <input type="hidden" name="realisasi[{{ $i }}]"
+                                                        value="{{ $all_data['realisasi'][$i] ?? '' }}">
+                                                    <input type="hidden" name="volumeTarget[{{ $i }}]"
+                                                        value="{{ $all_data['volumeTarget'][$i] ?? '' }}">
+                                                    <input type="hidden" name="satuan_realisasi[{{ $i }}]"
+                                                        value="{{ $all_data['satuan_realisasi'][$i] ?? '' }}">
+                                                    <input type="hidden" name="uraian[{{ $i }}]"
+                                                        value="{{ $all_data['uraian'][$i] ?? '' }}">
                                                 </div>
                                             @endif
                                         @endfor
@@ -348,11 +367,13 @@
                             </label>
                             <div class="d-flex">
                                 <div class="form-check me-3">
-                                    <input class="form-check-input" type="radio" name="modal_dokumen_anggaran" id="modal_dokumen_ada" value="ADA" checked>
+                                    <input class="form-check-input" type="radio" name="modal_dokumen_anggaran"
+                                        id="modal_dokumen_ada" value="ADA" checked>
                                     <label class="form-check-label" for="modal_dokumen_ada">ADA</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="modal_dokumen_anggaran" id="modal_dokumen_tidak" value="TIDAK">
+                                    <input class="form-check-input" type="radio" name="modal_dokumen_anggaran"
+                                        id="modal_dokumen_tidak" value="TIDAK">
                                     <label class="form-check-label" for="modal_dokumen_tidak">TIDAK</label>
                                 </div>
                             </div>
@@ -360,7 +381,7 @@
 
                         <div class="mb-3">
                             <label for="modal-realisasi" class="form-label">Realisasi Anggaran</label>
-                            <input type="text" id="modal-realisasi" class="form-control" >
+                            <input type="text" id="modal-realisasi" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="modal-volume" class="form-label">Volume Realisasi</label>
@@ -396,6 +417,18 @@
                     this.value = '';
                 }
             });
+
+
+            // Format otomatis untuk input Realisasi Anggaran di modal Triwulan
+            $('#modal-realisasi').on('input', function() {
+                let value = this.value.replace(/\D/g, ''); // hanya angka
+                if (value) {
+                    this.value = 'Rp. ' + parseInt(value).toLocaleString('id-ID');
+                } else {
+                    this.value = '';
+                }
+            });
+
 
             // Script untuk modal data triwulan
             function updateTriwulanOptions() {

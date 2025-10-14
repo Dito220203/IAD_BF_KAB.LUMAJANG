@@ -232,12 +232,12 @@
                         {{-- Kolom Data Utama --}}
                         <td class="text-left long-text">{{ $row->subprogram->subprogram ?? '-' }}</td>
                         <td class="text-left long-text">{{ $row->rencanakerja->rencana_aksi ?? '-' }}</td>
-                        <td class="text-left long-text">{{ $row->sub_kegiatan }}</td>
-                        <td class="text-left long-text">{{ $row->kegiatan }}</td>
-                        <td class="text-left long-text">{{ $row->nama_program }}</td>
-                        <td class="text-center">{{ $row->lokasi }}</td>
-                        <td class="text-center">{{ $row->volume }}</td>
-                        <td class="text-center">{{ $row->satuan }}</td>
+                        <td class="text-left long-text">{{ $row->rencanakerja->sub_kegiatan ?? '-'}}</td>
+                        <td class="text-left long-text">{{ $row->rencanakerja->kegiatan ?? '-' }}</td>
+                        <td class="text-left long-text">{{ $row->rencanakerja->nama_program ?? '-'}}</td>
+                        <td class="text-center">{{ $row->rencanakerja->lokasi ?? '-'}}</td>
+                        <td class="text-center">{{ $row->rencanakerja->volume ?? '-' }}</td>
+                        <td class="text-center">{{ $row->rencanakerja->satuan ?? '-'}}</td>
 
                         {{-- ANGGARAN --}}
                         <td class="text-center" style="padding: 0;">
@@ -262,7 +262,7 @@
                         </td>
 
                         {{-- Tahun & OPD --}}
-                        <td class="text-center">{{ $row->tahun }}</td>
+                        <td class="text-center">{{ $row->rencanakerja->tahun ?? '-' }}</td>
                         <td class="text-center">{{ $row->opd->nama ?? '-' }}</td>
 
                         {{-- DOKUMEN ANGGARAN --}}

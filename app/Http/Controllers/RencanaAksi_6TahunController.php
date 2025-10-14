@@ -167,25 +167,18 @@ class RencanaAksi_6TahunController extends Controller
             'satuan'        => $validate['satuan'],
             'id_opd'        => $validate['id_opd'],
             'keterangan'    => $validate['keterangan'],
-             'is_locked'     => true,
+            'is_locked'     => true,
         ]);
 
         // 7. Buat data Monev untuk PENGGUNA DARI OPD TERPILIH
         $monev = Monev::create([
             'id_pengguna'   => $pengguna->id, // Menggunakan ID pengguna dari OPD
+            'id_renja'      => $rencana->id,
             'id_subprogram' => $rencana->id_subprogram,
-            'rencana_aksi'  => $rencana->id,
-            'sub_kegiatan'  => $rencana->sub_kegiatan,
-            'kegiatan'      => $rencana->kegiatan,
-            'nama_program'  => $rencana->nama_program,
-            'lokasi'        => $rencana->lokasi,
-            'volume'        => $rencana->volume,
-            'satuan'        => $rencana->satuan,
+            'id_opd'        => $rencana->id_opd,
+
             'anggaran'      => $anggaranString,
             'sumberdana'    => $sumberdanaString,
-            'tahun'         => $rencana->tahun,
-            'id_opd'        => $rencana->id_opd,
-            'status'        => 'Belum divalidasi',
             'is_locked'     => true,
 
         ]);
@@ -233,7 +226,7 @@ class RencanaAksi_6TahunController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // 1. Validasi
+        // 1️⃣ Validasi input
         $validate = $request->validate([
             'sub_program'   => 'required|exists:subprograms,id',
             'rencanaAksi'   => 'required',
@@ -249,14 +242,14 @@ class RencanaAksi_6TahunController extends Controller
             'volume'        => 'required',
             'satuan'        => 'required',
             'id_opd'        => 'required|exists:opds,id',
-            'keterangan'    => 'required'
+            'keterangan'    => 'required',
         ]);
 
-        // 2. Ubah array jadi string
+        // 2️⃣ Gabungkan array jadi string
         $anggaranString = implode('; ', $validate['anggaran']);
         $sumberdanaString = implode('; ', $validate['sumberdana']);
 
-        // 3. Data update
+        // 3️⃣ Siapkan data update
         $updateData = [
             'id_subprogram' => $validate['sub_program'],
             'rencana_aksi'  => $validate['rencanaAksi'],
@@ -273,37 +266,42 @@ class RencanaAksi_6TahunController extends Controller
             'keterangan'    => $validate['keterangan'],
         ];
 
-        // 4. Ambil data lama Rencana Aksi
+        // 4️⃣ Ambil data lama sebelum diupdate
         $rencanaAksi = RencanaAksi_6_tahun::findOrFail($id);
-        $oldRencanaAksi = $rencanaAksi->replicate();
+        $oldTahun = $rencanaAksi->tahun;
+        $oldRencanaAksi = $rencanaAksi->rencana_aksi;
 
-        // 5. Update Rencana Aksi
+        // 5️⃣ Update data utama
         $rencanaAksi->update($updateData);
 
-        // 6. Cari & Update Renja (berdasarkan rencana_aksi lama)
-        $rencanaKerja = RencanaKerja::where('rencana_aksi', $oldRencanaAksi->rencana_aksi)
-            ->where('tahun', $oldRencanaAksi->tahun)
+        // 6️⃣ Sinkronkan ke Rencana Kerja berdasarkan ID Rencana Aksi lama
+        $rencanaKerja = RencanaKerja::where('rencana_aksi', $oldRencanaAksi)
+            ->where('tahun', $oldTahun)
             ->first();
 
         if ($rencanaKerja) {
             $rencanaKerja->update($updateData);
 
-            // 7. Cari & Update Monev (berdasarkan id renja)
-            $monev = Monev::where('rencana_aksi', $rencanaKerja->id)->first();
+            // 7️⃣ Sinkronkan ke Monev berdasarkan id_renja
+            $monev = Monev::where('id_renja', $rencanaKerja->id)->first();
             if ($monev) {
-                // ⚠️ Jangan update kolom rencana_aksi di Monev karena itu integer (id renja)
-                $monevUpdate = $updateData;
-                unset($monevUpdate['rencana_aksi']);
-
-                $monev->update($monevUpdate);
+                $monev->update([
+                    'id_subprogram' => $rencanaKerja->id_subprogram,
+                    'id_opd'        => $rencanaKerja->id_opd,
+                    'anggaran'      => $anggaranString,
+                    'sumberdana'    => $sumberdanaString,
+                    'is_locked'     => true, // tetap terkunci
+                ]);
             }
         }
 
+        // 8️⃣ Catat log aktivitas
         LogHelper::add('Mengedit Data Rencana Aksi, Rencana Kerja, dan Monev');
 
         return redirect()->route('rencana6tahun')
             ->with('success', 'Data berhasil diperbarui!');
     }
+
 
 
 
