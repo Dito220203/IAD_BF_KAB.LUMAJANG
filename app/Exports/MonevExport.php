@@ -23,13 +23,13 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
         $this->tahun = $tahun;
     }
 
-    // =============================================================
-    // MODIFIKASI TOTAL: Method ini diubah agar bisa membuat baris baru
-    // untuk anggaran/sumberdana, sama seperti di RencanaExport.
-    // =============================================================
+    /**
+     * Mengambil dan memformat data untuk koleksi Excel.
+     * Logika telah diperbaiki untuk menangani semua kolom array.
+     */
     public function collection()
     {
-        // Query untuk mengambil data tetap sama
+        // Query untuk mengambil data
         $query = Monev::with(['subprogram', 'opd', 'rencanakerja']);
 
         if ($this->user->level !== 'Super Admin') {
@@ -42,9 +42,10 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
 
         $monevs = $query->get();
 
-        // Logika baru untuk menyusun baris-baris Excel
+        // Menyusun baris-baris Excel
         $rows = collect();
         $no = 1;
+        $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
 
         foreach ($monevs as $item) {
             // 1. Pecah string anggaran dan sumberdana menjadi array
@@ -52,33 +53,30 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
             $sumberdanas = $item->sumberdana ? explode('; ', $item->sumberdana) : ['-'];
             $maxRows = max(count($anggarans), count($sumberdanas));
 
-            // Logika pemrosesan data lainnya (Realisasi, Vol Target, dll) tetap sama
-            $dokAnggaranStr = is_array($item->dokumen_anggaran) ? implode("\n", array_filter($item->dokumen_anggaran)) : 'Belum';
-            if (empty($dokAnggaranStr)) $dokAnggaranStr = 'Belum';
-
-            $realisasiStr = '';
-            if (is_array($item->realisasi)) {
-                $realisasiLines = [];
-                $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
-                foreach($item->realisasi as $tw => $val) {
-                    if ($val) $realisasiLines[] = "TW " . ($romanMap[$tw] ?? $tw) . ": " . $val;
+            // --- FUNGSI HELPER UNTUK KONVERSI ARRAY KE STRING ---
+            $arrayToString = function ($arrayData) use ($romanMap) {
+                if (!is_array($arrayData) || empty(array_filter($arrayData))) {
+                    return '-';
                 }
-                $realisasiStr = implode("\n", $realisasiLines);
-            }
-            if (empty($realisasiStr)) $realisasiStr = '-';
-
-            $volTargetStr = '';
-            if (is_array($item->volumeTarget)) {
-                $volTargetLines = [];
-                $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
-                foreach($item->volumeTarget as $tw => $val) {
-                    if ($val) $volTargetLines[] = "TW " . ($romanMap[$tw] ?? $tw) . ": " . $val;
+                $lines = [];
+                foreach ($arrayData as $tw => $val) {
+                    if ($val) {
+                        $lines[] = "TW " . ($romanMap[$tw] ?? $tw) . ": " . $val;
+                    }
                 }
-                $volTargetStr = implode("\n", $volTargetLines);
-            }
-            if (empty($volTargetStr)) $volTargetStr = '-';
+                return empty($lines) ? '-' : implode("\n", $lines);
+            };
 
-            // 2. Looping untuk membuat baris Excel
+            // 2. Proses semua kolom array menjadi string
+            $dokAnggaranStr = is_array($item->dokumen_anggaran) ? implode("\n", array_filter($item->dokumen_anggaran)) : '';
+            if (empty($dokAnggaranStr)) $dokAnggaranStr = '-';
+
+            $realisasiStr       = $arrayToString($item->realisasi);
+            $volTargetStr       = $arrayToString($item->volumeTarget);
+            $satuanRealisasiStr = $arrayToString($item->satuan_realisasi); // DIPERBAIKI: Menambahkan kolom yang hilang
+            $uraianStr          = $arrayToString($item->uraian);          // DIPERBAIKI: Mengatasi error
+
+            // 3. Looping untuk membuat baris Excel
             for ($i = 0; $i < $maxRows; $i++) {
                 if ($i === 0) {
                     // Baris pertama berisi semua data
@@ -90,28 +88,29 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
                         'Kegiatan'          => $item->kegiatan,
                         'Program'           => $item->nama_program,
                         'Lokasi'            => $item->lokasi,
-                        'Vol'               => $item->volume,
+                        'Vol Target'        => $item->volume,
                         'Satuan'            => $item->satuan,
                         'Anggaran'          => $anggarans[$i] ?? '-',
                         'Sumber Dana'       => $sumberdanas[$i] ?? '-',
                         'Tahun'             => $item->tahun,
                         'Perangkat Daerah'  => $item->opd->nama ?? '-',
                         'Dokumen Anggaran'  => $dokAnggaranStr,
-                        'Realisasi'         => $realisasiStr,
-                        'Vol Target'        => $volTargetStr,
+                        'Realisasi Anggaran'         => $realisasiStr,
+                        'Vol Realisasi'     => $volTargetStr,
+                        'Satuan Volume'  => $satuanRealisasiStr, // DIPERBAIKI: Menambahkan kolom baru
                         'Status'            => $item->status,
                         'Catatan'           => $item->pesan ?? '-',
-                        'Ket'               => $item->uraian ?? '-',
+                        'Ket'               => $uraianStr, // DIPERBAIKI: Menggunakan string yang sudah diproses
                     ]);
                 } else {
                     // Baris selanjutnya hanya berisi anggaran dan sumber dana
                     $rows->push([
                         'No' => '', 'Sub Program' => '', 'Rencana Aksi' => '', 'Sub Kegiatan' => '',
-                        'Kegiatan' => '', 'Program' => '', 'Lokasi' => '', 'Vol' => '', 'Satuan' => '',
+                        'Kegiatan' => '', 'Program' => '', 'Lokasi' => '', 'Vol Target' => '', 'Satuan' => '',
                         'Anggaran'          => $anggarans[$i] ?? '-',
                         'Sumber Dana'       => $sumberdanas[$i] ?? '-',
-                        'Tahun' => '', 'Perangkat Daerah' => '', 'Dokumen Anggaran' => '', 'Realisasi' => '',
-                        'Vol Target' => '', 'Status' => '', 'Catatan' => '', 'Ket' => '',
+                        'Tahun' => '', 'Perangkat Daerah' => '', 'Dokumen Anggaran' => '', 'Realisasi Anggaran' => '',
+                        'Vol Realisasi' => '', 'Satuan Volume' => '', 'Status' => '', 'Catatan' => '', 'Ket' => '',
                     ]);
                 }
             }
@@ -128,26 +127,24 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
 
     public function headings(): array
     {
+        // DIPERBAIKI: Menambahkan 'Satuan Realisasi' dan menyesuaikan urutan
         return [
             'No', 'Sub Program', 'Rencana Aksi', 'Sub Kegiatan', 'Kegiatan', 'Program',
-            'Lokasi', 'Vol', 'Satuan', 'Anggaran', 'Sumber Dana', 'Tahun',
-            'Perangkat Daerah', 'Dokumen Anggaran', 'Realisasi', 'Vol Target',
-            'Status', 'Catatan', 'Ket',
+            'Lokasi', 'Vol Target', 'Satuan', 'Anggaran', 'Sumber Dana', 'Tahun',
+            'Perangkat Daerah', 'Dokumen Anggaran', 'Realisasi Anggaran', 'Vol Realisasi',
+            'Satuan Volume', 'Status', 'Catatan', 'Ket',
         ];
     }
 
-    // =============================================================
-    // MODIFIKASI: Menambahkan logika MERGE CELL di method styles()
-    // =============================================================
     public function styles(Worksheet $sheet)
     {
-        $lastColumn = 'S';
+        $lastColumn = 'T'; // DIPERBAIKI: Diubah dari S ke T karena ada kolom baru
         $sheet->mergeCells("A1:{$lastColumn}1");
         $sheet->setCellValue('A1', 'Monitoring dan Evaluasi IAD Perhutanan Sosial');
         $sheet->getRowDimension(1)->setRowHeight(30);
         $sheet->getStyle('A1')->applyFromArray([
             'font' => ['bold' => true, 'size' => 16],
-            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER],
         ]);
 
         $headerRange = "A3:{$lastColumn}3";
@@ -158,7 +155,7 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
         ]);
         $sheet->getRowDimension(3)->setRowHeight(28);
 
-        $collection = $this->collection(); // Panggil collection di sini
+        $collection = $this->collection();
         $rowCount = $collection->count();
         $lastRow = $rowCount > 0 ? (3 + $rowCount) : 3;
 
@@ -173,33 +170,28 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
         ]);
 
         if ($rowCount > 0) {
-            $leftAlignedColumns = ['B', 'C', 'D', 'E', 'F'];
+            $leftAlignedColumns = ['B', 'C', 'D', 'E', 'F', 'O', 'P', 'Q', 'T']; // DIPERBAIKI: Kolom array rata kiri
             foreach ($leftAlignedColumns as $column) {
                 $sheet->getStyle("{$column}4:{$column}{$lastRow}")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
             }
-            $centerAlignedColumns = ['A', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'];
+            $centerAlignedColumns = ['A', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'R', 'S']; // DIPERBAIKI
             foreach ($centerAlignedColumns as $column) {
                 $sheet->getStyle("{$column}4:{$column}{$lastRow}")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             }
 
-            // =============================================================
-            // LOGIKA BARU: Menggabungkan sel (MERGE CELL)
-            // =============================================================
+            // Logika untuk menggabungkan sel (MERGE CELL)
             $currentRow = 4;
             foreach ($collection as $index => $row) {
-                // Cek jika baris ini adalah baris pertama dari sebuah data (ada nomornya)
                 if (!empty($row['No'])) {
                     $mergeCount = 0;
-                    // Hitung berapa baris berikutnya yang kosong (untuk anggaran & sumberdana tambahan)
                     for ($j = $index + 1; $j < $rowCount; $j++) {
                         if (empty($collection[$j]['No'])) $mergeCount++;
                         else break;
                     }
-                    // Jika ada baris tambahan, gabungkan selnya
                     if ($mergeCount > 0) {
                         $endRow = $currentRow + $mergeCount;
-                        // Kolom yang akan di-merge (semua kecuali Anggaran 'J' dan Sumber Dana 'K')
-                        $columnsToMerge = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'];
+                        // DIPERBAIKI: Menyesuaikan kolom yang akan di-merge
+                        $columnsToMerge = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
                         foreach ($columnsToMerge as $column) {
                             $sheet->mergeCells("{$column}{$currentRow}:{$column}{$endRow}");
                         }
@@ -217,11 +209,12 @@ class MonevExport implements FromCollection, WithHeadings, WithStyles, WithTitle
 
     public function columnWidths(): array
     {
+        // DIPERBAIKI: Menambahkan lebar untuk kolom 'Q' (Satuan Realisasi) dan menyesuaikan kolom lainnya
         return [
-            'A' => 5,   'B' => 25,  'C' => 30,  'D' => 30,  'E' => 25,
-            'F' => 30,  'G' => 20,  'H' => 10,  'I' => 10,  'J' => 20,
-            'K' => 20,  'L' => 10,  'M' => 25,  'N' => 20,  'O' => 20,
-            'P' => 20,  'Q' => 15,  'R' => 30,  'S' => 30,
+            'A' => 5,  'B' => 25, 'C' => 30, 'D' => 30, 'E' => 25,
+            'F' => 30, 'G' => 20, 'H' => 10, 'I' => 10, 'J' => 20,
+            'K' => 20, 'L' => 10, 'M' => 25, 'N' => 20, 'O' => 20,
+            'P' => 20, 'Q' => 20, 'R' => 15, 'S' => 30, 'T' => 30,
         ];
     }
 }

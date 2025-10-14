@@ -189,10 +189,55 @@
                                     </form>
                                 </div>
                             </div>
+                            {{-- --- aksi buka kunci --- --}}
+                            @if (Auth::guard('pengguna')->user()->level === 'Super Admin' && isset($allOpds) && $allOpds->isNotEmpty())
+                                <div class="card-body border-top pt-3">
+                                    <h5 class="card-title" style="padding: 0 !important; margin-bottom: 5px;">Aksi Kunci
+                                        Data per OPD</h5>
+                                    <form action="{{ route('monev.bulk-lock') }}" method="POST" id="bulk-lock-form">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="row g-2 align-items-end">
+                                            {{-- Dropdown Pilih OPD --}}
+                                            <div class="col-md-5">
+                                                <label for="opd_id_filter" class="form-label">Perangkat Daerah</label>
+                                                <select name="opd_id" id="opd_id_filter" class="form-select form-select-sm"
+                                                    required>
+                                                    <option value="" selected disabled>-- Pilih Perangkat Daerah --
+                                                    </option>
+                                                    @foreach ($allOpds as $opd)
+                                                        <option value="{{ $opd->id }}">{{ $opd->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            {{-- Dropdown Pilih Aksi --}}
+                                            <div class="col-md-4">
+                                                <label for="action_filter" class="form-label">Aksi</label>
+                                                <select name="action" id="action_filter" class="form-select form-select-sm"
+                                                    required>
+                                                    <option value="" selected disabled>-- Pilih Aksi --</option>
+                                                    <option value="lock">Kunci Semua Data</option>
+                                                    <option value="unlock">Buka Semua Kunci</option>
+                                                </select>
+                                            </div>
+
+                                            {{-- Tombol Terapkan --}}
+                                            <div class="col-md-3">
+                                                <button type="submit" class="btn btn-danger btn-sm w-100">
+                                                    <i class="fas fa-play me-1"></i> Terapkan Aksi
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endif
                             <div class="table-container">
                                 <div class="top-scrollbar-container">
                                     <div class="top-scrollbar-content"></div>
                                 </div>
+
+
                                 <!-- Table -->
                                 <div class="table-responsive">
                                     <table class="detail-table" id="TableMonev" style="min-width: 3000px;">
@@ -208,9 +253,9 @@
                                                 <th class="text-center" style="width: 300px;">Rencana Aksi / Aktivitas</th>
                                                 <th class="text-center" style="width: 200px;">Sub Kegiatan</th>
                                                 <th class="text-center" style="width: 200px;">Kegiatan</th>
-                                                <th class="text-center" style="width: 200px;">Nama Program</th>
+                                                <th class="text-center" style="width: 200px;">Program</th>
                                                 <th class="text-center">Lokasi</th>
-                                                <th class="text-center">Volume</th>
+                                                <th class="text-center">Volume Target</th>
                                                 <th class="text-center">Satuan</th>
                                                 <th class="text-center">Tahun</th>
                                                 <th class="text-center">Perangkat Daerah</th>
@@ -218,8 +263,9 @@
                                                 <th class="text-center" style="width: 200px;">Sumber Dana</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-center">Dokumen Anggaran</th>
-                                                <th class="text-center">Realisasi</th>
-                                                <th class="text-center">Volume Target</th>
+                                                <th class="text-center">Realisasi Anggaran</th>
+                                                <th class="text-center">Volume Realisasi</th>
+                                                <th class="text-center">Satuan Volume</th>
                                                 <th class="text-center">Keterangan</th>
                                                 @if ($adaPesan)
                                                     <th class="text-center">Catatan</th>
@@ -232,7 +278,8 @@
                                             @foreach ($monev as $data)
                                                 <tr id="row-{{ $data->id }}">
                                                     <td class="text-center">{{ $monev->firstItem() + $loop->index }}</td>
-                                                    <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}</td>
+                                                    <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}
+                                                    </td>
                                                     <td>{{ $data->rencanakerja->rencana_aksi ?? '-' }}</td>
                                                     <td>{{ $data->sub_kegiatan }}</td>
                                                     <td>{{ $data->kegiatan }}</td>
@@ -276,7 +323,7 @@
                                                     @endif
 
 
-
+                                                    {{-- kolom status --}}
                                                     <td class="text-center">
                                                         @if ($data->status === 'Valid')
                                                             <span class="badge bg-success">{{ $data->status }}</span>
@@ -329,7 +376,7 @@
                                                         @endif
                                                     </td>
 
-                                                    {{-- Kolom Volume Target (Diperbaiki dengan Flexbox) --}}
+                                                    {{-- Kolom Volume realisasi (Diperbaiki dengan Flexbox) --}}
                                                     <td>
                                                         @if (is_array($data->volumeTarget))
                                                             @foreach ($data->volumeTarget as $triwulan => $nilai)
@@ -349,7 +396,44 @@
                                                         @endif
                                                     </td>
 
-                                                    <td>{{ $data->uraian }}</td>
+                                                    {{-- Kolom Satuan Realisasi (Diperbaiki dengan Flexbox) --}}
+                                                    <td>
+                                                        @if (is_array($data->satuan_realisasi))
+                                                            @foreach ($data->satuan_realisasi as $triwulan => $nilai)
+                                                                @if ($nilai)
+                                                                    <div style="display: flex; align-items: baseline;">
+                                                                        <span style="width: 55px; display: inline-block;">
+                                                                            TW {{ $romanMap[$triwulan] ?? $triwulan }}
+                                                                        </span>
+                                                                        <span>:</span>
+                                                                        <strong
+                                                                            style="margin-left: 5px;">{{ $nilai }}</strong>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            {{ $data->satuan_realisasi }}
+                                                        @endif
+                                                    </td>
+                                                    {{-- kolom uraian --}}
+                                                    <td>
+                                                        @if (is_array($data->uraian))
+                                                            @foreach ($data->uraian as $triwulan => $nilai)
+                                                                @if ($nilai)
+                                                                    <div style="display: flex; align-items: baseline;">
+                                                                        <span style="width: 55px; display: inline-block;">
+                                                                            TW {{ $romanMap[$triwulan] ?? $triwulan }}
+                                                                        </span>
+                                                                        <span>:</span>
+                                                                        <strong
+                                                                            style="margin-left: 5px;">{{ $nilai }}</strong>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            {{ $data->uraian }}
+                                                        @endif
+                                                    </td>
                                                     @if ($adaPesan)
                                                         <td>{{ $data->pesan }}</td>
                                                     @endif
@@ -375,12 +459,25 @@
                                                                 data-id="{{ $data->id }}">
                                                                 <i class="fas fa-camera"></i> Upload
                                                             </button>
-                                                            <form action="{{ route('monev.edit', $data->id) }}"
-                                                                method="GET">
-                                                                <button class="btn btn-primary btn-sm">
-                                                                    Edit/Lengkapi
+
+                                                            @if ($data->is_locked)
+                                                                {{-- Jika terkunci, tombol dinonaktifkan --}}
+                                                                <button type="button" class="btn btn-secondary btn-sm"
+                                                                    onclick="showLockedAlert()">
+                                                                    <i class="fas fa-lock"></i> Edit/Lengkapi
                                                                 </button>
-                                                            </form>
+                                                            @else
+                                                                {{-- Jika tidak terkunci, tombol berfungsi normal --}}
+                                                                <form action="{{ route('monev.edit', $data->id) }}"
+                                                                    method="GET" style="display:inline;">
+                                                                    <button class="btn btn-primary btn-sm">
+                                                                        <i class="fas fa-edit"></i> Edit/Lengkapi
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                            @push('scripts')
+                                                                <script src="{{ asset('js/kunciMonev.js') }}"></script>
+                                                            @endpush
 
                                                             @if (auth()->guard('pengguna')->user()->level == 'Super Admin')
                                                                 <button
@@ -485,6 +582,110 @@
                                     </script>
 
 
+                                    {{-- modal detail --}}
+                                    @foreach ($monev as $data)
+                                        <div class="modal fade" id="ModalDetailProduk{{ $data->id }}" tabindex="-1"
+                                            aria-labelledby="DetailLabel{{ $data->id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-super-xl modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-primary text-white">
+                                                        <h5 class="modal-title" id="DetailLabel{{ $data->id }}">
+                                                            <i class="bi bi-info-circle me-2"></i>Detail Monitoring &
+                                                            Evaluasi
+                                                        </h5>
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row g-4">
+
+                                                            <div class="col-md-6">
+                                                                <div class="keterangan-panjang">
+                                                                    <h6 class="mb-3 fw-bold"><i
+                                                                            class="bi bi-list-ul text-primary me-2"></i>Detail
+                                                                        Dokumentasi</h6>
+                                                                    <div>
+                                                                        <h6 class="mb-2 fw-bold"><i
+                                                                                class="bi bi-card-text me-2"></i>Keterangan
+                                                                        </h6>
+
+                                                                        <div class="keterangan-box">
+                                                                            <p>
+                                                                                @if ($data->fotoProgres->isNotEmpty())
+                                                                                    {{ $data->fotoProgres->first()->deskripsi ?: 'Tidak ada uraian.' }}
+                                                                                @else
+                                                                                    <span
+                                                                                        class="text-muted fst-italic">Tidak
+                                                                                        ada uraian</span>
+                                                                                @endif
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mt-4">
+                                                                    <h6 class="mb-3 fw-bold"><i
+                                                                            class="bi bi-geo-alt-fill text-danger me-2"></i>Lokasi
+                                                                        Peta</h6>
+                                                                    @if ($data->map && $data->map->latitude && $data->map->longitude)
+                                                                        <div id="detailMap{{ $data->id }}"
+                                                                            class="peta-container rounded shadow-sm"
+                                                                            data-latitude="{{ $data->map->latitude }}"
+                                                                            data-longitude="{{ $data->map->longitude }}">
+                                                                        </div>
+                                                                    @else
+                                                                        <div
+                                                                            class="alert alert-light placeholder-container">
+                                                                            <i class="bi bi-map placeholder-icon"></i>
+                                                                            <p class="mb-0 mt-3 text-muted">Lokasi belum
+                                                                                ditandai</p>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <h6 class="mb-3 fw-bold"><i
+                                                                        class="bi bi-images text-primary me-2"></i>Dokumentasi
+                                                                    Foto</h6>
+                                                                <div class="foto-container-scrollable">
+                                                                    @if ($data->fotoProgres->isNotEmpty())
+                                                                        <div class="row g-3">
+                                                                            @foreach ($data->fotoProgres as $foto)
+                                                                                <div class="col-12">
+                                                                                    <a href="{{ asset('storage/' . $foto->foto) }}"
+                                                                                        target="_blank"
+                                                                                        class="d-block hover-effect">
+                                                                                        <img src="{{ asset('storage/' . $foto->foto) }}"
+                                                                                            alt="Foto Progres"
+                                                                                            class="galeri-foto-item">
+                                                                                    </a>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    @else
+                                                                        <div
+                                                                            class="alert alert-light text-center m-0 placeholder-container">
+                                                                            <i class="bi bi-image placeholder-icon"></i>
+                                                                            <p class="mb-0 mt-2 text-muted">Belum ada foto
+                                                                            </p>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer bg-light">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">
+                                                            <i class="bi bi-x-circle me-2"></i>Tutup
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                                 <div class="mt-3">
                                     {{ $monev->links('vendor.pagination.bootstrap-5') }}
@@ -518,7 +719,7 @@
                                             <p class="text-muted small">Drag & drop atau klik (JPG, PNG, Maks 2MB)</p>
                                         </div>
                                         <input type="file" id="fileInput" name="foto[]" accept="image/*" multiple
-                                            style="display: none;">
+                                            style="display: none;" required>
                                     </div>
 
                                     <div id="previewContainer" class="mb-3">
@@ -526,7 +727,7 @@
                                     <div class="form-group mb-4">
                                         <label for="deskripsi_input" class="form-label">Uraian</label>
                                         <textarea name="deskripsi" id="deskripsi_input" class="form-control" placeholder="Masukkan keterangan..."
-                                            rows="3"></textarea>
+                                            rows="3" required></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Tandai Lokasi di Peta</label>
@@ -546,77 +747,7 @@
                         </div>
                     </div>
                 </div>
-                {{-- modal detail --}}
-                @foreach ($monev as $data)
-                    <div class="modal fade" id="ModalDetailProduk{{ $data->id }}" tabindex="-1"
-                        aria-labelledby="DetailLabel{{ $data->id }}" aria-hidden="true">
-                        <div class="modal-dialog modal-xl modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="DetailLabel{{ $data->id }}">Dokumentasi Foto & Peta
-                                        Lokasi
-                                    </h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
 
-                                        <div class="col-md-6">
-                                            @if ($data->fotoProgres->isNotEmpty())
-                                                <div class="mb-3">
-                                                    <strong>Keterangan:</strong>
-                                                    <p class="mt-1" style="font-size: 1.1em;">
-                                                        {{ $data->fotoProgres->first()->deskripsi ?: 'Tidak ada keterangan.' }}
-                                                    </p>
-                                                </div>
-
-                                                <strong>Galeri Foto:</strong>
-                                                <div class="row mt-2">
-                                                    @foreach ($data->fotoProgres as $foto)
-                                                        <div class="col-lg-6 col-md-12 mb-3">
-                                                            <a href="{{ asset('storage/' . $foto->foto) }}"
-                                                                target="_blank" title="Lihat ukuran penuh">
-                                                                <img src="{{ asset('storage/' . $foto->foto) }}"
-                                                                    class="img-fluid" alt="Foto"
-                                                                    style="height: 150px; width: 100%; object-fit: cover; border-radius: 8px;">
-                                                            </a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @else
-                                                <div class="alert alert-warning text-center">
-                                                    <i class="bi bi-exclamation-triangle-fill"></i> Belum ada dokumentasi.
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <strong>Lokasi di Peta:</strong>
-                                            @if ($data->map && $data->map->latitude && $data->map->longitude)
-                                                <div id="detailMap{{ $data->id }}" class="mt-2 detail-map-container"
-                                                    style="height: 400px; width: 100%; border-radius: 8px; z-index: 0;"
-                                                    data-latitude="{{ $data->map->latitude }}"
-                                                    data-longitude="{{ $data->map->longitude }}">
-                                                </div>
-                                            @else
-                                                <div class="alert alert-light text-center mt-2 d-flex align-items-center justify-content-center"
-                                                    style="height: 400px;">
-                                                    Lokasi belum ditandai.
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Tutup</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
 
         </section>
     </main>
@@ -776,7 +907,7 @@
         <script>
             document.addEventListener('shown.bs.modal', function(event) {
                 const modal = event.target;
-                const mapContainer = modal.querySelector('.detail-map-container');
+                const mapContainer = modal.querySelector('.peta-container');
                 if (!mapContainer || mapContainer._leaflet_id) return;
 
                 const lat = mapContainer.dataset.latitude;
@@ -799,59 +930,5 @@
             });
         </script>
 
-        {{-- Script scroll atas --}}
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Cari semua kontainer tabel di halaman
-                const allTableContainers = document.querySelectorAll('.table-container');
-
-                allTableContainers.forEach(container => {
-                    const topScrollbar = container.querySelector('.top-scrollbar-container');
-                    const topScrollbarContent = container.querySelector('.top-scrollbar-content');
-                    const tableWrapper = container.querySelector('.table-responsive');
-                    const table = container.querySelector('.detail-table');
-
-                    // Jika salah satu elemen tidak ditemukan, hentikan untuk kontainer ini
-                    if (!topScrollbar || !tableWrapper || !table) {
-                        return;
-                    }
-
-                    let isSyncing = false;
-
-                    // 1. Atur lebar konten palsu agar sama dengan lebar tabel asli
-                    //    Ini akan membuat scrollbar atas muncul jika tabelnya lebar
-                    function updateTopScrollbarWidth() {
-                        if (table.scrollWidth > tableWrapper.clientWidth) {
-                            topScrollbarContent.style.width = table.scrollWidth + 'px';
-                            topScrollbar.style.display = 'block'; // Tampilkan jika perlu
-                        } else {
-                            topScrollbar.style.display = 'none'; // Sembunyikan jika tidak perlu
-                        }
-                    }
-
-                    // 2. Sinkronkan scroll dari atas ke bawah
-                    topScrollbar.addEventListener('scroll', function() {
-                        if (isSyncing) return;
-                        isSyncing = true;
-                        tableWrapper.scrollLeft = topScrollbar.scrollLeft;
-                        isSyncing = false;
-                    });
-
-                    // 3. Sinkronkan scroll dari bawah ke atas
-                    tableWrapper.addEventListener('scroll', function() {
-                        if (isSyncing) return;
-                        isSyncing = true;
-                        topScrollbar.scrollLeft = tableWrapper.scrollLeft;
-                        isSyncing = false;
-                    });
-
-                    // Panggil pertama kali saat halaman dimuat
-                    updateTopScrollbarWidth();
-
-                    // Panggil lagi jika ukuran window berubah (misal: rotasi HP)
-                    window.addEventListener('resize', updateTopScrollbarWidth);
-                });
-            });
-        </script>
-    @endpush
+      
 @endsection

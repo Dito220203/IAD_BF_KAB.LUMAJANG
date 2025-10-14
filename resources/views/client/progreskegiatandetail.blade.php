@@ -53,52 +53,63 @@
 @push('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-      const gallery = document.querySelector(".mySwiper");
+            const gallery = document.querySelector(".mySwiper");
 
-    if (gallery) {
-        const slideCount = gallery.querySelectorAll(".swiper-slide").length;
-        const screenWidth = window.innerWidth;
+            if (gallery) {
+                const wrapper = gallery.querySelector(".swiper-wrapper");
+                const originalSlides = gallery.querySelectorAll(".swiper-slide");
+                const slideCount = originalSlides.length;
 
-        // 🔧 Ubah logika agar loop aktif jika ada lebih dari 1 gambar
-        if (slideCount > 1) {
-
-            var swiper = new Swiper(".mySwiper", {
-                effect: "slide",
-                loop: true, // ✅ Selalu aktif jika gambar > 1
-                grabCursor: true,
-                speed: 900,
-
-                autoplay: {
-                    delay: 2500,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                },
-
-                // Default: mobile
-                slidesPerView: 1.2,
-                spaceBetween: 10,
-                centeredSlides: true, // tetap center agar visual halus
-
-                breakpoints: {
-                    768: {
-                        slidesPerView: 1.5,
-                        spaceBetween: 20,
-                        centeredSlides: true,
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 30,
-                        centeredSlides: true,
-                    }
+                // --- MULAI KODE BARU ---
+                // Logika untuk menduplikasi slide jika jumlahnya sedikit (2 atau 3)
+                // Ini memastikan Swiper punya cukup slide untuk mode 'loop'
+                if (slideCount > 1 && slideCount < 4) {
+                    originalSlides.forEach(slide => {
+                        const clone = slide.cloneNode(true); // Buat duplikat dari setiap slide
+                        wrapper.appendChild(clone);         // Tambahkan duplikat ke akhir galeri
+                    });
                 }
-            });
+                // --- AKHIR KODE BARU ---
 
-        } else {
-            // Layout statis (jika cuma 1 gambar)
-            gallery.classList.add('static-layout');
-            gallery.classList.add('static-layout-1');
-        }
-    }
+                // Inisialisasi Swiper hanya jika ada lebih dari 1 gambar
+                if (slideCount > 1) {
+                    var swiper = new Swiper(".mySwiper", {
+                        effect: "slide",
+                        loop: true, // Loop sekarang akan berfungsi untuk 2, 3, atau 4+ gambar
+                        grabCursor: true,
+                        speed: 900,
+
+                        autoplay: {
+                            delay: 2500,
+                            disableOnInteraction: false,
+                            pauseOnMouseEnter: true,
+                        },
+
+                        // Default: mobile
+                        slidesPerView: 1.2,
+                        spaceBetween: 10,
+                        centeredSlides: true,
+
+                        breakpoints: {
+                            768: {
+                                slidesPerView: 1.5,
+                                spaceBetween: 20,
+                                centeredSlides: true,
+                            },
+                            1024: {
+                                slidesPerView: 3,
+                                spaceBetween: 30,
+                                centeredSlides: true,
+                            }
+                        }
+                    });
+
+                } else if (slideCount === 1) {
+                    // Layout statis (jika cuma 1 gambar)
+                    gallery.classList.add('static-layout');
+                    gallery.classList.add('static-layout-1');
+                }
+            }
             // --- Bagian Peta (Leaflet.js) tidak diubah ---
             delete L.Icon.Default.prototype._getIconUrl;
             L.Icon.Default.mergeOptions({

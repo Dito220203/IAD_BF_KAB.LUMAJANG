@@ -316,4 +316,54 @@
     }, 200);
   }
 
+
+  /**
+   * Custom: Top Scrollbar for Tables
+   * Penjelasan: Script ini untuk menyinkronkan scrollbar atas dan bawah pada tabel.
+   */
+  // Langsung jalankan kodenya tanpa dibungkus DOMContentLoaded
+  const allTableContainers = document.querySelectorAll('.table-container');
+
+  allTableContainers.forEach(container => {
+      const topScrollbar = container.querySelector('.top-scrollbar-container');
+      const topScrollbarContent = container.querySelector('.top-scrollbar-content');
+      const tableWrapper = container.querySelector('.table-responsive');
+      const table = container.querySelector('.detail-table');
+
+      if (!topScrollbar || !tableWrapper || !table) {
+          return;
+      }
+
+      let isSyncing = false;
+
+      function updateTopScrollbarWidth() {
+          if (table.scrollWidth > tableWrapper.clientWidth) {
+              topScrollbarContent.style.width = table.scrollWidth + 'px';
+              topScrollbar.style.display = 'block';
+          } else {
+              topScrollbar.style.display = 'none';
+          }
+      }
+
+      topScrollbar.addEventListener('scroll', function() {
+          if (isSyncing) return;
+          isSyncing = true;
+          tableWrapper.scrollLeft = topScrollbar.scrollLeft;
+          isSyncing = false;
+      });
+
+      tableWrapper.addEventListener('scroll', function() {
+          if (isSyncing) return;
+          isSyncing = true;
+          topScrollbar.scrollLeft = tableWrapper.scrollLeft;
+          isSyncing = false;
+      });
+
+      // Panggil pertama kali saat halaman dimuat
+      updateTopScrollbarWidth();
+
+      // Panggil lagi jika ukuran window berubah
+      window.addEventListener('resize', updateTopScrollbarWidth);
+  });
 })();
+

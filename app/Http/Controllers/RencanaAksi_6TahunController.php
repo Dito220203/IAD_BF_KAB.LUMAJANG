@@ -167,6 +167,7 @@ class RencanaAksi_6TahunController extends Controller
             'satuan'        => $validate['satuan'],
             'id_opd'        => $validate['id_opd'],
             'keterangan'    => $validate['keterangan'],
+             'is_locked'     => true,
         ]);
 
         // 7. Buat data Monev untuk PENGGUNA DARI OPD TERPILIH
@@ -185,6 +186,8 @@ class RencanaAksi_6TahunController extends Controller
             'tahun'         => $rencana->tahun,
             'id_opd'        => $rencana->id_opd,
             'status'        => 'Belum divalidasi',
+            'is_locked'     => true,
+
         ]);
 
         // 8. Buat data Progres Kerja untuk PENGGUNA DARI OPD TERPILIH
@@ -200,93 +203,6 @@ class RencanaAksi_6TahunController extends Controller
             ->with('success', 'Rencana Aksi, Rencana Kerja, dan Monev berhasil ditambahkan!');
     }
 
-    // public function store(Request $request)
-    // {
-    //     $validate = $request->validate([
-    //         'sub_program' => 'required|exists:subprograms,id',
-    //         'nama_program' => 'required',
-    //         'rencanaAksi' => 'required',
-    //         'kegiatan' => 'required',
-    //         'sub_kegiatan' => 'required',
-    //         'tahun' => 'required',
-    //         'anggaran' => 'required|array',
-    //         'anggaran.*' => 'required|string',
-    //         'sumberdana' => 'required|array',
-    //         'sumberdana.*' => 'required|string',
-    //         'lokasi' => 'required',
-    //         'volume' => 'required',
-    //         'satuan' => 'required',
-    //         'id_opd' => 'required|exists:opds,id',
-    //         'keterangan' => 'required'
-    //     ]);
-
-    //     // 2. Ubah array anggaran dan sumberdana menjadi string dengan pemisah ';'
-    //     $anggaranString = implode('; ', $validate['anggaran']);
-    //     $sumberdanaString = implode('; ', $validate['sumberdana']);
-
-    //     RencanaAksi_6_tahun::create([
-    //         'id_pengguna'   => Auth::guard('pengguna')->id(),
-    //         'id_subprogram' => $validate['sub_program'],
-    //         'rencana_aksi'  => $validate['rencanaAksi'],
-    //         'nama_program'  => $validate['nama_program'],
-    //         'kegiatan'      => $validate['kegiatan'],
-    //         'sub_kegiatan'  => $validate['sub_kegiatan'],
-    //         'tahun'         => $validate['tahun'],
-    //         'anggaran'      => $anggaranString,
-    //         'sumberdana'    => $sumberdanaString,
-    //         'lokasi'        => $validate['lokasi'],
-    //         'volume'        => $validate['volume'],
-    //         'satuan'        => $validate['satuan'],
-    //         'id_opd'        => $validate['id_opd'],
-    //         'keterangan'    => $validate['keterangan'],
-    //     ]);
-
-    //     $rencana = RencanaKerja::create([
-    //         'id_pengguna'   => Auth::guard('pengguna')->id(),
-    //         'id_subprogram' => $validate['sub_program'],
-    //         'rencana_aksi'  => $validate['rencanaAksi'],
-    //         'nama_program'  => $validate['nama_program'],
-    //         'kegiatan'      => $validate['kegiatan'],
-    //         'sub_kegiatan'  => $validate['sub_kegiatan'],
-    //         'tahun'         => $validate['tahun'],
-    //         'anggaran'      => $anggaranString,
-    //         'sumberdana'    => $sumberdanaString,
-    //         'lokasi'        => $validate['lokasi'],
-    //         'volume'        => $validate['volume'],
-    //         'satuan'        => $validate['satuan'],
-    //         'id_opd'        => $validate['id_opd'],
-    //         'keterangan'    => $validate['keterangan'],
-    //     ]);
-
-    //     $monev = Monev::create([
-    //         'id_pengguna'   => $rencana->id_pengguna,
-    //         'id_subprogram' => $rencana->id_subprogram,
-    //         'rencana_aksi'  => $rencana->id,
-    //         'sub_kegiatan'  => $rencana->sub_kegiatan,
-    //         'kegiatan'      => $rencana->kegiatan,
-    //         'nama_program'  => $rencana->nama_program,
-    //         'lokasi'        => $rencana->lokasi,
-    //         'volume'        => $rencana->volume,
-    //         'satuan'        => $rencana->satuan,
-    //         'anggaran'      => $anggaranString,
-    //         'sumberdana'    => $sumberdanaString,
-    //         'tahun'         => $rencana->tahun,
-    //         'id_opd'        => $rencana->id_opd,
-    //         'status'        => 'Belum divalidasi',
-    //     ]);
-
-    //     ProgresKerja::create([
-    //         'id_pengguna' => $monev->id_pengguna,
-    //         'id_monev'    => $monev->id,
-
-    //     ]);
-
-
-    //     LogHelper::add('Menambah Data Rencana Aksi + Rencana Kerja + Monev');
-
-    //     return redirect()->route('rencana6tahun')
-    //         ->with('success', 'Rencana Aksi, Rencana Kerja, dan Monev berhasil ditambahkan!');
-    // }
 
     /**
      * Display the specified resource.

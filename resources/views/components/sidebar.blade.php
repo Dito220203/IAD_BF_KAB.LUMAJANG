@@ -124,8 +124,8 @@
                             <span>SubPotensi</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('potensi*') ? 'active' : '' }}"
+                    <li>
+                        <a class=" {{ request()->routeIs('potensi*') ? 'active' : '' }}"
                             href="{{ route('potensi') }}">
                             <i class="bi bi-circle"></i>
                             <span>Potensi</span>

@@ -300,7 +300,7 @@
                         <p>Tidak ada video tersedia.</p>
                     @endforelse
                 </div>
-                <div class="video-pagination" id="videoPagination"></div>
+                <div class="video-pagination" id="videoPagination" data-aos="fade-up" data-aos-delay="200"></div>
             </div>
         </section>
         <!-- /video Section -->
@@ -504,9 +504,16 @@
                         allDots.forEach((dot, index) => {
                             dot.addEventListener("click", () => {
                                 const cardWidth = cards[0].offsetWidth;
-                                const scrollPosition = index * (cardWidth + gap);
+                                const desiredScrollPosition = index * (cardWidth + gap);
+
+                                // BARU: Hitung batas scroll maksimum dari slider
+                                const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+
+                                // BARU: Pastikan posisi scroll tidak melebihi batas maksimum
+                                const finalScrollPosition = Math.min(desiredScrollPosition, maxScrollLeft);
+
                                 slider.scrollTo({
-                                    left: scrollPosition,
+                                    left: finalScrollPosition, // Gunakan posisi scroll yang sudah dikoreksi
                                     behavior: "smooth"
                                 });
                             });
@@ -514,7 +521,19 @@
 
                         slider.addEventListener("scroll", () => {
                             const cardWidth = cards[0].offsetWidth;
-                            const activeIndex = Math.round(slider.scrollLeft / (cardWidth + gap));
+                            const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                            let activeIndex;
+
+                            // --- INI BAGIAN YANG DIUBAH ---
+                            // Jika slider sudah di posisi paling ujung (toleransi 1px), paksa dot terakhir aktif
+                            if (Math.abs(slider.scrollLeft - maxScrollLeft) < 1) {
+                                activeIndex = allDots.length - 1;
+                            } else {
+                                // Jika tidak, gunakan perhitungan biasa
+                                activeIndex = Math.round(slider.scrollLeft / (cardWidth + gap));
+                            }
+                            // --- AKHIR PERUBAHAN ---
+
                             allDots.forEach((dot, index) => {
                                 dot.classList.toggle("active", index === activeIndex);
                             });

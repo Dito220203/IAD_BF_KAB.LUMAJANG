@@ -207,20 +207,22 @@
                     <th style="width: 8%;">Kegiatan</th>
                     <th style="width: 8%;">Program</th>
                     <th style="width: 5%;">Lokasi</th>
-                    <th style="width: 2%;">Vol</th>
+                    <th style="width: 2%;">Vol Target</th>
                     <th style="width: 3%;">Satuan</th>
                     <th style="width: 4%;">Anggaran</th>
                     <th style="width: 4%;">Sumber Dana</th>
                     <th style="width: 3%;">Tahun</th>
                     <th style="width: 6%;">Perangkat Daerah</th>
                     <th style="width: 7%;">Dokumen Anggaran</th>
-                    <th style="width: 7%;">Realisasi</th>
-                    <th style="width: 6%;">Vol Target</th>
+                    <th style="width: 7%;">Realisasi Anggaran</th>
+                    <th style="width: 6%;">Vol Realisasi</th>
+                    <th style="width: 6%;">Satuan Volume</th>
                     <th style="width: 4%;">Status</th>
                     <th style="width: 4%;">Catatan</th>
                     <th style="width: 4%;">Ket</th>
                 </tr>
             </thead>
+            {{-- GANTI SELURUH ISI <tbody> ANDA DENGAN KODE DI BAWAH INI --}}
             <tbody>
                 @foreach ($monev as $i => $row)
                     <tr>
@@ -236,28 +238,22 @@
                         <td class="text-center">{{ $row->lokasi }}</td>
                         <td class="text-center">{{ $row->volume }}</td>
                         <td class="text-center">{{ $row->satuan }}</td>
-                        {{-- Anggaran (dengan logika multi-baris & format Rupiah) --}}
-                        {{-- ANGGARAN (dengan garis pemisah) --}}
-                        <td class="text-center">
+
+                        {{-- ANGGARAN --}}
+                        <td class="text-center" style="padding: 0;">
                             @php $anggarans = explode('; ', $row->anggaran); @endphp
                             @foreach ($anggarans as $anggaran)
-                                {{-- Bungkus setiap item dengan div untuk styling --}}
                                 <div
                                     style="padding: 4px 2px; @if (!$loop->last) border-bottom: 1px solid #dee2e6; @endif">
-                                    @if (is_numeric($anggaran))
-                                        {{ 'Rp ' . number_format((float) $anggaran, 0, ',', '.') }}
-                                    @else
-                                        {{ $anggaran ?: '-' }}
-                                    @endif
+                                    {{ $anggaran ?: '-' }}
                                 </div>
                             @endforeach
                         </td>
 
-                        {{-- SUMBER DANA (dengan garis pemisah) --}}
-                        <td class="text-center">
+                        {{-- SUMBER DANA --}}
+                        <td class="text-center" style="padding: 0;">
                             @php $sumberdanas = explode('; ', $row->sumberdana); @endphp
                             @foreach ($sumberdanas as $sumber)
-                                {{-- Bungkus setiap item dengan div untuk styling --}}
                                 <div
                                     style="padding: 4px 2px; @if (!$loop->last) border-bottom: 1px solid #dee2e6; @endif">
                                     {{ $sumber ?: '-' }}
@@ -265,93 +261,82 @@
                             @endforeach
                         </td>
 
-                        {{-- Tahun --}}
+                        {{-- Tahun & OPD --}}
                         <td class="text-center">{{ $row->tahun }}</td>
-
-                        {{-- Perangkat Daerah --}}
                         <td class="text-center">{{ $row->opd->nama ?? '-' }}</td>
 
-                        {{-- RKA / Dokumen Anggaran (menggunakan style PDF) --}}
+                        {{-- DOKUMEN ANGGARAN --}}
                         <td class="text-center">
                             @if (is_array($row->dokumen_anggaran) && !empty(array_filter($row->dokumen_anggaran)))
-                                @foreach ($row->dokumen_anggaran ?? [] as $status)
+                                @foreach ($row->dokumen_anggaran as $status)
                                     @if ($status)
                                         <span
                                             class="status-badge {{ str_contains($status, 'ADA') ? 'rka-sudah' : 'rka-belum' }}">{{ $status }}</span><br>
                                     @endif
                                 @endforeach
                             @else
-                                <span class="status-badge rka-belum">Belum</span>
+                                -
                             @endif
                         </td>
 
-                        {{-- REALISASI (dengan jarak nilai yang lebih dekat) --}}
+                        {{-- REALISASI --}}
                         <td class="text-left">
                             @if (is_array($row->realisasi) && !empty(array_filter($row->realisasi)))
-                                @php $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV']; @endphp
-
-                                <table style="border: none; width: 100%; font-size: 7px;">
-                                    @foreach ($row->realisasi as $triwulan => $nilai)
-                                        @if ($nilai)
-                                            <tr style="background-color: transparent !important;">
-                                                <td
-                                                    style="border: none; padding: 1px; width: 35%; vertical-align: middle;">
-                                                    TW {{ $romanMap[$triwulan] ?? $triwulan }}
-                                                </td>
-                                                <td
-                                                    style="border: none; padding: 1px; width: 5%; vertical-align: middle;">
-                                                    :</td>
-                                                <td
-                                                    style="border: none; padding: 1px; text-align: left; font-weight: bold; vertical-align: middle; padding-left: 5px;">
-                                                    {{ $nilai }}
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </table>
+                                @php
+                                    $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
+                                    $outputLines = [];
+                                    foreach ($row->realisasi as $triwulan => $nilai) {
+                                        if ($nilai) {
+                                            $tw = $romanMap[$triwulan] ?? $triwulan;
+                                            $outputLines[] = "TW {$tw}: <strong>{$nilai}</strong>";
+                                        }
+                                    }
+                                    echo implode('<br>', $outputLines);
+                                @endphp
                             @else
                                 <span style="display: block; text-align: center;">-</span>
                             @endif
                         </td>
 
-                        {{-- VOL TARGET (dengan perataan titik dua yang presisi) --}}
+                        {{-- VOL REALISASI --}}
                         <td class="text-left">
                             @if (is_array($row->volumeTarget) && !empty(array_filter($row->volumeTarget)))
-                                @php $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV']; @endphp
-
-                                <table style="border: none; width: 100%; font-size: 7px;">
-                                    @foreach ($row->volumeTarget as $triwulan => $nilai)
-                                        @if ($nilai)
-                                            <tr style="background-color: transparent !important;">
-                                                {{-- Kolom 1: Untuk Label (rata kiri) --}}
-                                                <td
-                                                    style="border: none; padding: 1px; width: 35%; vertical-align: middle; text-align: left;">
-                                                    TW {{ $romanMap[$triwulan] ?? $triwulan }}
-                                                </td>
-
-                                                {{-- Kolom 2: Khusus untuk Titik Dua (rata tengah) --}}
-                                                <td
-                                                    style="border: none; padding: 1px; width: 5%; vertical-align: middle; text-align: center;">
-                                                    :
-                                                </td>
-
-                                                {{-- Kolom 3: Untuk Nilai (rata tengah) --}}
-                                                <td
-                                                    style="border: none; padding: 1px; vertical-align: middle; font-weight: bold; text-align: center;">
-                                                    {{ $nilai }}
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </table>
+                                @php
+                                    $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
+                                    $outputLines = [];
+                                    foreach ($row->volumeTarget as $triwulan => $nilai) {
+                                        if ($nilai) {
+                                            $tw = $romanMap[$triwulan] ?? $triwulan;
+                                            $outputLines[] = "TW {$tw}: <strong>{$nilai}</strong>";
+                                        }
+                                    }
+                                    echo implode('<br>', $outputLines);
+                                @endphp
                             @else
                                 <span style="display: block; text-align: center;">-</span>
                             @endif
                         </td>
 
+                        {{-- SATUAN REALISASI (DIPERBAIKI) --}}
+                        <td class="text-left">
+                            @if (is_array($row->satuan_realisasi) && !empty(array_filter($row->satuan_realisasi)))
+                                @php
+                                    $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
+                                    $outputLines = [];
+                                    foreach ($row->satuan_realisasi as $triwulan => $nilai) {
+                                        if ($nilai) {
+                                            $tw = $romanMap[$triwulan] ?? $triwulan;
+                                            $outputLines[] = "TW {$tw}: <strong>{$nilai}</strong>";
+                                        }
+                                    }
+                                    echo implode('<br>', $outputLines);
+                                @endphp
+                            @else
+                                <span style="display: block; text-align: center;">-</span>
+                            @endif
+                        </td>
 
-
-                        {{-- Status (menggunakan style PDF) --}}
+                        {{-- Status --}}
                         <td class="text-center">
                             @if ($row->status == 'Valid')
                                 <span class="status-badge status-valid">Valid</span>
@@ -360,9 +345,27 @@
                             @endif
                         </td>
 
-                        {{-- Catatan (Pesan) & Keterangan (Uraian) --}}
+                        {{-- Catatan (Pesan) --}}
                         <td class="text-center">{{ $row->pesan ?? '-' }}</td>
-                        <td class="text-center">{{ $row->uraian ?? '-' }}</td>
+
+                        {{-- KETERANGAN / URAIAN (DIPERBAIKI) --}}
+                        <td class="text-left">
+                            @if (is_array($row->uraian) && !empty(array_filter($row->uraian)))
+                                @php
+                                    $romanMap = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
+                                    $outputLines = [];
+                                    foreach ($row->uraian as $triwulan => $nilai) {
+                                        if ($nilai) {
+                                            $tw = $romanMap[$triwulan] ?? $triwulan;
+                                            $outputLines[] = "TW {$tw}: {$nilai}";
+                                        }
+                                    }
+                                    echo implode('<br>', $outputLines);
+                                @endphp
+                            @else
+                                <span style="display: block; text-align: center;">-</span>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
