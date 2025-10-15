@@ -1,8 +1,6 @@
 @extends('components.layout')
 
 @section('content')
-   
-
     <main id="main" class="main">
         <div class="pagetitle">
             <h1>Tabel Rencana Aksi</h1>
@@ -104,6 +102,7 @@
                                                 <th style="width: 150px;">Anggaran</th>
                                                 <th style="width: 150px;">Sumber Dana</th>
                                                 <th style="width: 300px;">Keterangan</th>
+
                                                 @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
                                                     <th style="width: 120px;">Aksi</th>
                                                 @endif
@@ -125,47 +124,34 @@
                                                     <td>{{ $data->tahun }}</td>
                                                     <td>{{ $data->opd->nama ?? '-' }}</td>
 
-                                                    {{-- ================================================================ --}}
-                                                    {{-- AWAL LOGIKA BARU UNTUK TAMPILAN SEMPURNA --}}
-                                                    {{-- ================================================================ --}}
-                                                    @php
+                                                     @php
                                                         $anggarans = explode('; ', $data->anggaran);
                                                         $sumberdanas = explode('; ', $data->sumberdana);
                                                     @endphp
 
-                                                    {{-- Cek untuk Kolom Anggaran --}}
                                                     @if (count($anggarans) > 1)
-                                                        {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
                                                         <td class="multi-item-rensi align-middle">
                                                             @foreach ($anggarans as $anggaran)
                                                                 <div>{{ $anggaran ?: '-' }}</div>
                                                             @endforeach
                                                         </td>
                                                     @else
-                                                        {{-- Jika data hanya satu, tampilkan seperti biasa --}}
-                                                        <td class="align-middle">{{ $data->anggaran ?: '-' }}</td>
+                                                       <td class="align-middle">{{ $data->anggaran ?: '-' }}</td>
                                                     @endif
 
-                                                    {{-- Cek untuk Kolom Sumber Dana --}}
                                                     @if (count($sumberdanas) > 1)
-                                                        {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
                                                         <td class="multi-item-rensi align-middle">
                                                             @foreach ($sumberdanas as $sumber)
                                                                 <div>{{ $sumber ?: '-' }}</div>
                                                             @endforeach
                                                         </td>
                                                     @else
-                                                        {{-- Jika data hanya satu, tampilkan seperti biasa --}}
                                                         <td class="align-middle">{{ $data->sumberdana ?: '-' }}</td>
                                                     @endif
-                                                    {{-- ================================================================ --}}
-                                                    {{-- AKHIR LOGIKA BARU --}}
-                                                    {{-- ================================================================ --}}
-
 
                                                     <td>{{ $data->keterangan ?? '-' }}</td>
-                                                    <td>
-                                                        @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                                    @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
+                                                        <td>
                                                             <div class="d-flex justify-content-center gap-1">
                                                                 <a href="{{ route('rencanaAksi.edit', $data->id) }}"
                                                                     class="btn btn-primary btn-sm" title="Edit">
@@ -182,8 +168,8 @@
                                                                     </button>
                                                                 </form>
                                                             </div>
-                                                        @endif
-                                                    </td>
+                                                        </td>
+                                                    @endif
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -201,4 +187,3 @@
         </section>
     </main>
 @endsection
-
