@@ -5,9 +5,46 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>iad_bf_kabupaten_lumajang</title>
-    <script>
-        document.documentElement.style.opacity = '0';
-    </script>
+    <style>
+        /* 1. Tampilkan preloader sejak awal */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            overflow: hidden;
+            background: #fff;
+            transition: all 0.6s ease-out;
+            display: flex; /* Tambahan agar spinner di tengah */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #preloader:before {
+            content: "";
+            width: 60px;
+            height: 60px;
+            border: 6px solid #196b4a;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: preloader-spin 1.5s linear infinite;
+        }
+
+        @keyframes preloader-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 2. Sembunyikan semua elemen lain KECUALI preloader */
+        body > *:not(#preloader) {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* 3. Atur transisi untuk konten saat muncul nanti */
+        .main, .footer, .header {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
     <meta name="description" content="">
     <meta name="keywords" content="">
 

@@ -7,15 +7,12 @@
          */
 
         const preloader = document.getElementById("preloader");
-
-        // Tampilkan kembali halaman
-        document.documentElement.style.opacity = "1";
-
         if (preloader) {
-            // Tambahkan kelas 'loaded' untuk memicu transisi fade-out
+            // Cukup tambahkan kelas 'loaded' ke body.
+            // CSS akan menangani semua efek transisinya.
             document.body.classList.add("loaded");
 
-            // Hapus elemen preloader SETELAH transisi benar-benar selesai
+            // Hapus elemen preloader SETELAH transisi selesai.
             preloader.addEventListener("transitionend", () => {
                 preloader.remove();
             });

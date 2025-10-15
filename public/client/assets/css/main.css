@@ -1091,6 +1091,17 @@ h6 {
 
 
 /* preload pindah layout */
+/* Aturan untuk memunculkan konten setelah loading selesai */
+body.loaded > *:not(#preloader) {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Aturan untuk menghilangkan preloader dengan efek fade-out */
+body.loaded #preloader {
+    opacity: 0;
+    visibility: hidden;
+}
 
 /*--------------------------------------------------------------
 # Scroll Top Button
