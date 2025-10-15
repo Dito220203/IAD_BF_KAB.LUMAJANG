@@ -236,12 +236,14 @@ class ClientController extends Controller
             ->findOrFail($detail_id);
 
         $contact = Kontak::all();
+        $subprogram = Subprogram::findOrFail($id);
         $subprograms = Subprogram::where('delete_at', '0')->get();
         $photoCount = $progres->fotoProgres->count();
 
         return view('client.progreskegiatandetail', compact(
             'contact',
             'subprograms',
+            'subprogram',
             'progres',
             'photoCount'
         ));

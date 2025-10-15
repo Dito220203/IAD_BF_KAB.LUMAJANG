@@ -239,37 +239,5 @@
     </section>
 </main>
 
-{{-- CSS --}}
-<style>
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, var(--bs-primary), #0056b3);
-    }
-    .bg-gradient-info {
-        background: linear-gradient(135deg, var(--bs-info), #0056b3);
-    }
-    .welcome-card {
-        background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
-    }
-    .card-hover { transition: all 0.3s ease; border-radius: 15px !important; }
-    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,.1) !important; }
-    .hover-lift { transition: transform 0.2s ease; }
-    .hover-lift:hover { transform: translateY(-3px); }
-    .animate-float { animation: float 3s ease-in-out infinite; }
-    .pulse-animation { animation: pulse 2s infinite; }
-    @keyframes float { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
-    @keyframes pulse { 0% {transform: scale(1);opacity:1;} 50% {transform: scale(1.1);opacity:.7;} 100% {transform: scale(1);opacity:1;} }
-    .bg-primary-subtle { background-color: rgba(var(--bs-primary-rgb),0.1) !important; }
-    .bg-success-subtle { background-color: rgba(var(--bs-success-rgb),0.1) !important; }
-    .bg-info-subtle { background-color: rgba(var(--bs-info-rgb),0.1) !important; }
-    .bg-warning-subtle { background-color: rgba(var(--bs-warning-rgb),0.1) !important; }
-    .bg-danger-subtle { background-color: rgba(var(--bs-danger-rgb),0.1) !important; }
-    .timeline { position: relative; padding: 0; }
-    .timeline-item { position: relative; padding-left: 2rem; margin-bottom: 1.5rem; }
-    .timeline-item:not(:last-child)::before { content: ''; position: absolute; left: 8px; top: 1.5rem; width: 2px; height: calc(100% + 1rem); background: #e9ecef; }
-    .timeline-marker { position: absolute; left: 0; top: .25rem; width: 16px; height: 16px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 2px #e9ecef; }
-    .timeline-content { background: #f8f9fa; padding: 1rem; border-radius: 8px; border-left: 3px solid var(--bs-primary); }
-    .progress-bar-animated { animation: progress-animation 1.5s ease-in-out; }
-    @keyframes progress-animation { from {width: 0;} to {width: 100%;} }
-    .card-header { border-radius: 15px 15px 0 0 !important; }
-</style>
+
 @endsection

@@ -24,22 +24,28 @@
                             @forelse ($progres as $item)
                                 <div class="progres-item">
                                     <div class="progres-header">
-                                        <h6>{{ strtoupper($item->monev->nama_program ?? '-') }}</h6>
+                                        <h6>{{ strtoupper($item->monev->rencanakerja->rencana_aksi ?? '-') }}</h6>
                                     </div>
                                     <div class="progres-meta">
-                                        <span class="tahun">{{ $item->monev->tahun ?? '-'  }}</span>
-                                        <span class="tanggal">
+                                        <span class="tahun">{{ $item->monev->rencanakerja->tahun ?? '-' }}</span>
+                                        {{-- <span class="tanggal">
                                             <i class="fas fa-calendar-alt"></i>
                                             {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
-                                        </span>
+                                        </span> --}}
                                     </div>
                                     <div class="progres-body">
-                                        <p>Sumber Anggaran : {{ $item->monev->sumberdana ?? '-'  }}</p>
-                                        <p>Jumlah Anggaran : {{ $item->monev->anggaran ?? '-'  }}</p>
+                                        <p>Sumber Anggaran :
+                                            {{ $item->monev->sumberdana ? str_replace(';', ', ', $item->monev->sumberdana) : '-' }}
+                                        </p>
+                                        <p>Jumlah Anggaran :
+                                            {{ $item->monev->anggaran ? str_replace(';', ', ', $item->monev->anggaran) : '-' }}
+                                        </p>
                                         {{-- <p>Penerima : {{ $item->penerima }}</p> --}}
                                     </div>
                                     <div class="progres-footer">
-                                        <form action="{{ route('client.progreskegiatandetail', ['id' => $subprogram->id, 'detail_id' => $item->id]) }}" method="GET">
+                                        <form
+                                            action="{{ route('client.progreskegiatandetail', ['id' => $subprogram->id, 'detail_id' => $item->id]) }}"
+                                            method="GET">
                                             <button type="submit" class="btn-lihat">Lihat</button>
                                         </form>
                                     </div>

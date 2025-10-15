@@ -212,6 +212,10 @@
         </section>
     </main>
 
+
+@endsection
+@push('scripts')
+    
     <script>
         function previewFile(event) {
             const file = event.target.files[0];
@@ -230,5 +234,4 @@
             }
         }
     </script>
-
-@endsection
+@endpush

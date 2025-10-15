@@ -1,24 +1,7 @@
 @extends('components.layout')
 
 @section('content')
-    {{-- CSS untuk membuat garis pemisah di dalam sel tabel --}}
-    <style>
-        .multi-item {
-            padding: 0 !important;
-            margin: 0 !important;
-            vertical-align: top;
-        }
-
-        .multi-item>div {
-            padding: 8px 12px;
-            white-space: normal;
-        }
-
-        .multi-item>div:not(:last-child) {
-            /* GANTI WARNA DI SINI */
-            border-bottom: 1px solid #cccccc;
-        }
-    </style>
+   
 
     <main id="main" class="main">
         <div class="pagetitle">
@@ -153,7 +136,7 @@
                                                     {{-- Cek untuk Kolom Anggaran --}}
                                                     @if (count($anggarans) > 1)
                                                         {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
-                                                        <td class="multi-item align-middle">
+                                                        <td class="multi-item-rensi align-middle">
                                                             @foreach ($anggarans as $anggaran)
                                                                 <div>{{ $anggaran ?: '-' }}</div>
                                                             @endforeach
@@ -166,7 +149,7 @@
                                                     {{-- Cek untuk Kolom Sumber Dana --}}
                                                     @if (count($sumberdanas) > 1)
                                                         {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
-                                                        <td class="multi-item align-middle">
+                                                        <td class="multi-item-rensi align-middle">
                                                             @foreach ($sumberdanas as $sumber)
                                                                 <div>{{ $sumber ?: '-' }}</div>
                                                             @endforeach

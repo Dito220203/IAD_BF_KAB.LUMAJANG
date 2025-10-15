@@ -13,7 +13,7 @@
 
 
     <link href="{{ asset('client/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('client/assets/css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/assets/css/main.css?v=1.1') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/aos/aos.css') }}" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">

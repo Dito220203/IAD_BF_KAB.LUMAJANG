@@ -58,7 +58,20 @@
                                         <td>{{ $rk->lokasi }}</td>
                                         <td>{{ $rk->volume }}</td>
                                         <td>{{ $rk->satuan }}</td>
-                                        <td>{{ $rk->sumberdana }}</td>
+                                        @php
+                                            $sumberdanas = explode('; ', $rk->sumberdana);
+                                        @endphp
+                                        @if (count($sumberdanas) > 1)
+                                            {{-- Jika data lebih dari satu, gunakan tampilan multi-baris --}}
+                                            <td class="multi-item-rensi align-middle">
+                                                @foreach ($sumberdanas as $sumber)
+                                                    <div>{{ $sumber ?: '-' }}</div>
+                                                @endforeach
+                                            </td>
+                                        @else
+                                            {{-- Jika data hanya satu, tampilkan seperti biasa --}}
+                                            <td class="align-middle">{{ $rk->sumberdana ?: '-' }}</td>
+                                        @endif
                                         <td>{{ $rk->tahun }}</td>
                                         <td>{{ $rk->opd->nama ?? '-' }}</td>
                                         <td>{{ $rk->keterangan }}</td>

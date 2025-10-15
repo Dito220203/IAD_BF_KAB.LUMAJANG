@@ -30,9 +30,9 @@
                     delete L.Icon.Default.prototype._getIconUrl;
 
                     L.Icon.Default.mergeOptions({
-                        iconRetinaUrl: '{{ asset('assets/vendor/leaflet/images/marker-icon-2x.png') }}',
-                        iconUrl: '{{ asset('assets/vendor/leaflet/images/marker-icon.png') }}',
-                        shadowUrl: '{{ asset('assets/vendor/leaflet/images/marker-shadow.png') }}',
+                        iconRetinaUrl: "{{ asset('assets/vendor/leaflet/images/marker-icon-2x.png') }}",
+                iconUrl: "{{ asset('assets/vendor/leaflet/images/marker-icon.png') }}",
+                shadowUrl: "{{ asset('assets/vendor/leaflet/images/marker-shadow.png') }}"
                     });
                     var programs = @json($maps);
 

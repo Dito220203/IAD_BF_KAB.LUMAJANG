@@ -1,128 +1,6 @@
 @extends('components.layout')
 @section('content')
-    <style>
-        .multi-item {
-            padding: 0 !important;
-            margin: 0 !important;
-            vertical-align: top;
 
-        }
-
-        .multi-item>div {
-            padding: 8px 12px;
-            white-space: normal;
-
-        }
-
-        .multi-item>div:not(:last-child) {
-            /* GANTI WARNA DI SINI */
-            border-bottom: 1px solid #cccccc;
-        }
-
-        /* Styling utama untuk drop zone */
-        .drop-zone {
-            border: 2px dashed #007bff;
-            /* Garis putus-putus dengan warna primer */
-            border-radius: 10px;
-            /* Sudut lebih tumpul */
-            padding: 30px;
-            text-align: center;
-            color: #6c757d;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            /* Animasi halus untuk semua perubahan */
-            background-color: #f8f9fa;
-        }
-
-        /* Efek saat mouse berada di atas drop zone */
-        .drop-zone:hover {
-            background-color: #e9ecef;
-            border-color: #0056b3;
-        }
-
-        /* Class ini ditambahkan via JavaScript saat file di-drag di atas zona */
-        .drop-zone--over {
-            border-style: solid;
-            /* Garis menjadi solid */
-            background-color: #d1e7fd;
-            /* Latar belakang biru muda */
-            border-color: #0056b3;
-        }
-
-        /* Styling untuk ikon */
-        .drop-zone-content .bi-cloud-arrow-up {
-            font-size: 3rem;
-            /* Ikon jauh lebih besar */
-            color: #007bff;
-            margin-bottom: 10px;
-        }
-
-        /* Styling untuk teks utama */
-        .drop-zone-content p strong {
-            font-size: 1.1rem;
-            color: #343a40;
-        }
-
-        /* Styling untuk container pratinjau */
-        #previewContainer {
-            display: flex;
-            /* Menggunakan flexbox agar rapi */
-            flex-wrap: wrap;
-            /* Gambar akan pindah ke baris baru jika tidak muat */
-            gap: 15px;
-            /* Jarak antar gambar */
-            margin-top: 20px;
-        }
-
-        /* Styling untuk setiap item pratinjau */
-        .preview-item {
-            position: relative;
-            /* Diperlukan untuk tombol hapus */
-            width: 120px;
-            height: 120px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            /* Memastikan gambar tidak keluar dari kotak */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Styling untuk gambar pratinjau */
-        .preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            /* Gambar akan mengisi kotak tanpa distorsi */
-        }
-
-        /* Styling untuk tombol hapus pada pratinjau */
-        .remove-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 20px;
-            height: 20px;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            /* Membuatnya menjadi lingkaran */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            opacity: 0;
-            /* Sembunyikan secara default */
-            transition: opacity 0.2s ease;
-        }
-
-        /* Tampilkan tombol hapus saat mouse di atas gambar */
-        .preview-item:hover .remove-btn {
-            opacity: 1;
-        }
-    </style>
     <main id="main" class="main">
         <div class="pagetitle">
             <h1>Tabel Monitoring Evaluasi</h1>
@@ -281,8 +159,8 @@
                                                     <td class="text-center">{{ $data->subprogram->subprogram ?? '-' }}
                                                     </td>
                                                     <td>{{ $data->rencanakerja->rencana_aksi ?? '-' }}</td>
-                                                    <td>{{ $data->rencanakerja->sub_kegiatan ?? '-'  }}</td>
-                                                    <td>{{ $data->rencanakerja->kegiatan ?? '-'}}</td>
+                                                    <td>{{ $data->rencanakerja->sub_kegiatan ?? '-' }}</td>
+                                                    <td>{{ $data->rencanakerja->kegiatan ?? '-' }}</td>
                                                     <td>{{ $data->rencanakerja->nama_program ?? '-' }}</td>
                                                     <td class="text-center">{{ $data->rencanakerja->lokasi ?? '-' }}</td>
                                                     <td class="text-center">{{ $data->rencanakerja->volume ?? '-' }}</td>
@@ -564,26 +442,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", function() {
-                                            var modalPesan = document.getElementById('modalPesan');
-                                            modalPesan.addEventListener('show.bs.modal', function(event) {
-                                                var button = event.relatedTarget;
-                                                var idMonev = button.getAttribute('data-id');
-                                                var pesan = button.getAttribute('data-pesan') || '';
 
-                                                // isi hidden input
-                                                modalPesan.querySelector('#idMonev').value = idMonev;
-
-                                                // isi textarea dengan pesan lama (kalau ada)
-                                                modalPesan.querySelector('#inputPesan').value = pesan;
-
-                                                // set action form ke route updatePesan
-                                                var form = modalPesan.querySelector('#formPesan');
-                                                form.action = "/monev/" + idMonev + "/pesan";
-                                            });
-                                        });
-                                    </script>
 
 
                                     {{-- modal detail --}}
@@ -757,11 +616,6 @@
     </main>
 
     @push('scripts')
-        {{-- Library JQuery (jika belum ada di layout utama) & Peta --}}
-        {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-        {{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> --}}
-        {{-- <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script> --}}
-
         {{-- Script untuk auto-submit filter tahun --}}
         <script>
             $(document).ready(function() {
@@ -933,6 +787,29 @@
                 setTimeout(() => detailMap.invalidateSize(), 200);
             });
         </script>
+        {{-- Script untuk fungsionalitas MODAL PESAN --}}
 
-      
-@endsection
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var modalPesan = document.getElementById('modalPesan');
+                modalPesan.addEventListener('show.bs.modal', function(event) {
+                    var button = event.relatedTarget;
+                    var idMonev = button.getAttribute('data-id');
+                    var pesan = button.getAttribute('data-pesan') || '';
+
+                    // isi hidden input
+                    modalPesan.querySelector('#idMonev').value = idMonev;
+
+                    // isi textarea dengan pesan lama (kalau ada)
+                    modalPesan.querySelector('#inputPesan').value = pesan;
+
+                    // set action form ke route updatePesan
+                    var form = modalPesan.querySelector('#formPesan');
+                    form.action = "/monev/" + idMonev + "/pesan";
+                });
+            });
+        </script>
+    
+@endpush
+
+    @endsection

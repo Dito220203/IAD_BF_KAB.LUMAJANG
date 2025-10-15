@@ -3214,6 +3214,22 @@ section,
 #  .. Section
 --------------------------------------------------------------*/
 
+/* Pastikan class ini ada di file CSS frontend Anda */
+.multi-item-rensi div {
+    padding: 8px; /* Atur jarak sesuai kebutuhan */
+    border-bottom: 1px solid #196b4a; /* Ini yang membuat garis */
+    text-align: center; /* Sesuaikan perataan teks */
+}
+
+.multi-item-rensi div:last-child {
+    border-bottom: none; /* Menghilangkan garis pada item terakhir */
+}
+
+/* Menghapus padding default dari sel agar garisnya penuh */
+.multi-item-rensi {
+    padding: 0 !important;
+    vertical-align: middle;
+}
 /*--------------------------------------------------------------
 #  .. Section
 --------------------------------------------------------------*/

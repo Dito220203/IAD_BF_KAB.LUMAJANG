@@ -18,16 +18,15 @@
                         <div class="card-body">
                             <!-- Header control: Tambah, Search, Tampilkan Data -->
                             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3 mt-3">
-<div class="col-12 col-lg-auto">
-     <form method="GET" class="input-group w-auto">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('aktivitas') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                <div class="col-12 col-lg-auto">
+                                    <form method="GET" class="input-group w-auto">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('aktivitas') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 
@@ -48,7 +47,7 @@
                                         @foreach ($log as $data)
                                             <tr>
                                                 <td>{{ $log->firstItem() + $loop->index }}</td>
-                                                 <td>{{ $data->pengguna->username ?? '-' }}</td>
+                                                <td>{{ $data->pengguna->username ?? '-' }}</td>
                                                 <td>{{ $data->ip }}</td>
                                                 <td>{{ $data->waktu }}</td>
                                                 <td>{{ $data->aktivitas }}</td>

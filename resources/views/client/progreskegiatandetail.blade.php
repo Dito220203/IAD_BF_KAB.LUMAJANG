@@ -1,20 +1,26 @@
 @extends('componentsclient.layout')
 
 @section('content')
-
     <section class="section_page ">
         <div class="global-title" data-aos="fade-up">
-            <h2>Detail Progres Kegiatan</h2>
+            <h2>Detail Progres Kegiatan {{ $subprogram->subprogram }}</h2>
         </div>
 
         <section id="detail-kegiatan" class="container">
             <div class="detail-card">
-                <h3>{{ $progres->judul }}</h3>
-                <p><strong>Tahun Pelaksanaan :</strong> {{ $progres->monev->tahun ?? '-' }}</p>
+                <h3 class="text-center">{{ $progres->monev->rencanakerja->rencana_aksi ?? '-' }}</h3>
+                <p><strong>Tahun Pelaksanaan :</strong> {{ $progres->monev->rencanakerja->tahun ?? '-' }}</p>
+                <p><strong>Sumber Anggaran :</strong>
+                    {{ $progres->monev->sumberdana ? str_replace(';', ', ', $progres->monev->sumberdana) : '-' }}
+                </p>
+                <p><strong>Jumlah Anggaran :</strong>
+                    {{ $progres->monev->anggaran ? str_replace(';', ', ', $progres->monev->anggaran) : '-' }}
+                </p>
                 <p><strong>Uraian :</strong>
                     @forelse($progres->fotoProgres as $foto)
                         {{ $foto->deskripsi ?? '-' }}
-                        @break
+                    @break
+
                     @empty
                         Belum ada Uraian
                     @endforelse
@@ -66,7 +72,7 @@
                 if (slideCount > 1 && slideCount < 4) {
                     originalSlides.forEach(slide => {
                         const clone = slide.cloneNode(true); // Buat duplikat dari setiap slide
-                        wrapper.appendChild(clone);         // Tambahkan duplikat ke akhir galeri
+                        wrapper.appendChild(clone); // Tambahkan duplikat ke akhir galeri
                     });
                 }
                 // --- AKHIR KODE BARU ---
@@ -128,7 +134,8 @@
             @endforeach
 
             @if ($progres->maps->count())
-                map.setView([{{ $progres->maps->first()->latitude }}, {{ $progres->maps->first()->longitude }}], 5);
+                map.setView([{{ $progres->maps->first()->latitude }}, {{ $progres->maps->first()->longitude }}],
+                    5);
             @endif
         });
     </script>
