@@ -18,11 +18,7 @@
                     <div class="card ">
                         <div class="card-body">
                             <div class="row g-3 align-items-center mb-3 mt-3">
-                                {{-- <div class="col-12 col-md-auto">
-                                    <a href="{{ route('monev.create') }}" class="btn btn-primary w-100">
-                                        <i class="fas fa-plus me-2"></i>Tambah Data
-                                    </a>
-                                </div> --}}
+
                                 @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
                                     <div class="col-12 col-md-auto">
                                         <a href="{{ route('monev.export.excel', request()->query()) }}"
