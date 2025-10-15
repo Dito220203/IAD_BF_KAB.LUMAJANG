@@ -281,7 +281,7 @@ class RencanaAksi_6TahunController extends Controller
             'lokasi'        => $validate['lokasi'],
             'id_opd'        => $validate['id_opd'],
             'volume'        => $validate['volume'],
-            'satuan'        => $validate['satuan'],
+             'satuan'        => $validate['satuan'],
             'keterangan'    => $validate['keterangan'],
         ];
 

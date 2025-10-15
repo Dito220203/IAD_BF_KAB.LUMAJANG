@@ -230,7 +230,7 @@ class ClientController extends Controller
         return view('client.progreskegiatan', compact('contact', 'subprograms', 'subprogram', 'progres'));
     }
 
-     public function progreskegiatandetail($id, $detail_id)
+    public function progreskegiatandetail($id, $detail_id)
     {
         $progres = ProgresKerja::with(['fotoProgres', 'maps', 'monev.subprogram'])
             ->findOrFail($detail_id);
@@ -257,15 +257,16 @@ class ClientController extends Controller
         $subprograms = Subprogram::where('delete_at', '0')->get();
         $subprogram = Subprogram::findOrFail($id);
 
-        $maps = Map::whereHas('monev', function ($q) use ($id) {
+        $maps = Map::whereHas('monev.progresKerja', function ($q) use ($id) {
             $q->where('id_subprogram', $id)
                 ->where('status', 'Valid');
         })
-            ->with('monev')
+            ->with(['monev.progresKerja'])
             ->get();
 
         return view('client.petasebarankegiatan', compact('contact', 'subprograms', 'subprogram', 'maps'));
     }
+
 
 
 
