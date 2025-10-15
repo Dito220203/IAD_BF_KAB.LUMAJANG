@@ -257,7 +257,7 @@ class ClientController extends Controller
 
         $maps = Map::whereHas('monev', function ($q) use ($id) {
             $q->where('id_subprogram', $id)
-                ->where('status', 'valid');
+                ->where('status', 'Valid');
         })
             ->with('monev')
             ->get();

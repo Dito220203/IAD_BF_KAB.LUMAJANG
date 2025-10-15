@@ -140,11 +140,7 @@
                     <div class="card ">
                         <div class="card-body">
                             <div class="row g-3 align-items-center mb-3 mt-3">
-                                {{-- <div class="col-12 col-md-auto">
-                                    <a href="{{ route('monev.create') }}" class="btn btn-primary w-100">
-                                        <i class="fas fa-plus me-2"></i>Tambah Data
-                                    </a>
-                                </div> --}}
+
                                 @if (Auth::guard('pengguna')->user()->level === 'Super Admin')
                                     <div class="col-12 col-md-auto">
                                         <a href="{{ route('monev.export.excel', request()->query()) }}"
@@ -757,11 +753,6 @@
     </main>
 
     @push('scripts')
-        {{-- Library JQuery (jika belum ada di layout utama) & Peta --}}
-        {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-        {{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> --}}
-        {{-- <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script> --}}
-
         {{-- Script untuk auto-submit filter tahun --}}
         <script>
             $(document).ready(function() {
@@ -934,5 +925,5 @@
             });
         </script>
 
-      
+
 @endsection

@@ -10,7 +10,7 @@
         <section id="detail-kegiatan" class="container">
             <div class="detail-card">
                 <h3>{{ $progres->judul }}</h3>
-                <p><strong>Tahun Pelaksanaan :</strong> {{ $progres->monev->tahun ?? '-' }}</p>
+                <p><strong>Tahun Pelaksanaan :</strong> {{ $progres->monev->rencanakerja->tahun ?? '-' }}</p>
                 <p><strong>Uraian :</strong>
                     @forelse($progres->fotoProgres as $foto)
                         {{ $foto->deskripsi ?? '-' }}

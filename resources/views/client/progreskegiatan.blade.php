@@ -24,10 +24,10 @@
                             @forelse ($progres as $item)
                                 <div class="progres-item">
                                     <div class="progres-header">
-                                        <h6>{{ strtoupper($item->monev->nama_program ?? '-') }}</h6>
+                                        <h6>{{ strtoupper($item->monev->rencanakerja->rencana_aksi ?? '-') }}</h6>
                                     </div>
                                     <div class="progres-meta">
-                                        <span class="tahun">{{ $item->monev->tahun ?? '-'  }}</span>
+                                        <span class="tahun">{{ $item->monev->rencanakerja->tahun ?? '-'  }}</span>
                                         <span class="tanggal">
                                             <i class="fas fa-calendar-alt"></i>
                                             {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}

@@ -226,30 +226,49 @@ class RencanaAksi_6TahunController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // 1️⃣ Validasi input
+        // 1️⃣ Validasi input dari form
         $validate = $request->validate([
-            'sub_program'   => 'required|exists:subprograms,id',
-            'rencanaAksi'   => 'required',
-            'nama_program'  => 'required',
-            'kegiatan'      => 'required',
-            'sub_kegiatan'  => 'required',
-            'tahun'         => 'required',
-            'anggaran'      => 'required|array',
-            'anggaran.*'    => 'required|string',
-            'sumberdana'    => 'required|array',
-            'sumberdana.*'  => 'required|string',
-            'lokasi'        => 'required',
-            'volume'        => 'required',
-            'satuan'        => 'required',
-            'id_opd'        => 'required|exists:opds,id',
-            'keterangan'    => 'required',
+            'sub_program'  => 'required|exists:subprograms,id',
+            'rencanaAksi'  => 'required',
+            'nama_program' => 'required',
+            'kegiatan'     => 'required',
+            'sub_kegiatan' => 'required',
+            'tahun'        => 'required',
+            'anggaran'     => 'required|array',
+            'anggaran.*'   => 'required|string',
+            'sumberdana'   => 'required|array',
+            'sumberdana.*' => 'required|string',
+            'lokasi'       => 'required',
+            'volume'       => 'required',
+            'satuan'       => 'required',
+            'id_opd'       => 'required|exists:opds,id',
+            'keterangan'   => 'required',
         ]);
 
-        // 2️⃣ Gabungkan array jadi string
+        // 2️⃣ Ambil data lama SEBELUM diupdate untuk referensi
+        $rencanaAksi = RencanaAksi_6_tahun::findOrFail($id);
+        $oldTahun = $rencanaAksi->tahun;
+        $oldRencanaAksi = $rencanaAksi->rencana_aksi; // Kunci untuk mencari RencanaKerja
+        $oldIdOpd = $rencanaAksi->id_opd;
+
+        $newPenggunaId = null;
+
+        // 3️⃣ Cek apakah OPD diubah. Jika ya, cari pengguna baru.
+        if ($oldIdOpd != $validate['id_opd']) {
+            $newPengguna = Pengguna::where('id_opd', $validate['id_opd'])->first();
+
+            // Jika tidak ada pengguna di OPD baru, batalkan update dan beri pesan error
+            if (!$newPengguna) {
+                return back()->withInput()->withErrors(['id_opd' => 'Gagal! Pengguna untuk OPD tujuan tidak ditemukan. Data tidak dapat dipindahkan.']);
+            }
+            $newPenggunaId = $newPengguna->id; // Simpan ID pengguna baru untuk pemindahan data
+        }
+
+        // 4️⃣ Gabungkan kembali array anggaran dan sumberdana menjadi string
         $anggaranString = implode('; ', $validate['anggaran']);
         $sumberdanaString = implode('; ', $validate['sumberdana']);
 
-        // 3️⃣ Siapkan data update
+        // 5️⃣ Siapkan data yang akan diupdate
         $updateData = [
             'id_subprogram' => $validate['sub_program'],
             'rencana_aksi'  => $validate['rencanaAksi'],
@@ -266,41 +285,54 @@ class RencanaAksi_6TahunController extends Controller
             'keterangan'    => $validate['keterangan'],
         ];
 
-        // 4️⃣ Ambil data lama sebelum diupdate
-        $rencanaAksi = RencanaAksi_6_tahun::findOrFail($id);
-        $oldTahun = $rencanaAksi->tahun;
-        $oldRencanaAksi = $rencanaAksi->rencana_aksi;
-
-        // 5️⃣ Update data utama
-        $rencanaAksi->update($updateData);
-
-        // 6️⃣ Sinkronkan ke Rencana Kerja berdasarkan ID Rencana Aksi lama
+        // 6️⃣ Cari RencanaKerja yang terhubung berdasarkan data LAMA
         $rencanaKerja = RencanaKerja::where('rencana_aksi', $oldRencanaAksi)
             ->where('tahun', $oldTahun)
+            ->where('id_opd', $oldIdOpd) // Spesifikasikan pencarian dengan OPD lama
             ->first();
 
+        // Jika RencanaKerja ditemukan, lakukan sinkronisasi update
         if ($rencanaKerja) {
-            $rencanaKerja->update($updateData);
+            $updateDataRenja = $updateData;
+            // Jika OPD diubah, tambahkan ID pengguna baru ke data update
+            if ($newPenggunaId) {
+                $updateDataRenja['id_pengguna'] = $newPenggunaId;
+            }
+            $rencanaKerja->update($updateDataRenja);
 
-            // 7️⃣ Sinkronkan ke Monev berdasarkan id_renja
+            // 7️⃣ Sinkronkan update ke tabel Monev
             $monev = Monev::where('id_renja', $rencanaKerja->id)->first();
             if ($monev) {
-                $monev->update([
+                $updateDataMonev = [
                     'id_subprogram' => $rencanaKerja->id_subprogram,
                     'id_opd'        => $rencanaKerja->id_opd,
                     'anggaran'      => $anggaranString,
                     'sumberdana'    => $sumberdanaString,
-                    'is_locked'     => true, // tetap terkunci
-                ]);
+                ];
+                // Jika OPD diubah, perbarui juga pemilik data di Monev
+                if ($newPenggunaId) {
+                    $updateDataMonev['id_pengguna'] = $newPenggunaId;
+                }
+                $monev->update($updateDataMonev);
+
+                // 8️⃣ Sinkronkan update ke tabel ProgresKerja (pemindahan kepemilikan)
+                $progresKerja = ProgresKerja::where('id_monev', $monev->id)->first();
+                if ($progresKerja && $newPenggunaId) {
+                    $progresKerja->update(['id_pengguna' => $newPenggunaId]);
+                }
             }
         }
 
-        // 8️⃣ Catat log aktivitas
-        LogHelper::add('Mengedit Data Rencana Aksi, Rencana Kerja, dan Monev');
+        // 9️⃣ Terakhir, update data utama di RencanaAksi_6_tahun
+        $rencanaAksi->update($updateData);
+
+        // 1️⃣0️⃣ Catat log dan kembalikan ke halaman index dengan pesan sukses
+        LogHelper::add('Mengedit Data Rencana Aksi. Pemindahan data OPD dilakukan jika ada perubahan.');
 
         return redirect()->route('rencana6tahun')
             ->with('success', 'Data berhasil diperbarui!');
     }
+
 
 
 
