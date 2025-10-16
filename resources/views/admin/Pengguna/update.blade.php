@@ -29,8 +29,11 @@
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Username</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="e_username" class="form-control"
-                                                value="{{ old('username', $pengguna->username) }}" required>
+                                            <input type="text" name="e_username" class="form-control @error('e_username') is-invalid @enderror"
+                                                value="{{ old('e_username', $pengguna->username) }}" required>
+                                            @error('e_username')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -39,7 +42,7 @@
                                         <label class="col-sm-2 col-form-label">Nama</label>
                                         <div class="col-sm-10">
                                             <input type="text" name="e_nama" class="form-control"
-                                                value="{{ old('nama', $pengguna->nama) }}" required>
+                                                value="{{ old('e_nama', $pengguna->nama) }}" required>
                                         </div>
                                     </div>
 
@@ -47,15 +50,21 @@
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-form-label">Perangkat Daerah</label>
                                         <div class="col-sm-10">
-                                            <select name="e_id_opd" class="form-select" required>
+                                            <select name="e_id_opd" class="form-select @error('e_id_opd') is-invalid @enderror" required>
                                                 <option value="">Pilih</option>
                                                 @foreach ($opd as $data)
                                                     <option value="{{ $data->id }}"
-                                                        {{ old('id_opd', $pengguna->id_opd) == $data->id ? 'selected' : '' }}>
+                                                        {{ old('e_id_opd', $pengguna->id_opd) == $data->id ? 'selected' : '' }}
+                                                        {{-- Nonaktifkan jika ID ada di array dan itu bukan OPD milik pengguna saat ini --}}
+                                                        @if(in_array($data->id, $assigned_opd_ids)) disabled @endif>
                                                         {{ $data->nama }}
+                                                        @if(in_array($data->id, $assigned_opd_ids)) (Sudah Dipilih) @endif
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('e_id_opd')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -66,17 +75,24 @@
                                             <select name="e_level" class="form-select" required>
                                                 <option value="">Pilih</option>
                                                 <option value="Super Admin"
-                                                    {{ old('level', $pengguna->level) == 'Super Admin' ? 'selected' : '' }}>
+                                                    {{ old('e_level', $pengguna->level) == 'Super Admin' ? 'selected' : '' }}>
                                                     Super Admin</option>
                                                 <option value="Admin"
-                                                    {{ old('level', $pengguna->level) == 'Admin' ? 'selected' : '' }}>Admin
+                                                    {{ old('e_level', $pengguna->level) == 'Admin' ? 'selected' : '' }}>Admin
                                                 </option>
-                                                <option value="adminsekretariat"
-                                                    {{ old('level', $pengguna->level) == 'adminsekretariat' ? 'selected' : '' }}>
-                                                    Admin Sekretariat</option>
                                             </select>
                                         </div>
                                     </div>
+
+                                     {{-- Password --}}
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">Password Baru</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" name="e_password" class="form-control">
+                                            <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah password.</small>
+                                        </div>
+                                    </div>
+
 
                                     {{-- Tombol --}}
                                     <div class="row mb-3">

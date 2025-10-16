@@ -58,16 +58,15 @@
                                         </div>
                                     </div>
                                 </div>
-                              <div class="col-12 col-lg-auto">
-     <form method="GET" class="input-group w-auto">
-        <input type="text" name="search" class="form-control"
-               placeholder="Cari Data"
-               value="{{ request('search') }}">
-        <button class="btn btn-primary" type="submit">Cari</button>
-        @if(request('search'))
-            <a href="{{ route('opd') }}" class="btn btn-secondary">Reset</a>
-        @endif
-    </form>
+                                <div class="col-12 col-lg-auto">
+                                    <form method="GET" class="input-group w-auto">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari Data"
+                                            value="{{ request('search') }}">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
+                                        @if (request('search'))
+                                            <a href="{{ route('opd') }}" class="btn btn-secondary">Reset</a>
+                                        @endif
+                                    </form>
                                 </div>
                             </div>
 
@@ -126,7 +125,7 @@
                                                                     @method('PUT')
 
                                                                     <div class="mb-3">
-                                                                        <label>Judul</label>
+                                                                        <label>Nama</label>
                                                                         <input type="text" class="form-control"
                                                                             name="e_nama" value="{{ $data->nama }}"
                                                                             required>
@@ -170,3 +169,51 @@
         </section>
     </main>
 @endsection
+@push('scripts')
+    <script>
+        // 1. Menampilkan alert untuk pesan SUKSES (dari store, update, & destroy)
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        @endif
+
+        // 2. Menampilkan alert untuk SEMUA jenis pesan GAGAL VALIDASI
+        @if ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                // Mengambil pesan error pertama yang ada, tidak peduli dari field 'nama' atau 'e_nama'
+                text: "{{ $errors->first() }}",
+            });
+
+            // Logika untuk membuka kembali modal 'Tambah Data' jika error terjadi di sana
+            @if ($errors->has('nama'))
+                var myModal = new bootstrap.Modal(document.getElementById('modalOpd'));
+                myModal.show();
+            @endif
+        @endif
+
+        // 3. Fungsi konfirmasi hapus data (tidak berubah)
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formDelete-' + id).submit();
+                }
+            });
+        }
+    </script>
+@endpush
