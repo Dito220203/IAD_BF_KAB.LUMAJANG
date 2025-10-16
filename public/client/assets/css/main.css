@@ -2361,6 +2361,7 @@ section,
     transform: scale(1.4);
 }
 
+
 /* --------------------------------------------------------------
 # RESPONSIVE KHUSUS VIDEO
 --------------------------------------------------------------*/
@@ -3184,6 +3185,27 @@ section,
   margin-bottom: 0;
 }
 
+/* .berita-card
+ {
+    padding-left: 20px;
+    padding-right: 20px;
+} */
+
+/* Penyesuaian untuk layar mobile */
+@media (max-width: 768px) {
+    .berita-card
+     {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+@media (max-width: 1200px) {
+    .berita-card
+     {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
 
 
 

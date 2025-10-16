@@ -436,12 +436,28 @@ class ClientController extends Controller
         $info = Informasi::findOrFail($id);
         return view('client.detailinformasi', compact('contact', 'subprograms', 'info'));
     }
-    public function detailvideo()
-    {
-        $contact = Kontak::all();
-        $subprograms = Subprogram::where('delete_at', '0')->get();
-        return view('client.detailvideo', compact('contact', 'subprograms'));
-    }
+    public function showVideo($id) // Ganti nama method jadi showVideo dan tambahkan $id
+{
+    $contact = Kontak::all();
+    $subprograms = Subprogram::where('delete_at', '0')->get();
+    $video = Video::findOrFail($id); // Ambil data video berdasarkan ID
+
+    // Ekstrak videoId dari link YouTube untuk embedding
+    preg_match(
+        '/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w\-]+)/',
+        $video->link,
+        $matches
+    );
+    $videoId = $matches[1] ?? null;
+
+    return view('client.detailvideo', compact('contact', 'subprograms', 'video', 'videoId'));
+}
+    // public function detailvideo()
+    // {
+    //     $contact = Kontak::all();
+    //     $subprograms = Subprogram::where('delete_at', '0')->get();
+    //     return view('client.detailvideo', compact('contact', 'subprograms'));
+    // }
 
 
 
