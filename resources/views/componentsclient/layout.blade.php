@@ -50,7 +50,7 @@
 
 
     <link href="{{ asset('client/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('client/assets/css/main.css?v=1.1') }}" rel="stylesheet">
+    <link href="{{ asset('client/assets/css/main.css?v=1.2') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/aos/aos.css') }}" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
@@ -61,11 +61,11 @@
     <link href="{{ asset('client/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
     <link href="{{ asset('client/assets/vendor/leaflet/leaflet.css') }}" rel="stylesheet">
-    </link>
+  
 
 
     <style>
-        body:not(.loaded)>*:not(#preloader) {
+        /* body:not(.loaded)>*:not(#preloader) {
             opacity: 0;
             visibility: hidden;
         }
@@ -107,7 +107,7 @@
             100% {
                 transform: rotate(360deg);
             }
-        }
+        } */
 
         .card-title {
             display: -webkit-box;
