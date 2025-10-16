@@ -1,6 +1,6 @@
 @extends('components.layout')
 @section('content')
-   
+
     <main id="main" class="main">
         <div class="pagetitle">
             <h1>Tabel Rencana Kerja</h1>
