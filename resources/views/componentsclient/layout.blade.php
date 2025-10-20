@@ -14,34 +14,71 @@
             overflow: hidden;
             background: #fff;
             transition: all 0.6s ease-out;
-            display: flex; /* Tambahan agar spinner di tengah */
-            align-items: center;
-            justify-content: center;
+            display: grid;
+            place-items: center;
         }
+
 
         #preloader:before {
             content: "";
-            width: 60px;
-            height: 60px;
-            border: 6px solid #196b4a;
+            width: 120px;
+            height: 120px;
+            border: 5px solid #196b4a;
             border-top-color: transparent;
             border-radius: 50%;
             animation: preloader-spin 1.5s linear infinite;
+            grid-area: 1 / 1;
+            z-index: 10;
+        }
+
+        #preloader img {
+            /* Atur ukuran logo agar pas di DALAM spinner */
+            width: 110px;
+            /* Sesuaikan ukurannya */
+            height: 110px;
+            object-fit: contain;
+            /* Biar logo tidak gepeng */
+
+            /* --- TAMBAHAN PENTING --- */
+            /* Taruh di tumpukan grid yang sama */
+            grid-area: 1 / 1;
+            z-index: 5;
+            /* Pastikan logo di bawah spinner */
         }
 
         @keyframes preloader-spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
+        /* Aturan untuk memunculkan konten setelah loading selesai */
+        body.loaded>*:not(#preloader) {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Aturan untuk menghilangkan preloader dengan efek fade-out */
+        body.loaded #preloader {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+
         /* 2. Sembunyikan semua elemen lain KECUALI preloader */
-        body > *:not(#preloader) {
+        body>*:not(#preloader) {
             opacity: 0;
             visibility: hidden;
         }
 
         /* 3. Atur transisi untuk konten saat muncul nanti */
-        .main, .footer, .header {
+        .main,
+        .footer,
+        .header {
             transition: opacity 0.5s ease-in-out;
         }
     </style>
@@ -53,6 +90,7 @@
     <link href="{{ asset('client/assets/css/main.css?v=1.2') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('client/assets/vendor/aos/aos.css') }}" rel="stylesheet">
+
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
@@ -61,54 +99,10 @@
     <link href="{{ asset('client/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
     <link href="{{ asset('client/assets/vendor/leaflet/leaflet.css') }}" rel="stylesheet">
-  
+
 
 
     <style>
-        /* body:not(.loaded)>*:not(#preloader) {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        #preloader {
-            position: fixed;
-            inset: 0;
-            z-index: 999999;
-            overflow: hidden;
-            background: #fff;
-            transition: all 0.6s ease-out;
-        }
-
-        body.loaded #preloader {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        #preloader:before {
-            content: "";
-            position: fixed;
-            top: calc(50% - 30px);
-            left: calc(50% - 30px);
-            border: 6px solid #196b4a;
-            /* Warna tema Anda */
-            border-top-color: transparent;
-            /* Buat lebih kontras */
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: preloader-spin 1.5s linear infinite;
-        }
-
-        @keyframes preloader-spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        } */
-
         .card-title {
             display: -webkit-box;
             -webkit-line-clamp: 4;
@@ -130,16 +124,6 @@
             transition-property: opacity, transform;
         }
 
-        #preloader {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: #fff;
-            /* atau warna latar belakang halamanmu */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
 
         /* 2. Sembunyikan konten utama SEBELUM halaman selesai loading */
         body:not(.loaded)>.main,
@@ -170,7 +154,9 @@
 
 <body class="{{ request()->is('/') ? 'index-page' : '' }}">
 
-    <div id="preloader"></div>
+    <div id="preloader">
+        <img src="{{ asset('client/assets/img/logo-kabupaten.png') }}" alt="Logo Kabupaten">
+    </div>
     @include('componentsclient.navbar')
 
     <main class="main">

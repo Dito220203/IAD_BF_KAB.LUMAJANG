@@ -10,9 +10,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/img/logo kabupaten.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link
@@ -86,7 +85,8 @@
                                                 <input type="password" name="password"
                                                     class="form-control @error('password') is-invalid @enderror"
                                                     id="yourPassword" placeholder="Masukkan password" required>
-                                                <span class="input-group-text" id="togglePassword" style="cursor:pointer;">
+                                                <span class="input-group-text" id="togglePassword"
+                                                    style="cursor:pointer;">
                                                     <i class="bi bi-eye" id="eyeIcon"></i>
                                                 </span>
                                                 <div class="invalid-feedback">
@@ -139,65 +139,66 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.querySelector("form");
-        const username = document.getElementById("yourUsername");
-        const password = document.getElementById("yourPassword");
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+            const username = document.getElementById("yourUsername");
+            const password = document.getElementById("yourPassword");
 
-        form.addEventListener("submit", function(e) {
-            e.preventDefault();
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
 
-            // Validasi kosong
-            if (username.value.trim() === "") {
-                username.classList.add("is-invalid");
-                return;
-            } else {
-                username.classList.remove("is-invalid");
-            }
+                // Validasi kosong
+                if (username.value.trim() === "") {
+                    username.classList.add("is-invalid");
+                    return;
+                } else {
+                    username.classList.remove("is-invalid");
+                }
 
-            if (password.value.trim() === "") {
-                password.classList.add("is-invalid");
-                return;
-            } else {
-                password.classList.remove("is-invalid");
-            }
+                if (password.value.trim() === "") {
+                    password.classList.add("is-invalid");
+                    return;
+                } else {
+                    password.classList.remove("is-invalid");
+                }
 
-            // Kalau sudah terisi → tampilkan loading
-            Swal.fire({
-                title: 'Memuat...',
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
+                // Kalau sudah terisi → tampilkan loading
+                Swal.fire({
+                    title: 'Memuat...',
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading()
+                });
+
+                form.submit();
             });
 
-            form.submit();
+            // Alert sukses
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Berhasil',
+                    text: '{{ session('success') }}',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            @endif
+
+            // Toggle password visibility
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('yourPassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            if (togglePassword && passwordInput && eyeIcon) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.type === 'password' ? 'text' : 'password';
+                    passwordInput.type = type;
+                    eyeIcon.classList.toggle('bi-eye');
+                    eyeIcon.classList.toggle('bi-eye-slash');
+                });
+            }
         });
-
-        // Alert sukses
-        @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Login Berhasil',
-                text: '{{ session("success") }}',
-                timer: 1500,
-                showConfirmButton: false
-            });
-        @endif
-
-        // Toggle password visibility
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('yourPassword');
-        const eyeIcon = document.getElementById('eyeIcon');
-
-        if (togglePassword && passwordInput && eyeIcon) {
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.type === 'password' ? 'text' : 'password';
-                passwordInput.type = type;
-                eyeIcon.classList.toggle('bi-eye');
-                eyeIcon.classList.toggle('bi-eye-slash');
-            });
-        }
-    });
     </script>
 
 </body>
+
 </html>

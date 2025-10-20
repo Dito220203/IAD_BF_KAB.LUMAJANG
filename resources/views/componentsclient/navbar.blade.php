@@ -21,7 +21,8 @@
 
                         @foreach ($subprograms as $subprogram)
                             <li class="dropdown">
-                                <a href="#" class="{{ request()->is('subprogram/' . $subprogram->id . '*') ? 'active' : '' }}">
+                                <a href="#"
+                                    class="{{ request()->is('subprogram/' . $subprogram->id . '*') ? 'active' : '' }}">
                                     <span>{{ $subprogram->subprogram }}</span>
                                     <i class="bi bi-chevron-down toggle-dropdown"></i>
                                 </a>
@@ -104,9 +105,9 @@
 
                 <li>
                     <a href="{{ route('client.regulasi') }}"
-       class="{{ request()->routeIs('client.regulasi', 'client.detailregulasi') ? 'active' : '' }}">
-        REGULASI IAD
-    </a>
+                        class="{{ request()->routeIs('client.regulasi', 'client.detailregulasi') ? 'active' : '' }}">
+                        REGULASI IAD
+                    </a>
                 </li>
 
                 <li><a href="{{ route('client') }}#video">VIDEO</a></li>

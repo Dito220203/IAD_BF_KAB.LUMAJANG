@@ -1090,19 +1090,6 @@ h6 {
     }
 
 
-/* preload pindah layout */
-/* Aturan untuk memunculkan konten setelah loading selesai */
-body.loaded > *:not(#preloader) {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Aturan untuk menghilangkan preloader dengan efek fade-out */
-body.loaded #preloader {
-    opacity: 0;
-    visibility: hidden;
-}
-
 /*--------------------------------------------------------------
 # Scroll Top Button
 --------------------------------------------------------------*/
@@ -2129,9 +2116,9 @@ section,
 .slide-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    /* 'cover' akan mengisi frame, cocok untuk semua orientasi */
-}
+    object-fit: contain;
+  
+  }
 
 .slide-content {
     flex: 1;
@@ -2174,11 +2161,11 @@ section,
 
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
-    .product-slider {
-        height: auto;
-        /* Biarkan tinggi slider utama menyesuaikan */
-        padding: 20px 0;
-    }
+.product-slider {
+    height: auto;
+    position: relative;
+    padding: 0 0 20px 0;
+}
 
     .slide {
         flex-direction: column;
@@ -2187,17 +2174,12 @@ section,
         gap: 20px;
     }
 
-    /* KUNCI UTAMA DI SINI */
     .slide-image {
         width: 100%;
-        /* Lebar frame penuh */
         height: 250px;
-        /* TINGGI FRAME DIPAKSA 250PX */
         flex-shrink: 0;
         border-radius: 15px;
-        /* Jaga sudut melengkung */
         overflow: hidden;
-        /* Jaga gambar tidak keluar frame */
     }
 
     .slide-image img {
@@ -2205,8 +2187,8 @@ section,
         height: 100%;
         /* Gambar dipaksa mengisi frame 250px */
         object-fit: cover;
-        /* 'Cover' akan mengisi frame, memotong jika perlu */
-    }
+        
+      }
 
     .slide-content {
         width: 100%;
@@ -2215,11 +2197,73 @@ section,
     }
 
     .slide-content p {
-        -webkit-line-clamp: 6;
-        /* Batasi teks jadi 6 baris */
+        -webkit-line-clamp: 4;
     }
 }
+/* ======================================================= */
+/* =========== CSS TAMBAHAN UNTUK TOMBOL SLIDER ========== */
+/* ======================================================= */
 
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    /* Hapus background-color agar transparan */
+    background-color: transparent; 
+    color: #333; /* Warna ikon/panah lebih gelap */
+    border: 1px solid rgba(0, 0, 0, 0.2); /* Border tipis abu-abu */
+    padding: 0;
+    width: 44px; /* Sedikit lebih besar */
+    height: 44px; /* Sedikit lebih besar */
+    border-radius: 50%; /* Tetap bulat */
+    font-size: 22px; /* Ukuran ikon/panah lebih besar */
+    line-height: 1; /* Pastikan ikon di tengah vertikal */
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sedikit bayangan untuk kesan modern */
+}
+
+.slider-btn:hover {
+    background-color: #e0e0e0;
+     /* Background saat hover menjadi abu-abu terang */
+    border-color: #196b4a; /* Border lebih tegas saat hover */
+    color: #000; /* Warna ikon/panah lebih gelap saat hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bayangan lebih kuat */
+}
+
+.slider-btn:active {
+    background-color: #e0e0e0; /* Sedikit lebih gelap saat diklik */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Bayangan lebih samar saat diklik */
+    transform: translateY(-50%) scale(0.98); /* Efek sedikit menekan */
+}
+
+.prev-btn {
+    left: 20px;
+}
+
+.next-btn {
+    right: 20px;
+}
+
+/* ======================================================= */
+/* ====== PERBAIKAN POSISI TOMBOL SLIDER DI MOBILE ====== */
+/* ======================================================= */
+
+@media (max-width: 768px) {
+    .slider-btn {
+        top: auto; 
+        bottom: 15px; 
+          }
+    .prev-btn {
+        left: 35%; 
+      }
+    .next-btn {
+        right: 35%; 
+      }
+}
 
 /*--------------------------------------------------------------
 # Video Section - SOLUSI FINAL GABUNGAN
@@ -2293,7 +2337,6 @@ section,
     opacity: 0;
 }
 
-/* Konten Teks */
 .video-content {
     position: absolute;
     bottom: 0;
@@ -2751,29 +2794,25 @@ section,
         aspect-ratio: 4 / 3; 
         height: auto !important;
         
-        /* BARU: Transisi untuk efek hover yang halus */
-        transition: transform 0.9s ease-in-out;
+      transition: transform 0.9s ease-in-out;
     }
 
-    /* BARU: Efek hover konsisten tanpa bayangan */
     .documentation-gallery .swiper-slide:hover {
-        transform: scale(1.07); /* Sedikit membesar saat disentuh mouse */
-    }
+        transform: scale(1.07);  }
 
     .documentation-gallery .swiper-slide img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         object-position: center top; 
-    }
 
-    /* --- Pengaturan Layout untuk Galeri Statis (1, 2, atau 3 gambar) --- */
-    .documentation-gallery.static-layout .swiper-wrapper {
+    }
+  .documentation-gallery.static-layout .swiper-wrapper {
         display: flex;
         justify-content: center;
         gap: 20px;
-        flex-wrap: wrap; /* Izinkan gambar turun ke bawah di layar kecil */
-    }
+        flex-wrap: wrap; 
+          }
 
     .documentation-gallery.static-layout .swiper-slide {
         opacity: 1 !important;
@@ -2797,12 +2836,14 @@ section,
         transform: scale(0.9);
         opacity: 0.7;
     }
-    /* Mengembalikan efek hover untuk slide aktif di slider */
-    /* .documentation-gallery.swiper-initialized .swiper-slide.swiper-slide-active:hover {
-        transform: scale(1.03);
-        box-shadow: none !important;
-    } */
 
+    /* ATURAN UNTUK MEMOTONG SLIDE YANG KELUAR BATAS */
+.documentation-gallery {
+    overflow: hidden; /* INI ADALAH KUNCINYA */
+    border-radius: 15px;
+    padding: 20px 0;
+    
+  }
 
     /* ========================================================== */
     /* ==         BAGIAN RESPONSIVE UNTUK LAYAR KECIL          == */
@@ -3114,7 +3155,8 @@ section,
   margin-top: 30px;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.08);
+
 }
 
 #programMap {
@@ -3185,11 +3227,6 @@ section,
   margin-bottom: 0;
 }
 
-/* .berita-card
- {
-    padding-left: 20px;
-    padding-right: 20px;
-} */
 
 /* Penyesuaian untuk layar mobile */
 @media (max-width: 768px) {

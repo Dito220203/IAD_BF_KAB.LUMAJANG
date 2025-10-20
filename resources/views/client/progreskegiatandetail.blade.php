@@ -44,7 +44,7 @@
                 <hr>
 
                 <h4>Peta Lokasi</h4>
-                <div id="map" style="height: 400px;"></div>
+                <div id="map" style="height: 400px; border-radius: 15px;"></div>
             </div>
         </section>
 
@@ -83,10 +83,10 @@
                         effect: "slide",
                         loop: true, // Loop sekarang akan berfungsi untuk 2, 3, atau 4+ gambar
                         grabCursor: true,
-                        speed: 900,
+                        speed: 1500,
 
                         autoplay: {
-                            delay: 2500,
+                            delay: 3000,
                             disableOnInteraction: false,
                             pauseOnMouseEnter: true,
                         },

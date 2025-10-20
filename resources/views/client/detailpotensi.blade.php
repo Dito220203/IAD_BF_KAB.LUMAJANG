@@ -7,7 +7,7 @@
 
         <section id="detail-kegiatan" class="container">
             <div class="detail-card">
-                <h3>{{ $detailpotensiKehutanan->judul }}</h3>
+                <h3 class="text-center">{{ $detailpotensiKehutanan->judul }}</h3>
                 <span class="tanggal">
                     <div class="progres-meta">
                         <i class="fas fa-calendar-alt"></i>

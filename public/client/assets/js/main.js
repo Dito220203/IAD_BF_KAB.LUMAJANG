@@ -115,28 +115,53 @@
         /**
          * 6. SLIDER PRODUK (PING-PONG EFFECT)
          */
-        const sliderWrapper = document.querySelector(
-            ".product-slider .slider-wrapper"
-        );
-        const slides = document.querySelectorAll(".product-slider .slide");
+        // --- SCRIPT BARU UNTUK SLIDER DENGAN KONTROL ---
 
-        if (sliderWrapper && slides.length > 1) {
-            let currentIndex = 0;
-            let direction = 1; // 1 untuk maju, -1 untuk mundur
+const sliderWrapper = document.querySelector(".product-slider .slider-wrapper");
+const slides = document.querySelectorAll(".product-slider .slide");
+const prevBtn = document.querySelector(".prev-btn"); // Ambil tombol prev
+const nextBtn = document.querySelector(".next-btn"); // Ambil tombol next
 
-            setInterval(() => {
-                // Pindahkan ke slide berikutnya sesuai arah
-                currentIndex += direction;
-                sliderWrapper.style.transform = `translateX(-${
-                    currentIndex * 100
-                }%)`;
+if (sliderWrapper && slides.length > 1) {
+    let currentIndex = 0;
+    let autoSlideInterval;
 
-                // Jika sudah sampai di ujung (akhir atau awal), balik arah
-                if (currentIndex === slides.length - 1 || currentIndex === 0) {
-                    direction *= -1; // Balik arah (dari 1 menjadi -1, atau sebaliknya)
-                }
-            }, 5000); // Ganti slide setiap 5 detik
+    // --- FUNGSI UTAMA UNTUK MENGGESER SLIDE ---
+    const goToSlide = (index) => {
+        // Pastikan index tidak keluar dari batas (0 s/d jumlah slide - 1)
+        if (index < 0) {
+            index = slides.length - 1;
+        } else if (index >= slides.length) {
+            index = 0;
         }
+        
+        sliderWrapper.style.transform = `translateX(-${index * 100}%)`;
+        currentIndex = index;
+    };
+
+    // --- FUNGSI UNTUK GESER OTOMATIS ---
+    const startAutoSlide = () => {
+        // Hapus interval lama agar tidak tumpuk
+        clearInterval(autoSlideInterval); 
+        autoSlideInterval = setInterval(() => {
+            goToSlide(currentIndex + 1); // Pindah ke slide berikutnya
+        }, 5000); // 💡 Ganti angka ini untuk durasi (misal: 5000 untuk 5 detik)
+    };
+
+    // --- LOGIKA UNTUK TOMBOL ---
+    nextBtn.addEventListener("click", () => {
+        goToSlide(currentIndex + 1);
+        startAutoSlide(); // Reset timer setiap kali tombol diklik
+    });
+
+    prevBtn.addEventListener("click", () => {
+        goToSlide(currentIndex - 1);
+        startAutoSlide(); // Reset timer setiap kali tombol diklik
+    });
+
+    // Mulai geser otomatis saat halaman dimuat
+    startAutoSlide();
+}
         /**
          * 7. PROGRES & POTENSI LIST (PENCARIAN & LOAD MORE)
          */

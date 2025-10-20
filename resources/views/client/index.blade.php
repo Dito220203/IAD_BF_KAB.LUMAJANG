@@ -222,8 +222,10 @@
                             <p>{{ $produk->keterangan }}</p>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+                <button class="slider-btn prev-btn">&lt;</button>
+                <button class="slider-btn next-btn">&gt;</button>
         </section>
         <!-- /PRODUCT KUPS -->
 
@@ -284,17 +286,17 @@
                         <div class="video-card">
                             {{-- <a href="{{ $video->link }}" target="_blank"> --}}
                             <a href="{{ route('video.show', $video->id) }}">
-                            <div class="video-image">
-                                <img src="{{ $thumbnail }}" alt="{{ $video->judul }}">
-                            </div>
-                            <div class="video-content">
-                                <h3>{{ $video->judul }}</h3>
-                                <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
-                                <div class="video-footer">
-                                    <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
-                                    <span class="showinfo">Lebih Lengkap...</span>
+                                <div class="video-image">
+                                    <img src="{{ $thumbnail }}" alt="{{ $video->judul }}">
                                 </div>
-                            </div>
+                                <div class="video-content">
+                                    <h3>{{ $video->judul }}</h3>
+                                    <p>{{ Str::limit(strip_tags($video->deskripsi ?? ''), 100) }}</p>
+                                    <div class="video-footer">
+                                        <span>{{ \Carbon\Carbon::parse($video->created_at)->translatedFormat('d F Y') }}</span>
+                                        <span class="showinfo">Lebih Lengkap...</span>
+                                    </div>
+                                </div>
                             </a>
                         </div>
                     @empty
@@ -480,6 +482,7 @@
                         }
                         tahunSelect.addEventListener("change", updateChartData);
                     }
+
                     //slider & pagination landingpage
                     function initializeSlider(sliderSelector, paginationId, cardSelector) {
                         const slider = document.querySelector(sliderSelector);
@@ -518,6 +521,7 @@
                                     behavior: "smooth"
                                 });
                             });
+
                         });
 
                         slider.addEventListener("scroll", () => {
@@ -623,3 +627,4 @@
         @endpush
         <!-- /Chart -->
     </main>
+@endsection

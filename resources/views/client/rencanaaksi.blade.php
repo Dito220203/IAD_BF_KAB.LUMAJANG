@@ -53,10 +53,10 @@
                                         <td>{{ ($rencanaAksi->currentPage() - 1) * $rencanaAksi->perPage() + $loop->iteration }}
                                         </td>
                                         <td>{{ $rk->subprogram->subprogram ?? '-' }}</td>
-                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->rencana_aksi }}</td>
-                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->sub_kegiatan }}</td>
-                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->kegiatan }}</td>
-                                        <td style="text-align: left;" class="kolom-lebar">{{ $rk->nama_program }}</td>
+                                        <td class="kolom-lebar">{{ $rk->rencana_aksi }}</td>
+                                        <td class="kolom-lebar">{{ $rk->sub_kegiatan }}</td>
+                                        <td class="kolom-lebar">{{ $rk->kegiatan }}</td>
+                                        <td class="kolom-lebar">{{ $rk->nama_program }}</td>
                                         <td>{{ $rk->lokasi }}</td>
 
                                         <td>{{ $rk->volume }}</td>

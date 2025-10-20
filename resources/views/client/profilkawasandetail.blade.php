@@ -6,7 +6,7 @@
         </div>
         <section id="detail-kegiatan" class="container">
             <div class="detail-card">
-                <h3>{{ $profilkawasanDetail->judul }}</h3>
+                <h3 class="text-center">{{ $profilkawasanDetail->judul }}</h3>
                 <p><strong>Keterangan:</strong> {{ $profilkawasanDetail->uraian }}</p>
 
                 <hr>

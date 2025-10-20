@@ -29,6 +29,8 @@
                         </div>
                     @endforelse
                 </div>
+                <button class="slider-btn prev-btn">&lt;</button>
+                <button class="slider-btn next-btn">&gt;</button>
             </section>
         </div>
     </section>
