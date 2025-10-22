@@ -8,7 +8,7 @@
 
         <section id="detail-kegiatan" class="container">
             <div class="detail-card">
-                <h3>{{ strtoupper($item->judul) }}</h3>
+                <h3 class="text-center">{{ strtoupper($item->judul) }}</h3>
 
                 <span class="tanggal">
                     <i class="fas fa-calendar-alt"></i>

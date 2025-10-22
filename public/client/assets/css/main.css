@@ -2074,7 +2074,6 @@ section,
 .product-slider {
     width: 100%;
     height: 550px;
-    /* Tinggi tetap untuk desktop */
     position: relative;
     overflow: hidden;
     background: #fff;
@@ -2085,7 +2084,6 @@ section,
     width: 100%;
     height: 100%;
     transition: transform 1s cubic-bezier(0.45, 0.05, 0.55, 0.95);
-    /* Transisi halus */
 }
 
 .slide {
@@ -2101,23 +2099,16 @@ section,
 
 .slide-image {
     width: 450px;
-    /* Atur lebar frame */
     height: 450px;
-    /* Atur tinggi frame (buat rasio 1:1 atau persegi) */
     flex-shrink: 0;
-
-    /* KUNCI UTAMA DI SINI */
     border-radius: 15px;
-    /* Ini yang akan membuat sudutnya melengkung */
     overflow: hidden;
-    /* Ini yang akan "memotong" gambar mengikuti frame */
 }
 
 .slide-image img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-  
   }
 
 .slide-content {
@@ -2143,22 +2134,47 @@ section,
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-    .product-slider {
-        height: 480px;
-    }
+/* ===== RESPONSIVE (INI YANG DIUBAH) ===== */
+@media (max-width: 1140px) {
+.product-slider {
+    height: auto;
+    position: relative;
+    padding: 0 0 20px 0;
+}
 
     .slide {
-        padding: 30px 40px;
-        gap: 30px;
+        flex-direction: column;
+        /* Susun ke bawah */
+        padding: 20px;
+        gap: 20px;
     }
 
     .slide-image {
-        width: 400px;
-        height: 360px;
+        width: 100%;
+        height: 250px;
+        flex-shrink: 0;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .slide-image img {
+        width: 100%;
+        height: 100%;
+        /* Gambar dipaksa mengisi frame 250px */
+        object-fit: contain;
+        
+      }
+
+    .slide-content {
+        width: 100%;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .slide-content p {
+        -webkit-line-clamp: 4;
     }
 }
-
 /* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 768px) {
 .product-slider {
@@ -2186,7 +2202,7 @@ section,
         width: 100%;
         height: 100%;
         /* Gambar dipaksa mengisi frame 250px */
-        object-fit: cover;
+        object-fit: contain;
         
       }
 
@@ -2993,7 +3009,7 @@ section,
 }
 
 .table-wrapper {
-    max-height: 85vh;
+    max-height: 86vh;
     overflow: auto; 
   
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);

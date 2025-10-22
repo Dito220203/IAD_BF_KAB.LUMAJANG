@@ -117,49 +117,93 @@
          */
         // --- SCRIPT BARU UNTUK SLIDER DENGAN KONTROL ---
 
+// Ambil elemen-elemen yang diperlukan
 const sliderWrapper = document.querySelector(".product-slider .slider-wrapper");
-const slides = document.querySelectorAll(".product-slider .slide");
-const prevBtn = document.querySelector(".prev-btn"); // Ambil tombol prev
-const nextBtn = document.querySelector(".next-btn"); // Ambil tombol next
+const slides = document.querySelectorAll(".product-slider .slide"); // Ini adalah slide *asli* Anda
+const prevBtn = document.querySelector(".product-slider .prev-btn");
+const nextBtn = document.querySelector(".product-slider .next-btn");
 
 if (sliderWrapper && slides.length > 1) {
-    let currentIndex = 0;
+    
+    // --- SETUP UNTUK INFINITE LOOP ---
+    
+    // 1. Kloning slide pertama dan terakhir
+    const firstSlideClone = slides[0].cloneNode(true);
+    const lastSlideClone = slides[slides.length - 1].cloneNode(true);
+
+    // 2. Tambahkan kloning ke wrapper
+    sliderWrapper.appendChild(firstSlideClone); // Tambah klon pertama di akhir
+    sliderWrapper.prepend(lastSlideClone); // Tambah klon terakhir di awal
+
+    // 3. Setup variabel
+    let currentIndex = 1; // Kita mulai dari slide "asli" pertama (indeks 1, karena 0 adalah klon)
     let autoSlideInterval;
+    let isTransitioning = false; // Flag untuk mencegah klik ganda
+
+    // 4. Set posisi awal (tanpa animasi)
+    const setInitialPosition = () => {
+        sliderWrapper.style.transition = 'none'; // Matikan animasi
+        sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    };
+    
+    setInitialPosition();
 
     // --- FUNGSI UTAMA UNTUK MENGGESER SLIDE ---
     const goToSlide = (index) => {
-        // Pastikan index tidak keluar dari batas (0 s/d jumlah slide - 1)
-        if (index < 0) {
-            index = slides.length - 1;
-        } else if (index >= slides.length) {
-            index = 0;
-        }
+        if (isTransitioning) return; // Hentikan jika sedang transisi
+        isTransitioning = true; // Set flag
         
-        sliderWrapper.style.transform = `translateX(-${index * 100}%)`;
         currentIndex = index;
+        
+        // Nyalakan animasi transisi
+        sliderWrapper.style.transition = 'transform 1s cubic-bezier(0.45, 0.05, 0.55, 0.95)';
+        sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
     };
 
-    // --- FUNGSI UNTUK GESER OTOMATIS ---
+    // --- FUNGSI UNTUK RESET TIMER AUTO SLIDE ---
     const startAutoSlide = () => {
-        // Hapus interval lama agar tidak tumpuk
-        clearInterval(autoSlideInterval); 
+        clearInterval(autoSlideInterval); // Hapus interval lama
         autoSlideInterval = setInterval(() => {
             goToSlide(currentIndex + 1); // Pindah ke slide berikutnya
-        }, 5000); // 💡 Ganti angka ini untuk durasi (misal: 5000 untuk 5 detik)
+        }, 5000); // Durasi 5 detik
     };
 
-    // --- LOGIKA UNTUK TOMBOL ---
+    // --- EVENT LISTENER (INI BAGIAN PENTING) ---
+    
+    // Listener untuk tombol Next
     nextBtn.addEventListener("click", () => {
+        if (isTransitioning) return;
         goToSlide(currentIndex + 1);
-        startAutoSlide(); // Reset timer setiap kali tombol diklik
+        startAutoSlide(); // Reset timer
     });
 
+    // Listener untuk tombol Prev
     prevBtn.addEventListener("click", () => {
+        if (isTransitioning) return;
         goToSlide(currentIndex - 1);
-        startAutoSlide(); // Reset timer setiap kali tombol diklik
+        startAutoSlide(); // Reset timer
     });
 
-    // Mulai geser otomatis saat halaman dimuat
+    // Listener 'transitionend' untuk "trik" looping-nya
+    sliderWrapper.addEventListener('transitionend', () => {
+        // Jika kita mendarat di klon slide pertama (di akhir list)
+        if (currentIndex === slides.length + 1) {
+            sliderWrapper.style.transition = 'none'; // Matikan animasi
+            currentIndex = 1; // Lompat ke slide "asli" pertama
+            sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+        
+        // Jika kita mendarat di klon slide terakhir (di awal list)
+        if (currentIndex === 0) {
+            sliderWrapper.style.transition = 'none'; // Matikan animasi
+            currentIndex = slides.length; // Lompat ke slide "asli" terakhir
+            sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+        
+        isTransitioning = false; // Izinkan klik lagi
+    });
+
+    // --- Mulai auto-slide saat halaman dimuat ---
     startAutoSlide();
 }
         /**
